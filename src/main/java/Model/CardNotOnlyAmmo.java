@@ -1,0 +1,24 @@
+package Model;
+
+public class CardNotOnlyAmmo implements CardAmmo{
+    private CardPowerUp item1;
+    private Colors item2;
+    private Colors item3;
+
+    public CardNotOnlyAmmo(){
+
+    }
+
+    public CardPowerUp getItem1() {
+        return item1;
+    }
+
+    public Colors getItem2() {
+        return item2;
+    }
+
+    public Colors getItem3() {
+        return item3;
+    }
+
+}
