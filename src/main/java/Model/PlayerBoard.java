@@ -13,7 +13,7 @@ public class PlayerBoard {
     private int maxPoint;
     private ArrayList<String> damageBar;
     private int adrenalineAction;
-    private ArrayList<CardWeapons> playerWeapons;
+    private ArrayList<CardWeapon> playerWeapons;
     private ArrayList<CardPowerUp> playerPowerUps;
     private int points;
     private ArrayList<String> mark;
