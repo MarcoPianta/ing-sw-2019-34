@@ -2,9 +2,9 @@ package Model;
 
 import java.util.ArrayList;
 
-public class CardWeapon implements card {
+public class CardWeapon implements Card {
     private String name;
-    private Colors;
+    private Colors color;
     private int redCost;
     private int blueCost;
     private int yellowCost;
