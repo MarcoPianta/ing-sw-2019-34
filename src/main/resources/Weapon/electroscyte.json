@@ -5,28 +5,61 @@
     "Y": 0,
     "B": 1
   },
-  "effectNumber": 2,
+  "color": "blue",
+  "effectNumber": 1,
   "effectOrder": true,
   "alternativeEffect": true,
-"basicEffect": [
+  "basicEffect": [
     {
-    "effectID": 1,
-    "target": 4,
-    "allTarget": true,
-    "damage": 1,
-    "mark": 0,
-    "preCondition": [
-      {
-        "vision": true,
-        "minRange": 0,
-        "maxRange": 0,
-        "cardinal": false,
-
-      }
-    ],
-    "postCondition":[
+      "target": 4,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
         {
-          "
+          "vision": true,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 1,
+          "Y": 0,
+          "B": 1
+        }
+      ],
+      "target": 4,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
         }
       ]
     }
