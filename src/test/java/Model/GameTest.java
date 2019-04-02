@@ -19,4 +19,14 @@ public class GameTest {
         game = new Game();
         assertNull(game.getWinner());
     }
+    @Test
+    public void testCalcolaPunteggio(){
+        Game game;
+        Player p;
+        p = new Player();
+
+        game = new Game();
+        assertEquals(0, game.calcolaPunteggio(p));
+
+    }
 }
