@@ -3,7 +3,7 @@ package Model;
 public enum Colors {
     Blue,
     Green,
-    Red,
+    Grey,
     Yellow,
     Violet;
 }
