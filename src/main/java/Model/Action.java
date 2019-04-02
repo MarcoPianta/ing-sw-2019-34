@@ -9,8 +9,8 @@ public abstract class Action {
     public Action() {
 
     }
-    public void runAction(int effect, int player)() {
-        return null;
+    public void runAction(int effect, int player) {
+
     }
 
     public ArrayList<Integer> getDamage() {
