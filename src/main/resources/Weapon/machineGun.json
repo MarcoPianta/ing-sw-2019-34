@@ -1,0 +1,100 @@
+{
+  "name": "machineGun",
+  "cost": {
+    "R": 1,
+    "Y": 0,
+    "B": 1
+  },
+  "color": "blue",
+  "effectNumber": 3,
+  "effectOrder": true,
+  "alternativeEffect": false,
+  "basicEffect": [
+    {
+      "target": 2,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": -1,
+          "maxRange": -1,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 0,
+          "Y": 1,
+          "B": 0
+        }
+      ],
+      "target": 1,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          //deve essere uno gia colpito dal primo effetto ( es target1)
+          "vision": true,
+          "minRange": -1,
+          "maxRange": -1,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "thirdEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 0,
+          "Y": 0,
+          "B": 1
+        }
+      ],
+      "target": 2,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          // uno dei precedenti ma non quello del effetto 2 (es target2) + un altro nuovo
+          "vision": true,
+          "minRange": -1,
+          "maxRange": -1,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ]
+}
