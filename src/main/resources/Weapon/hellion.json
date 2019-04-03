@@ -1,0 +1,71 @@
+{
+  "name": "hellion",
+  "cost": {
+    "R": 1,
+    "Y": 1,
+    "B": 0
+  },
+  "color": "red",
+  "effectNumber": 1,
+  "effectOrder": false,
+  "alternativeEffect": true,
+  "basicEffect": [
+    {
+      "target": 1,
+      "allTarget": false,
+      "damage": 1,
+      "mark": 1,
+      "markToOthers": 1, ------------------------mark added to others player not the target
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 1,
+          "maxRange": -1,
+          "cardinal": false,
+          "otherPosition": true ----------------------- deve essere in un posizione diversa dalla mia
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 1,
+          "Y": 0,
+          "B": 0
+        }
+      ],
+      "target": 1,
+      "allTarget": false,
+      "damage": 1,
+      "mark": 1,
+      "markToOthers": 2, ------------------------mark added to others player not the target
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 1,
+          "maxRange": -1,
+          "cardinal": false,
+          "otherPosition": true ----------------------- deve essere in un posizione diversa dalla mia
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ]
+}

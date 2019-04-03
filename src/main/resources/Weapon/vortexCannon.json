@@ -1,0 +1,69 @@
+{
+  "name": "vortex cannon",
+  "cost": {
+    "R": 1,
+    "Y": 0,
+    "B": 1
+  },
+  "color": "red",
+  "effectNumber": 2,
+  "effectOrder": false,
+  "alternativeEffect": false,
+  "basicEffect": [
+    {
+      "target": 1,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 1,
+          "maxRange": 2,
+          "cardinal": false,
+          "otherPosition": true -----------------------
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 1,
+          "Y": 0,
+          "B": 0
+        }
+      ],
+      "target": 2,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 1,
+          "maxRange": 2,
+          "cardinal": false,
+          "otherPosition": true ----------------------
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ]
+}

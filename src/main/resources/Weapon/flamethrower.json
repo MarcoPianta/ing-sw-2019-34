@@ -1,0 +1,70 @@
+{
+  "name": "flamethrower",
+  "cost": {
+    "R": 1,
+    "Y": 0,
+    "B": 0
+  },
+  "color": "red",
+  "effectNumber": 1,
+  "effectOrder": false,
+  "alternativeEffect": true,
+  "basicEffect": [
+    {
+      "target": 2,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 1,
+          "maxRange": 2,
+          "cardinal": false,
+          "otherPosition": false ----------------------- deve essere in un posizione diversa dalla mia
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 0,
+          "Y": 2,
+          "B": 0
+        }
+      ],
+      "target": 2,
+      "allTarget": false,
+      "damage": 2,
+      "otherDamage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 1,
+          "maxRange": 2,
+          "cardinal": false,
+          "otherPosition": false ----------------------
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ]
+}
