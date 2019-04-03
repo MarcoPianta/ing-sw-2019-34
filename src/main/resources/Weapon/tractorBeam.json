@@ -1,26 +1,26 @@
 {
-  "name": "lockRifle",
+  "name": "tractorBeam",
   "cost": {
     "R": 0,
     "Y": 0,
-    "B": 2
+    "B": 1
   },
   "color": "blue",
-  "effectNumber": 2,
+  "effectNumber": 1,
   "effectOrder": true,
-  "alternativeEffect": false,
+  "alternativeEffect": true,
   "basicEffect": [
     {
       "target": 1,
-      "allTarget": true,
-      "damage": 2,
-      "mark": 1,
+      "allTarget": false,
+      "damage": 1,
+      "mark": 0,
       "myMove": 0,
-      "otherMove": 0,
+      "otherMove": 2,
       "iteration": 1,
       "preCondition": [
         {
-          "vision": true,
+          "vision": false,
           "minRange": -1,
           "maxRange": -1,
           "cardinal": false,
@@ -28,6 +28,7 @@
       ],
       "postCondition":[
         {
+          //"vision": true,
           "targetMove": 0
         }
       ]
@@ -38,28 +39,29 @@
       "bonusCost": [
         {
           "R": 1,
-          "Y": 0,
+          "Y": 1,
           "B": 0
         }
       ],
-      "target": 1,// diverso da quello di prima
+      "target": 1,
       "allTarget": true,
-      "damage": 0,
-      "mark": 1,
+      "damage": 3,
+      "mark": 0,
       "myMove": 0,
-      "otherMove": 0,
+      "otherMove": 2,
       "iteration": 1,
       "preCondition": [
         {
-          "vision": true,
-          "minRange": -1,
-          "maxRange": -1,
+          "vision": false,
+          "minRange": 0,
+          "maxRange": 2,
           "cardinal": false,
         }
       ],
       "postCondition":[
         {
-          "targetMove": 0
+          //distanza tra me e target = 0
+          "targetMove": 0,
         }
       ]
     }

@@ -1,0 +1,100 @@
+{
+  "name": "T.H.O.R.",
+  "cost": {
+    "R": 1,
+    "Y": 0,
+    "B": 1
+  },
+  "color": "blue",
+  "effectNumber": 3,
+  "effectOrder": true,
+  "alternativeEffect": false,
+  "basicEffect": [
+    {
+      "target": 2,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": -1,
+          "maxRange": -1,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 0,
+          "Y": 0,
+          "B": 1
+        }
+      ],
+      "target": 1,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          //il target è diverso
+          "vision": false,//deve essere visibile dal primo target
+          "minRange": -1,
+          "maxRange": -1,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "thirdEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 0,
+          "Y": 0,
+          "B": 1
+        }
+      ],
+      "target": 1,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          //il target è diverso da entrambi i precedenti
+          "vision": false,//deve essere visibile dal secondo target
+          "minRange": -1,
+          "maxRange": -1,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ]
+}
