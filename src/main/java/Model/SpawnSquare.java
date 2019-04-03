@@ -2,28 +2,32 @@ package Model;
 
 import java.util.ArrayList;
 
-public class SpawnSquare {
+public class SpawnSquare extends Square{
 
-    private ArrayList<CardWeapon> Weapons;
-    private NormalSquare normalSquare;
-    private SpawnSquare spawnSquare;
+    private ArrayList<CardWeapon> weapons;
 
-    public SpawnSquare() {
+    public SpawnSquare(Square SideN, Square SideE, Square SideS, Square SideW) {
+        N = SideN;
+        E = SideE;
+        S = SideS;
+        W = SideW;
+    }
+
+    private void addWeapon(CardWeapon weapon, int position) {
+        this.weapons.set(position, weapon);
     }
 
     public ArrayList<CardWeapon> getWeapons() {
-        return null;
+        ArrayList<CardWeapon> Weapons;
+        Weapons = this.weapons;
+        return Weapons;
     }
 
-    public void grabWeapon(int choose) {
-
+    @Override
+    public CardWeapon grabItem(int position) {
+        CardWeapon Weapon = new CardWeapon();
+        Weapon = this.weapons.get(position);
+        return Weapon;
     }
 
-    private void removeWeapon() {
-
-    }
-
-    public void addWeapon(CardWeapon weapon) {
-
-    }
 }

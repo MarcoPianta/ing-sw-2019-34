@@ -28,7 +28,8 @@
       ],
       "postCondition":[
         {
-          //"vision": true,
+          "vision": true,
+          "range": -1,
           "targetMove": 0
         }
       ]
@@ -60,8 +61,9 @@
       ],
       "postCondition":[
         {
-          //distanza tra me e target = 0
-          "targetMove": 0,
+          "vision": true,
+          "range": 0,
+          "targetMove": 0
         }
       ]
     }

@@ -1,12 +1,21 @@
 package Model;
 
-public class CardOnlyAmmo implements CardAmmo {
+public class CardOnlyAmmo extends CardAmmo {
     private Colors item1;
     private Colors item2;
     private Colors item3;
 
     public CardOnlyAmmo(){
 
+    }
+
+    @Override
+    public CardOnlyAmmo copyCardAmmo (){
+        CardOnlyAmmo copy = new CardOnlyAmmo();
+        copy.item1 = this.getItem1();
+        copy.item2 = this.getItem2();
+        copy.item3 = this.getItem3();
+        return copy;
     }
 
     public Colors getItem1() {

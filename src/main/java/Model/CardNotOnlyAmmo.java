@@ -1,12 +1,17 @@
 package Model;
 
-public class CardNotOnlyAmmo implements CardAmmo{
+public class CardNotOnlyAmmo extends CardAmmo{
     private CardPowerUp item1;
     private Colors item2;
     private Colors item3;
 
-    public CardNotOnlyAmmo(){
-
+    @Override
+    public CardNotOnlyAmmo copyCardAmmo (){
+        CardNotOnlyAmmo copy = new CardNotOnlyAmmo();
+        copy.item1 = this.getItem1();
+        copy.item2 = this.getItem2();
+        copy.item3 = this.getItem3();
+        return copy;
     }
 
     public CardPowerUp getItem1() {
