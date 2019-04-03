@@ -1,0 +1,69 @@
+{
+  " name " : " shotgun " ,
+  " cost " : {
+    " R " : 0 ,
+    " Y " : 2 ,
+    " B " : 0
+  },
+  " color " : " yellow" ,
+  " effectNumber " : 1 ,
+  " effectOrder " : false ,
+  " alternativeEffect " :true  ,
+  " basicEffect " : [
+    {
+      " target  " : 1 ,
+      " allTarget " : true ,
+      " damage " : 3 ,
+      " mark " : 0 ,
+      " myMove " : 0 ,
+      " otherMove " : 1 ,
+      " iterazione " : 1 ,
+      " preCondition " : [
+        {
+          " vision " : true ,
+          "enemiesDifferentSquare": false,
+          " minRange " : 0 ,
+          " maxRange " : 0 ,
+          " cardinal " : false
+        }
+      ],
+      " postCondition " : [
+        {
+          " targetMove " : 0,
+        }
+      ]
+    }
+  ],
+  " secondEffect " : [
+    {
+      " bonusCost " : [
+        {
+          " R " : 0 ,
+          " Y " : 0 ,
+          " B " : 0
+        }
+      ],
+      " target  " : 1 ,
+      " allTarget " : true ,
+      " damage " : 2 ,
+      " mark " : 0 ,
+      " myMove " : 0 ,
+      " otherMove " : 0 ,
+      " iterazione " : 1 ,
+      " preCondition " : [
+        {
+          " vision " : true ,
+          "enemiesDifferentSquare": false,
+          " minRange " : 1 ,
+          " maxRange " : 1 ,
+          " cardinal " : true
+        }
+      ],
+      " postCondition " : [
+        {
+          " targetMove " : 0
+        }
+      ]
+    }
+  ]
+}
