@@ -1,11 +1,12 @@
 {
   "name": "electroscyte",
-  "cost": {
-    "R": 0,
-    "Y": 0,
-    "B": 1
-  },
-  "color": "blue",
+  "cost": [
+    0,
+    0,
+    1
+  ],
+
+  "color": "BLUE",
   "effectNumber": 1,
   "effectOrder": true,
   "alternativeEffect": true,
@@ -23,7 +24,7 @@
           "vision": true,
           "minRange": 0,
           "maxRange": 0,
-          "cardinal": false,
+          "cardinal": false
         }
       ],
       "postCondition":[
@@ -54,7 +55,7 @@
           "vision": true,
           "minRange": 0,
           "maxRange": 0,
-          "cardinal": false,
+          "cardinal": false
         }
       ],
       "postCondition":[
