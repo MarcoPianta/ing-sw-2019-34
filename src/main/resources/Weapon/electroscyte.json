@@ -1,0 +1,67 @@
+{
+  "name": "electroscyte",
+  "cost": {
+    "R": 0,
+    "Y": 0,
+    "B": 1
+  },
+  "color": "blue",
+  "effectNumber": 1,
+  "effectOrder": true,
+  "alternativeEffect": true,
+  "basicEffect": [
+    {
+      "target": 4,
+      "allTarget": true,
+      "damage": 1,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
+  "secondEffect": [
+    {
+      "bonusCost": [
+        {
+          "R": 1,
+          "Y": 0,
+          "B": 1
+        }
+      ],
+      "target": 4,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+        }
+      ],
+      "postCondition":[
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ]
+}

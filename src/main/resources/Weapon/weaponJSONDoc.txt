@@ -1,0 +1,42 @@
+"name": --> weapon name
+"cost": { --> weapon reload cost
+"R": 0,
+"Y": 0,
+"B": 1
+}
+"color": --> weapon color
+
+"effectNumber": --> effect number of weapon that can be used
+"effectOrder": --> does the effects may be used in order or not?(True or False)
+"alternativeEffect": --> does the effects may be used all or only one(True if only one else False)
+
+"basicEffect": [ --> first effect
+
+    "target": --> number of target that can be shooted
+    "allTarget": --> does all target get the same status changes?(True if yes)
+    "damage": --> damage
+    "mark":
+    "myMove": --> qty of steps that the weapon allow me to do
+    "otherMove": --> qty of steps that the weapon allow me to make enemy do
+    "iteration": --> how many times the effect can be used
+
+    "preCondition": [ --> condition that have to be true before using the weapon
+
+        "vision": --> does I need to see the enemy to shot him?(True if yes)
+        "minRange": --> minimum of range of weapon
+        "maxRange": --> maximum of range of weapon
+        "cardinal": --> can I shoot only in cardinal direction? (True if yes)
+
+    "postCondition":[ --> condition that have to be true after using the weapon
+
+        "targetMove": --> steps that the enemy have to do
+
+"SecondEffect": [ --> second effect
+
+    "bonusCost": { --> weapon secondary effect cost
+    "R": 0,
+    "Y": 0,
+    "B": 1
+    }
+
+"ThirdEffect": [ --> third effect
