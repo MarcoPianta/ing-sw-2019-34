@@ -1,5 +1,7 @@
 package Model;
 
+import java.io.FileNotFoundException;
+
 public abstract class Square {
     protected Square N;
     protected Square E;

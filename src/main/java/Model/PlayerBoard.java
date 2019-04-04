@@ -8,7 +8,6 @@ public class PlayerBoard {
     private String playerName;
     private int maxReward;// indicates the maximum reward obtainable
     private ArrayList<Colors> damageBar;
-    private int damegeBarCounter;
     private int adrenalineAction; //the only values are 0,1,2
     private ArrayList<CardWeapon> playerWeapons;
     private ArrayList<CardPowerUp> playerPowerUps;
@@ -20,7 +19,6 @@ public class PlayerBoard {
         this.color=color;
         this.playerName = playerName;
         this.damageBar = new ArrayList<Colors>();
-        this.damegeBarCounter = 0;
         this.adrenalineAction = 0;
         this.playerWeapons = new ArrayList<CardWeapon>();
         this.playerPowerUps = new ArrayList<CardPowerUp>();
@@ -38,9 +36,6 @@ public class PlayerBoard {
     public String getPlayerName() {
         return playerName;
     }
-    public int getDamegeBarCounter() {
-        return damegeBarCounter;
-    }
     //send damageBar to the controller for damage calculation and reset damageBar
     public ArrayList<Colors> getDamageBar() {
         resetDamageBar();
@@ -57,7 +52,6 @@ public class PlayerBoard {
 
         for( int i = 0 ; i<damageBar.size();i++)
             damageBar.remove(i);
-        damegeBarCounter=0;
 
     }
     //add new weapon after grad cardWeapon
@@ -66,6 +60,12 @@ public class PlayerBoard {
             //TODO throws exception
         playerWeapons.add(playerWeapons.size(),weapon);// we can delete index
 
+    }
+
+    public void substituteWeapons(ArrayList<CardWeapon> newPlayerWeapons){
+        for(int i=0; i<3 ;i--){
+            playerWeapons.set(i,newPlayerWeapons.get(i));
+        }
     }
     public void addPowerUp(CardPowerUp powerUp) {
         if(playerPowerUps.size()==3)
@@ -87,7 +87,7 @@ public class PlayerBoard {
 
     }
     //countMarks returns the number of the mark for the input color
-    private int countMarks(Colors color){
+    public int countMarks(Colors color){
         int counterMarks=0;
         for( Colors colors : mark ){
             if (colors==color)
@@ -99,15 +99,14 @@ public class PlayerBoard {
     public void addDamage(Colors color, int d) {
         int counterMark = countMarks(color);
 
-        for( int i = 0 ; (i<d + counterMark) && (damegeBarCounter <= 12);i++){
-            damageBar.add(damegeBarCounter,color);
-            damegeBarCounter++;
+        for( int i = 0 ; (i<d + counterMark) && (damageBar.size() <= 12);i++){
+            damageBar.add(color);
         }
-        if(damegeBarCounter>=3)
+        if(damageBar.size()>=3)
             adrenalineAction++;
-        if(damegeBarCounter>=6)
+        if(damageBar.size()>=6)
             adrenalineAction++;
-        if(damegeBarCounter==11) {
+        if(damageBar.size()==11) {
             //TODO  Throws exception death
         }
     }

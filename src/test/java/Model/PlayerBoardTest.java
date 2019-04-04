@@ -25,7 +25,7 @@ public class PlayerBoardTest  {
     }
 
     @Test
-    public void testResetDamageBar(){
+    public void testResetDamageBar (){
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
         ArrayList<Colors> damageBar = new ArrayList<Colors>();
         damageBar.add(Colors.BLUE);
@@ -44,6 +44,23 @@ public class PlayerBoardTest  {
         assertNotNull(playerBoard.getPlayerWeapons());
     }
 
+    @Test
+    public void testCountMarksAddMarks(){
+        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
+        playerBoard.addMark(Colors.BLUE, 3 );
+        playerBoard.addMark(Colors.VIOLET, 2 );
 
+        assertEquals(3,playerBoard.countMarks(Colors.BLUE));
+        assertEquals(0,playerBoard.countMarks(Colors.YELLOW));
+        assertEquals(2,playerBoard.countMarks(Colors.VIOLET));
 
+    }
+    @Test
+    public void testAddDamage(){
+        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest");
+        playerBoard.addMark(Colors.BLUE, 3 );
+        playerBoard.addDamage(Colors.BLUE,2);
+
+        assertEquals(2,playerBoard.getDamageBar().size());
+    }
 }

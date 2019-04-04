@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class SpawnSquare extends Square{
@@ -24,10 +25,9 @@ public class SpawnSquare extends Square{
     }
 
     @Override
-    public CardWeapon grabItem(int position) {
-        CardWeapon Weapon = new CardWeapon();
+    public CardWeapon grabItem(int position)  {
+        CardWeapon Weapon;
         Weapon = this.weapons.get(position);
         return Weapon;
     }
-
 }
