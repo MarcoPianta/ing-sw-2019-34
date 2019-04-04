@@ -18,7 +18,7 @@ public class CardWeapon implements Card {
 
     //The constructor read from JSON file the specs and create a weapon with that specs
     public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
-        InputStream fis = new FileInputStream("C:/Users/Mark2/Desktop/Marco/Universita/Progetto_ingegneria_del_software/ing-sw-2019-34/src/main/resources/Weapon/"+file);
+        InputStream fis = new FileInputStream("C:\\ing-sw-2019-34\\src\\main\\resources\\Weapon\\"+file);
         JsonReader reader = Json.createReader(fis);
         jsonValues = reader.readObject();
         reader.close();

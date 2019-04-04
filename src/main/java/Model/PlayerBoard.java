@@ -35,6 +35,9 @@ public class PlayerBoard {
         return color;
     }
 
+    public String getPlayerName() {
+        return playerName;
+    }
     public int getDamegeBarCounter() {
         return damegeBarCounter;
     }
@@ -50,10 +53,11 @@ public class PlayerBoard {
     }
 
     //reset damageBar after a dead
-    private void resetDamageBar() {
+    protected void resetDamageBar() {
 
         for( int i = 0 ; i<damageBar.size();i++)
             damageBar.remove(i);
+        damegeBarCounter=0;
 
     }
     //add new weapon after grad cardWeapon
