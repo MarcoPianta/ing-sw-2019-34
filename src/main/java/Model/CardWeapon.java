@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -41,8 +42,11 @@ public class CardWeapon implements Card {
     public int getEffectsNumber() {
         return effectsNumber;
     }
-
     public JsonObject getJsonValues() {
         return jsonValues;
+    }
+    @Override
+    public Enum[] getEnumeration(){
+        return WeaponDictionary.values();
     }
 }
