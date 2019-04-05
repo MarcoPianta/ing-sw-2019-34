@@ -22,7 +22,6 @@ public class SpawnSquareTest {
             weaponTest = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
         } catch (FileNotFoundException e) {
             return;}
-//        weaponsTest[0] = weaponTest;
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, weaponsTest);
         spawnSquare.addWeapon(weaponTest, 0);
         weaponsTest[0] = weaponTest;
@@ -33,7 +32,7 @@ public class SpawnSquareTest {
         CardWeapon weaponTest;
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null);
         try {
-            weaponTest = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
+            weaponTest = new CardWeapon(WeaponDictionary.FLAMETHROWER.getAbbreviation());
         } catch (FileNotFoundException e) { return; }
         spawnSquare.addWeapon(weaponTest, 0);
         assertTrue(spawnSquare.grabItem(0) instanceof CardWeapon || spawnSquare.grabItem(0) == null);

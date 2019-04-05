@@ -45,6 +45,10 @@ public class PlayerBoard {
 
     }
 
+    public int[] getAmmoRYB() {
+        return ammoRYB;
+    }
+
     public int getMaxReward() {
         return maxReward;
     }
@@ -66,11 +70,12 @@ public class PlayerBoard {
 
 
     public ArrayList<CardPowerUp> getPlayerPowerUps() {
+
         return playerPowerUps;
     }
 
     //reset damageBar after a dead
-    protected void resetDamageBar() {
+    private void resetDamageBar() {
         int i=0;
         while( damageBar.size()!=0)
             damageBar.remove(i);
@@ -78,13 +83,15 @@ public class PlayerBoard {
         decrementMaxReward();
 
     }
+
     //add new weapon after grad cardWeapon
     public void addWeapon(CardWeapon weapon) {
         if(playerWeapons.size()==3) {
             //TODO throws exception
         }
         else
-            playerWeapons.add(playerWeapons.size(),weapon);// we can delete index
+            playerWeapons.add(playerWeapons.size(),weapon);
+        decrementAmmo(weapon.getRedCost(),weapon.getYellowCost(),weapon.getBlueCost());
 
     }
 
@@ -100,19 +107,37 @@ public class PlayerBoard {
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
 
     }
-    //add new ammo after grab cardAmmo
-    public void addAmmo(int r, int y, int b) {
-        ammoRYB[0]= ammoRYB[0] +r;
+
+    private void removePowerUp(CardPowerUp powerUp){
+        boolean isPresent=false ;
+        int i=0;
+        while(isPresent=false){
+            if(getPlayerPowerUps().get(i)== powerUp)
+                getPlayerPowerUps().remove(i);
+            i++;
+        }
+    }
+
+    //**This method add new ammo after grab cardAmmo
+    public void addAmmo(int red, int yellow, int blue) {
+        ammoRYB[0]= ammoRYB[0] +red;
         if(ammoRYB[0]>3)
             ammoRYB[0]=3;
-        ammoRYB[1]=ammoRYB[1] +y;
+        ammoRYB[1]=ammoRYB[1] +yellow;
         if(ammoRYB[1]>3)
             ammoRYB[1]=3;
-        ammoRYB[2]=ammoRYB[2] +b;
+        ammoRYB[2]=ammoRYB[2] +blue;
         if(ammoRYB[2]>3)
             ammoRYB[2]=3;
 
     }
+    //** This method decrement the value of array ammoRYB, exception controllate da controller
+    private void decrementAmmo(int red,int yellow,int blue){
+        ammoRYB[0]-=red;
+        ammoRYB[1]-=yellow;
+        ammoRYB[2]-=blue;
+    }
+
     //countMarks returns the number of the mark for the input color
     public int countMarks(Colors color){
         int counterMarks=0;
@@ -125,32 +150,35 @@ public class PlayerBoard {
     }
     // addDamage adds colors to the damagedBar based on damage and increment adrenalineAction
     public void addDamage(Colors color, int d) {
-        int counterMark = countMarks(color);
-        resetMark(color);
 
-        for( int i = 0 ; (i < d + counterMark) && (damageBar.size() < 12);i++){
+        for( int i = 0 ; (i < d + countMarks(color)) && (damageBar.size() < 12);i++){
             damageBar.add(color);
         }
+
+        resetMark(color);
+
         if(damageBar.size()>=3 || damageBar.size()<6 )
             adrenalineAction++;
         if(damageBar.size()>=6)
             adrenalineAction++;
-        if(damageBar.size()==11) {
-            //TODO  Throws exception death
+        if(damageBar.size()>=11) {
+            //TODO  Throws exception death send player's damageboard and maxrewards
+            resetDamageBar();
         }
     }
 
     //addMark adds colors to arraylist mark based on the input marks
     public void addMark(Colors color, int m) {
-
-        for( int i = 0 ; i<m;i++){
-            mark.add(mark.size(),color);
+        int i=0;
+        while( (i<m) && (countMarks(color)<3)){
+            mark.add(color);
+            i++;
         }
 
     }
 
     //reset mark after adddamage
-    public void resetMark(Colors color){
+    private void resetMark(Colors color){
         int i=0;
         while(countMarks(color)!=0) {
             if(mark.get(i)==color)

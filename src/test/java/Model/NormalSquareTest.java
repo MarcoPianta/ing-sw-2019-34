@@ -23,9 +23,11 @@ public class NormalSquareTest {
     public void GrabItemTest(){
         CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
         NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null);
-
-        assertTrue(normalSquareTest.grabItem(0) instanceof CardAmmo || normalSquareTest.grabItem(0) == null);
+        assertTrue(normalSquareTest.grabItem(0) == null);
         assertTrue(normalSquareTest.getItem() == null);
+        normalSquareTest.addAmmo(ammoTest);
+        assertTrue(normalSquareTest.grabItem(0) instanceof CardAmmo);
+
     }
 }
 
