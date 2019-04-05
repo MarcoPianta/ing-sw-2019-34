@@ -45,6 +45,10 @@ public class PlayerBoard {
 
     }
 
+    public int[] getAmmoRYB() {
+        return ammoRYB;
+    }
+
     public int getMaxReward() {
         return maxReward;
     }
@@ -102,18 +106,35 @@ public class PlayerBoard {
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
 
     }
-    //add new ammo after grab cardAmmo
-    public void addAmmo(int r, int y, int b) {
-        ammoRYB[0]= ammoRYB[0] +r;
+
+    private void removePowerUp(CardPowerUp powerUp){
+        boolean isPresent=false ;
+        int i=0;
+        while(isPresent=false){
+            if(getPlayerPowerUps().get(i)== powerUp)
+                getPlayerPowerUps().remove(i);
+            i++;
+        }
+    }
+
+    //**This method add new ammo after grab cardAmmo
+    public void addAmmo(int red, int yellow, int blue) {
+        ammoRYB[0]= ammoRYB[0] +red;
         if(ammoRYB[0]>3)
             ammoRYB[0]=3;
-        ammoRYB[1]=ammoRYB[1] +y;
+        ammoRYB[1]=ammoRYB[1] +yellow;
         if(ammoRYB[1]>3)
             ammoRYB[1]=3;
-        ammoRYB[2]=ammoRYB[2] +b;
+        ammoRYB[2]=ammoRYB[2] +blue;
         if(ammoRYB[2]>3)
             ammoRYB[2]=3;
 
+    }
+    //** This method decrement the value of array ammoRYB, exception controllate da controller
+    private void decrementAmmo(int red,int yellow,int blue){
+        ammoRYB[0]-=red;
+        ammoRYB[1]-=yellow;
+        ammoRYB[2]-=blue;
     }
 
     //countMarks returns the number of the mark for the input color

@@ -73,7 +73,21 @@ public class PlayerBoardTest  {
     }
 
     */
+   @Test
+   public  void testAddAmmo(){
+       PlayerBoard playerBoard= new PlayerBoard(Colors.BLUE, "playertest");
+       int red=2;
+       int yellow=1;
+       int blue=0;
+       playerBoard.addAmmo(red,yellow,blue);
+       assertEquals(2, playerBoard.getAmmoRYB()[0]);
+       assertEquals(1, playerBoard.getAmmoRYB()[1]);
+       assertEquals(0, playerBoard.getAmmoRYB()[2]);
 
+       red=2;
+       playerBoard.addAmmo(red,yellow,blue);
+       assertEquals(3,playerBoard.getAmmoRYB()[0]);
+   }
 
     @Test
     public void testCountMarksAddMarks(){
