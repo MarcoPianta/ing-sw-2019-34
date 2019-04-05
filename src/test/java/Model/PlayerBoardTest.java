@@ -23,14 +23,18 @@ public class PlayerBoardTest  {
         assertEquals("playerTest", playerBoard.getPlayerName());
 
     }
-
+    //**test for private test removeammo
     @Test
     public void testAddWeapon() throws FileNotFoundException {
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
         String file= "electroscyte.json";
         CardWeapon cardWeapon=new CardWeapon(file);
+        playerBoard.addAmmo(3,3,3);
         playerBoard.addWeapon(cardWeapon);
         assertEquals(1,playerBoard.getPlayerWeapons().size());
+        assertEquals(3, playerBoard.getAmmoRYB()[0]);
+        assertEquals(3, playerBoard.getAmmoRYB()[1]);
+        assertEquals(2, playerBoard.getAmmoRYB()[2]);
     }
     @Test
     public void testSobstituteWeapons() throws FileNotFoundException{

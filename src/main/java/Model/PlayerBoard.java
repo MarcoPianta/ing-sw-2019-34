@@ -90,7 +90,8 @@ public class PlayerBoard {
             //TODO throws exception
         }
         else
-            playerWeapons.add(playerWeapons.size(),weapon);// we can delete index
+            playerWeapons.add(playerWeapons.size(),weapon);
+        decrementAmmo(weapon.getRedCost(),weapon.getYellowCost(),weapon.getBlueCost());
 
     }
 

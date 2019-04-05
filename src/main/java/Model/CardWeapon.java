@@ -35,6 +35,19 @@ public class CardWeapon implements Card {
     public String getName() {
         return name;
     }
+
+    public int getBlueCost() {
+        return blueCost;
+    }
+
+    public int getRedCost() {
+        return redCost;
+    }
+
+    public int getYellowCost() {
+        return yellowCost;
+    }
+
     public AmmoColors getColor(){
         return color;
     }
