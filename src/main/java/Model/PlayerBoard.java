@@ -80,14 +80,16 @@ public class PlayerBoard {
     }
     //add new weapon after grad cardWeapon
     public void addWeapon(CardWeapon weapon) {
-        if(playerWeapons.size()==3){}
+        if(playerWeapons.size()==3) {
             //TODO throws exception
-        playerWeapons.add(weapon);// we can delete index
+        }
+        else
+            playerWeapons.add(playerWeapons.size(),weapon);// we can delete index
 
     }
 
     public void substituteWeapons(ArrayList<CardWeapon> newPlayerWeapons){
-        for(int i=0; i<3 ;i--){
+        for(int i=0; i<3 ;i++){
             playerWeapons.set(i,newPlayerWeapons.get(i));
         }
     }

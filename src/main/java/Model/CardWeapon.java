@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -18,7 +19,8 @@ public class CardWeapon implements Card {
 
     //The constructor read from JSON file the specs and create a weapon with that specs
     public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
-        InputStream fis = new FileInputStream("C:\\ing-sw-2019-34\\src\\main\\resources\\Weapon\\"+file);
+        File fileJson = new File(getClass().getResource("/Weapon/"+file).getFile());
+        InputStream fis = new FileInputStream(fileJson);
         JsonReader reader = Json.createReader(fis);
         jsonValues = reader.readObject();
         reader.close();
@@ -40,4 +42,7 @@ public class CardWeapon implements Card {
         return effectsNumber;
     }
 
+    public JsonObject getJsonValues() {
+        return jsonValues;
+    }
 }
