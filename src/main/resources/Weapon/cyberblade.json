@@ -1,11 +1,11 @@
 {
   " name " : " cyberblade " ,
-  " cost " : {
-    " R " : 1 ,
-    " Y " : 1 ,
-    " B " : 0
-  },
-  " color " : " yellow" ,
+  " cost " : [
+    1 ,
+    1 ,
+    0
+  ],
+  " color " : "YELLOW" ,
   " effectNumber " : 3 ,
   " effectOrder " : true ,
   " alternativeEffect " :false  ,
@@ -17,7 +17,7 @@
       " mark " : 0 ,
       " myMove " : 0 ,
       " otherMove " : 0 ,
-      " iterazione " : 1 ,
+      " iteration " : 1 ,
       " preCondition " : [
         {
           " vision " : true ,
@@ -49,7 +49,7 @@
       " mark " : 0 ,
       " myMove " : 1 ,
       " otherMove " : 0 ,
-      " iterazione " : 1 ,
+      " iteration " : 1 ,
       " preCondition " : [
         {
           " vision " : true ,
