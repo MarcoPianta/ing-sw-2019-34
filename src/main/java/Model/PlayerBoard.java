@@ -66,11 +66,12 @@ public class PlayerBoard {
 
 
     public ArrayList<CardPowerUp> getPlayerPowerUps() {
+
         return playerPowerUps;
     }
 
     //reset damageBar after a dead
-    protected void resetDamageBar() {
+    private void resetDamageBar() {
         int i=0;
         while( damageBar.size()!=0)
             damageBar.remove(i);
@@ -78,6 +79,7 @@ public class PlayerBoard {
         decrementMaxReward();
 
     }
+
     //add new weapon after grad cardWeapon
     public void addWeapon(CardWeapon weapon) {
         if(playerWeapons.size()==3) {
@@ -113,6 +115,7 @@ public class PlayerBoard {
             ammoRYB[2]=3;
 
     }
+
     //countMarks returns the number of the mark for the input color
     public int countMarks(Colors color){
         int counterMarks=0;
@@ -125,32 +128,35 @@ public class PlayerBoard {
     }
     // addDamage adds colors to the damagedBar based on damage and increment adrenalineAction
     public void addDamage(Colors color, int d) {
-        int counterMark = countMarks(color);
-        resetMark(color);
 
-        for( int i = 0 ; (i < d + counterMark) && (damageBar.size() < 12);i++){
+        for( int i = 0 ; (i < d + countMarks(color)) && (damageBar.size() < 12);i++){
             damageBar.add(color);
         }
+
+        resetMark(color);
+
         if(damageBar.size()>=3 || damageBar.size()<6 )
             adrenalineAction++;
         if(damageBar.size()>=6)
             adrenalineAction++;
-        if(damageBar.size()==11) {
-            //TODO  Throws exception death
+        if(damageBar.size()>=11) {
+            //TODO  Throws exception death send player's damageboard and maxrewards
+            resetDamageBar();
         }
     }
 
     //addMark adds colors to arraylist mark based on the input marks
     public void addMark(Colors color, int m) {
-
-        for( int i = 0 ; i<m;i++){
-            mark.add(mark.size(),color);
+        int i=0;
+        while( (i<m) && (countMarks(color)<3)){
+            mark.add(color);
+            i++;
         }
 
     }
 
     //reset mark after adddamage
-    public void resetMark(Colors color){
+    private void resetMark(Colors color){
         int i=0;
         while(countMarks(color)!=0) {
             if(mark.get(i)==color)
