@@ -22,6 +22,7 @@ public class PlayerBoard {
         this.adrenalineAction = 0;
         this.playerWeapons = new ArrayList<CardWeapon>();
         this.playerPowerUps = new ArrayList<CardPowerUp>();
+        this.maxReward=8;
         this.points = 0;
         this.mark = new ArrayList<Colors>();
         this.ammoRYB= new int[3];
@@ -36,29 +37,52 @@ public class PlayerBoard {
     public String getPlayerName() {
         return playerName;
     }
+
+
     //send damageBar to the controller for damage calculation and reset damageBar
     public ArrayList<Colors> getDamageBar() {
-        resetDamageBar();
         return damageBar;
 
     }
 
+    public int getMaxReward() {
+        return maxReward;
+    }
+
+
+    public int getAdrenalineAction() {
+        return adrenalineAction;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
     public ArrayList<CardWeapon> getPlayerWeapons() {
+
         return playerWeapons;
+    }
+
+
+
+    public ArrayList<CardPowerUp> getPlayerPowerUps() {
+        return playerPowerUps;
     }
 
     //reset damageBar after a dead
     protected void resetDamageBar() {
-
-        for( int i = 0 ; i<damageBar.size();i++)
+        int i=0;
+        while( damageBar.size()!=0)
             damageBar.remove(i);
+        adrenalineAction=0;
+        decrementMaxReward();
 
     }
     //add new weapon after grad cardWeapon
     public void addWeapon(CardWeapon weapon) {
-        if(playerWeapons.size()==3)
+        if(playerWeapons.size()==3){}
             //TODO throws exception
-        playerWeapons.add(playerWeapons.size(),weapon);// we can delete index
+        playerWeapons.add(weapon);// we can delete index
 
     }
 
@@ -67,10 +91,11 @@ public class PlayerBoard {
             playerWeapons.set(i,newPlayerWeapons.get(i));
         }
     }
+
     public void addPowerUp(CardPowerUp powerUp) {
         if(playerPowerUps.size()==3)
             //TODO throws exception but this condition is checked by controller
-            playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
+        playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
 
     }
     //add new ammo after grab cardAmmo
@@ -89,6 +114,7 @@ public class PlayerBoard {
     //countMarks returns the number of the mark for the input color
     public int countMarks(Colors color){
         int counterMarks=0;
+
         for( Colors colors : mark ){
             if (colors==color)
                 counterMarks++;
@@ -98,11 +124,12 @@ public class PlayerBoard {
     // addDamage adds colors to the damagedBar based on damage and increment adrenalineAction
     public void addDamage(Colors color, int d) {
         int counterMark = countMarks(color);
+        resetMark(color);
 
-        for( int i = 0 ; (i<d + counterMark) && (damageBar.size() <= 12);i++){
+        for( int i = 0 ; (i < d + counterMark) && (damageBar.size() < 12);i++){
             damageBar.add(color);
         }
-        if(damageBar.size()>=3)
+        if(damageBar.size()>=3 || damageBar.size()<6 )
             adrenalineAction++;
         if(damageBar.size()>=6)
             adrenalineAction++;
@@ -118,6 +145,25 @@ public class PlayerBoard {
             mark.add(mark.size(),color);
         }
 
+    }
+
+    //reset mark after adddamage
+    public void resetMark(Colors color){
+        int i=0;
+        while(countMarks(color)!=0) {
+            if(mark.get(i)==color)
+                mark.remove(i);
+        }
+
+    }
+    //decrement maxReward after death
+    public void decrementMaxReward(){
+        if(getMaxReward()!=1)
+            maxReward-=2;
+    }
+
+    public void addPoints(int newPoints){
+        points+= newPoints;
     }
 
 
