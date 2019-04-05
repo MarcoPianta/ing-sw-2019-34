@@ -15,7 +15,7 @@ public class CardWeaponTest {
             return;
         }
         assertEquals("electroscyte", weapon.getName());
-        assertEquals(Colors.BLUE, weapon.getColor());
+        assertEquals(AmmoColors.BLUE, weapon.getColor());
         assertEquals(1,weapon.getEffectsNumber());
         assertTrue(weapon instanceof CardWeapon);
     }

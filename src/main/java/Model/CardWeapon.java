@@ -10,7 +10,7 @@ import javax.json.JsonReader;
 
 public class CardWeapon implements Card {
     private String name;
-    private Colors color;
+    private AmmoColors color;
     private int redCost;
     private int blueCost;
     private int yellowCost;
@@ -25,7 +25,7 @@ public class CardWeapon implements Card {
         jsonValues = reader.readObject();
         reader.close();
         name = jsonValues.getString("name");
-        color = Colors.valueOf(jsonValues.getString("color"));
+        color = AmmoColors.valueOf(jsonValues.getString("color"));
         redCost = jsonValues.getJsonArray("cost").getInt(0);
         yellowCost = jsonValues.getJsonArray("cost").getInt(1);
         blueCost = jsonValues.getJsonArray("cost").getInt(2);
@@ -35,7 +35,7 @@ public class CardWeapon implements Card {
     public String getName() {
         return name;
     }
-    public Colors getColor(){
+    public AmmoColors getColor(){
         return color;
     }
     public int getEffectsNumber() {
