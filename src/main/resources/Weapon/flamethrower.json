@@ -1,11 +1,11 @@
 {
   "name": "flamethrower",
-  "cost": {
-    "R": 1,
-    "Y": 0,
-    "B": 0
-  },
-  "color": "red",
+  "cost": [
+    1,
+    0,
+    0
+  ],
+  "color": "RED",
   "effectNumber": 1,
   "effectOrder": false,
   "alternativeEffect": true,
@@ -24,7 +24,7 @@
           "minRange": 1,
           "maxRange": 2,
           "cardinal": false,
-          "otherPosition": false ----------------------- deve essere in un posizione diversa dalla mia
+          "otherPosition": false
         }
       ],
       "postCondition":[
@@ -57,7 +57,7 @@
           "minRange": 1,
           "maxRange": 2,
           "cardinal": false,
-          "otherPosition": false ----------------------
+          "otherPosition": false
         }
       ],
       "postCondition":[

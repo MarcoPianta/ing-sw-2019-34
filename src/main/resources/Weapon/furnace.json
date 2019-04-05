@@ -1,11 +1,11 @@
 {
   "name": "furnace",
-  "cost": {
-    "R": 1,
-    "Y": 0,
-    "B": 1
-  },
-  "color": "red",
+  "cost": [
+    1,
+    0,
+    1
+  ],
+  "color": "RED",
   "effectNumber": 1,
   "effectOrder": false,
   "alternativeEffect": true,
@@ -24,7 +24,7 @@
           "minRange": -1,
           "maxRange": -1,
           "cardinal": false,
-          "otherPosition": true ----------------------- deve essere in un posizione diversa dalla mia
+          "otherPosition": true
         }
       ],
       "postCondition":[
@@ -56,7 +56,7 @@
           "minRange": 1,
           "maxRange": 1,
           "cardinal": false,
-          "otherPosition": true ----------------------
+          "otherPosition": true
         }
       ],
       "postCondition":[
