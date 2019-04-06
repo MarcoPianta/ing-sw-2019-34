@@ -19,7 +19,7 @@ public class CardWeapon implements Card {
     private boolean charge;
     private ArrayList<Effect> effects;
 
-    //The constructor read from JSON file the specs and create a weapon with that specs
+    /**The constructor read from JSON file the specs and create a weapon with that specs*/
     public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
         JsonObject jsonValues; /* this variable contains the JsonObject created from JSON file*/
         File fileJson = new File(getClass().getResource("/Weapon/"+file).getFile());
@@ -35,13 +35,6 @@ public class CardWeapon implements Card {
         effectsNumber = jsonValues.getInt("effectNumber");
         effects = new ArrayList<>();
         setEffects(jsonValues);
-
-        /*
-        int i = 0;
-        while (i < effectsNumber){
-            i++;
-            effects.add(new Effect(jsonValues, i));
-        }*/
     }
 
     public String getName() {
@@ -76,7 +69,7 @@ public class CardWeapon implements Card {
     /**
      * This method return the effects ArrayList of a weapon but to avoid exposing the data structure to an external
      * observer, who could change the values in it, it returns a copy of it
-    */
+     * */
     public ArrayList<Effect> getEffects() {
         return new ArrayList<Effect>(effects);
     }
@@ -85,6 +78,7 @@ public class CardWeapon implements Card {
         return charge;
     }
 
+    /**This method read the effects of a weapon from the jsonObject and create an arrayList of Effect*/
     private void setEffects(JsonObject jsonValues){
         int i = 0;
         while (i < effectsNumber){

@@ -5,10 +5,6 @@ public class CardOnlyAmmo extends CardAmmo {
     private Colors item2;
     private Colors item3;
 
-    public CardOnlyAmmo(){
-
-    }
-
     @Override
     public CardOnlyAmmo copyCardAmmo (){
         CardOnlyAmmo copy = new CardOnlyAmmo();
@@ -25,8 +21,8 @@ public class CardOnlyAmmo extends CardAmmo {
     public Colors getItem2() {
         return item2;
     }
+
     public Colors getItem3() {
         return item3;
     }
-
 }
