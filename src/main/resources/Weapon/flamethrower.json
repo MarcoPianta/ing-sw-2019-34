@@ -9,7 +9,7 @@
   "effectNumber": 1,
   "effectOrder": false,
   "alternativeEffect": true,
-  "basicEffect": [
+  "Effect1": [
     {
       "target": 2,
       "allTarget": true,
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "secondEffect": [
+  "Effect2": [
     {
       "bonusCost": [
         {

@@ -1,100 +1,99 @@
 {
-  " name " : " cyberblade " ,
-  " cost " : [
-    1 ,
-    1 ,
+  "name": "cyberblade",
+  "cost": [
+    1,
+    1,
     0
   ],
-  " color " : "YELLOW" ,
-  " effectNumber " : 3 ,
-  " effectOrder " : true ,
-  " alternativeEffect " :false  ,
-  " basicEffect " : [
+  "color": "YELLOW",
+  "effectNumber": 3,
+  "effectOrder": true,
+  "alternativeEffect": false ,
+  "Effect1": [
     {
-      " target " : 1 ,
-      " allTarget " : true ,
-      " damage " : 2 ,
-      " mark " : 0 ,
-      " myMove " : 0 ,
-      " otherMove " : 0 ,
-      " iteration " : 1 ,
-      " preCondition " : [
+      "target": 1,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
         {
-          " vision " : true ,
+          "vision": true,
           "enemiesDifferentSquare": false,
-          " minRange " : 0 ,
-          " maxRange " : 0 ,
-          " cardinal " : false
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false
         }
       ],
-      " postCondition " : [
+      "postCondition": [
         {
-          " targetMove " : 0
+          "targetMove": 0
         }
       ]
     }
   ],
-  " secondEffect " : [
+  "Effect2": [
     {
-      " bonusCost " : [
+      "bonusCost": [
         {
-          " R " : 0 ,
-          " Y " : 0 ,
-          " B " : 0
+          "R": 0,
+          "Y": 0,
+          "B": 0
         }
       ],
-      " target " : 0 ,
-      " allTarget " : true ,
-      " damage " : 0 ,
-      " mark " : 0 ,
-      " myMove " : 1 ,
-      " otherMove " : 0 ,
-      " iteration " : 1 ,
-      " preCondition " : [
+      "target": 0,
+      "allTarget": true,
+      "damage": 0,
+      "mark": 0,
+      "myMove": 1,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
         {
-          " vision " : true ,
+          "vision": true,
           "enemiesDifferentSquare": false,
-          " minRange " : 0 ,
-          " maxRange " : 0 ,
-          " cardinal " : false
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false
         }
       ],
-      " postCondition " : [
+      "postCondition": [
         {
-          " targetMove " : 0
+          "targetMove": 0
         }
       ]
     }
   ],
-  " thirdEffect " : [
+  "Effect3": [
     {
-      " bonusCost " : [
+      "bonusCost": [
         {
-          " R " : 0 ,
-          " Y " : 1 ,
-          " B " : 0
+          "R": 0,
+          "Y": 1,
+          "B": 0
         }
       ],
-      " target  " : 1 ,
-      " allTarget " : true ,
-      " damage " : 2 ,
-      " mark " : 0 ,
-      " myMove " : 0,
-      " otherMove " : 0 ,
-      " iterazione " : 1 ,
-      " preCondition " : [
+      "target": 1,
+      "allTarget": true,
+      "damage": 2,
+      "mark": 0,
+      "myMove": 0,
+      "otherMove": 0,
+      "iteration": 1,
+      "preCondition": [
         {
-          " vision " : true ,
+          "vision": true,
           "enemiesDifferentSquare": false,
-          //"differenttarget": true,
-          " minRange " : 0 ,
-          " maxRange " : 0 ,
-          " cardinal " : false
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false
         }
       ],
-      " postCondition " : [
+      "postCondition": [
         {
-          " targetMove " : 0
+          "targetMove": 0
         }
       ]
     }
