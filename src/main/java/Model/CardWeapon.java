@@ -16,6 +16,7 @@ public class CardWeapon implements Card {
     private int blueCost;
     private int yellowCost;
     private int effectsNumber;
+    private boolean charge;
     private ArrayList<Effect> effects;
 
     //The constructor read from JSON file the specs and create a weapon with that specs
@@ -80,6 +81,10 @@ public class CardWeapon implements Card {
         return new ArrayList<Effect>(effects);
     }
 
+    public boolean isCharge() {
+        return charge;
+    }
+
     private void setEffects(JsonObject jsonValues){
         int i = 0;
         while (i < effectsNumber){
@@ -87,4 +92,9 @@ public class CardWeapon implements Card {
             this.effects.add(new Effect(jsonValues, i));
         }
     }
+
+    public void setCharge(boolean charge) {
+        this.charge = charge;
+    }
+
 }
