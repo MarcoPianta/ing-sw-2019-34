@@ -16,10 +16,11 @@ public class CardWeapon implements Card {
     private int blueCost;
     private int yellowCost;
     private int effectsNumber;
-    private JsonObject jsonValues; /**this variable contains the JsonObject created from JSON file*/
+    private ArrayList<Effect> effects;
 
     //The constructor read from JSON file the specs and create a weapon with that specs
     public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
+        JsonObject jsonValues; /* this variable contains the JsonObject created from JSON file*/
         File fileJson = new File(getClass().getResource("/Weapon/"+file).getFile());
         InputStream fis = new FileInputStream(fileJson);
         JsonReader reader = Json.createReader(fis);
@@ -31,6 +32,15 @@ public class CardWeapon implements Card {
         yellowCost = jsonValues.getJsonArray("cost").getInt(1);
         blueCost = jsonValues.getJsonArray("cost").getInt(2);
         effectsNumber = jsonValues.getInt("effectNumber");
+        effects = new ArrayList<>();
+        setEffects(jsonValues);
+
+        /*
+        int i = 0;
+        while (i < effectsNumber){
+            i++;
+            effects.add(new Effect(jsonValues, i));
+        }*/
     }
 
     public String getName() {
@@ -52,14 +62,29 @@ public class CardWeapon implements Card {
     public AmmoColors getColor(){
         return color;
     }
+
     public int getEffectsNumber() {
         return effectsNumber;
     }
-    public JsonObject getJsonValues() {
-        return jsonValues;
-    }
+
     @Override
     public Enum[] getEnumeration(){
         return WeaponDictionary.values();
+    }
+
+    /**
+     * This method return the effects ArrayList of a weapon but to avoid exposing the data structure to an external
+     * observer, who could change the values in it, it returns a copy of it
+    */
+    public ArrayList<Effect> getEffects() {
+        return new ArrayList<Effect>(effects);
+    }
+
+    private void setEffects(JsonObject jsonValues){
+        int i = 0;
+        while (i < effectsNumber){
+            i++;
+            this.effects.add(new Effect(jsonValues, i));
+        }
     }
 }
