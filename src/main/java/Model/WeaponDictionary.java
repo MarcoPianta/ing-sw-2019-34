@@ -1,27 +1,30 @@
 package Model;
 
+/**
+ * This enumeration contains the name's list of all weapon cards
+ * */
 public enum WeaponDictionary {
-    CYBERBLADE("cyberblade.json"),
-    ELECTROSCYTE("electroscyte.json"),
-    FLAMETHROWER("flamethrower.json"),
-    FURNACE("furnace.json"),
-    GRENADELAUNCHER("grenadeLauncher.json"),
-    HEATSEEKER("heatseeker.json"),
-    HELLION("hellion.json"),
-    LOCKRIFLE("lockRifle.json"),
-    MACHINEGUN("machineGun.json"),
-    PLASMAGUN("plasmaGun.json"),
-    POWER_GLOVE("power_glove.json"),
-    RAIL_GUN("rail_gun.json"),
-    ROCKETLAUNCHER("rocketLauncher.json"),
-    SHOKWAVE("shokwave.json"),
-    SHOTGUN("shotgun.json"),
-    SLEDGEHAMMER("sledgehammer.json"),
-    THOR("thor.json"),
-    TRACTORBEAM("tractorBeam.json"),
-    VORTEXCANNON("vortexCannon.json"),
-    WHISPER("whisper.json"),
-    ZX_2("ZX-2.json");
+    CYBERBLADE("cyberblade"),
+    ELECTROSCYTE("electroscyte"),
+    FLAMETHROWER("flamethrower"),
+    FURNACE("furnace"),
+    GRENADELAUNCHER("grenadeLauncher"),
+    HEATSEEKER("heatseeker"),
+    HELLION("hellion"),
+    LOCKRIFLE("lockRifle"),
+    MACHINEGUN("machineGun"),
+    PLASMAGUN("plasmaGun"),
+    POWER_GLOVE("power_glove"),
+    RAIL_GUN("rail_gun"),
+    ROCKETLAUNCHER("rocketLauncher"),
+    SHOKWAVE("shokwave"),
+    SHOTGUN("shotgun"),
+    SLEDGEHAMMER("sledgehammer"),
+    THOR("thor"),
+    TRACTORBEAM("tractorBeam"),
+    VORTEXCANNON("vortexCannon"),
+    WHISPER("whisper"),
+    ZX_2("ZX-2");
 
     private String abbreviation;
     private WeaponDictionary(String abbreviation) {

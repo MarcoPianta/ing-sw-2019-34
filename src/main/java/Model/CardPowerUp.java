@@ -10,14 +10,4 @@ public class CardPowerUp implements Card {
     public String getName() {
         return name;
     }
-
-    public Enum[] getEnumeration(){
-        return null;
-    }
-
-
-
-
-
-
 }
