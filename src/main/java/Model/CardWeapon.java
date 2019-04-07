@@ -19,10 +19,12 @@ public class CardWeapon implements Card {
     private boolean charge;
     private ArrayList<Effect> effects;
 
-    /**The constructor read from JSON file the specs and create a weapon with that specs*/
+    /**
+     * The constructor read from JSON file the specs and create a weapon with that specs
+     * */
     public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
         JsonObject jsonValues; /* this variable contains the JsonObject created from JSON file*/
-        File fileJson = new File(getClass().getResource("/Weapon/"+file).getFile());
+        File fileJson = new File(getClass().getResource("/Weapon/"+file+".json").getFile());
         InputStream fis = new FileInputStream(fileJson);
         JsonReader reader = Json.createReader(fis);
         jsonValues = reader.readObject();
@@ -61,24 +63,21 @@ public class CardWeapon implements Card {
         return effectsNumber;
     }
 
-    @Override
-    public Enum[] getEnumeration(){
-        return WeaponDictionary.values();
-    }
-
     /**
      * This method return the effects ArrayList of a weapon but to avoid exposing the data structure to an external
-     * observer, who could change the values in it, it returns a copy of it
+     * observer, who could potentially change the values in it, it returns a copy of it
      * */
     public ArrayList<Effect> getEffects() {
-        return new ArrayList<Effect>(effects);
+        return new ArrayList<>(effects);
     }
 
     public boolean isCharge() {
         return charge;
     }
 
-    /**This method read the effects of a weapon from the jsonObject and create an arrayList of Effect*/
+    /**
+     * This method read the effects of a weapon from the jsonObject and create an arrayList of Effect
+     * */
     private void setEffects(JsonObject jsonValues){
         int i = 0;
         while (i < effectsNumber){

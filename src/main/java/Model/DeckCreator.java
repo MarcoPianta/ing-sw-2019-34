@@ -1,12 +1,65 @@
 package Model;
 
+import java.io.FileNotFoundException;
+
+/**
+ * This class is the Factory class for decks. Using createDeck method it's returned a deck
+ * */
 public class DeckCreator {
-    private Deck deck;
-    public DeckCreator(){
-
+    /**
+     * Method to create a deck of card, it takes a parameter which indicates the deck type
+     * */
+    public Deck createDeck(String type) throws FileNotFoundException{ //Need to solve the problem of recognize what type of card deck need to be created
+        switch (type){
+            case "WEAPON" :
+                return createWeaponDeck();
+                //break
+            case "AMMO" :
+                return createAmmoDeck();
+                //break
+            case "POWERUP" :
+                return createPowerUpDeck();
+                //break
+            default :
+                return null;
+        }
     }
-    public Deck factoryMethod(){
 
-       return deck;
+    /**
+     * This method return a WeaponCard deck
+     * */
+    private Deck<CardWeapon> createWeaponDeck()throws FileNotFoundException {
+        Deck<CardWeapon> deck = new Deck<>(false);
+        for (int i = 0; i < 4/*i < WeaponDictionary.values().length*/; i++){ // The end condition MUST be replaced when all json file are fixed
+            deck.add(new CardWeapon(WeaponDictionary.values()[i].getAbbreviation()));
+        }
+        return deck;
+    }
+
+    /**
+     * This method return an Ammo deck and also initialize the trash deck (which is in Deck class)
+     * */
+    private Deck<CardAmmo> createAmmoDeck() {
+        Deck<CardAmmo> deck = new Deck<>(true);
+        for (int i = 0; i < AmmoEnum.values().length; i++){
+            deck.add(new CardOnlyAmmo(/*AmmoEnum.values()[i].getAbbreviation()*/));//TODO need to be completed when CardOnlyAmmo is completed
+        }
+        for (int i = 0; i < AmmoEnum.values().length; i++){
+            deck.add(new CardNotOnlyAmmo(/*AmmoEnum.values()[i].getAbbreviation()*/));//TODO need to be completed when CardNotOnlyAmmo is completed
+        }
+        deck.setTrashDeck();
+        return deck;
+    }
+
+    /**
+     * This method return a PowerUp deck and also initialize the trash deck (which is in Deck class)
+     * */
+    private Deck<CardPowerUp> createPowerUpDeck() {
+        Deck<CardPowerUp> deck = new Deck<>(false);
+        //for (int i = 0; i < .values().length; i++){
+        //    deck.add(new CardPowerUp(/*WeaponDictionary.values()[i].getAbbreviation()*/)); //TODO need to be completed when CardPowerUp is completed
+        //}
+        deck.setTrashDeck();
+        return deck;
     }
 }

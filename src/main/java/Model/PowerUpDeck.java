@@ -1,7 +1,7 @@
 package Model;
 
 public class PowerUpDeck extends  Deck {
-    public PowerUpDeck(){
+    public PowerUpDeck() throws Exception{
         super(true);
     }
 }
