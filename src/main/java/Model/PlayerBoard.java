@@ -10,6 +10,7 @@ public class PlayerBoard {
     private ArrayList<Colors> damageBar;
     private int adrenalineAction; //the only values are 0,1,2
     private ArrayList<CardWeapon> playerWeapons;
+    private ArrayList<CardWeapon> playerOffloadWeapons;
     private ArrayList<CardPowerUp> playerPowerUps;
     private int points;
     private ArrayList<Colors> mark;
@@ -21,6 +22,7 @@ public class PlayerBoard {
         this.damageBar = new ArrayList<Colors>();
         this.adrenalineAction = 0;
         this.playerWeapons = new ArrayList<CardWeapon>();
+        this.playerOffloadWeapons=new ArrayList<CardWeapon>();
         this.playerPowerUps = new ArrayList<CardPowerUp>();
         this.maxReward=8;
         this.points = 0;
@@ -39,10 +41,8 @@ public class PlayerBoard {
     }
 
 
-    //send damageBar to the controller for damage calculation and reset damageBar
     public ArrayList<Colors> getDamageBar() {
         return damageBar;
-
     }
 
     public int[] getAmmoRYB() {
@@ -53,7 +53,6 @@ public class PlayerBoard {
         return maxReward;
     }
 
-
     public int getAdrenalineAction() {
         return adrenalineAction;
     }
@@ -63,18 +62,18 @@ public class PlayerBoard {
     }
 
     public ArrayList<CardWeapon> getPlayerWeapons() {
-
         return playerWeapons;
     }
 
-
+    public ArrayList<CardWeapon> getPlayerOffloadWeapons() {
+        return playerOffloadWeapons;
+    }
 
     public ArrayList<CardPowerUp> getPlayerPowerUps() {
-
         return playerPowerUps;
     }
 
-    //reset damageBar after a dead
+    //** this method reset damageBar after a dead
     private void resetDamageBar() {
         int i=0;
         while( damageBar.size()!=0)
@@ -84,24 +83,59 @@ public class PlayerBoard {
 
     }
 
-    //add new weapon after grad cardWeapon
+    //**this method add new weapon after grab cardWeapon and decrement ammo
     public void addWeapon(CardWeapon weapon) {
+        int red=weapon.getRedCost();
+        int yellow=weapon.getYellowCost();
+        int blue=weapon.getBlueCost();
         if(playerWeapons.size()==3) {
             //TODO throws exception
         }
         else
             playerWeapons.add(playerWeapons.size(),weapon);
+        if(weapon.getColor()==AmmoColors.BLUE)
+            blue--;
+        else if(weapon.getColor()==AmmoColors.YELLOW)
+            yellow--;
+        else if(weapon.getColor()==AmmoColors.RED)
+            red--;
+
+        decrementAmmo(red,yellow,blue);
+
+    }
+
+    public void addOffloadWeapon(CardWeapon weapon){
+        playerOffloadWeapons.add(weapon);
+    }
+
+    private void removeOffloadWeapon(CardWeapon weapon){
+        boolean isPresent=false ;
+        int i=0;
+        while((isPresent=false)){
+            if(getPlayerOffloadWeapons().get(i).equals(weapon)){
+                getPlayerOffloadWeapons().remove(i);
+                isPresent=true;
+                }
+            i++;
+        }
+    }
+
+    public void  chargeWeapon(CardWeapon weapon){
+        removeOffloadWeapon(weapon);
         decrementAmmo(weapon.getRedCost(),weapon.getYellowCost(),weapon.getBlueCost());
 
     }
 
+    //**this method substitute weapons when the player has three weapons and wants a new weapon
     public void substituteWeapons(ArrayList<CardWeapon> newPlayerWeapons){
+
         for(int i=0; i<3 ;i++){
             playerWeapons.set(i,newPlayerWeapons.get(i));
         }
     }
 
     public void addPowerUp(CardPowerUp powerUp) {
+
         if(playerPowerUps.size()==3)
             //TODO throws exception but this condition is checked by controller
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
@@ -111,9 +145,11 @@ public class PlayerBoard {
     private void removePowerUp(CardPowerUp powerUp){
         boolean isPresent=false ;
         int i=0;
-        while(isPresent=false){
-            if(getPlayerPowerUps().get(i)== powerUp)
+        while(isPresent=false ){
+            if(getPlayerPowerUps().get(i)== powerUp) {
                 getPlayerPowerUps().remove(i);
+                isPresent=true;
+            }
             i++;
         }
     }

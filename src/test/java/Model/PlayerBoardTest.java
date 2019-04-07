@@ -27,7 +27,7 @@ public class PlayerBoardTest  {
     @Test
     public void testAddWeapon() throws FileNotFoundException {
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
-        String file= "electroscyte.json";
+        String file= WeaponDictionary.FURNACE.getAbbreviation();
         CardWeapon cardWeapon=new CardWeapon(file);
         playerBoard.addAmmo(3,3,3);
         playerBoard.addWeapon(cardWeapon);
@@ -37,7 +37,7 @@ public class PlayerBoardTest  {
         assertEquals(2, playerBoard.getAmmoRYB()[2]);
     }
     @Test
-    public void testSobstituteWeapons() throws FileNotFoundException{
+    public void testSubstituteWeapons() throws FileNotFoundException{
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
         String file1= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
         CardWeapon cardWeapon1=new CardWeapon(file1);
@@ -77,6 +77,34 @@ public class PlayerBoardTest  {
     }
 
     */
+
+   @Test
+   public void testAddOffloadWeapon() throws FileNotFoundException{
+       PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
+       String file= WeaponDictionary.FURNACE.getAbbreviation();
+       CardWeapon cardWeapon=new CardWeapon(file);
+       playerBoard.addOffloadWeapon(cardWeapon);
+       assertEquals(1,playerBoard.getPlayerOffloadWeapons().size());
+   }
+
+   @Test
+   public void testChargeWeapon() throws FileNotFoundException{
+       PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
+       String file= WeaponDictionary.FURNACE.getAbbreviation();
+       CardWeapon cardWeapon=new CardWeapon(file);
+       int red=3;
+       int yellow=3;
+       int blue=3;
+       playerBoard.addAmmo(red,yellow,blue);
+       playerBoard.addOffloadWeapon(cardWeapon);
+       playerBoard.chargeWeapon(cardWeapon);
+       assertEquals(0,playerBoard.getPlayerOffloadWeapons().size());
+       assertEquals(2, playerBoard.getAmmoRYB()[0]);
+       assertEquals(3, playerBoard.getAmmoRYB()[1]);
+       assertEquals(2, playerBoard.getAmmoRYB()[2]);
+
+
+   }
    @Test
    public  void testAddAmmo(){
        PlayerBoard playerBoard= new PlayerBoard(Colors.BLUE, "playertest");
