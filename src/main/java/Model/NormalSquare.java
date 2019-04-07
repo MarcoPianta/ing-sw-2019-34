@@ -1,5 +1,6 @@
 package Model;
 
+/**This class extends Square and describe a square type*/
 public class NormalSquare extends Square {
     private CardAmmo ammo;
 
@@ -16,6 +17,7 @@ public class NormalSquare extends Square {
     }
 
     public void addAmmo(CardAmmo ammo) {
+        //TODO it has to be extended
         this.setAmmo(ammo);
     }
 
@@ -33,6 +35,8 @@ public class NormalSquare extends Square {
         this.setAmmo(null);
         return remove;
     }
+
+    /**This method Override the method of Square, it allows a BoardPlayer to grab one of the Item content by the square*/
     @Override
     public CardAmmo grabItem(int position) {
         CardAmmo grabbed = this.removeAmmo();

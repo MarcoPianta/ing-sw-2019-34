@@ -1,7 +1,6 @@
 package Model;
 
-import java.util.ArrayList;
-
+/**This class extends Square and describe a square type*/
 public class SpawnSquare extends Square{
 
     private CardWeapon weapons[];
@@ -43,6 +42,7 @@ public class SpawnSquare extends Square{
         return remove;
     }
 
+    /**This method Override the method of Square, it allows a BoardPlayer to grab one of the Item content by the square*/
     @Override
     public CardWeapon grabItem(int position)  {
         if (this.weapons[position] == null){
