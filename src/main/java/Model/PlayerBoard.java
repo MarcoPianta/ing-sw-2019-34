@@ -111,7 +111,7 @@ public class PlayerBoard {
     private void removeOffloadWeapon(CardWeapon weapon){
         boolean isPresent=false ;
         int i=0;
-        while((isPresent=false)){
+        while((!isPresent)){
             if(getPlayerOffloadWeapons().get(i).equals(weapon)){
                 getPlayerOffloadWeapons().remove(i);
                 isPresent=true;
@@ -145,7 +145,7 @@ public class PlayerBoard {
     private void removePowerUp(CardPowerUp powerUp){
         boolean isPresent=false ;
         int i=0;
-        while(isPresent=false ){
+        while(!isPresent ){
             if(getPlayerPowerUps().get(i)== powerUp) {
                 getPlayerPowerUps().remove(i);
                 isPresent=true;
