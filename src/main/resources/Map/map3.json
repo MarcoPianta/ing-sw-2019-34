@@ -1,0 +1,124 @@
+{
+  "name": "Map3",
+  "roomNumber": 6,
+  "Room1": [
+      {
+        "color": "red",
+        "dimension": 2,
+        "Square": [
+          {
+            "SideN": null,
+            "SideE": "1,0",
+            "SideS": "0,1",
+            "SideW": null
+          },
+          {
+            "SideN": "0,0",
+            "SideE": null,
+            "SideS": "5,0",
+            "SideW": null
+          }
+        ]
+      }
+    ],
+  "Room2": [
+    {
+      "color": "blue",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": null,
+          "SideE": "1,1",
+          "SideS": "3,0",
+          "SideW": "0,0"
+        },
+        {
+          "SideN": null,
+          "SideE": "2,0",
+          "SideS": "4,0",
+          "SideW": "1,0"
+        }
+      ]
+    }
+  ],
+  "Room3": [
+    {
+      "color": "green",
+      "dimension": 1,
+      "Square": [
+        {
+          "SideN": null,
+          "SideE": null,
+          "SideS": "4,1",
+          "SideW": "1,1"
+        }
+      ]
+    }
+  ],
+  "Room4": [
+    {
+      "color": "purple",
+      "dimension": 1,
+      "Square": [
+        {
+          "SideN": "1,0",
+          "SideE": null,
+          "SideS": "5,1",
+          "SideW": null
+        }
+      ]
+    }
+  ],
+  "Room5": [
+    {
+      "color": "yellow",
+      "dimension": 4,
+      "Square": [
+        {
+          "SideN": "1,1",
+          "SideE": "4,1",
+          "SideS": "4,2",
+          "SideW": null
+        },
+        {
+          "SideN": "2,0",
+          "SideE": null,
+          "SideS": "4,3",
+          "SideW": "4,0"
+        },
+        {
+          "SideN": "4,0",
+          "SideE": "4,3",
+          "SideS": null,
+          "SideW": "5,1"
+        },
+        {
+          "SideN": "4,1",
+          "SideE": null,
+          "SideS": null,
+          "SideW": "4,2"
+        }
+      ]
+    }
+  ],
+  "Room6": [
+    {
+      "color": "white",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": "0,1",
+          "SideE": "5,1",
+          "SideS": null,
+          "SideW": null
+        },
+        {
+          "SideN": "3,0",
+          "SideE": "4,2",
+          "SideS": null,
+          "SideW": "5,0"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "targettingScope",
+  "cost": 1,
+  "color": "RED",
+  "damage": 1,
+  "mark": 0,
+  "myMove": 0,
+  "otherMove": 0,
+  "target": 1,
+  "vision": false,
+  "when": "deal"
+}

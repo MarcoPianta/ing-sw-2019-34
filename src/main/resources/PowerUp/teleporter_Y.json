@@ -1,0 +1,12 @@
+{
+  "name": "teleporter",
+  "cost": 0,
+  "color": "YELLOW",
+  "damage": 0,
+  "mark": 0,
+  "myMove": -1,
+  "otherMove": 0,
+  "target": 1,
+  "vision": false,
+  "when": "during"
+}

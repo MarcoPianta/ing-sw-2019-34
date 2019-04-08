@@ -1,0 +1,12 @@
+{
+  "name": "tagbackGranade",
+  "cost": 0,
+  "color": "BLUE",
+  "damage": 0,
+  "mark": 1,
+  "myMove": 0,
+  "otherMove": 0,
+  "target": 1,
+  "vision": true,
+  "when": "get"
+}

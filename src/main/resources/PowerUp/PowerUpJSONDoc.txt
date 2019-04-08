@@ -1,0 +1,12 @@
+"name": --> name of power up
+"cost": --> cost to use power up
+"color": --power up's color
+"damage": --> damages that power up add
+"mark": --> marks that power up add
+"myMove": steps that power up allow me to do (if -1 i can move everywhere without limitation)
+"otherMove": max moves that power up allow me to make do others
+"target": --> target number (if 0 it means that I'm the target)
+"vision": --> true if I must see the target
+"when": --> this indicates when I can use the power up (values are: -- "during" --> during my turn, no others limitation
+                                                                    -- "deal"   --> when player is dealing damage
+                                                                    -- "get"    --> when getting damage
