@@ -51,6 +51,10 @@ public class Deck<T extends Card> {
             }
             return returned;
     }
+
+    /**
+     * Returns the deck size
+     * */
     public int getSize(){
         return deck.size();
     }
@@ -70,6 +74,13 @@ public class Deck<T extends Card> {
     public void setTrashDeck() {
         if(mix && trashDeck.isEmpty())
             this.trashDeck = new ArrayList<>(deck);
+    }
+
+    /**
+     * This method returns the iterator used to extract cards from deck
+     * */
+    public Drawer<T> createDrawer(){
+        return new Drawer<>(this);
     }
 
     /**
