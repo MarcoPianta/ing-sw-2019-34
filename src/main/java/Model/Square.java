@@ -11,7 +11,9 @@ public abstract class Square {
     public Square() {
 
     }
-    /**This method will be implemented by the classes that extends Square with the Override */
+    /**
+     * This method will be implemented by the classes that extends Square with the Override
+     * */
     public Card grabItem(int position) {
 
         return null;

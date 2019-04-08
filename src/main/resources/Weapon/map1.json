@@ -1,0 +1,96 @@
+{
+  "name": "Map1",
+  "roomNumber": 4,
+  "Room1": [
+      {
+        "color": "blue",
+        "dimension": 3,
+        "Square": [
+          {
+            "SideN": null,
+            "SideE": "0,1",
+            "SideS": "1,0",
+            "SideW": null
+          },
+          {
+            "SideN": null,
+            "SideE": "0,2",,
+            "SideS": null,
+            "SideW": "0,0"
+          },
+          {
+            "SideN": null,
+            "SideE": null,
+            "SideS": "1,2",
+            "SideW": "0,1"
+          }
+        ]
+      }
+    ],
+  "Room2": [
+    {
+      "color": "red",
+      "dimension": 3,
+      "Square": [
+        {
+          "SideN": "0,0",
+          "SideE": "1,1",
+          "SideS": null,
+          "SideW": null
+        },
+        {
+          "SideN": null,
+          "SideE": "1,2",
+          "SideS": "3,0",
+          "SideW": "1,0"
+        },
+        {
+          "SideN": "0,2",
+          "SideE": "2,0",
+          "SideS": null,
+          "SideW": "1,1"
+        }
+      ]
+    }
+  ],
+  "Room3": [
+    {
+      "color": "yellow",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": null,
+          "SideE": null,
+          "SideS": "2,1",
+          "SideW": "1,2"
+        },
+        {
+          "SideN": "2,0",
+          "SideE": null,
+          "SideS": null,
+          "SideW": "3,1"
+        }
+      ]
+    }
+  ],
+  "Room1": [
+    {
+      "color": "white",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": "1,1",
+          "SideE": "3,1",
+          "SideS": null,
+          "SideW": null
+        },
+        {
+          "SideN": null,
+          "SideE": null,
+          "SideS": null,
+          "SideW": "2,1"
+        }
+      ]
+    }
+  ]
+}
