@@ -1,0 +1,110 @@
+{
+  "name": "Map4",
+  "roomNumber": 5,
+  "Room1": [
+      {
+        "color": "blue",
+        "dimension": 2,
+        "Square": [
+          {
+            "SideN": null,
+            "SideE": "0,1",
+            "SideS": "4,0",
+            "SideW": "1,0"
+          },
+          {
+            "SideN": null,
+            "SideE": null,
+            "SideS": "4,1",
+            "SideW": "0,0"
+          }
+        ]
+      }
+    ],
+  "Room2": [
+    {
+      "color": "red",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": null,
+          "SideE": "0,0",
+          "SideS": "1,1",
+          "SideW": null
+        },
+        {
+          "SideN": "1,0",
+          "SideE": null,
+          "SideS": "3,0",
+          "SideW": null
+        }
+      ]
+    }
+  ],
+  "Room3": [
+    {
+      "color": "yellow",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": null,
+          "SideE": null,
+          "SideS": "2,1",
+          "SideW": "4,1"
+        },
+        {
+          "SideN": "2,0",
+          "SideE": null,
+          "SideS": null,
+          "SideW": "3,2"
+        }
+      ]
+    }
+  ],
+  "Room4": [
+    {
+      "color": "white",
+      "dimension": 3,
+      "Square": [
+        {
+          "SideN": "1,1",
+          "SideE": "3,1",
+          "SideS": null,
+          "SideW": null
+        },
+        {
+          "SideN": "4,0",
+          "SideE": "3,2",
+          "SideS": null,
+          "SideW": "3,0"
+        },
+        {
+          "SideN": null,
+          "SideE": "2,1",
+          "SideS": null,
+          "SideW": "3,1"
+        }
+      ]
+    }
+  ],
+  "Room5": [
+    {
+      "color": "purple",
+      "dimension": 2,
+      "Square": [
+        {
+          "SideN": "0,0",
+          "SideE": "4,1",
+          "SideS": "3,1",
+          "SideW": null
+        },
+        {
+          "SideN": "0,1",
+          "SideE": "2,0",
+          "SideS": null,
+          "SideW": "4,0"
+        }
+      ]
+    }
+  ]
+}
