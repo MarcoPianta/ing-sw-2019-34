@@ -23,7 +23,10 @@ public class PlayerBoardTest  {
         assertEquals("playerTest", playerBoard.getPlayerName());
 
     }
-    //**test for private test removeammo
+
+    /**
+     * this method tests the adding of a new weapon and the removal of  ammo
+     */
     @Test
     public void testAddWeapon() throws FileNotFoundException {
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
@@ -36,6 +39,10 @@ public class PlayerBoardTest  {
         assertEquals(3, playerBoard.getAmmoRYB()[1]);
         assertEquals(2, playerBoard.getAmmoRYB()[2]);
     }
+
+    /**
+     * this method tests the adding of a new weapon when there are already three weapons
+     * */
     @Test
     public void testSubstituteWeapons() throws FileNotFoundException{
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
@@ -76,8 +83,9 @@ public class PlayerBoardTest  {
         //assertFalse(playerBoard.getPlayerPowersUps().isEmpty());
     }
 
-    */
-
+   /**
+     * this method tests the adding of a offload weapon
+     */
    @Test
    public void testAddOffloadWeapon() throws FileNotFoundException{
        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
@@ -87,6 +95,9 @@ public class PlayerBoardTest  {
        assertEquals(1,playerBoard.getPlayerOffloadWeapons().size());
    }
 
+    /**
+     * this method tests the charge of a weapon
+     * */
    @Test
    public void testChargeWeapon() throws FileNotFoundException{
        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
@@ -102,11 +113,13 @@ public class PlayerBoardTest  {
        assertEquals(2, playerBoard.getAmmoRYB()[0]);
        assertEquals(3, playerBoard.getAmmoRYB()[1]);
        assertEquals(2, playerBoard.getAmmoRYB()[2]);
-
-
    }
-   @Test
-   public  void testAddAmmo(){
+
+    /**
+     * this method tests the adding off ammo
+     * */
+    @Test
+    public  void testAddAmmo(){
        PlayerBoard playerBoard= new PlayerBoard(Colors.BLUE, "playertest");
        int red=2;
        int yellow=1;
@@ -119,8 +132,11 @@ public class PlayerBoardTest  {
        red=2;
        playerBoard.addAmmo(red,yellow,blue);
        assertEquals(3,playerBoard.getAmmoRYB()[0]);
-   }
+    }
 
+    /**
+     * this method tests the count off marks
+     * */
     @Test
     public void testCountMarksAddMarks(){
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
@@ -132,6 +148,10 @@ public class PlayerBoardTest  {
         assertEquals(2,playerBoard.countMarks(Colors.VIOLET));
 
     }
+
+    /**
+     * this method test the add of damage e the modified of adrenaline action
+     * */
     @Test
     public void testAddDamage(){
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest");
@@ -150,6 +170,9 @@ public class PlayerBoardTest  {
         assertEquals(1, playerBoard.getAdrenalineAction());
     }
 
+    /**
+     * this method tests the decrement of max reward
+     * */
     @Test
     public void testDecrementMaxReward(){
         PlayerBoard playerBoard=new PlayerBoard(Colors.BLUE,"playertest");
@@ -158,6 +181,9 @@ public class PlayerBoardTest  {
 
     }
 
+    /**
+     * this method tests the add of points
+     * */
     @Test
     public void testAddPoints(){
         PlayerBoard playerBoard=new PlayerBoard(Colors.BLUE,"playertest");
