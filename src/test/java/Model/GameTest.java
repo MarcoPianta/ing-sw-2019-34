@@ -23,7 +23,7 @@ public class GameTest {
     public void testCalcolaPunteggio(){
         Game game;
         Player p;
-        p = new Player();
+        p = new Player("polimiserver2832", Colors.GREEN, "playerTest");
 
         game = new Game();
         assertEquals(0, game.calcolaPunteggio(p));

@@ -2,30 +2,58 @@ package Model;
 
 public class Player {
 
-    private int playerID;
-    private String Name;
+    private String playerID;
+    private String name;
     private int actionCounter;
     private PlayerBoard playerBoard;
+    private Square position;
 
-    public Player() {
-
+    public Player(String playerID, Colors color,String name) {
+        this.playerID=playerID;
+        this.name=name;
+        this.playerBoard=new PlayerBoard(color , name);
+        this.actionCounter=2;
+        this.position=null;
     }
-    public int getPlayerID() {
+    public String getPlayerID() {
         return playerID;
     }
 
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
     }
+
+    public Square getPosition() {
+        return position;
+    }
+
     public int getActionCounter() {
         return actionCounter;
     }
-    //canAct is a method that return true o false if the player can do an action
+
+
+    /*
+     *this method  return true o false if the player can do an action
+     * */
     public boolean canAct(){
         if(this.getActionCounter() == 0)
             return false;
         else
             return true;
+    }
+
+    /*
+     * this method increment action counter
+     * */
+    public void decrementActionCounter(){
+        actionCounter-=1;
+    }
+
+    /*
+     *this method modified a player's position
+     * */
+    public void newPosition(Square newPosition){
+        position=newPosition;
 
     }
 
