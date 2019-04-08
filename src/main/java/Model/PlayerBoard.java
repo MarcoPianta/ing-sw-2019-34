@@ -88,22 +88,11 @@ public class PlayerBoard {
      * this method add new weapon after grab cardWeapon and decrement ammo
      * */
     public void addWeapon(CardWeapon weapon) {
-        int red=weapon.getRedCost();
-        int yellow=weapon.getYellowCost();
-        int blue=weapon.getBlueCost();
         if(playerWeapons.size()==3) {
             //TODO throws exception
         }
         else
             playerWeapons.add(playerWeapons.size(),weapon);
-        if(weapon.getColor()==AmmoColors.BLUE)
-            blue--;
-        else if(weapon.getColor()==AmmoColors.YELLOW)
-            yellow--;
-        else if(weapon.getColor()==AmmoColors.RED)
-            red--;
-
-        decrementAmmo(red,yellow,blue);
 
     }
 
@@ -130,13 +119,30 @@ public class PlayerBoard {
     }
 
     /**
-     * this method call the private method removeOffloadWeapon and decrement the ammo
+     * this method remove an offload weapon e decrement its cost
      * */
-    public void  chargeWeapon(CardWeapon weapon){
+    public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue){
         removeOffloadWeapon(weapon);
-        decrementAmmo(weapon.getRedCost(),weapon.getYellowCost(),weapon.getBlueCost());
 
+        decrementAmmo(red,yellow,blue);
     }
+
+    /**
+     *this method remove an offload weapon and pay its cost with ammo and power up
+     * */
+  /*  public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, CardPowerUp powerUp){
+        removeOffloadWeapon(weapon);
+        if(powerUp.getColor()==AmmoColors.RED)
+            red--;
+        else if(powerUp.getColor()==AmmoColors.YELLOW)
+            yellow--;
+        else(powerUp.getColor()==AmmoColors.BLUE)
+            blue--;
+        decrementAmmo(red,yellow,blue);
+        removePowerUp(powerUp);
+    }
+    */
+
 
     /**
      *this method substitute weapons when the player has three weapons and wants a new weapon
@@ -158,6 +164,16 @@ public class PlayerBoard {
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
 
     }
+
+    /**
+     * this method use power up and remove it
+     * */
+/*    public void usePowerUp(Action action,CardPowerUp powerUp){
+        action.runAction();
+        removePowerUp(powerUp);
+
+    }
+    */
 
     /**
      * This method remove a power up after use its
@@ -191,7 +207,7 @@ public class PlayerBoard {
     }
 
     /**
-     * This method decrement the value of array ammoRYB, exception controllate da controller
+     * This method decrement the value of array ammoRYB, exception by controller
      * */
     private void decrementAmmo(int red,int yellow,int blue){
         ammoRYB[0]-=red;
