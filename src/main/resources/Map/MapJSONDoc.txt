@@ -1,0 +1,10 @@
+"name": --> name of map
+"roomNumber" --> how many room compose the map
+"Room1" --> description of a room
+    "color" --> color of the entire room
+    "dimension" --> how many square compose the room
+    "Square" --> description of a square
+        "SideN" --> reference to a Square who is connected with the top side of the room
+        "SideE" --> reference to a Square who is connected with the right side of the room
+        "SideS" --> reference to a Square who is connected with the bottom side of the room
+        "SideW" --> reference to a Square who is connected with the left side of the room
