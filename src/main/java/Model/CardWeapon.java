@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -67,7 +68,7 @@ public class CardWeapon implements Card {
      * This method return the effects ArrayList of a weapon but to avoid exposing the data structure to an external
      * observer, who could potentially change the values in it, it returns a copy of it
      * */
-    public ArrayList<Effect> getEffects() {
+    public List<Effect> getEffects() {
         return new ArrayList<>(effects);
     }
 

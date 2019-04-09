@@ -12,7 +12,6 @@ public class Effect {
     private int iteration;
 
     public Effect(JsonObject jsonValues, int effect){
-        //int jsonEffect = effect + 1;
         String jsonString = "Effect" + effect;
         targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("target");
         allTarget = jsonValues.getJsonArray(jsonString).getJsonObject(0).getBoolean("allTarget");

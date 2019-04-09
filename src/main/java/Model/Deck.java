@@ -4,36 +4,37 @@ import java.util.ArrayList;
 
 /**
  * This class is a collection of card, cards are collected in a deterministic order, the Drawer class then will randomly
- * extract card from deck
+ * extract card from cardDeck
  * */
 public class Deck<T extends Card> {
-    private ArrayList<T> deck,trashDeck;
+    private ArrayList<T> cardDeck;
+    private ArrayList<T> trashDeck;
     private boolean mix;
 
 
     public Deck(boolean mix) {
-        deck = new ArrayList<>();
+        cardDeck = new ArrayList<>();
         this.mix = mix;
         if(mix)
             trashDeck = new ArrayList<>();
     }
 
      /**
-      * This method is used to add a cart to the deck, it returns true if the operation end successfully
+      * This method is used to add a cart to the cardDeck, it returns true if the operation end successfully
       * */
     public boolean add(T t){
-        deck.add(t);
-        return deck.get(deck.size()-1) == t; // This is equivalent to an if-else statement checking the returned value
+        cardDeck.add(t);
+        return cardDeck.get(cardDeck.size()-1) == t; // This is equivalent to an if-else statement checking the returned value
     }
 
     /**
-     * This method allow the caller to get a card from the deck using an index, when deck is empty if deck type allow
-     * mixing a new deck is created to simulate mixing
+     * This method allow the caller to get a card from the cardDeck using an index, when cardDeck is empty if cardDeck type allow
+     * mixing a new cardDeck is created to simulate mixing
      * */
     public T getCard(int index) {
         T returned = null;
-            if(!deck.isEmpty()) {
-                if (index >= deck.size())
+            if(!cardDeck.isEmpty()) {
+                if (index >= cardDeck.size())
                     throw new IndexOutOfBoundsException();
                 else{
                     returned = remove(index);
@@ -41,8 +42,8 @@ public class Deck<T extends Card> {
             }
             else{
                 if (mix) {
-                    deck = getTrashDeck(); //Refill deck
-                    if (index >= deck.size())
+                    cardDeck = getTrashDeck(); //Refill cardDeck
+                    if (index >= cardDeck.size())
                         throw new IndexOutOfBoundsException();
                     else {
                         returned = remove(index);
@@ -53,31 +54,31 @@ public class Deck<T extends Card> {
     }
 
     /**
-     * Returns the deck size
+     * Returns the cardDeck size
      * */
     public int getSize(){
-        return deck.size();
+        return cardDeck.size();
     }
 
     /**
-     * This method returns a copy of the trash deck
+     * This method returns a copy of the trash cardDeck
      * */
     private ArrayList<T> getTrashDeck() {
         return new ArrayList<>(trashDeck);
     }
 
     /**
-     * This method copy the current deck in trashDeck if, and only if, the deck type allow mixing and trash deck is empty.
-     * This method should be used only when deck is created to create a copy of the original deck that can be used to
+     * This method copy the current cardDeck in trashDeck if, and only if, the cardDeck type allow mixing and trash cardDeck is empty.
+     * This method should be used only when cardDeck is created to create a copy of the original cardDeck that can be used to
      * simulate mixing
      * */
     public void setTrashDeck() {
         if(mix && trashDeck.isEmpty())
-            this.trashDeck = new ArrayList<>(deck);
+            this.trashDeck = new ArrayList<>(cardDeck);
     }
 
     /**
-     * This method returns the iterator used to extract cards from deck
+     * This method returns the iterator used to extract cards from cardDeck
      * */
     public Drawer<T> createDrawer(){
         return new Drawer<>(this);
@@ -87,8 +88,8 @@ public class Deck<T extends Card> {
      * This method remove the card specified by the index and return a copy of it
      * */
     private T remove(int index){
-        T copy = deck.get(index);
-        deck.remove(index);
+        T copy = cardDeck.get(index);
+        cardDeck.remove(index);
         return copy;
     }
 }
