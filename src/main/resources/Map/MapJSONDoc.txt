@@ -8,3 +8,4 @@
         "SideE" --> reference to a Square who is connected with the right side of the room
         "SideS" --> reference to a Square who is connected with the bottom side of the room
         "SideW" --> reference to a Square who is connected with the left side of the room
+        "spawn" --> boolean to indicate if the square is a spawn square

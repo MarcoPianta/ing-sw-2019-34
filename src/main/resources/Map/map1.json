@@ -10,19 +10,22 @@
             "SideN": null,
             "SideE": "0,1",
             "SideS": "1,0",
-            "SideW": null
+            "SideW": null,
+            "spawn": false
           },
           {
             "SideN": null,
             "SideE": "0,2",,
             "SideS": null,
-            "SideW": "0,0"
+            "SideW": "0,0",
+            "spawn": false
           },
           {
             "SideN": null,
             "SideE": null,
             "SideS": "1,2",
-            "SideW": "0,1"
+            "SideW": "0,1",
+            "spawn": true
           }
         ]
       }
@@ -36,19 +39,22 @@
           "SideN": "0,0",
           "SideE": "1,1",
           "SideS": null,
-          "SideW": null
+          "SideW": null,
+          "spawn": true
         },
         {
           "SideN": null,
           "SideE": "1,2",
           "SideS": "3,0",
-          "SideW": "1,0"
+          "SideW": "1,0",
+          "spawn": false
         },
         {
           "SideN": "0,2",
           "SideE": "2,0",
           "SideS": null,
-          "SideW": "1,1"
+          "SideW": "1,1",
+          "spawn": false
         }
       ]
     }
@@ -62,13 +68,15 @@
           "SideN": null,
           "SideE": null,
           "SideS": "2,1",
-          "SideW": "1,2"
+          "SideW": "1,2",
+          "spawn": false
         },
         {
           "SideN": "2,0",
           "SideE": null,
           "SideS": null,
-          "SideW": "3,1"
+          "SideW": "3,1",
+          "spawn": true
         }
       ]
     }
@@ -82,13 +90,15 @@
           "SideN": "1,1",
           "SideE": "3,1",
           "SideS": null,
-          "SideW": null
+          "SideW": null,
+          "spawn": false
         },
         {
           "SideN": null,
           "SideE": null,
           "SideS": null,
-          "SideW": "2,1"
+          "SideW": "2,1",
+          "spawn": false
         }
       ]
     }
