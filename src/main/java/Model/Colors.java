@@ -1,11 +1,12 @@
 package Model;
 
 public enum Colors {
-    BLUE("B"),
-    GREEN("GN"),
-    GREY("GY"),
-    YELLOW("Y"),
-    VIOLET("V");
+    BLUE("blue"),
+    GREEN("green"),
+    WHITE("white"),
+    YELLOW("yellow"),
+    VIOLET("purple"),
+    RED("red");
 
     private String abbreviation;
     private Colors(String abbreviation) {
