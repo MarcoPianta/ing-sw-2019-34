@@ -9,16 +9,19 @@ public class PlayerTest {
      * */
     @Test
     public void canActTest(){
-        Player player=new Player("polimiserver2832", Colors.GREEN, "playerTest");
+        Player player=new Player("playertest2832","gametest3782671", Colors.GREEN, "playerTest");
         assertTrue(player.canAct());
         player.decrementActionCounter();
         player.decrementActionCounter();
         assertFalse(player.canAct());
     }
 
+    /*
+     *
+     * */
     @Test
     public void newPositionTest(){
-        Player player=new Player("polimiserver2832", Colors.GREEN, "playerTest");
+        Player player=new Player("playertest2832","gametest262518", Colors.GREEN, "playerTest");
         SpawnSquare spawnSquare= new SpawnSquare(null,null,null,null,null) ;
         assertFalse(player.getPosition()==spawnSquare);
         player.newPosition(spawnSquare);

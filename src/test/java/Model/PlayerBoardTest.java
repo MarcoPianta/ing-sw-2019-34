@@ -1,27 +1,18 @@
 package Model;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class PlayerBoardTest  {
-/*
-    @BeforeAll
-    public void initPlayerBoard(){
-        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
 
-    }
-*/
     @Test
     public void testConstructor(){
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
         assertTrue(playerBoard instanceof  PlayerBoard);
         assertEquals(Colors.GREEN, playerBoard.getColor());
         assertEquals("playerTest", playerBoard.getPlayerName());
-
     }
 
     /**
@@ -35,7 +26,6 @@ public class PlayerBoardTest  {
         playerBoard.addAmmo(3,3,3);
         playerBoard.addWeapon(cardWeapon);
         assertFalse(playerBoard.getPlayerWeapons().isEmpty());
-
     }
 
     /**
@@ -65,9 +55,7 @@ public class PlayerBoardTest  {
         newPlayerWeapons.add(cardWeapon4);
 
         playerBoard.substituteWeapons(newPlayerWeapons);
-
         assertEquals(newPlayerWeapons,playerBoard.getPlayerWeapons());
-
     }
 
     /**
@@ -106,10 +94,10 @@ public class PlayerBoardTest  {
        CardWeapon cardWeapon2=new CardWeapon(file2);
        String file= PowerUpEnum.NEWTON_B.getAbbreviation();
        CardPowerUp cardPowerUp=new CardPowerUp(file);
-
        int red=3;
        int yellow=3;
        int blue=3;
+
        playerBoard.addAmmo(red,yellow,blue);
        playerBoard.addOffloadWeapon(cardWeapon1);
        playerBoard.addOffloadWeapon(cardWeapon2);
@@ -128,6 +116,7 @@ public class PlayerBoardTest  {
        assertEquals(2, playerBoard.getAmmoRYB()[2]);
        assertEquals(0,playerBoard.getPlayerPowerUps().size());
    }
+
     /**
      * this method tests the adding off ammo
      * */
@@ -159,7 +148,6 @@ public class PlayerBoardTest  {
         assertEquals(3,playerBoard.countMarks(Colors.BLUE));
         assertEquals(0,playerBoard.countMarks(Colors.YELLOW));
         assertEquals(2,playerBoard.countMarks(Colors.VIOLET));
-
     }
 
     /**
@@ -191,7 +179,6 @@ public class PlayerBoardTest  {
         PlayerBoard playerBoard=new PlayerBoard(Colors.BLUE,"playertest");
         playerBoard.decrementMaxReward();
         assertEquals(6,playerBoard.getMaxReward());
-
     }
 
     /**

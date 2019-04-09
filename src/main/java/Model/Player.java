@@ -7,13 +7,15 @@ public class Player {
     private int actionCounter;
     private PlayerBoard playerBoard;
     private Square position;
+    private String gameId;
 
-    public Player(String playerID, Colors color,String name) {
+    public Player(String playerID,String gameId, Colors color,String name) {
         this.playerID=playerID;
         this.name=name;
         this.playerBoard=new PlayerBoard(color , name);
         this.actionCounter=2;
         this.position=null;
+        this.gameId=gameId;
     }
     public String getPlayerID() {
         return playerID;
@@ -31,6 +33,9 @@ public class Player {
         return actionCounter;
     }
 
+    public String getGameId() {
+        return gameId;
+    }
 
     /*
      *this method  return true o false if the player can do an action
@@ -47,6 +52,8 @@ public class Player {
      * */
     public void decrementActionCounter(){
         actionCounter-=1;
+        if (actionCounter==0) {//TODO called controller for change game(currentPlayer)
+        }
     }
 
     /*

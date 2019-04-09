@@ -61,7 +61,7 @@ public class PlayerBoard {
     }
 
     public ArrayList<CardWeapon> getPlayerWeapons() {
-        return playerWeapons;
+        return  new ArrayList<> (playerWeapons);
     }
 
     public ArrayList<CardWeapon> getPlayerOffloadWeapons() {
@@ -69,7 +69,7 @@ public class PlayerBoard {
     }
 
     public ArrayList<CardPowerUp> getPlayerPowerUps() {
-        return playerPowerUps;
+        return  playerPowerUps;
     }
 
     /**
@@ -81,7 +81,6 @@ public class PlayerBoard {
             damageBar.remove(i);
         adrenalineAction=0;
         decrementMaxReward();
-
     }
 
     /**
@@ -93,7 +92,6 @@ public class PlayerBoard {
         }
         else
             playerWeapons.add(playerWeapons.size(),weapon);
-
     }
 
     /**
@@ -123,7 +121,6 @@ public class PlayerBoard {
      * */
     public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue){
         removeOffloadWeapon(weapon);
-
         decrementAmmo(red,yellow,blue);
     }
 
@@ -142,13 +139,10 @@ public class PlayerBoard {
         removePowerUp(powerUp);
     }
 
-
-
     /**
      *this method substitute weapons when the player has three weapons and wants a new weapon
      * */
     public void substituteWeapons(ArrayList<CardWeapon> newPlayerWeapons){
-
         for(int i=0; i<3 ;i++){
             playerWeapons.set(i,newPlayerWeapons.get(i));
         }
@@ -159,18 +153,15 @@ public class PlayerBoard {
      * */
     public void addPowerUp(CardPowerUp powerUp) {
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
-
     }
 
     /**
      * this method use power up and remove it
      * */
-/*    public void usePowerUp(Action action,CardPowerUp powerUp){
-        action.runAction();
+    public void usePowerUp(CardPowerUp powerUp, Player targetPlayer){
+        //TODO CALLED CONTROLLER FOR USE
         removePowerUp(powerUp);
-
     }
-    */
 
     /**
      * This method remove a power up after use its
@@ -200,7 +191,6 @@ public class PlayerBoard {
         ammoRYB[2]=ammoRYB[2] +blue;
         if(ammoRYB[2]>3)
             ammoRYB[2]=3;
-
     }
 
     /**
@@ -217,7 +207,6 @@ public class PlayerBoard {
      * */
     public int countMarks(Colors color){
     int counterMarks=0;
-
         for( Colors colors : mark ){
             if (colors==color)
                 counterMarks++;
@@ -233,7 +222,6 @@ public class PlayerBoard {
         for( int i = 0 ; (i < d + countMarks(color)) && (damageBar.size() < 12);i++){
             damageBar.add(color);
         }
-
         resetMark(color);
 
         if(damageBar.size()>=3 || damageBar.size()<6 )
@@ -282,7 +270,4 @@ public class PlayerBoard {
     public void addPoints(int newPoints){
         points+= newPoints;
     }
-
-
-
 }
