@@ -130,18 +130,18 @@ public class PlayerBoard {
     /**
      *this method remove an offload weapon and pay its cost with ammo and power up
      * */
-  /*  public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, CardPowerUp powerUp){
+    public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, CardPowerUp powerUp){
         removeOffloadWeapon(weapon);
         if(powerUp.getColor()==AmmoColors.RED)
             red--;
         else if(powerUp.getColor()==AmmoColors.YELLOW)
             yellow--;
-        else(powerUp.getColor()==AmmoColors.BLUE)
+        else if(powerUp.getColor()==AmmoColors.BLUE)
             blue--;
         decrementAmmo(red,yellow,blue);
         removePowerUp(powerUp);
     }
-    */
+
 
 
     /**
@@ -158,9 +158,6 @@ public class PlayerBoard {
      * this method add a power up after when the player grabs its when he doesn't have more than three power up
      * */
     public void addPowerUp(CardPowerUp powerUp) {
-
-        if(playerPowerUps.size()==3)
-            //TODO throws exception but this condition is checked by controller
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
 
     }

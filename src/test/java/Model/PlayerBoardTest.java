@@ -70,33 +70,33 @@ public class PlayerBoardTest  {
 
     }
 
-
-   /* @Test
+    /**
+     * this method tests the adding of power up
+     * */
+    @Test
     public void testAddPowerUp() throws FileNotFoundException {
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
-        String file= "";
+        String file= PowerUpEnum.NEWTON_B.getAbbreviation();
         CardPowerUp cardPowerUp=new CardPowerUp(file);
-        playerBoard.addPowerUp(cardPowerup);
-        assertNotNull(playerBoard.getPlayerPowersUps());
-        //assertFalse(playerBoard.getPlayerPowersUps().isEmpty());
+        playerBoard.addPowerUp(cardPowerUp);
+        assertFalse(playerBoard.getPlayerPowerUps().isEmpty());
     }
 
-   /**
-     * this method tests the adding of a offload weapon
-     */
-   @Test
-   public void testAddOffloadWeapon() throws FileNotFoundException{
+    /**
+    * this method tests the adding of a offload weapon
+    * */
+    @Test
+    public void testAddOffloadWeapon() throws FileNotFoundException{
        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
        String file= WeaponDictionary.FURNACE.getAbbreviation();
        CardWeapon cardWeapon=new CardWeapon(file);
        playerBoard.addOffloadWeapon(cardWeapon);
        assertEquals(1,playerBoard.getPlayerOffloadWeapons().size());
-   }
+    }
 
     /**
      * this method tests the charge of a weapon
      * */
-    /*
     @Test
     public void testChargeWeapon() throws FileNotFoundException{
        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest") ;
@@ -104,7 +104,7 @@ public class PlayerBoardTest  {
        CardWeapon cardWeapon1=new CardWeapon(file1);
        String file2= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
        CardWeapon cardWeapon2=new CardWeapon(file2);
-       String file= "";
+       String file= PowerUpEnum.NEWTON_B.getAbbreviation();
        CardPowerUp cardPowerUp=new CardPowerUp(file);
 
        int red=3;
@@ -113,7 +113,7 @@ public class PlayerBoardTest  {
        playerBoard.addAmmo(red,yellow,blue);
        playerBoard.addOffloadWeapon(cardWeapon1);
        playerBoard.addOffloadWeapon(cardWeapon2);
-       playerBoard.addPowerUp(cardPowerup);
+       playerBoard.addPowerUp(cardPowerUp);
 
        playerBoard.chargeWeapon(cardWeapon1, 1,0,1);
        assertEquals(1,playerBoard.getPlayerOffloadWeapons().size());
@@ -121,14 +121,13 @@ public class PlayerBoardTest  {
        assertEquals(3, playerBoard.getAmmoRYB()[1]);
        assertEquals(2, playerBoard.getAmmoRYB()[2]);
 
-       playerBoard.chargeWeapon(cardWeapon2,0,0,1);
+       playerBoard.chargeWeapon(cardWeapon2,0,0,1,cardPowerUp);
        assertEquals(0,playerBoard.getPlayerOffloadWeapons().size());
        assertEquals(2, playerBoard.getAmmoRYB()[0]);
        assertEquals(3, playerBoard.getAmmoRYB()[1]);
        assertEquals(2, playerBoard.getAmmoRYB()[2]);
        assertEquals(0,playerBoard.getPlayerPowerUps().size());
    }
-*/
     /**
      * this method tests the adding off ammo
      * */
