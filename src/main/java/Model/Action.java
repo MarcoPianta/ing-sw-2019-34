@@ -5,18 +5,13 @@ package Model;
 public final class Action{
     /**
      * The Grab class has 2 Overloaded definition
-     * the first that represents the grabbing action in a NormalSquare, in witch you has to grab a CardAmmo
-     * the second that represents the grabbing action in a SpawnSquare, in witch you has to grab a CardWeapon
+     * the first that represents the grabbing action in a NormalSquare, in which you has to grab a CardAmmo
+     * the second that represents the grabbing action in a SpawnSquare, in which you has to grab a CardWeapon
      * */
     public boolean Grab(NormalSquare playerSquare, PlayerBoard actor){
-        CardAmmo Item = playerSquare.grabItem(0);
-        //TODO come differenzio il tipo di CardAmmo ???
-/*
-        int R;
-        int Y;
-        int B;
-        actor.addAmmo(R,Y,B);
-*/
+        //TODO we have to generalize the 2 case in which we grab a CardNotOnlyAmmo or a CardOnlyAmmo,
+        // because we can't access to the method of the extended classes!!!
+
         return true;
     }
 
@@ -43,7 +38,7 @@ public final class Action{
     }
 
     public boolean Move(PlayerBoard target, int moveNumber){
-    //TODO combine this method with the one who calculate the distance and realize the List of reachable Square
+    //TODO combine this method with the one who calculate the distance and realize the ArrayList of reachable Square
         return true;
     }
 
