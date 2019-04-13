@@ -1,60 +1,52 @@
 package Model;
 
+import java.util.ArrayList;
+
 /**
- * This class extends Square and describe a square type
+ * This class extends NormalSquare and describe a NormalSquare type
  * */
-public class SpawnSquare extends Square{
+public class SpawnSquare extends NormalSquare{
 
-    private CardWeapon weapons[];
+    private ArrayList<CardWeapon> weapons;
 
-    public SpawnSquare(Square SideN, Square SideE, Square SideS, Square SideW, CardWeapon Weapons[]) {
-        N = SideN;
-        E = SideE;
-        S = SideS;
-        W = SideW;
-        weapons = Weapons;
-    }
-
-    private void setWeapon(CardWeapon weapon, int position) {
-        this.weapons[position] = weapon;
+    public SpawnSquare(NormalSquare SideN, NormalSquare SideE, NormalSquare SideS, NormalSquare SideW, Colors color, ArrayList<CardWeapon> weapons) {
+        super(SideN, SideE, SideS, SideW, color, null);
+        this.weapons = new ArrayList<>(weapons);
+        spawn = true;
     }
 
     public void addWeapon(CardWeapon weapon, int position) {
-        if (this.weapons == null){
-            CardWeapon[] newWeapons;
-            newWeapons = new CardWeapon[2];
-            newWeapons[0] = weapon;
-            this.weapons = newWeapons;
+        if (weapons.size() < 3)
+            weapons.add(weapon);
+        else {
+            //TODO throws new FullWeaponSpaceException
         }
-        else
-            this.weapons[position] = weapon;
     }
 
-    public CardWeapon[] getWeapons() {
-        if (weapons==null)
+    public ArrayList<CardWeapon> getWeapons() {
+        if (weapons.isEmpty())
             return null;
-        return weapons;
+        return new ArrayList<>(weapons);
     }
 
     private CardWeapon removeWeapon(int position){
-        if (this.getWeapons() == null)
+        if (this.getWeapons().isEmpty())
             return null;
-        CardWeapon remove = this.weapons[position];
-        this.setWeapon(null, position);
-        return remove;
+        CardWeapon card = weapons.get(position);
+        this.addWeapon(null, position);
+        return card;
     }
 
     /**
-     * This method Override the method of Square, it allows a BoardPlayer to grab one of the Item content by the square
+     * This method Override the method of NormalSquare, it allows a BoardPlayer to grab one of the Item content by the NormalSquare
      * */
-    @Override
+
     public CardWeapon grabItem(int position)  {
-        if (this.weapons[position] == null){
+        if (weapons.get(position) == null){
             return null;
         }
-        CardWeapon Weapon;
-        Weapon = this.weapons[position];
+        CardWeapon weapon = weapons.get(position);
         removeWeapon(position);
-        return Weapon;
+        return weapon;
     }
 }

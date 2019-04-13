@@ -7,27 +7,24 @@ public class NormalSquareTest {
     @Test
     public void testConstructor(){
         NormalSquare normalSquareTest;
-        normalSquareTest = new NormalSquare(null, null, null, null, null);
+        normalSquareTest = new NormalSquare(null, null, null, null, null, null);
         assertTrue(normalSquareTest instanceof NormalSquare);
     }
 
     @Test
     public void AddAmmoGetItemTest(){
         CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
-        NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null);
+        NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, null);
         normalSquareTest.addAmmo(ammoTest);
-        assertTrue(normalSquareTest.getItem() instanceof CardAmmo);
+        assertEquals(normalSquareTest.getItem(), ammoTest);
     }
 
     @Test
     public void GrabItemTest(){
         CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
-        NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null);
-        assertTrue(normalSquareTest.grabItem(0) == null);
-        assertTrue(normalSquareTest.getItem() == null);
-        normalSquareTest.addAmmo(ammoTest);
-        assertTrue(normalSquareTest.grabItem(0) instanceof CardAmmo);
-
+        NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, ammoTest);
+        assertEquals(ammoTest, normalSquareTest.grabItem());
+        assertEquals(null, normalSquareTest.getItem());
     }
 }
 
