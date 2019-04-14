@@ -11,13 +11,14 @@ public class SpawnSquareTest {
     @Test
     public void testConstructor(){
         SpawnSquare spawnSquare;
-        spawnSquare = new SpawnSquare(null, null, null, null, null, null);
+        spawnSquare = new SpawnSquare(null, null, null, null, null, new ArrayList<>());
         assertTrue(spawnSquare instanceof SpawnSquare);
     }
 
     @Test
     public void AddWeaponGetWeaponsTest() throws FileNotFoundException{
         ArrayList<CardWeapon> weaponsTest = new ArrayList<>();
+        weaponsTest.add(null);
         CardWeapon weaponTest;
         weaponTest = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
 

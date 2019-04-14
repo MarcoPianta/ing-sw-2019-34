@@ -17,7 +17,7 @@ public class SpawnSquare extends NormalSquare{
 
     public void addWeapon(CardWeapon weapon, int position) {
         if (weapons.size() < 3)
-            weapons.add(weapon);
+            weapons.set(position, weapon);
         else {
             //TODO throws new FullWeaponSpaceException
         }

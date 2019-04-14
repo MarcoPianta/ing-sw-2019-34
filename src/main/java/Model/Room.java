@@ -15,7 +15,7 @@ public class Room{
     public Room(int dimension){
         normalSquares = new ArrayList<>();
         while (normalSquares.size() < dimension)
-            normalSquares.add(null);
+            normalSquares.add(new NormalSquare());
     }
 
     public ArrayList<NormalSquare> getNormalSquares() {

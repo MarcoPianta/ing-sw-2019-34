@@ -59,4 +59,20 @@ public class NormalSquare {
     public boolean isSpawn() {
         return spawn;
     }
+
+    public NormalSquare getN() {
+        return N;
+    }
+
+    public NormalSquare getE() {
+        return E;
+    }
+
+    public NormalSquare getS() {
+        return S;
+    }
+
+    public NormalSquare getW() {
+        return W;
+    }
 }

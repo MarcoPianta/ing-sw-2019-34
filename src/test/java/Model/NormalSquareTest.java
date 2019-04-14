@@ -16,7 +16,7 @@ public class NormalSquareTest {
         CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
         NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, null);
         normalSquareTest.addAmmo(ammoTest);
-        assertEquals(normalSquareTest.getItem(), ammoTest);
+        assertEquals(normalSquareTest.getItem().getName(), ammoTest.getName());
     }
 
     @Test
