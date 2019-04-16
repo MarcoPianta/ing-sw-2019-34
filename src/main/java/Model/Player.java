@@ -6,7 +6,7 @@ public class Player {
     private String name;
     private int actionCounter;
     private PlayerBoard playerBoard;
-    private Square position;
+    private NormalSquare position;
     private String gameId;
 
     public Player(String playerID,String gameId, Colors color,String name) {
@@ -25,7 +25,7 @@ public class Player {
         return playerBoard;
     }
 
-    public Square getPosition() {
+    public NormalSquare getPosition() {
         return position;
     }
 
@@ -59,7 +59,7 @@ public class Player {
     /*
      *this method modified a player's position
      * */
-    public void newPosition(Square newPosition){
+    public void newPosition(NormalSquare newPosition){
         position=newPosition;
 
     }
