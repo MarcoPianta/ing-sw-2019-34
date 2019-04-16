@@ -37,7 +37,7 @@ public class Player {
         return gameId;
     }
 
-    /*
+    /**
      *this method  return true o false if the player can do an action
      * */
     public boolean canAct(){
