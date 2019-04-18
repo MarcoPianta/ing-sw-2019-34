@@ -27,6 +27,20 @@ public class Game {
         return currentPlayer;
     }
 
+    public void addPlayerPoints(ArrayList<Colors> bestMurder,Player thisPlayer){
+        int reward=thisPlayer.getPlayerBoard().getMaxReward();
+        int newPoints=0;
+        for (Player player: players){
+            if(bestMurder.indexOf(player.getPlayerBoard().getColor())!=-1){
+                newPoints=thisPlayer.getPlayerBoard().getMaxReward()-2*(bestMurder.indexOf(player.getPlayerBoard().getColor()));
+                if(newPoints<=0)
+                    newPoints=1;
+            }
+            player.getPlayerBoard().addPoints(newPoints);
+        }
+        thisPlayer.getPlayerBoard().decrementMaxReward();
+    }
+
     /**
      * this method add a new player
      * */
