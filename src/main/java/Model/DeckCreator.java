@@ -54,11 +54,11 @@ public class DeckCreator {
     /**
      * This method return a PowerUp deck and also initialize the trash deck (which is in Deck class)
      * */
-    private Deck<CardPowerUp> createPowerUpDeck() {
+    private Deck<CardPowerUp> createPowerUpDeck() throws FileNotFoundException{
         Deck<CardPowerUp> deck = new Deck<>(false);
-        //for (int i = 0; i < .values().length; i++){
-        //    deck.add(new CardPowerUp(/*WeaponDictionary.values()[i].getAbbreviation()*/)); //TODO need to be completed when CardPowerUp is completed
-        //}
+        for (int i = 0; i < PowerUpEnum.values().length; i++){
+            deck.add(new CardPowerUp(PowerUpEnum.values()[i].getAbbreviation()));
+        }
         deck.setTrashDeck();
         return deck;
     }
