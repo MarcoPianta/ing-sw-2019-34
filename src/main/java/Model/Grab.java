@@ -10,21 +10,21 @@ public class Grab implements Action {
 
     public void Grab(Player grabberPlayer, CardWeapon grabbedCard){
         actorPlayer = grabberPlayer;
-        //TODO playerSquare = grabberPlayer.getPosition();
+        playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 0;
     }
 
     public void Grab(Player grabberPlayer, CardOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
-        //TODO playerSquare = grabberPlayer.getPosition();
+        playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 1;
     }
 
     public void Grab(Player grabberPlayer, CardNotOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
-        //TODO playerSquare = grabberPlayer.getPosition();
+        playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 2;
     }
