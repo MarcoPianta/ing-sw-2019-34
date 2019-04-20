@@ -97,10 +97,10 @@ public class PlayerTest {
     public void newPositionTest(){
         Game game=new Game("gametest");
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
-        SpawnSquare spawnSquare= new SpawnSquare(null,null,null,null,null) ;
-        assertFalse(player.getPosition()==spawnSquare);
-        player.newPosition(spawnSquare);
-        assertTrue(player.getPosition()==spawnSquare);
+        NormalSquare normalSquare= new NormalSquare(null,null,null,null,null,null) ;
+        assertFalse(player.getPosition()==normalSquare);
+        player.newPosition(normalSquare);
+        assertTrue(player.getPosition()==normalSquare);
     }
 
 }

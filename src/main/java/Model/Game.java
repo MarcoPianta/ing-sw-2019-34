@@ -8,11 +8,17 @@ public class Game {
     private ArrayList<Player> players;
     private Player firstPlayer;
     private Player currentPlayer;
+    private DeathRow deathRow;
 
-    public Game(String gameId) {
+    public Game(String gameId,int n) {
         this.gameId=gameId;
         this.players=new ArrayList<Player>();
         this.currentPlayer=null;
+        deathRow=new DeathRow(n,this);
+    }
+
+    public DeathRow getDeathRow() {
+        return deathRow;
     }
 
     public ArrayList<Player> getPlayers() {

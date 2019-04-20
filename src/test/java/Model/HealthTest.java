@@ -25,7 +25,7 @@ public class HealthTest {
      * */
     @Test
     public void testDeath(){
-        Game gameTest= new Game("gameTest");
+        Game gameTest= new Game("gameTest",5);
         Player playerTest= new Player("playerTest1", gameTest,Colors.GREEN,"playertest");
         PlayerBoard playerBoard=new PlayerBoard(Colors.GREEN,"playerTest",playerTest);
         playerBoard.getHealthPlayer().death();
