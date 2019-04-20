@@ -12,7 +12,7 @@ public class GameTest {
      * */
     @Test
     public void addPLayerPoints(){
-        Game game=new Game("gametest");
+        Game game=new Game("gametest",8);
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
         Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
@@ -58,7 +58,7 @@ public class GameTest {
      * */
     @Test
     public void addPlayerTest(){
-        Game game=new Game("gametest");
+        Game game=new Game("gametest",8);
         Player player=new Player("playertest2832",game, Colors.GREEN, "playerTest");
 
         assertTrue(game.getPlayers().isEmpty() );
@@ -71,7 +71,7 @@ public class GameTest {
 
     @Test
     public void incrementCurrentPlayerTest(){
-        Game game=new Game("gametest");
+        Game game=new Game("gametest",5);
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.GREEN, "playerTest2");
         Player player3=new Player("playertest2832",game, Colors.GREEN, "playerTest3");

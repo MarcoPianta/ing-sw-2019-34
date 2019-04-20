@@ -8,13 +8,8 @@ public class Player {
     private String name;
     private int actionCounter;
     private PlayerBoard playerBoard;
-<<<<<<< HEAD
-    private Square position;
-    private Game gameId;
-=======
     private NormalSquare position;
-    private String gameId;
->>>>>>> 4a34c2f7b025f899424f72df9824508343337a0a
+    private Game gameId;
 
     public Player(String playerID,Game gameId, Colors color,String name) {
         this.playerID=playerID;
@@ -44,7 +39,6 @@ public class Player {
     }
 
     /**
-<<<<<<< HEAD
      * this calculate who received points after kill
      * */
     public ArrayList<Colors> calculatePoints(ArrayList<Colors> playersMurder){
@@ -140,10 +134,7 @@ public class Player {
 
     }
 
-
     /*
-=======
->>>>>>> 4a34c2f7b025f899424f72df9824508343337a0a
      *this method  return true o false if the player can do an action
      * */
     public boolean canAct(){
