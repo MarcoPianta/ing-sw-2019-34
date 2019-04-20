@@ -22,7 +22,7 @@ public class PlayerTest {
     @Test
     public void newPositionTest(){
         Player player=new Player("playertest2832","gametest262518", Colors.GREEN, "playerTest");
-        SpawnSquare spawnSquare= new SpawnSquare(null,null,null,null,null) ;
+        SpawnSquare spawnSquare= new SpawnSquare(null,null,null,null,null, null) ;
         assertFalse(player.getPosition()==spawnSquare);
         player.newPosition(spawnSquare);
         assertTrue(player.getPosition()==spawnSquare);
