@@ -11,7 +11,7 @@ public class Injure implements Action {
     }
 
     public void execute() {
-        targetPlayer.getPlayerBoard().addDamage(damageColor, injurerEffect.getMark());
+        targetPlayer.getPlayerBoard().addDamage(damageColor, injurerEffect.getDamage());
     }
 
     public boolean isValid(){
