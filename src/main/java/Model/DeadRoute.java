@@ -2,12 +2,12 @@ package Model;
 
 import java.util.ArrayList;
 
-public class DeathRow {
+public class DeadRoute {
     private int skulls;
     private ArrayList<Colors> murders;
     private Game gameId;
 
-    public DeathRow(int n,Game gameId){
+    public DeadRoute(int n, Game gameId){
         skulls=n;
         murders=new ArrayList<>();
         this.gameId=gameId;
