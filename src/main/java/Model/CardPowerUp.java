@@ -24,12 +24,7 @@ public class CardPowerUp implements Card {
      * The constructor read from JSON file the specs and create a power up with that specs
      * */
     public CardPowerUp(String file) throws FileNotFoundException{
-        JsonObject jsonValues; /* this variable contains the JsonObject created from JSON file*/
-        File fileJson = new File(getClass().getResource("/PowerUp/"+file+".json").getFile());
-        InputStream fis = new FileInputStream(fileJson);
-        JsonReader reader = Json.createReader(fis);
-        jsonValues = reader.readObject();
-        reader.close();
+        JsonObject jsonValues = Utils.JsonFileHandler.openFile("PowerUp", file); /* this variable contains the JsonObject created from JSON file*/
         name = jsonValues.getString("name");
         cost = jsonValues.getInt("cost");
         color = AmmoColors.valueOf(jsonValues.getString("color"));

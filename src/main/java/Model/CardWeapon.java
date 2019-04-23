@@ -19,17 +19,13 @@ public class CardWeapon implements Card {
     private int effectsNumber;
     private boolean charge;
     private ArrayList<Effect> effects;
+    private static final String directory = "Weapon";
 
     /**
      * The constructor read from JSON file the specs and create a weapon with that specs
      * */
     public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
-        JsonObject jsonValues; /* this variable contains the JsonObject created from JSON file*/
-        File fileJson = new File(getClass().getResource("/Weapon/"+file+".json").getFile());
-        InputStream fis = new FileInputStream(fileJson);
-        JsonReader reader = Json.createReader(fis);
-        jsonValues = reader.readObject();
-        reader.close();
+        JsonObject jsonValues = Utils.JsonFileHandler.openFile("Weapon", file); /* this variable contains the JsonObject created from JSON file*/
         name = jsonValues.getString("name");
         color = AmmoColors.valueOf(jsonValues.getString("color"));
         redCost = jsonValues.getJsonArray("cost").getInt(0);
