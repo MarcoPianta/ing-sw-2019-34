@@ -51,5 +51,8 @@ public class CardWeaponTest {
         }
         card.setCharge(true);
         assertTrue(card.isCharge());
+        assertEquals(1, card.getRedCost());
+        assertEquals(1, card.getYellowCost());
+        assertEquals(0, card.getBlueCost());
     }
 }
