@@ -30,7 +30,7 @@ public class DeckCreator {
      * */
     private Deck<CardWeapon> createWeaponDeck()throws FileNotFoundException {
         Deck<CardWeapon> deck = new Deck<>(false);
-        for (int i = 0; i < 4/*i < WeaponDictionary.values().length*/; i++){ // The end condition MUST be replaced when all json file are fixed
+        for (int i = 0; i < 2/*i < WeaponDictionary.values().length*/; i++){ // The end condition MUST be replaced when all json file are fixed
             deck.add(new CardWeapon(WeaponDictionary.values()[i].getAbbreviation()));
         }
         return deck;
