@@ -8,17 +8,17 @@ public class Game {
     private ArrayList<Player> players;
     private Player firstPlayer;
     private Player currentPlayer;
-    private DeathRow deathRow;
+    private DeadRoute deadRoute;
 
     public Game(String gameId,int n) {
         this.gameId=gameId;
         this.players=new ArrayList<Player>();
         this.currentPlayer=null;
-        deathRow=new DeathRow(n,this);
+        deadRoute=new DeadRoute(n,this);
     }
 
-    public DeathRow getDeathRow() {
-        return deathRow;
+    public DeadRoute getDeadRoute() {
+        return deadRoute;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -33,12 +33,30 @@ public class Game {
         return currentPlayer;
     }
 
-    public void addPlayerPoints(ArrayList<Colors> bestMurder,Player thisPlayer){
+    /*public ArrayList<UtilPlayer> addPlayerInUtilPlayer(ArrayList<Colors> players){
+        int counter;
+        boolean isPresent;
+        for(UtilPlayer player: players){
+            counter=0;
+            isPresent=false;
+            while(counter < getPlayers().size() || (!isPresent)){
+                if(player.getColor()==getPlayers().get(counter).getColor()){
+                    player.setPlayer(getPlayers().get(counter));
+                    isPresent=true;
+                }
+                else
+                    counter++;
+            }
+        }
+        return players;
+    }
+*/
+    public void addPlayerPoints(ArrayList<Player> bestMurder,Player thisPlayer){
         int reward=thisPlayer.getPlayerBoard().getMaxReward();
         int newPoints=0;
         for (Player player: players){
-            if(bestMurder.indexOf(player.getPlayerBoard().getColor())!=-1){
-                newPoints=thisPlayer.getPlayerBoard().getMaxReward()-2*(bestMurder.indexOf(player.getPlayerBoard().getColor()));
+            if(bestMurder.indexOf(player)!=-1){
+                newPoints=thisPlayer.getPlayerBoard().getMaxReward()-2*(bestMurder.indexOf(player));
                 if(newPoints<=0)
                     newPoints=1;
             }
@@ -46,6 +64,7 @@ public class Game {
         }
         thisPlayer.getPlayerBoard().decrementMaxReward();
     }
+
 
     /**
      * this method add a new player
