@@ -2,12 +2,12 @@ package Model;
 
 public class NormalSquare {
     private CardAmmo ammo;
-    protected NormalSquare N;
-    protected NormalSquare E;
-    protected NormalSquare S;
-    protected NormalSquare W;
+    NormalSquare N;
+    NormalSquare E;
+    NormalSquare S;
+    NormalSquare W;
     protected Colors color;
-    protected boolean spawn;
+    boolean spawn;
 
     public NormalSquare(NormalSquare SideN, NormalSquare SideE, NormalSquare SideS, NormalSquare SideW, Colors color, CardAmmo Ammo) {
         N = SideN;
