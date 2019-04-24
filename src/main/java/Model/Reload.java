@@ -9,14 +9,17 @@ public class Reload implements Action {
         actorPlayer = player;
     }
 
-    public void execute() {
+    public boolean execute() {
         if(!selectedWeapon.isCharge()){
             //TODO throws exception weaponAlreadyCharge
+            return true;
         }
         else if(isValid()){
             //TODO actorPlayer must pay the cost of reload
             selectedWeapon.setCharge(true);
+            return true;
         }
+        return false;
     }
 
     public boolean isValid(){

@@ -75,4 +75,8 @@ public class NormalSquare {
     public NormalSquare getW() {
         return W;
     }
+
+    public Colors getColor() {
+        return color;
+    }
 }
