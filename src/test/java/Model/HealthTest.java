@@ -11,14 +11,19 @@ public class HealthTest {
      * */
     @Test
     public void testCountMarksAddMarks(){
-        Player playerTest=new Player();
-        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest",playerTest) ;
-        playerBoard.getHealthPlayer().addMark(Colors.BLUE, 5 );
-        playerBoard.getHealthPlayer().addMark(Colors.VIOLET, 2 );
+        Game game=new Game("gametest",8);
+        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
+        Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
+        Player playerTest=new Player("playertest2832",game, Colors.RED, "playerTest");
 
-        assertEquals(3,playerBoard.getHealthPlayer().countMarks(Colors.BLUE));
-        assertEquals(0,playerBoard.getHealthPlayer().countMarks(Colors.YELLOW));
-        assertEquals(2,playerBoard.getHealthPlayer().countMarks(Colors.VIOLET));
+        PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest",playerTest) ;
+        playerBoard.getHealthPlayer().addMark(player1, 5 );
+        playerBoard.getHealthPlayer().addMark(player2, 2 );
+
+        assertEquals(3,playerBoard.getHealthPlayer().countMarks(player1));
+        assertEquals(0,playerBoard.getHealthPlayer().countMarks(player3));
+        assertEquals(2,playerBoard.getHealthPlayer().countMarks(player2));
     }
     /**
      * this method test the player's death
@@ -39,20 +44,24 @@ public class HealthTest {
      * */
     @Test
     public void testAddDamage(){
-        Player playerTest=new Player();
+        Game game=new Game("gametest",8);
+        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
+        Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
+        Player playerTest=new Player("playertest2832",game, Colors.RED, "playerTest");
         PlayerBoard playerBoard= new PlayerBoard(Colors.GREEN, "playerTest",playerTest);
 
-        int counterMark= playerBoard.getHealthPlayer().countMarks(Colors.BLUE);
+        int counterMark= playerBoard.getHealthPlayer().countMarks(player1);
         //case max damage and adrenaline action=2
-        playerBoard.getHealthPlayer().addMark(Colors.BLUE,3);
-        playerBoard.getHealthPlayer().addDamage(Colors.BLUE,9);
+        playerBoard.getHealthPlayer().addMark(player1,3);
+        playerBoard.getHealthPlayer().addDamage(player1,9);
         assertEquals(0,playerBoard.getHealthPlayer().getDamageBar().size());
         assertEquals(0,playerBoard.getHealthPlayer().getAdrenalineAction());
         //assertEquals(6,playerBoard.getHealthPlayer().getMaxReward());
-        assertEquals(0,playerBoard.getHealthPlayer().countMarks(Colors.BLUE));
+        assertEquals(0,playerBoard.getHealthPlayer().countMarks(player1));
 
-        playerBoard.getHealthPlayer().addMark(Colors.BLUE,2);
-        playerBoard.getHealthPlayer().addDamage(Colors.BLUE,1);
+        playerBoard.getHealthPlayer().addMark(player1,2);
+        playerBoard.getHealthPlayer().addDamage(player1,1);
         assertEquals(3,playerBoard.getHealthPlayer().getDamageBar().size());
         assertEquals(1, playerBoard.getHealthPlayer().getAdrenalineAction());
     }

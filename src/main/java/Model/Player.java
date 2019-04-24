@@ -6,6 +6,7 @@ public class Player {
 
     private String playerID;
     private String name;
+    private Colors color;
     private int actionCounter;
     private PlayerBoard playerBoard;
     private NormalSquare position;
@@ -14,6 +15,7 @@ public class Player {
     public Player(String playerID,Game gameId, Colors color,String name) {
         this.playerID=playerID;
         this.name=name;
+        this.color=color;
         this.playerBoard=new PlayerBoard(color , name, this);
         this.actionCounter=2;
         this.position=null;
@@ -41,33 +43,33 @@ public class Player {
     /**
      * this calculate who received points after kill
      * */
-    public ArrayList<Colors> calculatePoints(ArrayList<Colors> playersMurder){
+    public ArrayList<Player> calculatePoints(ArrayList<Player> playersMurder){
         int counter;
         int i;
         boolean isPresent;
-        ArrayList<Colors> bestMurder=new ArrayList<>();
+        ArrayList<Player> bestMurder=new ArrayList<>();
         for(int n=0;n<4 ;n++)
             bestMurder.add(null);
         ArrayList<Integer> points= new ArrayList<>();
         for(int n=0;n<4 ;n++)
             points.add(0);
 
-        for(Colors color:playersMurder){
-            if(notAlreadyView(color,bestMurder)){
+        for(Player player:playersMurder){
+            if(notAlreadyView(player,bestMurder)){
                 isPresent=false;
-                counter=countColors(color,playersMurder);
+                counter=countColors(player,playersMurder);
                 i=0;
                 while ((i<4) && (!isPresent)){
                     if(counter>points.get(i)){
                         points.add(i,counter);
-                        bestMurder.add(i,color);
+                        bestMurder.add(i,player);
                         isPresent=true;
                     }
                     else if(counter==points.get(i)){
                         while(counter==points.get(i)&&(!isPresent)){ //if there are more player with same counter
-                            if(firstDamage(color,bestMurder.get(i),playersMurder)==color){
+                            if(firstDamage(player,bestMurder.get(i),playersMurder)==player){
                                 points.add(i,counter);
-                                bestMurder.add(i,color);
+                                bestMurder.add(i,player);
                                 isPresent=true;
                             }
                             else{
@@ -76,7 +78,7 @@ public class Player {
                         }
                         if(!isPresent){
                             points.add(i,counter);
-                            bestMurder.add(i,color);
+                            bestMurder.add(i,player);
                             isPresent=true;
                         }
 
@@ -89,11 +91,11 @@ public class Player {
         //getGameId().addPlayerPoints(bestMurder,this);
         return bestMurder;
     }
-    public boolean notAlreadyView(Colors color,ArrayList<Colors> colors){
+    public boolean notAlreadyView(Player player,ArrayList<Player> players){
         boolean isNotPresent=true;
         int i=0;
-        while(i<colors.size()&&(isNotPresent)){
-            if(color==colors.get(i)){
+        while(i<players.size()&&(isNotPresent)){
+            if(player==players.get(i)){
                 isNotPresent=false;
                 i++;
 
@@ -104,17 +106,17 @@ public class Player {
         return isNotPresent;
     }
 
-    public Colors firstDamage(Colors color1,Colors color2, ArrayList<Colors> playerMurder){
-        Colors firstDamage=null;
+    public Player firstDamage(Player player1,Player player2, ArrayList<Player> playerMurder){
+        Player firstDamage=null;
         Boolean isPresent=false;
         int i=0;
         while (!isPresent) {
-            if(playerMurder.get(i)==color1){
-                firstDamage=color1;
+            if(playerMurder.get(i)==player1){
+                firstDamage=player1;
                 isPresent=true;
             }
-            else if(playerMurder.get(i)==color2){
-                firstDamage=color2;
+            else if(playerMurder.get(i)==player2){
+                firstDamage=player2;
                 isPresent=true;
             }
             else
@@ -124,10 +126,10 @@ public class Player {
     }
 
 
-    public int countColors(Colors color,ArrayList<Colors> playersMurder){
+    public int countColors(Player player,ArrayList<Player> playersMurder){
         int counterColors=0;
-        for( Colors colors : playersMurder ){
-            if (colors==color)
+        for( Player players : playersMurder ){
+            if (players==player)
                 counterColors++;
         }
         return counterColors;

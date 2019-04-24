@@ -18,38 +18,38 @@ public class GameTest {
         Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
         Player player4=new Player("playertest2832",game, Colors.RED, "playerTest3");
         Player player5=new Player("playertest2832",game, Colors.VIOLET, "playerTest3");
-        ArrayList<Colors> bestMurder=new ArrayList<>();
+        ArrayList<Player> bestMurder=new ArrayList<>();
 
-        bestMurder.add(Colors.GREEN);
-        bestMurder.add(Colors.BLUE);
-        bestMurder.add(Colors.YELLOW);
-        bestMurder.add(Colors.VIOLET);
+        bestMurder.add(player1);
+        bestMurder.add(player2);
+        bestMurder.add(player3);
+        bestMurder.add(player4);
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
         game.addPlayer(player4);
         game.addPlayer(player5);
 
-        game.addPlayerPoints(bestMurder,player4);
+        game.addPlayerPoints(bestMurder,player5);
         assertEquals(8,player1.getPlayerBoard().getPoints());
         assertEquals(6,player2.getPlayerBoard().getPoints());
         assertEquals(4,player3.getPlayerBoard().getPoints());
-        assertEquals(2,player5.getPlayerBoard().getPoints());
-        assertEquals(6,player4.getPlayerBoard().getMaxReward());
+        assertEquals(2,player4.getPlayerBoard().getPoints());
+        assertEquals(6,player5.getPlayerBoard().getMaxReward());
 
-        game.addPlayerPoints(bestMurder,player4);
+        game.addPlayerPoints(bestMurder,player5);
         assertEquals(14,player1.getPlayerBoard().getPoints());
         assertEquals(10,player2.getPlayerBoard().getPoints());
         assertEquals(6,player3.getPlayerBoard().getPoints());
-        assertEquals(3,player5.getPlayerBoard().getPoints());
-        assertEquals(4,player4.getPlayerBoard().getMaxReward());
+        assertEquals(3,player4.getPlayerBoard().getPoints());
+        assertEquals(4,player5.getPlayerBoard().getMaxReward());
 
-        game.addPlayerPoints(bestMurder,player4);
+        game.addPlayerPoints(bestMurder,player5);
         assertEquals(18,player1.getPlayerBoard().getPoints());
         assertEquals(12,player2.getPlayerBoard().getPoints());
         assertEquals(7,player3.getPlayerBoard().getPoints());
-        assertEquals(4,player5.getPlayerBoard().getPoints());
-        assertEquals(2,player4.getPlayerBoard().getMaxReward());
+        assertEquals(4,player4.getPlayerBoard().getPoints());
+        assertEquals(2,player5.getPlayerBoard().getMaxReward());
 
 
     }
