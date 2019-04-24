@@ -56,7 +56,8 @@
           "vision": true,
           "minRange": 0,
           "maxRange": 0,
-          "cardinal": false
+          "cardinal": false,
+          "enemiesDifferentSquare": false
         }
       ],
       "postCondition":[

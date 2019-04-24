@@ -24,7 +24,8 @@
           "minRange": 1,
           "maxRange": 2,
           "cardinal": false,
-          "otherPosition": false
+          "otherPosition": false,
+          "enemiesDifferentSquare": false
         }
       ],
       "postCondition":[
@@ -57,7 +58,8 @@
           "minRange": 1,
           "maxRange": 2,
           "cardinal": false,
-          "otherPosition": false
+          "otherPosition": false,
+          "enemiesDifferentSquare": false
         }
       ],
       "postCondition":[
