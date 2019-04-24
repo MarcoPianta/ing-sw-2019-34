@@ -17,8 +17,8 @@ public class DeadRoute {
         return murders;
     }
 
-    public void addMurders(UtilPlayer player){
-        getMurders().add(player);
+    public void addMurders(Player player, int counter){
+        getMurders().add(new UtilPlayer(player,counter));
         skulls--;
         if(skulls==0){
             //TODO ultimate adrenaline round

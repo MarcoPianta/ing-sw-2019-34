@@ -10,8 +10,11 @@ public class Mark implements Action {
         markerEffect = effect; //devo ricevere la copia
     }
 
-    public void execute() {
-        targetPlayer.getPlayerBoard().addMark(markColor, markerEffect.getMark());
+    public boolean execute() {
+        if (isValid()) {
+            return true;
+        }
+        return false;
     }
 
     public boolean isValid(){

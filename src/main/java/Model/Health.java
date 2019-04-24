@@ -34,18 +34,16 @@ public class Health {
     /**
      * this method set a death
      * */
-    public void death(){
+    public void death(){//vedere se funziona senza olddamagebar
         ArrayList<Player> oldDamageBar= new ArrayList<>();
         oldDamageBar=getDamageBar();
-        resetDamageBar();
         getPlayerBoard().getPlayer().calculatePoints(oldDamageBar);
-        /*getPlayerBoard().getPlayer().getGameId().firstBlood(oldDamageBar.get(0));
+        oldDamageBar.get(0).getPlayerBoard().addPoints(1);
         if(oldDamageBar.get(10)==oldDamageBar.get(11))
-            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(new UtilPlayer(null,oldDamageBar.get(10),2));
+            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(oldDamageBar.get(10),2);
         else
-            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(new UtilPlayer(null,oldDamageBar.get(10),1));
-*/
-
+            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(oldDamageBar.get(10),1);
+        resetDamageBar();
     }
 
     /**
@@ -86,11 +84,6 @@ public class Health {
             adrenalineAction++;
         if(damageBar.size()>=11) {
             death();
-
-            // va in metodo morte che restituisce damagebar come copia o faccio conto io e restituisco array(TODOdiventerà hash), metto boolean detah a true
-            //resetto damage bar e decremento max reward
-            //e aggiungo un metodo in player per sapere se è morto o no
-            //nel game  aggiungo scalata teschi come damage e contatore teschi
         }
     }
 

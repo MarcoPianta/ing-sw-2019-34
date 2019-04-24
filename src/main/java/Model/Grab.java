@@ -29,20 +29,24 @@ public class Grab implements Action {
         execution = 2;
     }
 
-    public void execute(){
-        if( execution == 0 ){
-            //TODO è il caso in cui raccolgo un CardWeapon
-            // se ne ho gia 3 chiamo la substituteWeapon se no la addWeapon
+    public boolean execute(){
+        if(isValid()){
+            if( execution == 0 ){
+                //TODO è il caso in cui raccolgo un CardWeapon
+                // se ne ho gia 3 chiamo la substituteWeapon se no la addWeapon
+            }
+            else if( execution == 1 ){
+                //TODO è il caso in cui raccolgo una CardOnlyAmmo
+                // chiamo la addAmmo passando i 3 colori
+            }
+            else if( execution == 2 ){
+                //TODO è il caso in cui raccolgo una CardNotOnlyAmmo
+                // chiamo la addAmmo passando i 3 colori
+                // chiamo anche la addPowerUp se ne ha meno di 3 se no la substitute
+            }
+            return true;
         }
-        else if( execution == 1 ){
-            //TODO è il caso in cui raccolgo una CardOnlyAmmo
-            // chiamo la addAmmo passando i 3 colori
-        }
-        else if( execution == 2 ){
-            //TODO è il caso in cui raccolgo una CardNotOnlyAmmo
-            // chiamo la addAmmo passando i 3 colori
-            // chiamo anche la addPowerUp se ne ha meno di 3 se no la substitute
-        }
+        return false;
     }
 
     public boolean isValid(){
