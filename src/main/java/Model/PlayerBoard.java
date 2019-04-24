@@ -42,6 +42,10 @@ public class PlayerBoard {
         return playerName;
     }
 
+    public Hand getHandPlayer() {
+        return handPlayer;
+    }
+
     public Health getHealthPlayer() {
         return healthPlayer;
     }
