@@ -24,7 +24,7 @@ public class CardWeapon implements Card {
     /**
      * The constructor read from JSON file the specs and create a weapon with that specs
      * */
-    public CardWeapon(String file) throws FileNotFoundException{ //file variable contains the weapon name
+    public CardWeapon(String file) throws FileNotFoundException{ //file parameter contains the weapon name
         JsonObject jsonValues = Utils.JsonFileHandler.openFile("Weapon", file); /* this variable contains the JsonObject created from JSON file*/
         name = jsonValues.getString("name");
         color = AmmoColors.valueOf(jsonValues.getString("color"));

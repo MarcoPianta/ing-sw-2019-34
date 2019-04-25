@@ -34,7 +34,7 @@ public class CardWeaponTest {
         }catch (FileNotFoundException e){
             return;
         }
-        assertTrue(cardWeapon.getEffects().size() == 1); //Expected size value  of effects for electroscyte is 1
+        assertTrue(cardWeapon.getEffects().size() == 2); //Expected size value  of effects for electroscyte is 1
         assertEquals(4 ,cardWeapon.getEffects().get(0).getTargetNumber()); //Expected value of target is 4
     }
 

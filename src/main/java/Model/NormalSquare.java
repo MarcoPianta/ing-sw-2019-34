@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class NormalSquare {
     private CardAmmo ammo;
     NormalSquare N;
@@ -78,5 +80,9 @@ public class NormalSquare {
 
     public Colors getColor() {
         return color;
+    }
+
+    public ArrayList<CardWeapon> getWeapons() {
+        return new ArrayList<>();
     }
 }
