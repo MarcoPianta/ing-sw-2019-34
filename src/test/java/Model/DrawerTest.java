@@ -14,5 +14,6 @@ public class DrawerTest {
         deck.add(new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation()));
         assertTrue(drawer.hasNext());
         CardWeapon c = drawer.draw();
+        assertEquals(c.getName(), new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation()).getName());
     }
 }

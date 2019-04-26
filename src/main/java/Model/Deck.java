@@ -92,4 +92,13 @@ public class Deck<T extends Card> {
         cardDeck.remove(index);
         return copy;
     }
+
+    public Deck<T> clone(){
+        Deck<T> copy = new Deck<>(mix);
+        copy.cardDeck = new ArrayList<>(this.cardDeck);
+        copy.mix = this.mix;
+        if (mix)
+            copy.trashDeck = new ArrayList<>(this.trashDeck);
+        return copy;
+    }
 }

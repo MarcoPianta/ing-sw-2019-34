@@ -3,7 +3,8 @@ package Model;
 import java.security.SecureRandom;
 
 /**
- * This class is an iterator used to randomly extract cards
+ * This class is an iterator used to randomly extract cards.
+ * Drawer is created by deck.
  * */
 public class Drawer<E> {
     private Deck deck;

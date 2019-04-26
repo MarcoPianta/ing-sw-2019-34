@@ -30,15 +30,11 @@ public class DeckTest {
      * This method test a deck that can be mixed
      * */
     @Test
-    public void mixedTest() {
+    public void mixedTest() throws FileNotFoundException{
         Deck<CardAmmo> deck;
         deck = new Deck(true);
 
-        //The following TO-DO statement should be uncommented when all json file for ammo will be created
-        //TODO deck.add(new CardOnlyAmmo(AmmoEnum.AMMO1.getAbbreviation()));
-
-        //The following statement MUST be removed when TO-DO will be uncommented
-        deck.add(new CardOnlyAmmo());
+        deck.add(new CardOnlyAmmo(AmmoEnum.AMMO1.getAbbreviation()));
 
         deck.setTrashDeck();
         assertEquals(1, deck.getSize()); //After a card is added the deck size must be 1
@@ -47,5 +43,19 @@ public class DeckTest {
         assertThrows(IndexOutOfBoundsException.class , () -> {
             deck.getCard(2);
         });//When parameter of getCard is higher than deck size getCard must throw an IndexOutOfBoundsException even when the deck is refilled
+    }
+
+    @Test
+    public void cloneTest() throws FileNotFoundException{
+        Deck<CardWeapon> cardWeaponDeck, cardWeaponDeckCopy;
+        cardWeaponDeck = new DeckCreator().createDeck("WEAPON");
+        cardWeaponDeckCopy = cardWeaponDeck.clone();
+
+        assertEquals(cardWeaponDeck.getSize(), cardWeaponDeckCopy.getSize());
+        while (cardWeaponDeck.getSize() > 0){
+            assertEquals(cardWeaponDeck.getCard(0), cardWeaponDeckCopy.getCard(0));
+        }
+        assertEquals(0, cardWeaponDeck.getSize());
+        assertEquals(0, cardWeaponDeckCopy.getSize());
     }
 }
