@@ -16,7 +16,7 @@ public class Health {
     }
 
     public ArrayList<Player> getDamageBar() {
-        return damageBar;
+        return new ArrayList<>(damageBar);
     }
 
     public int getAdrenalineAction() {
@@ -34,15 +34,16 @@ public class Health {
     /**
      * this method set a death
      * */
-    public void death(){//vedere se funziona senza olddamagebar
-        ArrayList<Player> oldDamageBar= new ArrayList<>();
-        oldDamageBar=getDamageBar();
-        getPlayerBoard().getPlayer().calculatePoints(oldDamageBar);
-        oldDamageBar.get(0).getPlayerBoard().addPoints(1);
-        if(oldDamageBar.get(10)==oldDamageBar.get(11))
-            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(oldDamageBar.get(10),2);
+    public void death(){
+
+        getPlayerBoard().getPlayer().getGameId().calculatePoints(getDamageBar(), false,getPlayerBoard().getPlayer());
+        getDamageBar().get(0).getPlayerBoard().addPoints(1);
+        if(getDamageBar().size()==12){
+            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(getDamageBar().get(10),2);
+            getDamageBar().get(11).getPlayerBoard().getHealthPlayer().addMark(this.getPlayerBoard().getPlayer(),1);
+        }
         else
-            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(oldDamageBar.get(10),1);
+            getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(getDamageBar().get(10),1);
         resetDamageBar();
     }
 
