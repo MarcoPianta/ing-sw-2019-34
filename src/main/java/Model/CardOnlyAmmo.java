@@ -1,10 +1,26 @@
 package Model;
 
-public class CardOnlyAmmo extends CardAmmo {
-    private Colors item1;
-    private Colors item2;
-    private Colors item3;
+import javax.json.JsonObject;
+import java.io.FileNotFoundException;
 
+public class CardOnlyAmmo extends CardAmmo {
+    private AmmoColors item1;
+    private AmmoColors item2;
+    private AmmoColors item3;
+
+
+    public CardOnlyAmmo(String file) throws FileNotFoundException {
+        JsonObject jsonValues = Utils.JsonFileHandler.openFile("OnlyAmmo", file); /* this variable contains the JsonObject created from JSON file*/
+        item1 = AmmoColors.valueOf(jsonValues.getString("item1"));
+        item2 = AmmoColors.valueOf(jsonValues.getString("item2"));
+        item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
+    }
+
+    public CardOnlyAmmo() {
+        item1 = null;
+        item2 = null;
+        item3 = null;
+    }
     @Override
     public CardOnlyAmmo copyCardAmmo (){
         CardOnlyAmmo copy = new CardOnlyAmmo();
@@ -14,15 +30,15 @@ public class CardOnlyAmmo extends CardAmmo {
         return copy;
     }
 
-    public Colors getItem1() {
+    public AmmoColors getItem1() {
         return item1;
     }
 
-    public Colors getItem2() {
+    public AmmoColors getItem2() {
         return item2;
     }
 
-    public Colors getItem3() {
+    public AmmoColors getItem3() {
         return item3;
     }
 }
