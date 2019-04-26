@@ -36,14 +36,11 @@ public class DeckCreatorTest {
         deckCreator = new DeckCreator();
         deck = deckCreator.createDeck("AMMO");
 
-        //The following TO-DO statement should be uncommented when all json file for ammo will be created
-        //TODO assertTrue(deckCreator.createDeck("AMMO").getCard(0) instanceof CardAmmo); //Check if card inserted in deck are of the correct type
-        //TODO assertEquals(36, deck.getSize()); //Ammo card deck should be of 36 card
-        //TODO deck.getCard();
-        //TODO assertEquals(35, deck.getSize()); // After getting a card this should be removed from the deck
+        assertTrue(deckCreator.createDeck("AMMO").getCard(0) instanceof CardAmmo); //Check if card inserted in deck are of the correct type
+        assertEquals(36, deck.getSize()); //Ammo card deck should be of 36 card
+        deck.getCard(0);
+        assertEquals(35, deck.getSize()); // After getting a card this should be removed from the deck
 
-        //The following statement MUST be removed when TO-DO will be uncommented
-        assertEquals(36, deck.getSize());
     }
 
     /**
@@ -57,13 +54,10 @@ public class DeckCreatorTest {
         deckCreator = new DeckCreator();
         deck = deckCreator.createDeck("POWERUP");
 
-        //The following TO-DO statement should be uncommented when all json file for power ups will be created
-        //TODO assertTrue(deckCreator.createDeck("POWERUP").getCard(0) instanceof CardPowerUp); //Check if card inserted in deck are of the correct type
-        //TODO assertEquals(12, deck.getSize()); //Ammo card deck should be of 12 card
-        //TODO deck.getCard();
-        //TODO assertEquals(11, deck.getSize()); // After getting a card this should be removed from the deck
+        assertTrue(deckCreator.createDeck("POWERUP").getCard(0) instanceof CardPowerUp); //Check if card inserted in deck are of the correct type
+        assertEquals(12, deck.getSize()); //Ammo card deck should be of 12 card
+        deck.getCard(0);
+        assertEquals(11, deck.getSize()); // After getting a card this should be removed from the deck
 
-        //The following statement MUST be removed when TO-DO will be uncommented
-        assertEquals(12, deck.getSize());
     }
 }

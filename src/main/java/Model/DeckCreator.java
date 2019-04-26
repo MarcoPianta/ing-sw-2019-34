@@ -9,7 +9,7 @@ public class DeckCreator {
     /**
      * Method to create a deck of card, it takes a parameter which indicates the deck type
      * */
-    public Deck createDeck(String type) throws FileNotFoundException{ //Need to solve the problem of recognize what type of card deck need to be created
+    public Deck createDeck(String type) { //Need to solve the problem of recognize what type of card deck need to be created
         switch (type){
             case "WEAPON" :
                 return createWeaponDeck();
@@ -28,10 +28,14 @@ public class DeckCreator {
     /**
      * This method return a WeaponCard deck
      * */
-    private Deck<CardWeapon> createWeaponDeck()throws FileNotFoundException {
+    private Deck<CardWeapon> createWeaponDeck() {
         Deck<CardWeapon> deck = new Deck<>(false);
-        for (int i = 0; i < 2/*i < WeaponDictionary.values().length*/; i++){ // The end condition MUST be replaced when all json file are fixed
-            deck.add(new CardWeapon(WeaponDictionary.values()[i].getAbbreviation()));
+        for (int i = 0; i < 2/*i < WeaponDictionary.values().length*/; i++){ //TODO The end condition MUST be replaced when all json file are fixed
+            try {
+                deck.add(new CardWeapon(WeaponDictionary.values()[i].getAbbreviation()));
+            }catch (FileNotFoundException e){
+                //TODO send message that  the card will be not used
+            }
         }
         return deck;
     }
@@ -42,10 +46,18 @@ public class DeckCreator {
     private Deck<CardAmmo> createAmmoDeck() {
         Deck<CardAmmo> deck = new Deck<>(true);
         for (int i = 0; i < AmmoEnum.values().length; i++){
-            deck.add(new CardOnlyAmmo(/*AmmoEnum.values()[i].getAbbreviation()*/));//TODO need to be completed when CardOnlyAmmo is completed
+            try {
+                deck.add(new CardOnlyAmmo(AmmoEnum.values()[i].getAbbreviation()));
+            }catch (FileNotFoundException e){
+                //TODO send message that  the card will be not used
+            }
         }
         for (int i = 0; i < AmmoEnum.values().length; i++){
-            deck.add(new CardNotOnlyAmmo(/*AmmoEnum.values()[i].getAbbreviation()*/));//TODO need to be completed when CardNotOnlyAmmo is completed
+            try {
+                deck.add(new CardNotOnlyAmmo(AmmoEnum.values()[i].getAbbreviation()));
+            }catch (FileNotFoundException e){
+                //TODO send message that  the card will be not used
+            }
         }
         deck.setTrashDeck();
         return deck;
@@ -54,10 +66,14 @@ public class DeckCreator {
     /**
      * This method return a PowerUp deck and also initialize the trash deck (which is in Deck class)
      * */
-    private Deck<CardPowerUp> createPowerUpDeck() throws FileNotFoundException{
+    private Deck<CardPowerUp> createPowerUpDeck() {
         Deck<CardPowerUp> deck = new Deck<>(false);
         for (int i = 0; i < PowerUpEnum.values().length; i++){
-            deck.add(new CardPowerUp(PowerUpEnum.values()[i].getAbbreviation()));
+            try {
+                deck.add(new CardPowerUp(PowerUpEnum.values()[i].getAbbreviation()));
+            }catch (FileNotFoundException e){
+                //TODO send message that  the card will be not used
+            }
         }
         deck.setTrashDeck();
         return deck;
