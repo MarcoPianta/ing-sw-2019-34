@@ -36,6 +36,10 @@ public class Game {
         return currentPlayer;
     }
 
+    public  DeckCollector getDeckCollector() {
+        return deckCollector;
+    }
+
     /**
      * this calculate who received points after kill
      * */
@@ -141,6 +145,8 @@ public class Game {
                 if(newPoints<=0)
                     newPoints=1;
             }
+            else
+                newPoints=0;
             player.getPlayerBoard().addPoints(newPoints);
         }
         thisPlayer.getPlayerBoard().decrementMaxReward();

@@ -69,4 +69,38 @@ public class HealthTest {
         assertEquals(3,playerTest.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(1, playerTest.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
     }
+
+    @Test
+    public void killTest(){
+        Game game=new Game("gametest",8);
+        Player player5=new Player("playertest2832",game , Colors.RED, "playerTest");
+        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
+        Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
+        Player player4=new Player("playertest2832",game, Colors.VIOLET, "playerTest4");
+
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+        game.addPlayer(player4);
+        game.addPlayer(player5);
+
+        player1.getPlayerBoard().getHealthPlayer().addDamage(player2,5);
+        player1.getPlayerBoard().getHealthPlayer().addDamage(player3,4);
+        player1.getPlayerBoard().getHealthPlayer().addDamage(player4,4);
+
+        assertEquals(9,player2.getPlayerBoard().getPoints()); // 8+first Blood
+        assertEquals(6,player3.getPlayerBoard().getPoints());
+        assertEquals(4,player4.getPlayerBoard().getPoints());
+        assertEquals(0,player5.getPlayerBoard().getPoints());
+
+        assertEquals(0,player1.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(0,player1.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
+        assertEquals(6,player1.getPlayerBoard().getMaxReward());
+        assertEquals(1,player4.getPlayerBoard().getHealthPlayer().countMarks(player1));
+        assertEquals(7,game.getDeadRoute().getSkulls());
+        assertEquals(2,game.getDeadRoute().getMurders().size());
+
+
+    }
 }

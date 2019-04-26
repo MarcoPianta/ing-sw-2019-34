@@ -80,7 +80,6 @@ public class GameTest {
         ArrayList<Player> bestMurder=new ArrayList<>();
         boolean isPresentTest;
         Game game=new Game("gametest",8);
-        Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
         Player player1=new Player("playertest2830",game, Colors.RED, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
 
