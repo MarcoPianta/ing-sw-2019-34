@@ -10,7 +10,6 @@ public class CardNotOnlyAmmo extends CardAmmo{
 
     public CardNotOnlyAmmo(String file) throws FileNotFoundException {
         JsonObject jsonValues = Utils.JsonFileHandler.openFile("NotOnlyAmmo", file); /* this variable contains the JsonObject created from JSON file*/
-        //item1 = ;
         item2 = AmmoColors.valueOf(jsonValues.getString("item2"));
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
     }
@@ -30,7 +29,7 @@ public class CardNotOnlyAmmo extends CardAmmo{
     }
 
     public CardPowerUp getItem1() {
-        return item1;
+        return item1; //TODO extract a card power up from deck at the moment of requiring it
     }
 
     public AmmoColors getItem2() {

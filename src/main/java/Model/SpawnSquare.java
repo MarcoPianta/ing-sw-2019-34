@@ -15,6 +15,12 @@ public class SpawnSquare extends NormalSquare{
         spawn = true;
     }
 
+    public SpawnSquare(){
+        super();
+        this.weapons = new ArrayList<>();
+        spawn = true;
+    }
+
     public void addWeapon(CardWeapon weapon, int position) {
         if (weapons.size() < 3)
             weapons.set(position, weapon);

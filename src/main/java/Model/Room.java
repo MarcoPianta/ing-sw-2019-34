@@ -12,10 +12,11 @@ public class Room{
         this.color = color;
     }
 
-    public Room(int dimension){
+    public Room(int dimension, Colors color){
         normalSquares = new ArrayList<>();
         while (normalSquares.size() < dimension)
             normalSquares.add(new NormalSquare());
+        this.color = color;
     }
 
     public ArrayList<NormalSquare> getNormalSquares() {

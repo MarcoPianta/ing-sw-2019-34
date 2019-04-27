@@ -85,4 +85,20 @@ public class NormalSquare {
     public ArrayList<CardWeapon> getWeapons() {
         return new ArrayList<>();
     }
+
+    public void setN(NormalSquare n) {
+        N = n;
+    }
+
+    public void setE(NormalSquare e) {
+        E = e;
+    }
+
+    public void setS(NormalSquare s) {
+        S = s;
+    }
+
+    public void setW(NormalSquare w) {
+        W = w;
+    }
 }
