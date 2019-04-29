@@ -13,6 +13,7 @@ public class SpawnSquareTest {
         SpawnSquare spawnSquare;
         spawnSquare = new SpawnSquare(null, null, null, null, null, new ArrayList<>());
         assertTrue(spawnSquare instanceof SpawnSquare);
+        assertTrue(spawnSquare.isSpawn());
     }
 
     @Test
@@ -33,6 +34,7 @@ public class SpawnSquareTest {
         weapons.add(new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation()));
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null, weapons);
         assertEquals(weapons.get(0), spawnSquare.grabItem(0));
-        assertEquals(null, spawnSquare.grabItem(0));
+        assertNull(spawnSquare.grabItem(0));
+        assertNull(spawnSquare.getWeapons().get(0));
     }
 }

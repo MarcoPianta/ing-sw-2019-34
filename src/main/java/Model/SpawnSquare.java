@@ -12,6 +12,8 @@ public class SpawnSquare extends NormalSquare{
     public SpawnSquare(NormalSquare SideN, NormalSquare SideE, NormalSquare SideS, NormalSquare SideW, Colors color, ArrayList<CardWeapon> weapons) {
         super(SideN, SideE, SideS, SideW, color, null);
         this.weapons = new ArrayList<>(weapons);
+        while (this.weapons.size() < 3)
+            this.weapons.add(null);
         spawn = true;
     }
 
@@ -31,7 +33,7 @@ public class SpawnSquare extends NormalSquare{
 
     public ArrayList<CardWeapon> getWeapons() {
         if (weapons.isEmpty())
-            return null;
+            return new ArrayList<>();
         return new ArrayList<>(weapons);
     }
 
@@ -48,9 +50,6 @@ public class SpawnSquare extends NormalSquare{
      * */
 
     public CardWeapon grabItem(int position)  {
-        if (weapons.get(position) == null){
-            return null;
-        }
         CardWeapon weapon = weapons.get(position);
         removeWeapon(position);
         return weapon;

@@ -9,6 +9,7 @@ public class NormalSquareTest {
         NormalSquare normalSquareTest;
         normalSquareTest = new NormalSquare(null, null, null, null, null, null);
         assertTrue(normalSquareTest instanceof NormalSquare);
+        assertTrue(normalSquareTest.getWeapons().isEmpty());
     }
 
     @Test
@@ -24,7 +25,7 @@ public class NormalSquareTest {
         CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
         NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, ammoTest);
         assertEquals(ammoTest, normalSquareTest.grabItem());
-        assertEquals(null, normalSquareTest.getItem());
+        assertNull(normalSquareTest.getItem());
     }
 }
 

@@ -22,9 +22,8 @@ public class Deck<T extends Card> {
      /**
       * This method is used to add a cart to the cardDeck, it returns true if the operation end successfully
       * */
-    public boolean add(T t){
+    public void add(T t){
         cardDeck.add(t);
-        return cardDeck.get(cardDeck.size()-1) == t; // This is equivalent to an if-else statement checking the returned value
     }
 
     /**

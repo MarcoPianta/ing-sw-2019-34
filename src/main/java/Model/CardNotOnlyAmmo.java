@@ -4,7 +4,6 @@ import javax.json.JsonObject;
 import java.io.FileNotFoundException;
 
 public class CardNotOnlyAmmo extends CardAmmo{
-    private CardPowerUp item1;
     private AmmoColors item2;
     private AmmoColors item3;
 
@@ -14,22 +13,21 @@ public class CardNotOnlyAmmo extends CardAmmo{
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
     }
 
-    public CardNotOnlyAmmo() {
-        item1 = null;
+    public CardNotOnlyAmmo(){
         item2 = null;
         item3 = null;
     }
+
     @Override
     public CardNotOnlyAmmo copyCardAmmo (){
         CardNotOnlyAmmo copy = new CardNotOnlyAmmo();
-        copy.item1 = this.getItem1();
         copy.item2 = this.getItem2();
         copy.item3 = this.getItem3();
         return copy;
     }
 
-    public CardPowerUp getItem1() {
-        return item1; //TODO extract a card power up from deck at the moment of requiring it
+    public CardPowerUp getItem1(Drawer<CardPowerUp> drawer) {
+        return drawer.draw();
     }
 
     public AmmoColors getItem2() {

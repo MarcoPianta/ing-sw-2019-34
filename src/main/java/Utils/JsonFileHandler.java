@@ -21,4 +21,6 @@ public final class JsonFileHandler {
         reader.close();
         return jsonValues;
     }
+
+    private JsonFileHandler(){}
 }
