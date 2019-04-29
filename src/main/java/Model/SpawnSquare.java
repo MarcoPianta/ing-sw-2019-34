@@ -19,13 +19,13 @@ public class SpawnSquare extends NormalSquare{
 
     public SpawnSquare(){
         super();
-        this.weapons = new ArrayList<>();
+        this.weapons = null;
         spawn = true;
     }
 
-    public void addWeapon(CardWeapon weapon, int position) {
+    public void addWeapon(CardWeapon weapon) {
         if (weapons.size() < 3)
-            weapons.set(position, weapon);
+            weapons.add(weapon);
         else {
             //TODO throws new FullWeaponSpaceException
         }
@@ -41,7 +41,7 @@ public class SpawnSquare extends NormalSquare{
         if (this.getWeapons().isEmpty())
             return null;
         CardWeapon card = weapons.get(position);
-        this.addWeapon(null, position);
+        this.weapons.remove(position);
         return card;
     }
 
