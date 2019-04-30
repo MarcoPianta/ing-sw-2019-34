@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Injure implements Action {
     private Player shooterPlayer;
-    private Player targetPlayer;
+    private ArrayList<Player> targetPlayers;
     private Effect injurerEffect;
 
     /**
@@ -13,86 +13,98 @@ public class Injure implements Action {
      * @param effect
      */
 
-    public void Injure(Player shooter, Player target, Effect effect) {
+    public Injure(Player shooter, ArrayList<Player> target, Effect effect) {
         shooterPlayer = shooter; //devo ricevere la copia
-        targetPlayer = target; //devo ricevere l'originale
+        targetPlayers = target; //devo ricevere l'originale
         injurerEffect = effect; //devo ricevere la copia
     }
 
     public boolean execute() {
         if (isValid())  {
-            targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, injurerEffect.getDamage());
+            for (int playerCounter = 0; playerCounter < targetPlayers.size(); playerCounter++) {
+                if (injurerEffect.isAllTarget()) {
+                    injureTarget(targetPlayers.get(playerCounter), injurerEffect.getDamage().get(0), injurerEffect.getPostCondition());
+                } else {
+                    injureTarget(targetPlayers.get(playerCounter), injurerEffect.getDamage().get(playerCounter), injurerEffect.getPostCondition());
+                }
+            }
             return true;
         }
         return false;
     }
 
-    /**
-     * isValid is a method that once the preCondition were verified, it tried if
-     */
+    private void injureTarget(Player target, int damage, Effect.PostCondition postCondition){
+        target.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
+        if(postCondition.getTargetMove() != 0)
+        {
+            //TODO throw shooterHasToMoveTargetException
+            // --> receives targetNewSquare
+            Move action = new Move(shooterPlayer, target, injurerEffect, null);
+        }
+    }
+
 
     public boolean isValid(){
         ArrayList<NormalSquare> reachable = reachableSquare();
-        if(reachable.contains(targetPlayer.getPosition()))
-            return true;
-        return false;
+        int playerCounter = 0;
+        while(playerCounter < targetPlayers.size()){
+            if(reachable.contains(targetPlayers.get(playerCounter).getPosition())){
+                if(injurerEffect.getPreCondition().isEnemiesDifferentSquare()) {
+                    reachable.remove(targetPlayers.get(playerCounter).getPosition());
+                }
+                playerCounter++;
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
     }
 
     public ArrayList<NormalSquare> reachableSquare() {
         Effect.PreCondition preCondition = injurerEffect.getPreCondition();
-        Effect.PostCondition postCondition = injurerEffect.getPostCondition();
-        ArrayList<NormalSquare> reachableSquare = new ArrayList<>();  //tutte le celle in cui posso usare l'effetto
-        ArrayList<NormalSquare> thisStepSquare = new ArrayList<>();   //le celle che posso raggiungere con gli stessi passi
-        ArrayList<NormalSquare> allStepSquare = new ArrayList<>();    //le celle che ho controllato fino ad ora
-        ArrayList<Colors> colors = new ArrayList<>();                 //tutti i colori delle Room visibili
-        thisStepSquare.add(0, shooterPlayer.getPosition());
-        allStepSquare.add(0, shooterPlayer.getPosition());
+        ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
+        ArrayList<NormalSquare> thisStepSquare = new ArrayList<>();
+        ArrayList<NormalSquare> allStepSquare = new ArrayList<>();
+        ArrayList<Colors> colors = new ArrayList<>();
+        thisStepSquare.add(shooterPlayer.getPosition());
+        allStepSquare.add(shooterPlayer.getPosition());
         int thisStep;
         if (0 == preCondition.getMinRange())
-            reachableSquare.add(0, shooterPlayer.getPosition());
+            reachableSquare.add(shooterPlayer.getPosition());
         if (preCondition.isVision()) {
             colors.add(shooterPlayer.getPosition().getColor());
-            if (shooterPlayer.getPosition().getN().getColor() != null && shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor())
+            if (shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getN().getColor());
-            if (shooterPlayer.getPosition().getE().getColor() != null && shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor())
+            if (shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getE().getColor());
-            if (shooterPlayer.getPosition().getS().getColor() != null && shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor())
+            if (shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getS().getColor());
-            if (shooterPlayer.getPosition().getW().getColor() != null && shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
+            if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getW().getColor());
         }
         for (int i = 0, j; i < preCondition.getMaxRange(); i++) {
             thisStep = thisStepSquare.size();
             j = 0;
             while (j < thisStep) {
-                if (!allStepSquare.contains(thisStepSquare.get(0).getN())) {
-                    thisStepSquare.add(thisStepSquare.get(0).getN());
-                    allStepSquare.add(allStepSquare.get(0).getN());
-                    if ((!preCondition.isVision() || colors.contains(thisStepSquare.get(0).getN().getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(reachableSquare.get(0).getN()))
-                        reachableSquare.add(reachableSquare.size(), thisStepSquare.get(0).getN());
-                }
-                if (!allStepSquare.contains(thisStepSquare.get(0).getE())) {
-                    thisStepSquare.add(thisStepSquare.get(0).getE());
-                    allStepSquare.add(allStepSquare.get(0).getE());
-                    if ((!preCondition.isVision() || colors.contains(thisStepSquare.get(0).getE().getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(reachableSquare.get(0).getE()))
-                        reachableSquare.add(reachableSquare.size(), thisStepSquare.get(0).getE());
-                }
-                if (!allStepSquare.contains(thisStepSquare.get(0).getS())) {
-                    thisStepSquare.add(thisStepSquare.get(0).getS());
-                    allStepSquare.add(allStepSquare.get(0).getS());
-                    if ((!preCondition.isVision() || colors.contains(thisStepSquare.get(0).getS().getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(reachableSquare.get(0).getS()))
-                        reachableSquare.add(reachableSquare.size(), thisStepSquare.get(0).getS());
-                }
-                if (!allStepSquare.contains(thisStepSquare.get(0).getW())) {
-                    thisStepSquare.add(thisStepSquare.get(0).getW());
-                    allStepSquare.add(allStepSquare.get(0).getW());
-                    if ((!preCondition.isVision() || colors.contains(thisStepSquare.get(0).getW().getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(reachableSquare.get(0).getW()))
-                        reachableSquare.add(reachableSquare.size(), thisStepSquare.get(0).getW());
-                }
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getN(), colors, preCondition, i);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getE(), colors, preCondition, i);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getS(), colors, preCondition, i);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getW(), colors, preCondition, i);
                 thisStepSquare.remove(0);
                 j++;
             }
         }
         return reachableSquare;
     }
+
+    private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquare, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int i){
+        if (!allStepSquare.contains(thisSquare)) {
+            thisStepSquare.add(thisSquare);
+            allStepSquare.add(thisSquare);
+            if ((!preCondition.isVision() || colors.contains(thisSquare.getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(thisSquare))
+                reachableSquare.add(reachableSquare.size(), thisSquare);
+        }
+    }
+
 }
