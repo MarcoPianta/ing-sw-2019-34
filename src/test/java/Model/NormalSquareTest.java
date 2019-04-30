@@ -1,6 +1,9 @@
 package Model;
 
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NormalSquareTest {
@@ -13,16 +16,16 @@ public class NormalSquareTest {
     }
 
     @Test
-    public void AddAmmoGetItemTest(){
-        CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
+    public void AddAmmoGetItemTest() throws FileNotFoundException{
+        CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo(AmmoEnum.AMMO1.getAbbreviation());
         NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, null);
         normalSquareTest.addAmmo(ammoTest);
         assertEquals(normalSquareTest.getItem().getName(), ammoTest.getName());
     }
 
     @Test
-    public void GrabItemTest(){
-        CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo();
+    public void GrabItemTest() throws FileNotFoundException {
+        CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo(AmmoEnum.AMMO1.getAbbreviation());
         NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, ammoTest);
         assertEquals(ammoTest, normalSquareTest.grabItem());
         assertNull(normalSquareTest.getItem());

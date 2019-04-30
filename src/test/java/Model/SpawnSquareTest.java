@@ -24,7 +24,7 @@ public class SpawnSquareTest {
         weaponTest = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
 
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null, weaponsTest);
-        spawnSquare.addWeapon(weaponTest, 0);
+        spawnSquare.addWeapon(weaponTest);
         assertEquals(weaponTest, spawnSquare.getWeapons().get(0));
     }
 
@@ -35,6 +35,6 @@ public class SpawnSquareTest {
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null, weapons);
         assertEquals(weapons.get(0), spawnSquare.grabItem(0));
         assertNull(spawnSquare.grabItem(0));
-        assertNull(spawnSquare.getWeapons().get(0));
+        assertEquals(0, spawnSquare.getWeapons().size());
     }
 }

@@ -36,5 +36,7 @@ public class GameBoardTest {
         assertEquals(gameBoard.getRooms().get(2).getNormalSquares().get(0), gameBoard.getRooms().get(1).getNormalSquares().get(2).getE());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(2), gameBoard.getRooms().get(1).getNormalSquares().get(2).getS());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(1), gameBoard.getRooms().get(1).getNormalSquares().get(2).getW());
+
+        assertEquals(Colors.RED, gameBoard.getRooms().get(1).getColor());
     }
 }

@@ -1,6 +1,9 @@
 package Model;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This Class contains the possible effect of a CardWeapon
@@ -8,7 +11,7 @@ import javax.json.JsonObject;
 public class Effect {
     private int targetNumber;
     private boolean allTarget;
-    private int damage;
+    private ArrayList<Integer> damage;
     private int mark;
     private int myMove;
     private int otherMove;
@@ -18,9 +21,13 @@ public class Effect {
 
     public Effect(JsonObject jsonValues, int effect){
         String jsonString = "Effect" + effect;
+        JsonArray damageArray;
         targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("target");
         allTarget = jsonValues.getJsonArray(jsonString).getJsonObject(0).getBoolean("allTarget");
-        damage = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("damage");
+        damageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("damage");
+        damage = new ArrayList<>();
+        while (damage.size() < damageArray.size())
+            damage.add(damageArray.getInt(damage.size()));
         mark = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("mark");
         myMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("myMove");
         otherMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("otherMove");
@@ -37,7 +44,7 @@ public class Effect {
         return allTarget;
     }
 
-    public int getDamage() {
+    public List<Integer> getDamage() {
         return damage;
     }
 

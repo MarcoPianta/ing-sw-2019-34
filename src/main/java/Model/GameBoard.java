@@ -63,7 +63,7 @@ public final class GameBoard {
                     SpawnSquare newSquare =  new SpawnSquare();
                     tmpRoom = rooms.get(i).getNormalSquares();
                     tmpRoom.set(j, newSquare);
-                    rooms.set(i, new Room(tmpRoom, null));
+                    rooms.set(i, new Room(tmpRoom, rooms.get(i).getColor()));
 
                     setSides(newSquare, currentReference);
 

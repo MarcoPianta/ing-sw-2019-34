@@ -13,7 +13,7 @@ public class CardNotOnlyAmmo extends CardAmmo{
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
     }
 
-    public CardNotOnlyAmmo(){
+    private CardNotOnlyAmmo(){
         item2 = null;
         item3 = null;
     }
