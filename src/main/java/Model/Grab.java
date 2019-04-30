@@ -8,21 +8,33 @@ public class Grab implements Action {
     private Card grabbedItem;
     private int execution;
 
-    public void Grab(Player grabberPlayer, CardWeapon grabbedCard){
+    /**
+     * @param grabberPlayer
+     * @param grabbedCard
+     */
+    public Grab(Player grabberPlayer, CardWeapon grabbedCard){
         actorPlayer = grabberPlayer;
         playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 0;
     }
 
-    public void Grab(Player grabberPlayer, CardOnlyAmmo grabbedCard){
+    /**
+     * @param grabberPlayer
+     * @param grabbedCard
+     */
+    public Grab(Player grabberPlayer, CardOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
         playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 1;
     }
 
-    public void Grab(Player grabberPlayer, CardNotOnlyAmmo grabbedCard){
+    /**
+     * @param grabberPlayer
+     * @param grabbedCard
+     */
+    public Grab(Player grabberPlayer, CardNotOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
         playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
@@ -32,17 +44,23 @@ public class Grab implements Action {
     public boolean execute(){
         if(isValid()){
             if( execution == 0 ){
-                //TODO è il caso in cui raccolgo un CardWeapon
-                // se ne ho gia 3 chiamo la substituteWeapon se no la addWeapon
+                SpawnSquare actorSquare = (SpawnSquare) actorPlayer.getPosition();
+                actorPlayer.getPlayerBoard().getHandPlayer().addWeapon((CardWeapon) grabbedItem);
+                actorSquare.grabItem(actorPlayer.getPosition().getWeapons().indexOf(grabbedItem));
             }
             else if( execution == 1 ){
-                //TODO è il caso in cui raccolgo una CardOnlyAmmo
-                // chiamo la addAmmo passando i 3 colori
-            }
+                CardOnlyAmmo grabbedOnlyAmmo = (CardOnlyAmmo) grabbedItem;
+                grabAmmo(grabbedOnlyAmmo.getItem1().getAbbreviation());
+                grabAmmo(grabbedOnlyAmmo.getItem2().getAbbreviation());
+                grabAmmo(grabbedOnlyAmmo.getItem3().getAbbreviation());
+                }
             else if( execution == 2 ){
-                //TODO è il caso in cui raccolgo una CardNotOnlyAmmo
-                // chiamo la addAmmo passando i 3 colori
-                // chiamo anche la addPowerUp se ne ha meno di 3 se no la substitute
+                CardNotOnlyAmmo grabbedNotOnlyAmmo = (CardNotOnlyAmmo) grabbedItem;
+                grabAmmo(grabbedNotOnlyAmmo.getItem2().getAbbreviation());
+                grabAmmo(grabbedNotOnlyAmmo.getItem3().getAbbreviation());
+                if(actorPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps().size() != 3)
+                    actorPlayer.getPlayerBoard().getHandPlayer().addPowerUp(actorPlayer.getGameId().getDeckCollector().getCardPowerUpDrawer().draw());
+                //TODO prompt fullPowerUp in else
             }
             return true;
         }
@@ -50,8 +68,23 @@ public class Grab implements Action {
     }
 
     public boolean isValid(){
-        //TODO
-        return true;
+        if(actorPlayer.getPosition().isSpawn()){
+            return actorPlayer.getPosition().getWeapons().contains(grabbedItem);
+        }
+        else{
+            return actorPlayer.getPosition().getItem() == grabbedItem;
+        }
+    }
+
+    private int grabAmmo(String ammoColor) {
+        int RYB = 0;
+        if(ammoColor.equals("R"))
+            RYB = 0;
+        else if(ammoColor.equals("Y"))
+            RYB = 1;
+        else if(ammoColor.equals("B"))
+            RYB = 2;
+        return RYB;
     }
 }
 
