@@ -30,7 +30,7 @@ public class EffectTest {
         Effect effect = new Effect(jsonValues, 1);
         assertEquals(1, effect.getTargetNumber());
         assertTrue(effect.isAllTarget());
-        assertEquals(2, effect.getDamage());
+        assertEquals(2, effect.getDamage().get(0));
         assertEquals(0, effect.getMark());
         assertEquals(0, effect.getMyMove());
         assertEquals(0, effect.getOtherMove());
