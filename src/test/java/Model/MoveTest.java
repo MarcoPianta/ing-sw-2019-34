@@ -6,18 +6,26 @@ import java.io.FileNotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MoveTest {
+
     @Test
-    public void constructorTest() throws FileNotFoundException {
-        Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+    public void constructorTestWithEffect() throws FileNotFoundException {
         GameBoard testGameBoard = new GameBoard("map1");
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        Player testShooterPlayer = new Player("shooterID", null, null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, null, "name" );
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
         Move action = new Move(testShooterPlayer, testTargetPlayer, testEffect, null);
+        assertTrue(action instanceof Move);
+    }
+
+    @Test
+    public void constructorTestWithoutEffect() throws FileNotFoundException {
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testMoverPlayer = new Player("targetID", null, null, "name" );
+        testMoverPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        Move action = new Move(testMoverPlayer, testGameBoard.getRooms().get(1).getNormalSquares().get(2), 2);
         assertTrue(action instanceof Move);
     }
 
