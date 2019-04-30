@@ -15,7 +15,7 @@ public class GrabTest {
     public void ConstructorTest() throws FileNotFoundException {
         //Test 1
         Colors color = null;
-        Game testGame = new Game("gameID", 8);
+        Game testGame = new Game( 8);
         Player testPlayer = new Player("playerID", testGame, color, "name" );
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Grab action = new Grab(testPlayer, testWeapon);
@@ -33,7 +33,7 @@ public class GrabTest {
     @Test
     public void isValidTest() throws FileNotFoundException {
         Colors color = null;
-        Game testGame = new Game("gameID", 8);
+        Game testGame = new Game(8);
         Player testPlayer = new Player("playerID", testGame, color, "name" );
         GameBoard testGameBoard = new GameBoard("map1");
         SpawnSquare testSpawnSquare = (SpawnSquare) testGameBoard.getRooms().get(0).getNormalSquares().get(2);
@@ -56,7 +56,7 @@ public class GrabTest {
     public void executeTest() throws FileNotFoundException {
         //TODO the method execute has to be finished
         Colors color = null;
-        Game testGame = new Game("gameID", 8);
+        Game testGame = new Game( 8);
         Player testPlayer = new Player("playerID", testGame, color, "name" );
         GameBoard testGameBoard = new GameBoard("map1");
         SpawnSquare testSpawnSquare = (SpawnSquare) testGameBoard.getRooms().get(0).getNormalSquares().get(2);

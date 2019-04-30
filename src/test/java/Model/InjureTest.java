@@ -26,7 +26,7 @@ public class InjureTest {
          * This method test execute
          * */
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+        Game game = new Game( 8);
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -49,7 +49,7 @@ public class InjureTest {
          * */
         //Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+        Game game = new Game(8);
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -78,7 +78,7 @@ public class InjureTest {
          */
         //  Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+        Game game = new Game( 8);
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );

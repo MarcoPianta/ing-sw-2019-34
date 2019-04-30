@@ -2,29 +2,27 @@ package Model;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
-    private  String gameId;
     private ArrayList<Player> players;
     private Player firstPlayer;
     private Player currentPlayer;
     private DeadRoute deadRoute;
     private DeckCollector deckCollector;
 
-    public Game(String gameId,int n) {
-        this.gameId=gameId;
+    public Game(int n) {
         this.players=new ArrayList<>();
         this.currentPlayer=null;
         deadRoute=new DeadRoute(n,this);
         deckCollector= new DeckCollector();
-
     }
 
     public DeadRoute getDeadRoute() {
         return deadRoute;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -41,83 +39,79 @@ public class Game {
     }
 
     /**
-     * this calculate who received points after kill
+     * this method calculates who received points after kill
      * */
-    public ArrayList<Player> calculatePoints(ArrayList<Player> playersMurder, boolean deadRoute, Player playerDead){
-        int counter;
-        int i;
-        boolean isPresent;
-        ArrayList<Player> bestMurder=new ArrayList<>(); //5 is right for both
-        for(int n=0;n<5 ;n++)
-            bestMurder.add(null);
-        ArrayList<Integer> points= new ArrayList<>();
-        for(int n=0;n<5 ;n++)
-            points.add(0);
+    public void calculatePoints(List<Player> damagedBar, boolean deadRoute, Player playerDead){
+        int counter=0;
+        int i=0;
+        ArrayList<UtilPlayer> bestMurder=new ArrayList<>();
+        while(bestMurder.size()<5)
+            bestMurder.add(new UtilPlayer(null,0));
 
-        for(Player player:playersMurder){
+        for(Player player:damagedBar){
             if(notAlreadyView(player,bestMurder)){
-                isPresent=false;
-                counter=countPlayers(player,playersMurder);
-                i=0;
-                while ((i<4) && (!isPresent)){
-                    if(counter>points.get(i)){
-                        points.add(i,counter);
-                        bestMurder.add(i,player);
-                        isPresent=true;
-                    }
-                    else if(counter==points.get(i)){
-                        while(counter==points.get(i)&&(!isPresent)){ //if there are more player with same counter
-                            if(firstDamage(player,bestMurder.get(i),playersMurder)==player){
-                                points.add(i,counter);
-                                bestMurder.add(i,player);
-                                isPresent=true;
-                            }
-                            else{
-                                i++;
-                            }
-                        }
-                        if(!isPresent){
-                            points.add(i,counter);
-                            bestMurder.add(i,player);
-                            isPresent=true;
-                        }
-                    }
-                    else
-                        i++;
+                counter=countPlayers(player,damagedBar);
+                bestMurder.set(i,new UtilPlayer(player,counter));
+                i++;
+            }
+        }
+        insertionSort(bestMurder,new ArrayList<>(bestMurder));
+
+        if(!deadRoute)
+            addPlayerPoints(createPlayers(bestMurder),playerDead);
+        else
+            addDeadRoutePoints(createPlayers(bestMurder));
+    }
+
+    /*
+     * This method sorts the input array based on who has done the most damage
+     * */
+    private void insertionSort (List<UtilPlayer> playersMurder,List<UtilPlayer> damagedBar){
+        for (int i = 1; i < playersMurder.size(); i++) {
+            for (int j = i; j > 0; j--) {
+
+                if((playersMurder.get(j - 1).getCounter() <  playersMurder.get(j).getCounter()) ||
+                        ((playersMurder.get(j - 1).getCounter()== playersMurder.get(j).getCounter()) &&
+                                (firstDamage(playersMurder.get(j - 1).getPlayer(),playersMurder.get(j).getPlayer(),damagedBar)==playersMurder.get(j).getPlayer()))){
+                    setUtilPlayer(playersMurder,j);
                 }
             }
         }
-        if(!deadRoute)
-            addPlayerPoints(bestMurder,playerDead);
-        else
-            addDeadRoutePoints(bestMurder);
-        return bestMurder;
-    }
-    public boolean notAlreadyView(Player player,ArrayList<Player> players){
-        boolean isNotPresent=true;
-        int i=0;
-        while(i<players.size()&&(isNotPresent)){
-            if(player==players.get(i)){
-                isNotPresent=false;
-                i++;
-
-            }
-            else
-                i++;
-        }
-        return isNotPresent;
     }
 
-    public Player firstDamage(Player player1,Player player2, ArrayList<Player> playerMurder){
+    /*
+     * this method set the players in order if they satisfy the insertionSort's conditions
+     * */
+    private void setUtilPlayer(List<UtilPlayer> playersMurder, int j){
+        UtilPlayer temp;
+        temp = playersMurder.get(j);
+        playersMurder.set(j,playersMurder.get(j-1));
+        playersMurder.set(j - 1, temp);
+    }
+
+    /*
+     * this method creates a list of players from a list of UtilPlayer
+     * */
+    private  List<Player> createPlayers(List<UtilPlayer> players) {
+        ArrayList<Player> newPlayers = new ArrayList<>();
+        for (UtilPlayer player : players)
+            newPlayers.add(player.getPlayer());
+        return newPlayers;
+    }
+
+    /*
+     * this method evaluates who did damaged first
+     * */
+    private Player firstDamage(Player player1,Player player2, List<UtilPlayer> playerMurder){
         Player firstDamage=null;
-        Boolean isPresent=false;
+        boolean isPresent=false;
         int i=0;
         while (!isPresent) {
-            if(playerMurder.get(i)==player1){
+            if(playerMurder.get(i).getPlayer()==player1){
                 firstDamage=player1;
                 isPresent=true;
             }
-            else if(playerMurder.get(i)==player2){
+            else if(playerMurder.get(i).getPlayer()==player2){
                 firstDamage=player2;
                 isPresent=true;
             }
@@ -127,17 +121,39 @@ public class Game {
         return firstDamage;
     }
 
+    /*
+     * this method evaluates whether a player has already been considered in the array creation
+     * */
+    private boolean notAlreadyView(Player player,List<UtilPlayer> players){
+        boolean isNotPresent=true;
+        int i=0;
+        while(i<players.size()&&(isNotPresent)){
+            if(player==players.get(i).getPlayer()){
+                isNotPresent=false;
+                i++;
+            }
+            else
+                i++;
+        }
+        return isNotPresent;
+    }
 
-    public int countPlayers(Player player,ArrayList<Player> playersMurder){
+    /*
+     * this method counts how many damage does a  single player
+     * */
+    private int countPlayers(Player player,List<Player> playersMurder){
         int counterPlayer=0;
-        for( Player players : playersMurder ){
-            if (players==player)
+        for( Player p : playersMurder ){
+            if (p==player)
                 counterPlayer++;
         }
         return counterPlayer;
-
     }
-    public void addPlayerPoints(ArrayList<Player> bestMurder,Player thisPlayer){
+
+    /*
+     * this method adds players' points after a calculation of points after a player's death
+     * */
+    private void addPlayerPoints(List<Player> bestMurder,Player thisPlayer){
         int newPoints=0;
         for (Player player: players){
             if(bestMurder.indexOf(player)!=-1){
@@ -152,7 +168,10 @@ public class Game {
         thisPlayer.getPlayerBoard().decrementMaxReward();
     }
 
-    public void addDeadRoutePoints(ArrayList<Player> bestMurder){
+    /*
+     * This method adds points when the dead route is empty
+     * */
+    private void addDeadRoutePoints(List<Player> bestMurder){
         int newPoints=0;
         int reward=8;
         for (Player player: players){
@@ -161,10 +180,11 @@ public class Game {
                 if(newPoints<=0)
                     newPoints=1;
             }
+            else
+                newPoints=0;
             player.getPlayerBoard().addPoints(newPoints);
         }
     }
-
 
     /**
      * this method add a new player
@@ -193,6 +213,27 @@ public class Game {
         index = rand.nextInt(players.size());
         firstPlayer=players.get(index);
         currentPlayer=players.get(index);
+    }
+
+    /*
+     * This nested class is used for simplify the calculation of points
+     * */
+    class UtilPlayer{
+        private  Player player;
+        private int counter;
+
+        public UtilPlayer(Player player, int counter){
+            this.player=player;
+            this.counter=counter;
+        }
+
+        public int getCounter() {
+            return counter;
+        }
+
+        public Player getPlayer() {
+            return player;
+        }
     }
 }
 
