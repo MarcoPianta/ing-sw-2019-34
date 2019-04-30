@@ -21,7 +21,7 @@ public class SpawnSquare extends NormalSquare{
 
     public SpawnSquare(){
         super();
-        this.weapons = null;
+        this.weapons = new ArrayList<>();
         spawn = true;
     }
 
