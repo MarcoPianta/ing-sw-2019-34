@@ -54,7 +54,6 @@ public class GrabTest {
 
     @Test
     public void executeTest() throws FileNotFoundException {
-        //TODO the method execute has to be finished
         Colors color = null;
         Game testGame = new Game("gameID", 8);
         Player testPlayer = new Player("playerID", testGame, color, "name" );
