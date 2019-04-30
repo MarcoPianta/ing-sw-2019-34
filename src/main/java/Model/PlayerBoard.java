@@ -3,27 +3,18 @@ package Model;
 import java.util.ArrayList;
 
 public class PlayerBoard {
-
-    private Colors color;
-    private String playerName;
     private int maxReward;// indicates the maximum reward obtainable
     private int points;
     private Health healthPlayer;
     private Hand handPlayer;
     private Player player;
 
-    public PlayerBoard(Colors color,String playerName,Player player){
-        this.color=color;
-        this.playerName = playerName;
+    public PlayerBoard(Player player){
         this.maxReward=8;
         this.points = 0;
         this.healthPlayer= new Health(this);
-        this.handPlayer=new Hand(this);
+        this.handPlayer=new Hand();
         this.player=player;
-    }
-
-    public Colors getColor() {
-        return color;
     }
 
     public Player getPlayer() {
@@ -36,10 +27,6 @@ public class PlayerBoard {
 
     public int getPoints() {
         return points;
-    }
-
-    public String getPlayerName() {
-        return playerName;
     }
 
     public Hand getHandPlayer() {

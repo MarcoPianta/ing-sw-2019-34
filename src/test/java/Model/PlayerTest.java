@@ -12,7 +12,7 @@ public class PlayerTest {
      * */
     @Test
     public void canActTest(){
-        Game game=new Game("gametest",5);
+        Game game=new Game(5);
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
         assertTrue(player.canAct());
         player.decrementActionCounter();
@@ -21,16 +21,15 @@ public class PlayerTest {
     }
 
     /*
-     *
+     * This method tests the player's new position
      * */
     @Test
     public void newPositionTest(){
-        Game game=new Game("gametest",5);
+        Game game=new Game(5);
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
         NormalSquare normalSquare= new NormalSquare(null,null,null,null,null,null) ;
-        assertFalse(player.getPosition()==normalSquare);
+        assertNotSame(player.getPosition(), normalSquare);
         player.newPosition(normalSquare);
-        assertTrue(player.getPosition()==normalSquare);
+        assertSame(player.getPosition(), normalSquare);
     }
-
 }

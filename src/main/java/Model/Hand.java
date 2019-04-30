@@ -1,27 +1,24 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Hand {
     private ArrayList<CardWeapon> playerWeapons;
     private ArrayList<CardPowerUp> playerPowerUps;
     private int[] ammoRYB;
-    private PlayerBoard playerBoard;
 
-    public Hand(PlayerBoard playerBoard){
+    public Hand(){
         this.playerWeapons = new ArrayList<>();
-        this.playerPowerUps = new ArrayList<CardPowerUp>();
+        this.playerPowerUps = new ArrayList<>();
         this.ammoRYB= new int[3];
-        this.playerBoard=playerBoard;
-        for( int i = 0 ; i<3;i++)
-            ammoRYB[i]=0;
     }
 
-    public ArrayList<CardPowerUp> getPlayerPowerUps() {
+    public List<CardPowerUp> getPlayerPowerUps() {
         return playerPowerUps;
     }
 
-    public ArrayList<CardWeapon> getPlayerWeapons() {
+    public List<CardWeapon> getPlayerWeapons() {
         return playerWeapons;
     }
 
@@ -60,13 +57,13 @@ public class Hand {
         else if(powerUp.getColor()==AmmoColors.BLUE)
             blue--;
         decrementAmmo(red,yellow,blue);
-        removePowerUp(powerUp);
+        removePowerUp(getPlayerPowerUps().indexOf(powerUp));
     }
 
     /**
      *this method substitute weapons when the player has three weapons and wants a new weapon
      * */
-    public void substituteWeapons(ArrayList<CardWeapon> newPlayerWeapons){
+    public void substituteWeapons(List<CardWeapon> newPlayerWeapons){
         for(int i=0; i<3 ;i++){
             playerWeapons.set(i,newPlayerWeapons.get(i));
         }
@@ -77,29 +74,27 @@ public class Hand {
      * */
     public void addPowerUp(CardPowerUp powerUp) {
         playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
+        if(playerPowerUps.size()>=4) {
+            //TODO removePowerUp();
+        }
     }
 
     /**
      * this method use power up and remove it
      * */
-    public void usePowerUp(CardPowerUp powerUp, Player targetPlayer){
-        //TODO CALLED CONTROLLER FOR USE
-        removePowerUp(powerUp);
+    public CardPowerUp usePowerUp (int position){
+        CardPowerUp powerUp;
+        powerUp=getPlayerPowerUps().get(position);
+        removePowerUp(getPlayerPowerUps().indexOf(powerUp));
+        return powerUp;
+
     }
 
     /**
      * This method remove a power up after use its
      * */
-    private void removePowerUp(CardPowerUp powerUp){
-        boolean isPresent=false ;
-        int i=0;
-        while(!isPresent ){
-            if(getPlayerPowerUps().get(i)== powerUp) {
-                getPlayerPowerUps().remove(i);
-                isPresent=true;
-            }
-            i++;
-        }
+    private void removePowerUp(int position){
+        getPlayerPowerUps().remove(position);
     }
 
     /**
