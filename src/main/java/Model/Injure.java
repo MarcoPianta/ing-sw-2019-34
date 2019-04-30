@@ -21,7 +21,7 @@ public class Injure implements Action {
 
     public boolean execute() {
         if (isValid())  {
-            targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, injurerEffect.getDamage());
+            //targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, injurerEffect.getDamage());
             return true;
         }
         return false;
