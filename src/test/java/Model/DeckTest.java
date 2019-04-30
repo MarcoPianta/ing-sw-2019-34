@@ -46,10 +46,10 @@ public class DeckTest {
     }
 
     @Test
-    public void cloneTest() throws FileNotFoundException{
+    public void copyTest() throws FileNotFoundException{
         Deck<CardWeapon> cardWeaponDeck, cardWeaponDeckCopy;
         cardWeaponDeck = new DeckCreator().createDeck("WEAPON");
-        cardWeaponDeckCopy = cardWeaponDeck.clone();
+        cardWeaponDeckCopy = cardWeaponDeck.copy();
 
         assertEquals(cardWeaponDeck.getSize(), cardWeaponDeckCopy.getSize());
         while (cardWeaponDeck.getSize() > 0){

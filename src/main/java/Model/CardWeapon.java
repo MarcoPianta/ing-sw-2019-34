@@ -1,14 +1,9 @@
 package Model;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 
 public class CardWeapon implements Card {
     private String name;
@@ -19,13 +14,13 @@ public class CardWeapon implements Card {
     private int effectsNumber;
     private boolean charge;
     private ArrayList<Effect> effects;
-    private static final String directory = "Weapon";
+    private static final String DIRECTORY = "Weapon";
 
     /**
      * The constructor read from JSON file the specs and create a weapon with that specs
      * */
     public CardWeapon(String file) throws FileNotFoundException{ //file parameter contains the weapon name
-        JsonObject jsonValues = Utils.JsonFileHandler.openFile("Weapon", file); /* this variable contains the JsonObject created from JSON file*/
+        JsonObject jsonValues = Utils.JsonFileHandler.openFile(DIRECTORY, file); /* this variable contains the JsonObject created from JSON file*/
         name = jsonValues.getString("name");
         color = AmmoColors.valueOf(jsonValues.getString("color"));
         redCost = jsonValues.getJsonArray("cost").getInt(0);

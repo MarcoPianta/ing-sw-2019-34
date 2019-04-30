@@ -1,7 +1,5 @@
 package Model;
 
-import java.io.FileNotFoundException;
-
 /**
  * This class is used to collect all the decks used in a game.
  * It creates decks and the relative drawers.
@@ -56,14 +54,14 @@ public class DeckCollector {
      * */
 
     public Deck<CardWeapon> getCardWeaponDeck() {
-        return cardWeaponDeck.clone();
+        return cardWeaponDeck.copy();
     }
 
     public Deck<CardPowerUp> getCardPowerUpDeck() {
-        return cardPowerUpDeck.clone();
+        return cardPowerUpDeck.copy();
     }
 
     public Deck<CardAmmo> getCardAmmoDeck() {
-        return cardAmmoDeck.clone();
+        return cardAmmoDeck.copy();
     }
 }

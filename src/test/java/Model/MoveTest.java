@@ -51,10 +51,10 @@ public class MoveTest {
         //TODO fix when GameBoard is fixed
         /*
             System.out.println("--TEST-- " + testGameBoard.getRooms().get(0).getNormalSquares().get(0));
-            System.out.println("N " + testGameBoard.getRooms().get(0).getNormalSquares().get(0).getN());
-            System.out.println("E " + testGameBoard.getRooms().get(0).getNormalSquares().get(1));
-            System.out.println("S " + testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-            System.out.println("W " + testGameBoard.getRooms().get(0).getNormalSquares().get(0).getW());
+            System.out.println("n " + testGameBoard.getRooms().get(0).getNormalSquares().get(0).getN());
+            System.out.println("e " + testGameBoard.getRooms().get(0).getNormalSquares().get(1));
+            System.out.println("s " + testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+            System.out.println("w " + testGameBoard.getRooms().get(0).getNormalSquares().get(0).getW());
             System.out.println(action.calculateReachableSquare());
         */
         assertTrue(action.isValid());

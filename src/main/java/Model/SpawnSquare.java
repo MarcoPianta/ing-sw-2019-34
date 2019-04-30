@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class extends NormalSquare and describe a NormalSquare type
@@ -9,8 +10,8 @@ public class SpawnSquare extends NormalSquare{
 
     private ArrayList<CardWeapon> weapons;
 
-    public SpawnSquare(NormalSquare SideN, NormalSquare SideE, NormalSquare SideS, NormalSquare SideW, Colors color, ArrayList<CardWeapon> weapons) {
-        super(SideN, SideE, SideS, SideW, color, null);
+    public SpawnSquare(NormalSquare sideN, NormalSquare sideE, NormalSquare sideS, NormalSquare sideW, Colors color, List<CardWeapon> weapons) {
+        super(sideN, sideE, sideS, sideW, color, null);
         this.weapons = new ArrayList<>();
         for (CardWeapon c: weapons){
             if (c != null)
@@ -34,7 +35,7 @@ public class SpawnSquare extends NormalSquare{
         }
     }
 
-    public ArrayList<CardWeapon> getWeapons() {
+    public List<CardWeapon> getWeapons() {
         if (weapons.isEmpty())
             return new ArrayList<>();
         return new ArrayList<>(weapons);

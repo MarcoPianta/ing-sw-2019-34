@@ -1,31 +1,32 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NormalSquare {
     private CardAmmo ammo;
-    NormalSquare N;
-    NormalSquare E;
-    NormalSquare S;
-    NormalSquare W;
+    NormalSquare n;
+    NormalSquare e;
+    NormalSquare s;
+    NormalSquare w;
     protected Colors color;
     boolean spawn;
 
-    public NormalSquare(NormalSquare SideN, NormalSquare SideE, NormalSquare SideS, NormalSquare SideW, Colors color, CardAmmo Ammo) {
-        N = SideN;
-        E = SideE;
-        S = SideS;
-        W = SideW;
-        ammo = Ammo;
+    public NormalSquare(NormalSquare sideN, NormalSquare sideE, NormalSquare sideS, NormalSquare sideW, Colors color, CardAmmo ammo) {
+        n = sideN;
+        e = sideE;
+        s = sideS;
+        w = sideW;
+        this.ammo = ammo;
         this.color = color;
         spawn = false;
     }
 
     public NormalSquare(){
-        N = null;
-        E = null;
-        S = null;
-        W = null;
+        n = null;
+        e = null;
+        s = null;
+        w = null;
         ammo = null;
         this.color = null;
     }
@@ -63,42 +64,42 @@ public class NormalSquare {
     }
 
     public NormalSquare getN() {
-        return N;
+        return n;
     }
 
     public NormalSquare getE() {
-        return E;
+        return e;
     }
 
     public NormalSquare getS() {
-        return S;
+        return s;
     }
 
     public NormalSquare getW() {
-        return W;
+        return w;
     }
 
     public Colors getColor() {
         return color;
     }
 
-    public ArrayList<CardWeapon> getWeapons() {
+    public List<CardWeapon> getWeapons() {
         return new ArrayList<>();
     }
 
     public void setN(NormalSquare n) {
-        N = n;
+        this.n = n;
     }
 
     public void setE(NormalSquare e) {
-        E = e;
+        this.e = e;
     }
 
     public void setS(NormalSquare s) {
-        S = s;
+        this.s = s;
     }
 
     public void setW(NormalSquare w) {
-        W = w;
+        this.w = w;
     }
 }

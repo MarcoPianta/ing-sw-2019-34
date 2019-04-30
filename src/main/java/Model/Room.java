@@ -1,13 +1,14 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Room{
 
     private ArrayList<NormalSquare> normalSquares;
     private Colors color;
 
-    public Room(ArrayList<NormalSquare> normalSquares, Colors color) {
+    public Room(List<NormalSquare> normalSquares, Colors color) {
         this.normalSquares = new ArrayList<>(normalSquares);
         this.color = color;
     }

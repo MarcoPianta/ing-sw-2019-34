@@ -1,12 +1,7 @@
 package Model;
 
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 public class CardPowerUp implements Card {
     private String name;
@@ -19,12 +14,13 @@ public class CardPowerUp implements Card {
     private int target;
     private boolean vision;
     private String when;
+    private static final String DIRECTORY = "PowerUp";
 
     /**
      * The constructor read from JSON file the specs and create a power up with that specs
      * */
     public CardPowerUp(String file) throws FileNotFoundException{
-        JsonObject jsonValues = Utils.JsonFileHandler.openFile("PowerUp", file); /* this variable contains the JsonObject created from JSON file*/
+        JsonObject jsonValues = Utils.JsonFileHandler.openFile(DIRECTORY, file); /* this variable contains the JsonObject created from JSON file*/
         name = jsonValues.getString("name");
         cost = jsonValues.getInt("cost");
         color = AmmoColors.valueOf(jsonValues.getString("color"));
