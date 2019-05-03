@@ -1,4 +1,5 @@
-package Server;
+package network.Server;
 
 public class GameLobby {
+
 }
