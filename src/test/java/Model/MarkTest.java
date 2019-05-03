@@ -5,48 +5,68 @@ import org.junit.jupiter.api.Test;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MarkTest {
     /**
      * This method test all the three constructor methods
      */
-/*
+
     @Test
-    public void ConstructorTest() throws FileNotFoundException {
-        Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Player testPlayer1 = new Player("playerID", "gameID", color1, "name" );
-        Player testPlayer2 = new Player("playerID", "gameID", color2, "name" );
+    public void constructorTest() throws FileNotFoundException {
+        Player testMarkerPlayer = new Player("shooterID", null, null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        ArrayList<Player> testList = new ArrayList<>();
+        testList.add(testTargetPlayer);
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Mark action = new Mark();
-        action.Mark(testPlayer1, testPlayer2, testEffect);
+        Mark action = new Mark(testMarkerPlayer, testList, testEffect);
         assertTrue(action instanceof Mark);
     }
 
     @Test
     public void executeTest() throws FileNotFoundException {
-        Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Player testPlayer1 = new Player("playerID", "gameID", color1, "name" );
-        Player testPlayer2 = new Player("playerID", "gameID", color2, "name" );
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.FURNACE.getAbbreviation());
-        ArrayList<Effect> testEffect = new ArrayList<>(testWeapon.getEffects());
-        Mark action = new Mark();
-        action.Mark(testPlayer1, testPlayer2, testEffect.get(1));
-        action.execute();
-        Injure injure = new Injure();
-        injure.Injure(testPlayer1, testPlayer2, testEffect.get(0));
-        action.execute();
-        assertEquals((testEffect.get(0).getDamage()+testEffect.get(1).getMark()) ,testPlayer2.getPlayerBoard().getDamageBar().size());
-        //TODO --> there isn't a markBar to control so I can't assert anythings
-
+        /**
+         * This method test execute
+         * */
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testMarkerPlayer = new Player("shooterID", null, null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        ArrayList<Player> testList = new ArrayList<>();
+        testList.add(testTargetPlayer);
+        testMarkerPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(0);
+        Mark action = new Mark(testMarkerPlayer, testList, testEffect);
+        assertTrue(action.execute());
     }
-
 
     @Test
-    public void isValidTest(){
-        //TODO the method isValid has to be finished
+    public void isValidTest() throws FileNotFoundException {
+        /**
+         * This method test isValid
+         * First case: CyberBlade's precondition respected
+         * Second case: CyberBlade's precondition not respected
+         * */
+        //Test 1
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testMarkerPlayer = new Player("shooterID", null, null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        ArrayList<Player> testList = new ArrayList<>();
+        testList.add(testTargetPlayer);
+        testMarkerPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(1);
+        Mark action = new Mark(testMarkerPlayer, testList, testEffect);
+        assertTrue(action.isValid());
+        //Test 2
+        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
+        assertFalse(action.isValid());
+
     }
-*/
+
+
+
 }

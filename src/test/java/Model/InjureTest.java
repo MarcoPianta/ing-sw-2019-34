@@ -26,7 +26,7 @@ public class InjureTest {
          * This method test execute
          * */
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+        Game game = new Game( 8);
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -49,7 +49,7 @@ public class InjureTest {
          * */
         //Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+        Game game = new Game(8);
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -73,12 +73,13 @@ public class InjureTest {
          * This method test the execute test of the Injure class
          * create a game with one of the real map, two player and take one of a weapon's effect that use injure
          * First case: 2 players in the same Square, CyberBlade works
-         * Second Case: 2 players in different Square, CyberBlade don't works
-         * TODO Third Case: 2 players selected, FlameThrower works
+         * Second case: 2 players in different Square, CyberBlade don't works
+         * Third case: 2 players selected, FlameThrower works
+         * Forth case: 2 target in different square, FlameThrower works
          */
         //  Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game("gameID", 8);
+        Game game = new Game( 8);
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -94,11 +95,15 @@ public class InjureTest {
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(1));
         assertFalse(action.reachableSquare().contains(testTargetPlayer.getPosition()));
         //Test 3
-        //TODO Flamethrower doesn't works --> CYBERBLADE must become FLAMETHROWER assertFalse must become assertTrue
-        CardWeapon testOtherWeapon= new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        CardWeapon testOtherWeapon= new CardWeapon (WeaponDictionary.FLAMETHROWER.getAbbreviation());
         Effect testOtherEffect = testOtherWeapon.getEffects().get(0);
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
-        assertFalse(action.reachableSquare().contains(testTargetPlayer.getPosition()));
-
+        assertTrue(action.reachableSquare().contains(testTargetPlayer.getPosition()));
+        //Test 4
+        Player testTargetPlayer2 = new Player("targetID", game, color2, "name" );
+        testList.add(testTargetPlayer2);
+        testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
+        action = new Injure(testShooterPlayer, testList, testOtherEffect);
+        assertTrue(action.reachableSquare().contains(testTargetPlayer2.getPosition()));
     }
 }

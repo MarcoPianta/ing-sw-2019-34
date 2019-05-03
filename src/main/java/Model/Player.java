@@ -16,14 +16,11 @@ public class Player {
         this.playerID=playerID;
         this.name=name;
         this.color=color;
-        this.playerBoard=new PlayerBoard(color , name, this);
+        this.playerBoard=new PlayerBoard( this);
         this.actionCounter=2;
         this.position=null;
         this.gameId=gameId;
     }
-
-    public Player(){}
-
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
     }
@@ -40,14 +37,15 @@ public class Player {
         return gameId;
     }
 
+    public Colors getColor() {
+        return color;
+    }
+
     /*
      *this method  return true o false if the player can do an action
      * */
     public boolean canAct(){
-        if(this.getActionCounter() == 0)
-            return false;
-        else
-            return true;
+        return this.getActionCounter() != 0;
     }
 
     /*
@@ -64,7 +62,5 @@ public class Player {
      * */
     public void newPosition(NormalSquare newPosition){
         position=newPosition;
-
     }
-
 }

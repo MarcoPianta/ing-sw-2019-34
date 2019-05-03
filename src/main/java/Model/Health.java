@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Health {
     private ArrayList<Player> damageBar;
@@ -9,13 +10,13 @@ public class Health {
     private PlayerBoard playerBoard;
 
     public Health( PlayerBoard playerBoard){
-        damageBar= new ArrayList<Player>();
-        mark=new ArrayList<Player>();
+        damageBar= new ArrayList<>();
+        mark=new ArrayList<>();
         this.playerBoard=playerBoard;
         adrenalineAction=0;
     }
 
-    public ArrayList<Player> getDamageBar() {
+    public List<Player> getDamageBar() {
         return new ArrayList<>(damageBar);
     }
 
@@ -23,7 +24,7 @@ public class Health {
         return adrenalineAction;
     }
 
-    public ArrayList<Player> getMark() {
+    public List<Player> getMark() {
         return mark;
     }
 
@@ -32,9 +33,9 @@ public class Health {
     }
 
     /**
-     * this method set a death
+     * this method set a player's death and  execute the calculation of points
      * */
-    public void death(){
+    private void death(){
 
         getPlayerBoard().getPlayer().getGameId().calculatePoints(getDamageBar(), false,getPlayerBoard().getPlayer());
         getDamageBar().get(0).getPlayerBoard().addPoints(1);
@@ -44,6 +45,7 @@ public class Health {
         }
         else
             getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(getDamageBar().get(10),1);
+        //TODO respawn getPlayerBoard().getHandPlayer().addPowerUp(getPlayerBoard().getPlayer().getGameId().getDeckCollector().getCardPowerUpDrawer().draw());
         resetDamageBar();
     }
 
@@ -52,7 +54,7 @@ public class Health {
      * */
     private void resetDamageBar() {
         int i=0;
-        while( damageBar.size()!=0)
+        while( !damageBar.isEmpty())
             damageBar.remove(i);
         adrenalineAction=0;
     }
@@ -60,7 +62,7 @@ public class Health {
     /**
      * This method returns the number of the mark for the input color
      * */
-    public int countMarks(Player player){
+    private int countMarks(Player player){
         int counterMarks=0;
         for( Player players : mark ){
             if (players==player)
@@ -79,7 +81,7 @@ public class Health {
         }
         resetMark(player);
 
-        if(damageBar.size()>=3 || damageBar.size()<6 )
+        if(damageBar.size()>=3 && damageBar.size()<6 )
             adrenalineAction++;
         if(damageBar.size()>=6)
             adrenalineAction++;

@@ -28,6 +28,13 @@ public class Move implements Action {
         startSquare = targetPlayer.getPosition();
     }
 
+    public Move(Player target, NormalSquare square, int move){
+        targetPlayer = target;
+        selectedSquare = square;
+        startSquare = targetPlayer.getPosition();
+        movePass = move;
+    }
+
     public ArrayList<NormalSquare> calculateReachableSquare(){
         /**
          * This method return all the reachable from startSquare
