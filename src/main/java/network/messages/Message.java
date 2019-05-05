@@ -1,8 +1,18 @@
 package network.messages;
 
-import Model.Player;
+import network.Server.Client;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
     protected ActionType actionType;
-    protected Player player;
+    protected Client client;
+
+    public ActionType getActionType() {
+        return actionType;
+    }
+
+    public Client getClient() {
+        return client;
+    }
 }
