@@ -11,7 +11,7 @@ public class RMIClient {
     public static void main (String args[]) {
 
         try{
-            Registry registry = LocateRegistry.getRegistry(10000);
+            Registry registry = LocateRegistry.getRegistry(10001);
             RemoteObjectInterface stub = (RemoteObjectInterface) registry.lookup("STUB");
             String response = stub.sayHello();
             System.err.println("response: " + response);

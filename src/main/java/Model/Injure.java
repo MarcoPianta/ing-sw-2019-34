@@ -83,7 +83,8 @@ public class Injure implements Action {
             if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getW().getColor());
         }
-        for (int i = 0, j; i < preCondition.getMaxRange(); i++) {
+        int j;
+        for (int i = 1; i <= preCondition.getMaxRange(); i++) {
             thisStep = thisStepSquare.size();
             j = 0;
             while (j < thisStep) {
@@ -102,7 +103,7 @@ public class Injure implements Action {
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);
             allStepSquare.add(thisSquare);
-            if ((!preCondition.isVision() || colors.contains(thisSquare.getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(thisSquare))
+            if ((!preCondition.isVision() || colors.contains(thisSquare.getColor())) && i >= preCondition.getMinRange() && !reachableSquare.contains(thisSquare))
                 reachableSquare.add(reachableSquare.size(), thisSquare);
         }
     }

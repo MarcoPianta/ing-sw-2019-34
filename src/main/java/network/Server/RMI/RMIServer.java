@@ -21,8 +21,8 @@ public class RMIServer implements RemoteObjectInterface {
     public static void main(String args[]) {
         try{
             RMIServer serverRMI = new RMIServer();
-            RemoteObjectInterface stub = (RemoteObjectInterface) UnicastRemoteObject.exportObject(serverRMI, 10000);
-            Registry registry = LocateRegistry.createRegistry(10000);
+            RemoteObjectInterface stub = (RemoteObjectInterface) UnicastRemoteObject.exportObject(serverRMI, 10001);
+            Registry registry = LocateRegistry.createRegistry(10001);
             registry.bind("STUB", stub);
             System.err.println("RMIServer ready");
 
