@@ -1,35 +1,41 @@
 package network.Server.RMI;
 
-import java.rmi.AlreadyBoundException;
+import network.Client.RMI.RMIClientInterface;
+import network.Server.Server;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 
-public class RMIServer implements RemoteObjectInterface {
+public class RMIServer {
 
+    private Server server;
+    private int port ;
+    private static Logger logger = Logger.getLogger("rmiServer");
+    private ArrayList<RMIClientInterface> clients;
 
-    protected RMIServer() throws RemoteException {
-        super();
+    public RMIServer(Server server, int port) {
+        this.server = server;
+        this.port = port;
+        clients = new ArrayList<>();
     }
 
-    @Override
-    public String sayHello(){
-        return "FUNZIONOOOOO";
-    }
-
-    public static void main(String args[]) {
-        try{
-            RMIServer serverRMI = new RMIServer();
-            RemoteObjectInterface stub = (RemoteObjectInterface) UnicastRemoteObject.exportObject(serverRMI, 10001);
-            Registry registry = LocateRegistry.createRegistry(10001);
-            registry.bind("STUB", stub);
+    private void init() throws RemoteException{
+        Registry registry = LocateRegistry.createRegistry(port);
+        try {
+            registry.rebind("Server", new RMIServerImplementation(server));
             System.err.println("RMIServer ready");
-
-        } catch (RemoteException | AlreadyBoundException e) {
-            System.err.println("Server exception: " + e.toString());
+        } catch (RemoteException e) {
+            System.err.println("Server Exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit(1);
         }
     }
+
+    public void run() throws RemoteException {
+        init();
+    }
+
+
 }
