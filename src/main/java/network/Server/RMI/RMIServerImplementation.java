@@ -11,7 +11,7 @@ public class RMIServerImplementation extends UnicastRemoteObject implements RMIS
 
     private Server server;
 
-    protected RMIServerImplementation(Server server) throws RemoteException {
+    public RMIServerImplementation(Server server) throws RemoteException {
         this.server = server;
     }
 
@@ -28,8 +28,4 @@ public class RMIServerImplementation extends UnicastRemoteObject implements RMIS
         System.out.println("SEND HA FUNZIONATO");
     }
 
-    @Override
-    public void register(String username, RMIClient client) {
-       //TODO server.addClient(username, client);
-    }
 }

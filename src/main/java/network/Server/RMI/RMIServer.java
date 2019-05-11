@@ -27,7 +27,7 @@ public class RMIServer {
         try {
             registry.rebind("Server", new RMIServerImplementation(server));
             System.err.println("RMIServer ready");
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             System.err.println("Server Exception: " + e.getMessage());
             e.printStackTrace();
         }

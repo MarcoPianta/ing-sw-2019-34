@@ -11,5 +11,4 @@ public interface RMIServerInterface extends Remote {
     void acceptConnection() throws RemoteException;
     void send(Message message) throws RemoteException;
 
-    void register(String username, RMIClient client);
 }

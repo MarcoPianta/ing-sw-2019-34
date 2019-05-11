@@ -51,6 +51,7 @@ public class RMIServerTest {
         RMIClient rmiClient = new RMIClient(PORT);
         rmiClient.init();
         rmiClient.send(new Message());
+        rmiClient.send(new Message());
     }
 
 }
