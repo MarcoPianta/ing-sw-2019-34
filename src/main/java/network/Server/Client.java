@@ -1,28 +1,15 @@
-package network.Server;
+package network.Client;
 
 import Model.Player;
 
-import java.io.IOException;
-import java.net.Socket;
-
 public class Client {
-    private Player player;
-    private Socket connection;
-    //TODO RmiServer server;
+    protected Player player;
 
     public Client(Player player){
-        this.player = player;
+        this.player = null;
     }
 
-    public Socket getSocket() {
-        return connection;
-    }
-
-    public void setConnection(String host) throws IOException {
-        connection = new Socket(host, 10000);
-    }
-
-    public void init(){
-
+    public void setPlayer(Player player){
+        
     }
 }

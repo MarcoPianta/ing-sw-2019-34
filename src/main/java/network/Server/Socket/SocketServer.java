@@ -56,13 +56,15 @@ public class SocketServer {
      * */
     //TODO catch exception
     public Socket acceptConnection() throws IOException{
-        Socket socket = serverSocket.accept();
+        while (true) {
+            Socket socket = serverSocket.accept();
 
-        new Thread(() -> {
-            new SocketClientHandler(socket, this);
-        }).start();
-        clients.add(socket);
-        return socket;
+            new Thread(() -> {
+                new SocketClientHandler(socket, this);
+            }).start();
+            clients.add(socket);
+            return socket;
+        }
     }
 
     /**
