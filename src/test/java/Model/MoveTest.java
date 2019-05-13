@@ -32,7 +32,7 @@ public class MoveTest {
     @Test
     public void executeTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game( 8);
+        Game game = new Game( 8,"map1");
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -47,7 +47,7 @@ public class MoveTest {
     @Test
     public void isValidTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game( 8);
+        Game game = new Game( 8,"map1");
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
@@ -74,7 +74,7 @@ public class MoveTest {
     @Test
     public  void calculateReachableSquareTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game( 8);
+        Game game = new Game( 8,"map1");
         GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );

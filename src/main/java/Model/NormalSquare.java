@@ -31,8 +31,8 @@ public class NormalSquare {
         this.color = null;
     }
 
-    public void addAmmo(CardAmmo ammo) {
-        this.ammo = ammo;
+    public void setItems(Card card) {
+        this.ammo = (CardAmmo) card;
     }
 
     /**
@@ -48,7 +48,7 @@ public class NormalSquare {
         if (this.getItem() == null)
             return null;
         CardAmmo card = ammo;
-        addAmmo(null);
+        setItems(null);
         return card;
     }
 

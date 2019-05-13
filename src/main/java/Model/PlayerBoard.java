@@ -8,6 +8,7 @@ public class PlayerBoard {
     private Health healthPlayer;
     private Hand handPlayer;
     private Player player;
+    private boolean finalTurn;
 
     public PlayerBoard(Player player){
         this.maxReward=8;
@@ -15,6 +16,19 @@ public class PlayerBoard {
         this.healthPlayer= new Health(this);
         this.handPlayer=new Hand();
         this.player=player;
+        finalTurn=false;
+    }
+
+    public boolean isFinalTurn() {
+        return finalTurn;
+    }
+
+    public void setMaxReward(int maxReward) {
+        this.maxReward = maxReward;
+    }
+
+    public void setFinalTurn(boolean finalTurn) {
+        this.finalTurn = finalTurn;
     }
 
     public Player getPlayer() {

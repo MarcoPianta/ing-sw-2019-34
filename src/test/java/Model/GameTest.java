@@ -2,6 +2,7 @@ package Model;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,9 +12,9 @@ public class GameTest {
      * this method tests CalculatePoints and his private method
      * */
     @Test
-    public void testCalculatePoints(){
+    public void testCalculatePoints()throws  FileNotFoundException{
         ArrayList<Player> bestMurder=new ArrayList<>();
-        Game game=new Game(8);
+        Game game=new Game(8,"map1");
         Player player=new Player("playertest2832",game , Colors.RED, "playerTest");
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
@@ -45,8 +46,8 @@ public class GameTest {
      * this method tests the adding of new player
      * */
     @Test
-    public void addPlayerTest(){
-        Game game=new Game(8);
+    public void addPlayerTest()throws  FileNotFoundException{
+        Game game=new Game(8,"map1");
         Player player=new Player("playertest2832",game, Colors.GREEN, "playerTest");
 
         assertTrue(game.getPlayers().isEmpty() );
@@ -58,8 +59,8 @@ public class GameTest {
      * */
 
     @Test
-    public void incrementCurrentPlayerTest(){
-        Game game=new Game(5);
+    public void incrementCurrentPlayerTest() throws FileNotFoundException {
+        Game game=new Game(5,"map1");
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.RED, "playerTest2");
         Player player3=new Player("playertest2832",game, Colors.BLUE, "playerTest3");

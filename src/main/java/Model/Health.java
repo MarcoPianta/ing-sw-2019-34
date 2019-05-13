@@ -35,18 +35,23 @@ public class Health {
     /**
      * this method set a player's death and  execute the calculation of points
      * */
-    private void death(){
-
+    public void death(){
         getPlayerBoard().getPlayer().getGameId().calculatePoints(getDamageBar(), false,getPlayerBoard().getPlayer());
-        getDamageBar().get(0).getPlayerBoard().addPoints(1);
+        if(!getPlayerBoard().isFinalTurn()) // first blood
+            getDamageBar().get(0).getPlayerBoard().addPoints(1);
+
         if(getDamageBar().size()==12){
             getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(getDamageBar().get(10),2);
             getDamageBar().get(11).getPlayerBoard().getHealthPlayer().addMark(this.getPlayerBoard().getPlayer(),1);
         }
-        else
+        else if(getDamageBar().size()==11)
             getPlayerBoard().getPlayer().getGameId().getDeadRoute().addMurders(getDamageBar().get(10),1);
-        //TODO respawn getPlayerBoard().getHandPlayer().addPowerUp(getPlayerBoard().getPlayer().getGameId().getDeckCollector().getCardPowerUpDrawer().draw());
+
+        if(getPlayerBoard().getPlayer().getGameId().getDeadPlayer().size()>=2)//double kill
+            getDamageBar().get(10).getPlayerBoard().addPoints(1);
         resetDamageBar();
+        getPlayerBoard().getPlayer().getGameId().getDeadPlayer().remove(getPlayerBoard().getPlayer());
+        getPlayerBoard().getPlayer().newPosition(null);
     }
 
     /**
@@ -86,7 +91,7 @@ public class Health {
         if(damageBar.size()>=6)
             adrenalineAction++;
         if(damageBar.size()>=11) {
-            death();
+            getPlayerBoard().getPlayer().getGameId().getDeadPlayer().add(getPlayerBoard().getPlayer());
         }
     }
 
