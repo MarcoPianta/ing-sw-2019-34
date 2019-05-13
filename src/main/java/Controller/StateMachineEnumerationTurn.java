@@ -2,9 +2,8 @@ package Controller;
 
 public enum StateMachineEnumerationTurn {
     START("Start"),
-    ACTIONMOVE("Move"),
-    ACTIONGRAB("Grab"),
-    ACTIONSHOT("Shot"),
+    ACTION1("Action1"),
+    ACTION2("Action2"),
     RELOAD("Reload"),
     ENDTURN("End"),
     WAIT("Wait");

@@ -7,6 +7,7 @@ public class DeadRoute {
     private int skulls;
     private ArrayList<Player> murders;
     private Game gameId;
+    private boolean finalTurn;
 
     public DeadRoute(int n, Game gameId){
         skulls=n;
@@ -26,6 +27,10 @@ public class DeadRoute {
         return murders;
     }
 
+    public boolean isFinalTurn() {
+        return finalTurn;
+    }
+
     /*
      *This method adds a murder in the dead route
      * */
@@ -34,9 +39,16 @@ public class DeadRoute {
         getMurders().add(player);
         counter--;}
         skulls--;
-        if(skulls==0){
-            //TODO ultimate adrenaline round
-            getGameId().calculatePoints(getMurders(),true,null);
+        if(skulls<=0){
+            finalTurn=true;
         }
     }
+
+    public void finalTurnPlayer(){
+        for(Player p:getGameId().getPlayers()){
+            if(p.getPlayerBoard().getHealthPlayer().getDamageBar().size()==0)
+                p.getPlayerBoard().setMaxReward(2);
+        }
+    }
+    //start finalTurn
 }

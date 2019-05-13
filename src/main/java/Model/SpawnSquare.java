@@ -26,10 +26,11 @@ public class SpawnSquare extends NormalSquare{
         spawn = true;
     }
 
-    public void addWeapon(CardWeapon weapon) {
+    @Override
+    public void setItems(Card card) {
         if (weapons.size() < 3)
-            if(weapon != null)
-                weapons.add(weapon);
+            if((CardWeapon)card != null)
+                weapons.add((CardWeapon)card);
         else {
             //TODO throws new FullWeaponSpaceException
         }

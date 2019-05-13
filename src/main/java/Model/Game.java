@@ -1,5 +1,8 @@
 package Model;
 
+import Controller.StateMachineEnumerationTurn;
+
+import java.io.FileNotFoundException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +13,20 @@ public class Game {
     private Player currentPlayer;
     private DeadRoute deadRoute;
     private DeckCollector deckCollector;
+    private ArrayList<Player> deadPlayer;
+    private GameBoard map;
 
-    public Game(int n) {
+    public Game(int n,String file) throws FileNotFoundException {
         this.players=new ArrayList<>();
         this.currentPlayer=null;
         deadRoute=new DeadRoute(n,this);
         deckCollector= new DeckCollector();
+        deadPlayer=new ArrayList<>();
+        map=new GameBoard(file);
+    }
+
+    public GameBoard getMap() {
+        return map;
     }
 
     public DeadRoute getDeadRoute() {
@@ -28,6 +39,10 @@ public class Game {
 
     public Player getFirstPlayer() {
         return firstPlayer;
+    }
+
+    public List<Player> getDeadPlayer() {
+        return deadPlayer;
     }
 
     public Player getCurrentPlayer() {
@@ -165,6 +180,10 @@ public class Game {
                 newPoints=0;
             player.getPlayerBoard().addPoints(newPoints);
         }
+        if(getDeadRoute().isFinalTurn()) {
+            thisPlayer.getPlayerBoard().setMaxReward(2);
+            thisPlayer.getPlayerBoard().setFinalTurn(true);
+        }
         thisPlayer.getPlayerBoard().decrementMaxReward();
     }
 
@@ -202,6 +221,7 @@ public class Game {
             currentPlayer=players.get(0);
         else
             currentPlayer=players.get(players.indexOf(currentPlayer)+1);
+        currentPlayer.setState(StateMachineEnumerationTurn.START);
     }
 
     /**
@@ -213,6 +233,7 @@ public class Game {
         index = rand.nextInt(players.size());
         firstPlayer=players.get(index);
         currentPlayer=players.get(index);
+        currentPlayer.setState(StateMachineEnumerationTurn.START);
     }
 
     /*

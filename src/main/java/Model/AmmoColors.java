@@ -1,9 +1,9 @@
 package Model;
 
-public enum AmmoColors {
-    BLUE("B"),
-    RED("R"),
-    YELLOW("Y");
+public enum AmmoColors{
+    BLUE("blue"),
+    RED("red"),
+    YELLOW("yellow");
 
     private String abbreviation;
     private AmmoColors(String abbreviation) {

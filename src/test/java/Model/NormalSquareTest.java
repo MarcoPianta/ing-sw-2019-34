@@ -16,10 +16,10 @@ public class NormalSquareTest {
     }
 
     @Test
-    public void AddAmmoGetItemTest() throws FileNotFoundException{
+    public void setItemsGetItemTest() throws FileNotFoundException{
         CardNotOnlyAmmo ammoTest = new CardNotOnlyAmmo(AmmoEnum.AMMO1.getAbbreviation());
         NormalSquare normalSquareTest = new NormalSquare(null, null, null, null, null, null);
-        normalSquareTest.addAmmo(ammoTest);
+        normalSquareTest.setItems(ammoTest);
         assertEquals(normalSquareTest.getItem().getName(), ammoTest.getName());
     }
 

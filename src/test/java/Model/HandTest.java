@@ -11,8 +11,8 @@ public class HandTest {
      *This method tests the constructor
      * */
      @Test
-     public void constructorTest(){
-         Game game=new Game(5);
+     public void constructorTest()throws FileNotFoundException{
+         Game game=new Game(5,"map1");
          Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
          assertNotNull(player.getPlayerBoard().getHandPlayer());
      }
@@ -21,7 +21,7 @@ public class HandTest {
      */
     @Test
     public void testAddWeapon() throws FileNotFoundException {
-        Game game=new Game(5);
+        Game game=new Game(5,"map1");
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
         String file= WeaponDictionary.FURNACE.getAbbreviation();
         CardWeapon cardWeapon=new CardWeapon(file);
@@ -35,7 +35,7 @@ public class HandTest {
      * */
     @Test
     public void testSubstituteWeapons() throws FileNotFoundException{
-        Game game=new Game(5);
+        Game game=new Game(5,"map1");
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
         String file1= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
         CardWeapon cardWeapon1=new CardWeapon(file1);
@@ -66,7 +66,7 @@ public class HandTest {
      * */
     @Test
     public void testAddPowerUp() throws FileNotFoundException {
-        Game game=new Game(5);
+        Game game=new Game(5,"map1");
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
 
         String file= PowerUpEnum.NEWTON_B.getAbbreviation();
@@ -80,7 +80,7 @@ public class HandTest {
      * */
     @Test
     public void testChargeWeapon() throws FileNotFoundException{
-        Game game=new Game(5);
+        Game game=new Game(5,"map1");
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
 
         String file1= WeaponDictionary.FURNACE.getAbbreviation();
@@ -118,8 +118,8 @@ public class HandTest {
      * this method tests the adding off ammo
      * */
     @Test
-    public  void testAddAmmo(){
-        Game game=new Game(5);
+    public  void testAddAmmo()throws FileNotFoundException{
+        Game game=new Game(5,"map1");
         Player player=new Player("playertest2832",game , Colors.GREEN, "playerTest");
 
         int red=2;

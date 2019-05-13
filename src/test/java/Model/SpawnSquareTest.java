@@ -17,14 +17,14 @@ public class SpawnSquareTest {
     }
 
     @Test
-    public void AddWeaponGetWeaponsTest() throws FileNotFoundException{
+    public void setItemsGetWeaponsTest() throws FileNotFoundException{
         ArrayList<CardWeapon> weaponsTest = new ArrayList<>();
         weaponsTest.add(null);
         CardWeapon weaponTest;
         weaponTest = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
 
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null, weaponsTest);
-        spawnSquare.addWeapon(weaponTest);
+        spawnSquare.setItems(weaponTest);
         assertEquals(weaponTest, spawnSquare.getWeapons().get(0));
     }
 

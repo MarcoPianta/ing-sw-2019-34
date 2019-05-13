@@ -1,16 +1,18 @@
 package Model;
-
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class HealthTest {
     /**
      * this method tests the count of marks
      * */
     @Test
-    public void testCountMarksAddMarks(){
-        Game game=new Game(8);
+    public void testCountMarksAddMarks()throws FileNotFoundException {
+        Game game=new Game(8,"map1");
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
         Player playerTest=new Player("playertest2832",game, Colors.RED, "playerTest");
@@ -25,28 +27,39 @@ public class HealthTest {
      * this method test the player's death
      * */
     @Test
-    public void testDeath() {
-        Game game = new Game(5);
+    public void testDeath() throws FileNotFoundException{
+        Game game = new Game(5,"map1");
         Player playerTest = new Player("playerTest1", game, Colors.GREEN, "playertest");
-        Player player1 = new Player("playertest2830", game, Colors.GREEN, "playerTest1");
+        Player player1 = new Player("playertest2830", game, Colors.RED, "playerTest1");
+        Player player2 = new Player("playertest2830", game, Colors.BLUE, "playerTest2");
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        game.addPlayer(playerTest);
 
         playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1, 12);
+        player2.getPlayerBoard().getHealthPlayer().addDamage(player1, 11);
+        assertEquals(playerTest,game.getDeadPlayer().get(0));
+        playerTest.getPlayerBoard().getHealthPlayer().death();
         assertEquals(0, playerTest.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(0, playerTest.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
         assertEquals(playerTest, player1.getPlayerBoard().getHealthPlayer().getMark().get(0));
+        assertNull(playerTest.getPosition());
         assertEquals(2, playerTest.getPlayerBoard().getPlayer().getGameId().getDeadRoute().getMurders().size());
+        assertEquals(10,player1.getPlayerBoard().getPoints());//first blood,bestMurder amd double kill
 
+        player2.getPlayerBoard().getHealthPlayer().death();
         playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1, 11);
         assertEquals(playerTest, player1.getPlayerBoard().getHealthPlayer().getMark().get(0));
         assertEquals(3, playerTest.getPlayerBoard().getPlayer().getGameId().getDeadRoute().getMurders().size());
+        assertEquals(19,player1.getPlayerBoard().getPoints());
     }
 
     /**
      * this method test the add of damage e the modified of adrenaline action
      * */
     @Test
-    public void testAddDamage(){
-        Game game=new Game(8);
+    public void testAddDamage()throws FileNotFoundException{
+        Game game=new Game(8,"map1");
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player playerTest=new Player("playertest2832",game, Colors.RED, "playerTest");
 
@@ -69,8 +82,8 @@ public class HealthTest {
      * */
 
     @Test
-    public void killTest(){
-        Game game=new Game(8);
+    public void killTest()throws FileNotFoundException{
+        Game game=new Game(8,"map1");
         Player player5=new Player("playertest2832",game , Colors.RED, "playerTest");
         Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
         Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
