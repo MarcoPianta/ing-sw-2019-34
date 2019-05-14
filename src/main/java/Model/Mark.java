@@ -1,18 +1,31 @@
 package Model;
 
 import java.util.ArrayList;
-
+/**
+ * This class implements Action
+ */
 public class Mark implements Action {
     private Player markerPlayer;
     private ArrayList<Player> targetPlayers;
     private Effect markerEffect;
 
-    public Mark(Player marker, ArrayList<Player> target, Effect effect){
-        markerPlayer = marker; //devo ricevere la copia
-        targetPlayers = target; //devo ricevere l'originale
+    /**
+     * @param markerPlayer  The actorPlayer who use the Mark Action
+     * @param targets       The list of Player that are targeted by the actorPlayer
+     * @param effect        The effect used by the actorPlayer to invoke Injure Action
+     */
+    public Mark(Player markerPlayer, ArrayList<Player> targets, Effect effect){
+        this.markerPlayer = markerPlayer; //devo ricevere la copia
+        targetPlayers = targets; //devo ricevere l'originale
         markerEffect = effect; //devo ricevere la copia
     }
 
+    /**
+     * Invoke the isValid method that control the Pre-condition of the action
+     * This method execute the Mark Action
+     *
+     * @return true if the action has been executed, false otherwise
+     */
     public boolean execute() {
         if (isValid())  {
             for (int playerCounter = 0; playerCounter < targetPlayers.size(); playerCounter++) {
@@ -27,17 +40,12 @@ public class Mark implements Action {
         return false;
     }
 
-    private void markTarget(Player target, int damage, Effect.PostCondition postCondition){
-        target.getPlayerBoard().getHealthPlayer().addDamage(markerPlayer, damage);
-        if(postCondition.getTargetMove() != 0)
-        {
-            //TODO throw shooterHasToMoveTargetException
-            // --> receives targetNewSquare
-            Move action = new Move(markerPlayer, target, markerEffect, null);
-        }
-    }
-
-
+    /**
+     * Control the Pre-condition of the Mark Action
+     * This method invoke reachableSquare method
+     *
+     * @return true if the action invocation respect the condition, false otherwise
+     */
     public boolean isValid(){
         ArrayList<NormalSquare> reachable = reachableSquare();
         int playerCounter = 0;
@@ -55,6 +63,25 @@ public class Mark implements Action {
         return true;
     }
 
+    /**
+     * @param targetPlayer  The Player that is targeted in this step
+     * @param damage        The number of mark that must be dealt to the targetPlayer
+     * @param postCondition Post-condition that must be respected after the marking
+     */
+    private void markTarget(Player targetPlayer, int damage, Effect.PostCondition postCondition){
+        targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(markerPlayer, damage);
+        if(postCondition.getTargetMove() != 0)
+        {
+            //TODO throw shooterHasToMoveTargetException
+            // --> receives targetNewSquare
+            Move action = new Move(markerPlayer, targetPlayer, markerEffect, null);
+        }
+    }
+
+    /**
+     * This method is
+     * @return the list of Square reachable from the startSquare with at least movePass step
+     */
     public ArrayList<NormalSquare> reachableSquare() {
         Effect.PreCondition preCondition = markerEffect.getPreCondition();
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
@@ -92,6 +119,9 @@ public class Mark implements Action {
         return reachableSquare;
     }
 
+    /**
+     * This method is invoked by reachableSquare method
+     */
     private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquare, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int i){
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);

@@ -1,28 +1,37 @@
 package network.Server;
 
 import Model.Player;
-
-import java.io.IOException;
-import java.net.Socket;
+import network.messages.ActionType;
+import network.messages.Message;
 
 public class Client {
-    private Player player;
-    private Socket connection;
-    //TODO RmiServer server;
+    protected Player player;
+    protected boolean rmi;
 
-    public Client(Player player){
+    public Client(){
+        this.player = null;
+    }
+
+    /**
+     * This method receive a message from the server and handle it.
+     * The method is called from NetworkHandler, when a new message is received on input stream it is read and passed as
+     * parameter.
+     * @param message is the message received from the server
+     * */
+    public void onReceive(Message message) {
+        if (message.getActionType().getAbbreviation().equals(ActionType.CONNECTIONRESPONSE.getAbbreviation())) {
+            //TODO call setPlayer(); set new player in the client
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
+            //TODO call method
+        }
+    }
+
+    private void setPlayer(Player player){
         this.player = player;
     }
 
-    public Socket getSocket() {
-        return connection;
-    }
-
-    public void setConnection(String host) throws IOException {
-        connection = new Socket(host, 10000);
-    }
-
-    public void init(){
-
+    public boolean isRmi() {
+        return rmi;
     }
 }

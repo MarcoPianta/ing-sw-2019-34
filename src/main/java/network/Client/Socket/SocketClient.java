@@ -1,6 +1,6 @@
 package network.Client.Socket;
 
-import network.Server.Socket.SocketServer;
+import network.Server.Client;
 import network.messages.Message;
 
 import java.io.IOException;
@@ -11,19 +11,20 @@ import java.net.Socket;
 /**
  * This class is used from the client to communicate with SocketServer when a Socket connection is used.
  * */
-public class SocketClient {
+public class SocketClient extends Client{
     private String host;
     private final int port;
     private Socket connection;
-    private SocketServer server;
     private ObjectInputStream in; //Used to send message to server
-    private ObjectOutputStream out; ////Used to receive message from server
+    private ObjectOutputStream out; //Used to receive message from server
 
     /**
      * The constructor only initialize the host and port attribute, it doesn't establish connection. Attributes will be
      * used from init() to establish a new connection to the server
      * */
     public SocketClient(String host, int port){
+        super();
+        this.rmi = false;
         this.host = host;
         this.port = port;
     }
@@ -35,6 +36,7 @@ public class SocketClient {
     public void init() throws IOException {
         connection = new Socket(host, port);
         out = new ObjectOutputStream(connection.getOutputStream());
+        out.flush();
         in = new ObjectInputStream(connection.getInputStream());
     }
 
@@ -46,8 +48,6 @@ public class SocketClient {
     public void send(Message message) throws IOException{
         out.writeObject(message);
     }
-
-    //TODO receive response message
 
     /**
      * This method is used to close connection between the client and the server. Before closing connection input and
