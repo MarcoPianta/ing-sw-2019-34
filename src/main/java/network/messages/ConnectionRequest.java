@@ -7,8 +7,7 @@ import network.Server.Client;
  * */
 public class ConnectionRequest extends Message{
 
-    public ConnectionRequest(Client client){
-        this.client = client;
+    public ConnectionRequest(){
         this.actionType = ActionType.CONNECTIONREQUEST;
     }
 }
