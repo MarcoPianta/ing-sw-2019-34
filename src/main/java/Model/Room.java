@@ -16,7 +16,7 @@ public class Room{
     public Room(int dimension, Colors color){
         normalSquares = new ArrayList<>();
         while (normalSquares.size() < dimension)
-            normalSquares.add(new NormalSquare());
+            normalSquares.add(new NormalSquare(color));
         this.color = color;
     }
 

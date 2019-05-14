@@ -9,3 +9,4 @@
         "SideS" --> reference to a Square who is connected with the bottom side of the room
         "SideW" --> reference to a Square who is connected with the left side of the room
         "spawn" --> boolean to indicate if the square is a spawn square
+        "ID"    --> unique string to identify the square in the map

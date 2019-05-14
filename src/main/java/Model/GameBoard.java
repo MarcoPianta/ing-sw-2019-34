@@ -57,10 +57,12 @@ public final class GameBoard {
                 }
                 if(!currentSquare.getBoolean("spawn")){
                     setSides(square, currentReference);
+                    square.setId(currentSquare.getString("ID"));
                 }
                 else {
                     ArrayList<NormalSquare> tmpRoom;
                     SpawnSquare newSquare =  new SpawnSquare();
+                    newSquare.setId(currentSquare.getString("ID"));
                     tmpRoom = rooms.get(i).getNormalSquares();
                     tmpRoom.set(j, newSquare);
                     rooms.set(i, new Room(tmpRoom, rooms.get(i).getColor()));

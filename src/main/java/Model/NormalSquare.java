@@ -11,6 +11,7 @@ public class NormalSquare {
     NormalSquare w;
     protected Colors color;
     boolean spawn;
+    private String id;
 
     public NormalSquare(NormalSquare sideN, NormalSquare sideE, NormalSquare sideS, NormalSquare sideW, Colors color, CardAmmo ammo) {
         n = sideN;
@@ -20,6 +21,15 @@ public class NormalSquare {
         this.ammo = ammo;
         this.color = color;
         spawn = false;
+    }
+
+    public NormalSquare(Colors color){
+        n = null;
+        e = null;
+        s = null;
+        w = null;
+        ammo = null;
+        this.color = color;
     }
 
     public NormalSquare(){
@@ -87,6 +97,10 @@ public class NormalSquare {
         return new ArrayList<>();
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void setN(NormalSquare n) {
         this.n = n;
     }
@@ -101,5 +115,9 @@ public class NormalSquare {
 
     public void setW(NormalSquare w) {
         this.w = w;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

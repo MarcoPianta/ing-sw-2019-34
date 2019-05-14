@@ -11,21 +11,24 @@
             "SideE": "0,1",
             "SideS": "1,0",
             "SideW": "",
-            "spawn": false
+            "spawn": false,
+            "ID": "0,0"
           },
           {
             "SideN": "",
             "SideE": "0,2",
             "SideS": "",
             "SideW": "0,0",
-            "spawn": false
+            "spawn": false,
+            "ID": "0,1"
           },
           {
             "SideN": "",
             "SideE": "",
             "SideS": "1,2",
             "SideW": "0,1",
-            "spawn": true
+            "spawn": true,
+            "ID": "0,2"
           }
         ]
       }
@@ -40,21 +43,24 @@
           "SideE": "1,1",
           "SideS": "",
           "SideW": "",
-          "spawn": true
+          "spawn": true,
+          "ID": "1,0"
         },
         {
           "SideN": "",
           "SideE": "1,2",
           "SideS": "3,0",
           "SideW": "1,0",
-          "spawn": false
+          "spawn": false,
+          "ID": "1,1"
         },
         {
           "SideN": "0,2",
           "SideE": "2,0",
           "SideS": "",
           "SideW": "1,1",
-          "spawn": false
+          "spawn": false,
+          "ID": "1,2"
         }
       ]
     }
@@ -69,14 +75,16 @@
           "SideE": "",
           "SideS": "2,1",
           "SideW": "1,2",
-          "spawn": false
+          "spawn": false,
+          "ID": "1,3"
         },
         {
           "SideN": "2,0",
           "SideE": "",
           "SideS": "",
           "SideW": "3,1",
-          "spawn": true
+          "spawn": true,
+          "ID": "2,3"
         }
       ]
     }
@@ -91,14 +99,16 @@
           "SideE": "3,1",
           "SideS": "",
           "SideW": "",
-          "spawn": false
+          "spawn": false,
+          "ID": "2,1"
         },
         {
           "SideN": "",
-          "SideE": "",
+          "SideE": "2,1",
           "SideS": "",
-          "SideW": "2,1",
-          "spawn": false
+          "SideW": "3,0",
+          "spawn": false,
+          "ID": "2,2"
         }
       ]
     }
