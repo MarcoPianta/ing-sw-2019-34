@@ -21,8 +21,13 @@ public class Server {
     }
 
     public void onReceive(Message message){
-        if (message.getActionType().getAbbreviation().equals(ActionType.POSSIBLEMOVE)){
+        if ((message.getActionType().getAbbreviation().equals(ActionType.POSSIBLETARGETSHOT)) || (message.getActionType().getAbbreviation().equals(ActionType.POSSIBLEMOVE))){
+            //TODO
+        }
+        else if ((message.getActionType().getAbbreviation().equals(ActionType.SHOT)) || (message.getActionType().getAbbreviation().equals(ActionType.MOVE)) || (message.getActionType().getAbbreviation().equals(ActionType.RELOAD))  || (message.getActionType().getAbbreviation().equals(ActionType.PASS)) || (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPON))){
 
         }
     }
+
+    public void send(){} //TODO handle inheritance of this method for socket and rmi
 }
