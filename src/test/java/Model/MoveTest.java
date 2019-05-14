@@ -10,8 +10,8 @@ public class MoveTest {
     @Test
     public void constructorTestWithEffect() throws FileNotFoundException {
         GameBoard testGameBoard = new GameBoard("map1");
-        Player testShooterPlayer = new Player("shooterID", null, null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        Player testShooterPlayer = new Player("shooterID", null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, "name" );
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -23,7 +23,7 @@ public class MoveTest {
     @Test
     public void constructorTestWithoutEffect() throws FileNotFoundException {
         GameBoard testGameBoard = new GameBoard("map1");
-        Player testMoverPlayer = new Player("targetID", null, null, "name" );
+        Player testMoverPlayer = new Player("targetID", null, "name" );
         testMoverPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         Move action = new Move(testMoverPlayer, testGameBoard.getRooms().get(1).getNormalSquares().get(2), 2);
         assertTrue(action instanceof Move);
@@ -33,9 +33,9 @@ public class MoveTest {
     public void executeTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = game.getMap();
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testShooterPlayer = new Player("shooterID", color1, "name" );
+        Player testTargetPlayer = new Player("targetID", color2, "name" );
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -48,9 +48,9 @@ public class MoveTest {
     public void isValidTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = game.getMap();
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testShooterPlayer = new Player("shooterID", color1, "name" );
+        Player testTargetPlayer = new Player("targetID", color2, "name" );
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -75,9 +75,9 @@ public class MoveTest {
     public  void calculateReachableSquareTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = game.getMap();
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testShooterPlayer = new Player("shooterID", color1, "name" );
+        Player testTargetPlayer = new Player("targetID", color2, "name" );
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());

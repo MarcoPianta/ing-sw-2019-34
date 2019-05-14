@@ -10,8 +10,8 @@ public class InjureTest {
 
     @Test
     public void constructorTest() throws FileNotFoundException {
-        Player testShooterPlayer = new Player("shooterID", null, null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        Player testShooterPlayer = new Player("shooterID", null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -26,10 +26,9 @@ public class InjureTest {
          * This method test execute
          * */
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = game.getMap();
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testShooterPlayer = new Player("shooterID", color1, "name" );
+        Player testTargetPlayer = new Player("targetID", color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
@@ -49,10 +48,9 @@ public class InjureTest {
          * */
         //Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game(8,"map1");
-        GameBoard testGameBoard = game.getMap();
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testShooterPlayer = new Player("shooterID", color1, "name" );
+        Player testTargetPlayer = new Player("targetID", color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
@@ -79,10 +77,9 @@ public class InjureTest {
          */
         //  Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = game.getMap();
-        Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
-        Player testTargetPlayer = new Player("targetID", game, color2, "name" );
+        GameBoard testGameBoard = new GameBoard("map1");
+        Player testShooterPlayer = new Player("shooterID", color1, "name" );
+        Player testTargetPlayer = new Player("targetID", color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
@@ -100,7 +97,7 @@ public class InjureTest {
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
         assertTrue(action.reachableSquare().contains(testTargetPlayer.getPosition()));
         //Test 4
-        Player testTargetPlayer2 = new Player("targetID", game, color2, "name" );
+        Player testTargetPlayer2 = new Player("targetID", color2, "name" );
         testList.add(testTargetPlayer2);
         testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
@@ -113,11 +110,11 @@ public class InjureTest {
         Game game = new Game( 8, "map1");
         GameBoard testGameBoard = game.getMap();
         Colors color1 = Colors.YELLOW, color2 = Colors.BLUE, color3 = Colors.VIOLET, color4 = Colors.GREEN, color5 = Colors.WHITE;
-        Player testShooterPlayer = new Player("shooterID", game, color1, "shooter" );
-        Player testTargetPlayer1 = new Player("targetID1", game, color2, "target1" );
-        Player testTargetPlayer2= new Player("targetID2", game, color3, "target2" );
-        Player testTargetPlayer3 = new Player("targetID3", game, color4, "target3" );
-        Player testTargetPlayer4 = new Player("targetID4", game, color5, "target4" );
+        Player testShooterPlayer = new Player("shooterID",color1, "shooter" );
+        Player testTargetPlayer1 = new Player("targetID1",color2, "target1" );
+        Player testTargetPlayer2= new Player("targetID2",color3, "target2" );
+        Player testTargetPlayer3 = new Player("targetID3",color4, "target3" );
+        Player testTargetPlayer4 = new Player("targetID4",color5, "target4" );
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer1.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
