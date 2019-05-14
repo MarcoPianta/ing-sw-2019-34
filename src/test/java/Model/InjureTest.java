@@ -27,7 +27,7 @@ public class InjureTest {
          * */
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = new GameBoard("map1");
+        GameBoard testGameBoard = game.getMap();
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
@@ -50,7 +50,7 @@ public class InjureTest {
         //Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game(8,"map1");
-        GameBoard testGameBoard = new GameBoard("map1");
+        GameBoard testGameBoard = game.getMap();
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
@@ -80,7 +80,7 @@ public class InjureTest {
         //  Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = new GameBoard("map1");
+        GameBoard testGameBoard = game.getMap();
         Player testShooterPlayer = new Player("shooterID", game, color1, "name" );
         Player testTargetPlayer = new Player("targetID", game, color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
@@ -105,5 +105,36 @@ public class InjureTest {
         testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
         assertTrue(action.reachableSquare().contains(testTargetPlayer2.getPosition()));
+    }
+
+    @Test
+    public void targetablePlayerTest() throws FileNotFoundException {
+        //initialization of the test game
+        Game game = new Game( 8, "map1");
+        GameBoard testGameBoard = game.getMap();
+        Colors color1 = Colors.YELLOW, color2 = Colors.BLUE, color3 = Colors.VIOLET, color4 = Colors.GREEN, color5 = Colors.WHITE;
+        Player testShooterPlayer = new Player("shooterID", game, color1, "shooter" );
+        Player testTargetPlayer1 = new Player("targetID1", game, color2, "target1" );
+        Player testTargetPlayer2= new Player("targetID2", game, color3, "target2" );
+        Player testTargetPlayer3 = new Player("targetID3", game, color4, "target3" );
+        Player testTargetPlayer4 = new Player("targetID4", game, color5, "target4" );
+        testShooterPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer1.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer3.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(1));
+        testTargetPlayer4.newPosition(testGameBoard.getRooms().get(3).getNormalSquares().get(0));
+        game.addPlayer(testShooterPlayer);
+        game.addPlayer(testTargetPlayer1);
+        game.addPlayer(testTargetPlayer2);
+        game.addPlayer(testTargetPlayer3);
+        game.addPlayer(testTargetPlayer4);
+        //initialization of the action
+        ArrayList<Player> testList = new ArrayList<Player>(game.getPlayers());
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(1);
+        Injure action = new Injure(testShooterPlayer, testList, testEffect);
+        ArrayList<Player> correctTargetList = new ArrayList<Player>();
+        correctTargetList.add(testTargetPlayer1);
+        assertEquals(correctTargetList, action.targetablePlayer());
     }
 }

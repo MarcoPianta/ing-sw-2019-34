@@ -9,8 +9,8 @@ public class Grab implements Action {
     private int execution;
 
     /**
-     * @param grabberPlayer
-     * @param grabbedCard
+     * @param grabberPlayer The actorPlayer who use the Grab Action
+     * @param grabbedCard   The card that is grabbed by the actorPlayer
      */
     public Grab(Player grabberPlayer, CardWeapon grabbedCard){
         actorPlayer = grabberPlayer;
@@ -20,8 +20,8 @@ public class Grab implements Action {
     }
 
     /**
-     * @param grabberPlayer
-     * @param grabbedCard
+     * @param grabberPlayer The actorPlayer who use the Grab Action
+     * @param grabbedCard   The card that is grabbed by the actorPlayer
      */
     public Grab(Player grabberPlayer, CardOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
@@ -31,8 +31,8 @@ public class Grab implements Action {
     }
 
     /**
-     * @param grabberPlayer
-     * @param grabbedCard
+     * @param grabberPlayer The actorPlayer who use the Grab Action
+     * @param grabbedCard   The card that is grabbed by the actorPlayer
      */
     public Grab(Player grabberPlayer, CardNotOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
@@ -41,6 +41,12 @@ public class Grab implements Action {
         execution = 2;
     }
 
+    /**
+     * Invoke the isValid method that control the Pre-condition of the action
+     * This method execute the Grab Action
+     *
+     * @return true if the action has been executed, false otherwise
+     */
     public boolean execute(){
         if(isValid()){
             if( execution == 0 ){
@@ -67,6 +73,11 @@ public class Grab implements Action {
         return false;
     }
 
+    /**
+     * This method control the Pre-condition of the Grab Action
+     *
+     * @return true if the action invocation respect the condition, false otherwise
+     */
     public boolean isValid(){
         if(actorPlayer.getPosition().isSpawn()){
             return actorPlayer.getPosition().getWeapons().contains(grabbedItem);
@@ -76,6 +87,12 @@ public class Grab implements Action {
         }
     }
 
+    /**
+     * This method is invoked by execute method if the grabbed card is a CardAmmo
+     *
+     * @param ammoColor The string that represent the color of the grabbed ammo
+     * @return 0 if RED, 1 if YELLOW, 2 if BLUE
+     */
     private int grabAmmo(String ammoColor) {
         int RYB = 0;
         if(ammoColor.equals("R"))
