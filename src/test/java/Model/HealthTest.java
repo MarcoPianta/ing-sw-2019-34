@@ -11,11 +11,10 @@ public class HealthTest {
      * this method tests the count of marks
      * */
     @Test
-    public void testCountMarksAddMarks()throws FileNotFoundException {
-        Game game=new Game(8,"map1");
-        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
-        Player playerTest=new Player("playertest2832",game, Colors.RED, "playerTest");
+    public void testCountMarksAddMarks(){
+        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
+        Player playerTest=new Player("playertest2832", Colors.RED, "playerTest");
 
         PlayerBoard playerBoard= new PlayerBoard(playerTest) ;
         playerBoard.getHealthPlayer().addMark(player1, 5 );
@@ -29,9 +28,9 @@ public class HealthTest {
     @Test
     public void testDeath() throws FileNotFoundException{
         Game game = new Game(5,"map1");
-        Player playerTest = new Player("playerTest1", game, Colors.GREEN, "playertest");
-        Player player1 = new Player("playertest2830", game, Colors.RED, "playerTest1");
-        Player player2 = new Player("playertest2830", game, Colors.BLUE, "playerTest2");
+        Player playerTest = new Player("playerTest1", Colors.GREEN, "playertest");
+        Player player1 = new Player("playertest2830", Colors.RED, "playerTest1");
+        Player player2 = new Player("playertest2830", Colors.BLUE, "playerTest2");
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(playerTest);
@@ -59,23 +58,22 @@ public class HealthTest {
      * */
     @Test
     public void testAddDamage()throws FileNotFoundException{
-        Game game=new Game(8,"map1");
-        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
-        Player playerTest=new Player("playertest2832",game, Colors.RED, "playerTest");
-
-
+        Game game=new Game(5,"map1");
+        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
+        Player playerTest=new Player("playertest2832", Colors.RED, "playerTest");
+        game.addPlayer(player1);
+        game.addPlayer(playerTest);
         //case max damage and adrenaline action=2
         playerTest.getPlayerBoard().getHealthPlayer().addMark(player1,3);
-        playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1,9);
-        assertEquals(0,playerTest.getPlayerBoard().getHealthPlayer().getDamageBar().size());
-        assertEquals(0,playerTest.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
-        assertEquals(6,playerTest.getPlayerBoard().getMaxReward());
+        playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1,4);
+        assertEquals(2,playerTest.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
+        playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1,6);
+        assertEquals(12 ,playerTest.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(2,playerTest.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
+        assertEquals(8,playerTest.getPlayerBoard().getMaxReward());
         assertEquals(0,playerTest.getPlayerBoard().getHealthPlayer().getMark().size());
+        assertEquals(playerTest, playerTest.getGameId().getDeadPlayer().get(0));
 
-        playerTest.getPlayerBoard().getHealthPlayer().addMark(player1,2);
-        playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1,1);
-        assertEquals(3,playerTest.getPlayerBoard().getHealthPlayer().getDamageBar().size());
-        assertEquals(1, playerTest.getPlayerBoard().getHealthPlayer().getAdrenalineAction());
     }
     /*
      *This method tests all method of a player's kill
@@ -84,12 +82,11 @@ public class HealthTest {
     @Test
     public void killTest()throws FileNotFoundException{
         Game game=new Game(8,"map1");
-        Player player5=new Player("playertest2832",game , Colors.RED, "playerTest");
-        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
-        Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
-        Player player4=new Player("playertest2832",game, Colors.VIOLET, "playerTest4");
-
+        Player player5=new Player("playertest2832", Colors.RED, "playerTest");
+        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
+        Player player3=new Player("playertest2832", Colors.YELLOW, "playerTest3");
+        Player player4=new Player("playertest2832", Colors.VIOLET, "playerTest4");
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
@@ -102,8 +99,7 @@ public class HealthTest {
         player1.getPlayerBoard().getHealthPlayer().addDamage(player5,3);
         player1.getPlayerBoard().getHealthPlayer().addDamage(player2,1);
         player1.getPlayerBoard().getHealthPlayer().addDamage(player4,2);
-
-
+        player1.getPlayerBoard().getHealthPlayer().death();// in reality controller called death's method
         assertEquals(9,player2.getPlayerBoard().getPoints()); // 8+first Blood
         assertEquals(6,player3.getPlayerBoard().getPoints());
         assertEquals(4,player4.getPlayerBoard().getPoints());

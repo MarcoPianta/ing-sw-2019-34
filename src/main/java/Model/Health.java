@@ -87,11 +87,12 @@ public class Health {
         resetMark(player);
 
         if(damageBar.size()>=3 && damageBar.size()<6 )
-            adrenalineAction++;
-        if(damageBar.size()>=6)
-            adrenalineAction++;
+            adrenalineAction=1;
+        if(damageBar.size()>=6 && damageBar.size()<11)
+            adrenalineAction=2;
         if(damageBar.size()>=11) {
             getPlayerBoard().getPlayer().getGameId().getDeadPlayer().add(getPlayerBoard().getPlayer());
+            adrenalineAction=2;
         }
     }
 

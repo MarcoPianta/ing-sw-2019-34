@@ -26,13 +26,13 @@ public class InjureTest {
          * This method test execute
          * */
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        GameBoard testGameBoard = new GameBoard("map1");
+        Game game=new Game(5,"map1");
         Player testShooterPlayer = new Player("shooterID", color1, "name" );
         Player testTargetPlayer = new Player("targetID", color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
         Injure action = new Injure(testShooterPlayer, testList, testEffect);
@@ -48,19 +48,19 @@ public class InjureTest {
          * */
         //Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        GameBoard testGameBoard = new GameBoard("map1");
+        Game game=new Game(5,"map1");
         Player testShooterPlayer = new Player("shooterID", color1, "name" );
         Player testTargetPlayer = new Player("targetID", color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
         Injure action = new Injure(testShooterPlayer, testList, testEffect);
         assertTrue(action.isValid());
         //Test 2
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
         assertFalse(action.isValid());
 
     }
@@ -77,19 +77,19 @@ public class InjureTest {
          */
         //  Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
-        GameBoard testGameBoard = new GameBoard("map1");
+        Game game=new Game(5,"map1");
         Player testShooterPlayer = new Player("shooterID", color1, "name" );
         Player testTargetPlayer = new Player("targetID", color2, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
         Injure action = new Injure(testShooterPlayer, testList, testEffect);
         assertTrue(action.reachableSquare().contains(testTargetPlayer.getPosition()));
         //  Test 2
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(1));
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(1));
         assertFalse(action.reachableSquare().contains(testTargetPlayer.getPosition()));
         //Test 3
         CardWeapon testOtherWeapon= new CardWeapon (WeaponDictionary.FLAMETHROWER.getAbbreviation());
@@ -99,7 +99,7 @@ public class InjureTest {
         //Test 4
         Player testTargetPlayer2 = new Player("targetID", color2, "name" );
         testList.add(testTargetPlayer2);
-        testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
+        testTargetPlayer2.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
         assertTrue(action.reachableSquare().contains(testTargetPlayer2.getPosition()));
     }
@@ -108,18 +108,17 @@ public class InjureTest {
     public void targetablePlayerTest() throws FileNotFoundException {
         //initialization of the test game
         Game game = new Game( 8, "map1");
-        GameBoard testGameBoard = game.getMap();
         Colors color1 = Colors.YELLOW, color2 = Colors.BLUE, color3 = Colors.VIOLET, color4 = Colors.GREEN, color5 = Colors.WHITE;
         Player testShooterPlayer = new Player("shooterID",color1, "shooter" );
         Player testTargetPlayer1 = new Player("targetID1",color2, "target1" );
         Player testTargetPlayer2= new Player("targetID2",color3, "target2" );
         Player testTargetPlayer3 = new Player("targetID3",color4, "target3" );
         Player testTargetPlayer4 = new Player("targetID4",color5, "target4" );
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
-        testTargetPlayer1.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
-        testTargetPlayer2.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer3.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(1));
-        testTargetPlayer4.newPosition(testGameBoard.getRooms().get(3).getNormalSquares().get(0));
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer2.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer3.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(1));
+        testTargetPlayer4.newPosition(game.getMap().getRooms().get(3).getNormalSquares().get(0));
         game.addPlayer(testShooterPlayer);
         game.addPlayer(testTargetPlayer1);
         game.addPlayer(testTargetPlayer2);

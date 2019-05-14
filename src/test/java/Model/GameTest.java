@@ -15,11 +15,11 @@ public class GameTest {
     public void testCalculatePoints()throws  FileNotFoundException{
         ArrayList<Player> bestMurder=new ArrayList<>();
         Game game=new Game(8,"map1");
-        Player player=new Player("playertest2832",game , Colors.RED, "playerTest");
-        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831",game, Colors.BLUE, "playerTest2");
-        Player player3=new Player("playertest2832",game, Colors.YELLOW, "playerTest3");
-        Player player4=new Player("playertest2832",game, Colors.VIOLET, "playerTest4");
+        Player player=new Player("playertest2832", Colors.RED, "playerTest");
+        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
+        Player player3=new Player("playertest2832", Colors.YELLOW, "playerTest3");
+        Player player4=new Player("playertest2832", Colors.VIOLET, "playerTest4");
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
@@ -32,7 +32,6 @@ public class GameTest {
             bestMurder.add(player3);
         for(int i=0; i<3;i++)
             bestMurder.add(player4);
-
         game.calculatePoints(bestMurder,false,player);
 
         assertEquals(8,player1.getPlayerBoard().getPoints());
@@ -48,11 +47,12 @@ public class GameTest {
     @Test
     public void addPlayerTest()throws  FileNotFoundException{
         Game game=new Game(8,"map1");
-        Player player=new Player("playertest2832",game, Colors.GREEN, "playerTest");
+        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
 
         assertTrue(game.getPlayers().isEmpty() );
         game.addPlayer(player);
         assertFalse(game.getPlayers().isEmpty());
+        assertEquals(game,player.getGameId());
     }
     /*
      * this method tests increment current player and the choose of the first player
@@ -61,11 +61,9 @@ public class GameTest {
     @Test
     public void incrementCurrentPlayerTest() throws FileNotFoundException {
         Game game=new Game(5,"map1");
-        Player player1=new Player("playertest2830",game, Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831",game, Colors.RED, "playerTest2");
-        Player player3=new Player("playertest2832",game, Colors.BLUE, "playerTest3");
-
-
+        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
+        Player player2=new Player("playertest2831", Colors.RED, "playerTest2");
+        Player player3=new Player("playertest2832", Colors.BLUE, "playerTest3");
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);

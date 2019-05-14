@@ -211,6 +211,7 @@ public class Game {
     public void addPlayer(Player newPlayer){
         //TODO  SERVER MUST CREATE A NEW PLAYER
         players.add(newPlayer);
+        newPlayer.setGameId(this);
     }
 
     /**
