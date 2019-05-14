@@ -1,24 +1,31 @@
 package Model;
 
 import java.util.ArrayList;
-
+/**
+ * This class implements Action
+ */
 public class Injure implements Action {
     private Player shooterPlayer;
     private ArrayList<Player> targetPlayers;
     private Effect injurerEffect;
 
     /**
-     * @param shooter
-     * @param target
-     * @param effect
+     * @param shooterPlayer     The actorPlayer who use the Injure Action
+     * @param target            The list of Player that are targeted by the actorPlayer
+     * @param effect            The effect used by the actorPlayer to invoke Injure Action
      */
-
-    public Injure(Player shooter, ArrayList<Player> target, Effect effect) {
-        shooterPlayer = shooter; //devo ricevere la copia
+    public Injure(Player shooterPlayer, ArrayList<Player> target, Effect effect) {
+        this.shooterPlayer = shooterPlayer; //devo ricevere la copia
         targetPlayers = target; //devo ricevere l'originale
         injurerEffect = effect; //devo ricevere la copia
     }
 
+    /**
+     * Invoke the isValid method that control the Pre-condition of the action
+     * This method execute the Injure Action
+     *
+     * @return true if the action has been executed, false otherwise
+     */
     public boolean execute() {
         if (isValid())  {
             for (int playerCounter = 0; playerCounter < targetPlayers.size(); playerCounter++) {
@@ -33,17 +40,12 @@ public class Injure implements Action {
         return false;
     }
 
-    private void injureTarget(Player target, int damage, Effect.PostCondition postCondition){
-        target.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
-        if(postCondition.getTargetMove() != 0)
-        {
-            //TODO throw shooterHasToMoveTargetException
-            // --> receives targetNewSquare
-            Move action = new Move(shooterPlayer, target, injurerEffect, null);
-        }
-    }
-
-
+    /**
+     * Control the Pre-condition of the Injure Action
+     * This method invoke reachableSquare method
+     *
+     * @return true if the action invocation respect the condition, false otherwise
+     */
     public boolean isValid(){
         ArrayList<NormalSquare> reachable = reachableSquare();
         int playerCounter = 0;
@@ -61,6 +63,25 @@ public class Injure implements Action {
         return true;
     }
 
+    /**
+     * @param targetPlayer  The Player that is targeted in this step
+     * @param damage        The number of damage that must be dealt to the targetPlayer
+     * @param postCondition Post-condition that must be respected after the injuring
+     */
+    private void injureTarget(Player targetPlayer, int damage, Effect.PostCondition postCondition){
+        targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
+        if(postCondition.getTargetMove() != 0)
+        {
+            //TODO throw shooterHasToMoveTargetException
+            // --> receives targetNewSquare
+            Move action = new Move(shooterPlayer, targetPlayer, injurerEffect, null);
+        }
+    }
+
+    /**
+     * This method is
+     * @return the list of Square reachable from the startSquare with at least movePass step
+     */
     public ArrayList<NormalSquare> reachableSquare() {
         Effect.PreCondition preCondition = injurerEffect.getPreCondition();
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
@@ -99,6 +120,9 @@ public class Injure implements Action {
         return reachableSquare;
     }
 
+    /**
+     * This method is invoked by reachableSquare method
+     */
     private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquare, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int i){
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);
@@ -108,4 +132,20 @@ public class Injure implements Action {
         }
     }
 
+    /**
+     * @return the list of Player that can be targeted by the actorPlayer
+     */
+    public ArrayList<Player> targetablePlayer(){
+        ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
+        int i = 0;
+        while(i < reachablePlayer.size()){
+            if((!reachableSquare().contains(reachablePlayer.get(i).getPosition()) || (reachablePlayer.get(i) == shooterPlayer)))
+                reachablePlayer.remove(i);
+            else
+                i++;
+        }
+        return reachablePlayer;
+    }
+    //TODO se la view mostra solo gli Square raggiungibili, allora devo togliere dei passaggi,
+    // perchè in teoria ottengo come scelta del player solo Square accettabili
 }
