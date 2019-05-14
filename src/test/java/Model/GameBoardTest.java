@@ -24,18 +24,21 @@ public class GameBoardTest {
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(1), gameBoard.getRooms().get(1).getNormalSquares().get(0).getE());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(0), gameBoard.getRooms().get(1).getNormalSquares().get(0).getS());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(0), gameBoard.getRooms().get(1).getNormalSquares().get(0).getW());
+        assertEquals("1,0", gameBoard.getRooms().get(1).getNormalSquares().get(0).getId());
 
         //The following assertion check the second square
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(1), gameBoard.getRooms().get(1).getNormalSquares().get(1).getN());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(2), gameBoard.getRooms().get(1).getNormalSquares().get(1).getE());
         assertEquals(gameBoard.getRooms().get(3).getNormalSquares().get(0), gameBoard.getRooms().get(1).getNormalSquares().get(1).getS());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(0), gameBoard.getRooms().get(1).getNormalSquares().get(1).getW());
+        assertEquals("1,1", gameBoard.getRooms().get(1).getNormalSquares().get(1).getId());
 
         //The following assertion check the third square
         assertEquals(gameBoard.getRooms().get(0).getNormalSquares().get(2), gameBoard.getRooms().get(1).getNormalSquares().get(2).getN());
         assertEquals(gameBoard.getRooms().get(2).getNormalSquares().get(0), gameBoard.getRooms().get(1).getNormalSquares().get(2).getE());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(2), gameBoard.getRooms().get(1).getNormalSquares().get(2).getS());
         assertEquals(gameBoard.getRooms().get(1).getNormalSquares().get(1), gameBoard.getRooms().get(1).getNormalSquares().get(2).getW());
+        assertEquals("1,2", gameBoard.getRooms().get(1).getNormalSquares().get(2).getId());
 
         assertEquals(Colors.RED, gameBoard.getRooms().get(1).getColor());
     }

@@ -11,14 +11,16 @@
             "SideE": "1,0",
             "SideS": "0,1",
             "SideW": null,
-            "spawn": false
+            "spawn": false,
+            "ID": "0,0"
           },
           {
             "SideN": "0,0",
             "SideE": null,
             "SideS": "5,0",
             "SideW": null,
-            "spawn": true
+            "spawn": true,
+            "ID": "1,0"
           }
         ]
       }
@@ -33,14 +35,16 @@
           "SideE": "1,1",
           "SideS": "3,0",
           "SideW": "0,0",
-          "spawn": false
+          "spawn": false,
+          "ID": "0,1"
         },
         {
           "SideN": null,
           "SideE": "2,0",
           "SideS": "4,0",
           "SideW": "1,0",
-          "spawn": true
+          "spawn": true,
+          "ID": "0,2"
         }
       ]
     }
@@ -55,7 +59,8 @@
           "SideE": null,
           "SideS": "4,1",
           "SideW": "1,1",
-          "spawn": false
+          "spawn": false,
+          "ID": "0,3"
         }
       ]
     }
@@ -70,7 +75,8 @@
           "SideE": null,
           "SideS": "5,1",
           "SideW": null,
-          "spawn": false
+          "spawn": false,
+          "ID": "1,1"
         }
       ]
     }
@@ -85,28 +91,32 @@
           "SideE": "4,1",
           "SideS": "4,2",
           "SideW": null,
-          "spawn": false
+          "spawn": false,
+          "ID": "1,2"
         },
         {
           "SideN": "2,0",
           "SideE": null,
           "SideS": "4,3",
           "SideW": "4,0",
-          "spawn": false
+          "spawn": false,
+          "ID": "1,3"
         },
         {
           "SideN": "4,0",
           "SideE": "4,3",
           "SideS": null,
           "SideW": "5,1",
-          "spawn": false
+          "spawn": false,
+          "ID": "2,2"
         },
         {
           "SideN": "4,1",
           "SideE": null,
           "SideS": null,
           "SideW": "4,2",
-          "spawn": true
+          "spawn": true,
+          "ID": "2,3"
         }
       ]
     }
@@ -120,14 +130,16 @@
           "SideN": "0,1",
           "SideE": "5,1",
           "SideS": null,
-          "SideW": null
+          "SideW": null,
+          "ID": "2,0"
         },
         {
           "SideN": "3,0",
           "SideE": "4,2",
           "SideS": null,
           "SideW": "5,0",
-          "spawn": false
+          "spawn": false,
+          "ID": "2,1"
         }
       ]
     }

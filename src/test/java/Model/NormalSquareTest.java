@@ -13,6 +13,8 @@ public class NormalSquareTest {
         normalSquareTest = new NormalSquare(null, null, null, null, null, null);
         assertTrue(normalSquareTest instanceof NormalSquare);
         assertTrue(normalSquareTest.getWeapons().isEmpty());
+        normalSquareTest.setId("0,0");
+        assertEquals("0,0", normalSquareTest.getId());
     }
 
     @Test
