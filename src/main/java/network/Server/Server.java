@@ -1,19 +1,26 @@
 package network.Server;
 
+import network.Server.RMI.RMIServer;
 import network.Server.Socket.SocketServer;
-import network.messages.ActionType;
 import network.messages.Message;
 
 import java.net.Socket;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Server {
     private Queue playersQueue;
     private SocketServer socketServer;
-    //TODO RmiServer rmiServer
+    private ArrayList<Integer> tokens;
+    private HashMap<Integer, Boolean> clients;
+    private RMIServer rmiServer;
 
     public Server(){
         playersQueue = new Queue();
         socketServer = new SocketServer(this, 10000);
+        tokens = new ArrayList<>();
+        clients = new HashMap<>();
     }
 
     public void addToQueue(Socket client){
@@ -21,13 +28,27 @@ public class Server {
     }
 
     public void onReceive(Message message){
-        if ((message.getActionType().getAbbreviation().equals(ActionType.POSSIBLETARGETSHOT)) || (message.getActionType().getAbbreviation().equals(ActionType.POSSIBLEMOVE))){
-            //TODO
-        }
-        else if ((message.getActionType().getAbbreviation().equals(ActionType.SHOT)) || (message.getActionType().getAbbreviation().equals(ActionType.MOVE)) || (message.getActionType().getAbbreviation().equals(ActionType.RELOAD))  || (message.getActionType().getAbbreviation().equals(ActionType.PASS)) || (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPON))){
 
-        }
     }
 
-    public void send(){} //TODO handle inheritance of this method for socket and rmi
+    /**
+     * This method is empty because is used for inheritance
+     * */
+    public void send(Message message, Integer token){
+        if (clients.get(token)) {
+            //TODO rmiServer.send(message)
+        }
+        else
+            socketServer.send(message);
+    }
+
+    public Integer generateToken(boolean rmi){
+        Integer integer;
+        do{
+            integer = new SecureRandom().nextInt(1147483647) + 1000000000;
+        }while (tokens.contains(integer));
+        tokens.add(integer);
+        clients.put(integer, rmi);
+        return integer;
+    }
 }
