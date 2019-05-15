@@ -61,12 +61,13 @@ public class SocketServer {
     public void acceptConnection() throws IOException{
         while (threadHashMap.size() < 100) {
             Socket socket = serverSocket.accept();
-            SocketClientHandler clientHandler = new SocketClientHandler(socket, this);
+
+            int token = server.generateToken(false);
+            SocketClientHandler clientHandler = new SocketClientHandler(socket, token, this);
 
             Thread thread = new Thread(clientHandler);
             thread.start();
 
-            int token = server.generateToken(false);
             threadHashMap.put(token, clientHandler);
             clientHandler.respond(new ConnectionResponse(token));
         }
@@ -91,5 +92,15 @@ public class SocketServer {
     public void run() throws IOException{
             init();
             acceptConnection();
+    }
+
+    /**
+     * When a socket connection is closed the client is remove from the hash map containing the Thread of every
+     * connected client. The client is also removed from the main server
+     * @param token the identifier of the client to be removed.
+     */
+    public void removeClient(Integer token){
+        server.removeClient(token);
+        threadHashMap.remove(token);
     }
 }

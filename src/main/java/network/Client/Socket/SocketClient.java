@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.HashMap;
 
 /**
  * This class is used from the client to communicate with SocketServer when a Socket connection is used.
@@ -22,7 +21,9 @@ public class SocketClient extends Client{
 
     /**
      * The constructor only initialize the host and port attribute, it doesn't establish connection. Attributes will be
-     * used from init() to establish a new connection to the server
+     * used from init() to establish a new connection to the server.
+     * @param host the ip of the server to which you have to connect.
+     * @param port the port of the server to which you have to connect.
      * */
     public SocketClient(String host, int port){
         super();
@@ -56,6 +57,7 @@ public class SocketClient extends Client{
     //TODO handle exception, maybe with a logger
     public void send(Message message) throws IOException{
         out.writeObject(message);
+        out.flush();
     }
 
     /**

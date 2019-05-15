@@ -19,6 +19,11 @@ public class NetworkHandler implements Runnable{
     private ObjectOutputStream out; //Used to receive message from server
     private boolean loop;
 
+    /**
+     * The constructor create input and output stream of the socket connection to communicate with server.
+     * @param client the client of which the connection must be handled
+     * @param connection the Socket object that represents the connection with the server
+     */
     public NetworkHandler(SocketClient client, Socket connection){
         try {
             this.connection = connection;
@@ -32,6 +37,13 @@ public class NetworkHandler implements Runnable{
         }
     }
 
+    /**
+     * This method is run when the thread which contains the class is started.
+     * It loops to read object on the input stream sent from the server, when a message is received is forwarded to the
+     * client.
+     * To forward the message is used the onReceive method in SocketClient which is inherited from the Client class
+     * without overriding.
+     */
     @Override
     public void run() {
         while (loop){
