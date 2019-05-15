@@ -21,11 +21,11 @@ public class NetworkHandler implements Runnable{
 
     public NetworkHandler(SocketClient client, Socket connection){
         try {
+            this.connection = connection;
             out = new ObjectOutputStream(this.connection.getOutputStream());
             out.flush();
             in = new ObjectInputStream(connection.getInputStream());
             this.client = client;
-            this.connection = connection;
             loop = true;
         }catch (IOException e){
             loop = false;

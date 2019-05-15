@@ -1,12 +1,13 @@
 package network.Server.Socket;
 
 import network.Server.Server;
+import network.messages.ConnectionResponse;
 import network.messages.Message;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class represent the socket server; it is used to send and receive message from the client using socket
@@ -15,9 +16,9 @@ import java.util.ArrayList;
  * */
 public class SocketServer {
     private ServerSocket serverSocket;
-    private final int PORT;
+    private int port;
     private Server server; //This variable is used to contain the main server
-    private ArrayList<Socket> clients;
+    private HashMap<Integer, SocketClientHandler> threadHashMap;
 
     /**
      * This constructor creates a new server socket listening on the default port 10000
@@ -25,8 +26,8 @@ public class SocketServer {
      * */
     public SocketServer(Server server) {
         this.server = server;
-        this.PORT = 10000;
-        clients = new ArrayList<>();
+        this.port = 10000;
+        threadHashMap = new HashMap<>();
     }
 
     /**
@@ -36,8 +37,8 @@ public class SocketServer {
      * */
     public SocketServer(Server server, int port) {
         this.server = server;
-        this.PORT = port;
-        clients = new ArrayList<>();
+        this.port = port;
+        threadHashMap = new HashMap<>();
     }
 
     /**
@@ -46,24 +47,28 @@ public class SocketServer {
      * */
     //TODO catch exception
     private void init() throws IOException{
-        serverSocket = new ServerSocket(PORT);
+        serverSocket = new ServerSocket(port);
     }
 
     /**
      * This method accept a new connection from a client.
      * When a new connection is accepted a new Thread running SocketClientHandler's method run is started, so that more
      * than one client will be able to communicate with the server.
+     * To every new client is assigned a unique token which is sent to the client using a ConnectionResponse message.
+     * Every connected client is also added to an hash map using the token as key
      * */
     //TODO catch exception
-    public Socket acceptConnection() throws IOException{
-        while (true) {
+    public void acceptConnection() throws IOException{
+        while (threadHashMap.size() < 100) {
             Socket socket = serverSocket.accept();
+            SocketClientHandler clientHandler = new SocketClientHandler(socket, this);
 
-            new Thread(() -> {
-                new SocketClientHandler(socket, this);
-            }).start();
-            clients.add(socket);
-            return socket;
+            Thread thread = new Thread(clientHandler);
+            thread.start();
+
+            int token = server.generateToken(false);
+            threadHashMap.put(token, clientHandler);
+            clientHandler.respond(new ConnectionResponse(token));
         }
     }
 
@@ -73,6 +78,10 @@ public class SocketServer {
      * */
     public void onReceive(Message message){
         server.onReceive(message);
+    }
+
+    public void send(Message message){
+        threadHashMap.get(message.getToken()).respond(message);
     }
 
     /**

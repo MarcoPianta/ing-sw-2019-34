@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class extends NormalSquare and describe a NormalSquare type
+ * This class extends NormalSquare and describe a SpawnSquare type
  * */
 public class SpawnSquare extends NormalSquare{
-
     private ArrayList<CardWeapon> weapons;
 
     public SpawnSquare(NormalSquare sideN, NormalSquare sideE, NormalSquare sideS, NormalSquare sideW, Colors color, List<CardWeapon> weapons) {
