@@ -33,14 +33,15 @@ public class MoveTest {
     public void executeTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", color1, "name" );
         Player testTargetPlayer = new Player("targetID", color2, "name" );
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        game.addPlayer(testShooterPlayer);
+        game.addPlayer(testTargetPlayer);
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testTargetPlayer, testEffect, testGameBoard.getRooms().get(1).getNormalSquares().get(1));
+        Move action = new Move(testShooterPlayer, testTargetPlayer, testEffect, game.getMap().getRooms().get(1).getNormalSquares().get(1));
         assertFalse(action.execute());
     }
 
@@ -48,14 +49,15 @@ public class MoveTest {
     public void isValidTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", color1, "name" );
         Player testTargetPlayer = new Player("targetID", color2, "name" );
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(0).getNormalSquares().get(0));
+        game.addPlayer(testShooterPlayer);
+        game.addPlayer(testTargetPlayer);
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testShooterPlayer, testEffect, testGameBoard.getRooms().get(0).getNormalSquares().get(1));
+        Move action = new Move(testShooterPlayer, testShooterPlayer, testEffect,game.getMap().getRooms().get(0).getNormalSquares().get(1));
         //TODO fix when GameBoard is fixed
         /*
             System.out.println("--TEST-- " + testGameBoard.getRooms().get(0).getNormalSquares().get(0));
@@ -67,7 +69,7 @@ public class MoveTest {
         */
         assertTrue(action.isValid());
 
-        action = new Move(testShooterPlayer, testTargetPlayer, testEffect, testGameBoard.getRooms().get(0).getNormalSquares().get(0));
+        action = new Move(testShooterPlayer, testTargetPlayer, testEffect, game.getMap().getRooms().get(0).getNormalSquares().get(0));
         assertFalse(action.isValid());
     }
 
@@ -75,14 +77,15 @@ public class MoveTest {
     public  void calculateReachableSquareTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        GameBoard testGameBoard = new GameBoard("map1");
         Player testShooterPlayer = new Player("shooterID", color1, "name" );
         Player testTargetPlayer = new Player("targetID", color2, "name" );
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        game.addPlayer(testShooterPlayer);
+        game.addPlayer(testTargetPlayer);
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testShooterPlayer, testEffect, testGameBoard.getRooms().get(1).getNormalSquares().get(1));
+        Move action = new Move(testShooterPlayer, testShooterPlayer, testEffect, game.getMap().getRooms().get(1).getNormalSquares().get(1));
         assertEquals(2, action.reachableSquare().size());
     }
 }

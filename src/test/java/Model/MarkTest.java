@@ -14,8 +14,8 @@ public class MarkTest {
 
     @Test
     public void constructorTest() throws FileNotFoundException {
-        Player testMarkerPlayer = new Player("shooterID", null, null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        Player testMarkerPlayer = new Player("shooterID", null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, "name" );
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -29,13 +29,15 @@ public class MarkTest {
         /**
          * This method test execute
          * */
-        GameBoard testGameBoard = new GameBoard("map1");
-        Player testMarkerPlayer = new Player("shooterID", null, null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        Game game=new Game(5,"map1");
+        Player testMarkerPlayer = new Player("shooterID", null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, "name" );
+        game.addPlayer(testMarkerPlayer);
+        game.addPlayer(testTargetPlayer);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
-        testMarkerPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testMarkerPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(0);
         Mark action = new Mark(testMarkerPlayer, testList, testEffect);
@@ -50,19 +52,21 @@ public class MarkTest {
          * Second case: CyberBlade's precondition not respected
          * */
         //Test 1
-        GameBoard testGameBoard = new GameBoard("map1");
-        Player testMarkerPlayer = new Player("shooterID", null, null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, null, "name" );
+        Game game=new Game(5,"map1");
+        Player testMarkerPlayer = new Player("shooterID", null, "name" );
+        Player testTargetPlayer = new Player("targetID", null, "name" );
+        game.addPlayer(testMarkerPlayer);
+        game.addPlayer(testTargetPlayer);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
-        testMarkerPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
+        testMarkerPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
         Mark action = new Mark(testMarkerPlayer, testList, testEffect);
         assertTrue(action.isValid());
         //Test 2
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(2));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
         assertFalse(action.isValid());
 
     }

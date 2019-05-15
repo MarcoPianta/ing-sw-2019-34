@@ -15,7 +15,7 @@ public class Player {
     private Game gameId;
     private StateMachineEnumerationTurn state;
 
-    public Player(String playerID,Game gameId, Colors color,String name) {
+    public Player(String playerID, Colors color, String name) {
         this.playerID=playerID;
         this.name=name;
         this.color=color;
@@ -24,6 +24,10 @@ public class Player {
         this.position=null;
         this.gameId=gameId;
         this.state= StateMachineEnumerationTurn.WAIT;
+    }
+
+    public void setGameId(Game gameId) {
+        this.gameId = gameId;
     }
 
     public PlayerBoard getPlayerBoard() {
@@ -95,8 +99,9 @@ public class Player {
         while((i<getGameId().getMap().getRooms().size()) &&(isNotFind)){
             j=0;
             while((j<getGameId().getMap().getRooms().get(i).getNormalSquares().size())&&(isNotFind)){
+                 //assert(getGameId().getMap().getRooms().get(i).getNormalSquares().get(j).getColor()!=null);
                 if(getGameId().getMap().getRooms().get(i).getNormalSquares().get(j).isSpawn()&&
-                        (getGameId().getMap().getRooms().get(i).getNormalSquares().get(j).getColor().getAbbreviation().equals(powerUp.getColor().getAbbreviation())))
+                        (getGameId().getMap().getRooms().get(i).getColor().getAbbreviation().equals(powerUp.getColor().getAbbreviation())))
                     isNotFind=false;
                 else
                     j++;

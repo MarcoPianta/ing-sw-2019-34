@@ -31,7 +31,7 @@ public class TurnHandler {
 
     public void start(){
         //TODO messaggio che inizia turno
-        setNextState(StateMachineEnumerationTurn.ACTION1);
+        getGameHandler().getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         for(Player p:getGameHandler().getGame().getPlayers()){
             if(p.getPosition()==null && p.getPlayerBoard().getMaxReward()!=8)//if player is dead
                 p.spawn();
@@ -40,6 +40,7 @@ public class TurnHandler {
                 p.spawn();
             }
         }
+        setNextState(StateMachineEnumerationTurn.ACTION1);
     }
     public boolean actionState(Message message){
         boolean valueReturn=false;
@@ -57,6 +58,14 @@ public class TurnHandler {
             valueReturn=actionAdrenaline2(message);
         else
             valueReturn=actionAdrenaline0(message);
+        if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
+            setNextState(StateMachineEnumerationTurn.ACTION2);
+        else if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION2 && thereAreOnlyChargeWeapon()){
+            setNextState(StateMachineEnumerationTurn.ENDTURN);
+            endTurn();
+        }
+        else
+            setNextState(StateMachineEnumerationTurn.RELOAD);
         return  valueReturn;
     }
     private boolean actionAdrenaline0(Message message){
@@ -100,8 +109,6 @@ public class TurnHandler {
         }
         else
             valueReturn=actionGrab(message,2);
-        if(thereAreOnlyChargeWeapon()&&valueReturn)
-            endTurn();
         return valueReturn;
     }
 
@@ -140,15 +147,16 @@ public class TurnHandler {
     public boolean actionReload(ReloadMessage message){
         boolean valueReturn=false;
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.RELOAD);
-        setNextState(StateMachineEnumerationTurn.ENDTURN);
         if(message.getPowerUp()==null)
             valueReturn=new Reload(gameHandler.getGame().getCurrentPlayer(),message.getWeapon()).execute();
         valueReturn=new Reload(gameHandler.getGame().getCurrentPlayer(),message.getWeapon(),message.getPowerUp()).execute();
+        setNextState(StateMachineEnumerationTurn.ENDTURN);
         return valueReturn;
     }
 
     public void endTurn(){
         //TODO messaggio che è finito turno
+        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ENDTURN);
         endTurnChecks.playerIsDead(gameHandler.getGame());
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
         gameHandler.getGame().incrementCurrentPlayer();
@@ -158,22 +166,6 @@ public class TurnHandler {
         start();
 
     }
-/*
-    public List<Player> receiveTarget(PossibleTargetShot message){
-        ArrayList<Player> targets=new ArrayList<>();
-        if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1 || gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION2)
-             targets=new Injure(gameHandler.getGame().getCurrentPlayer(),null, message.getEffect()).possibleTarget();
-        return  targets;
-    }
-
-    public List<NormalSquare> receiveSquare(PossibleMove message){
-        ArrayList<NormalSquare> squares=new ArrayList<>();
-        if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1 || gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION2)
-            squares=new Move(gameHandler.getGame().getCurrentPlayer(),null,message.getMaxMove()).possibleSquare();
-        return  squares;
-    }
-*/
-
     class EndTurnChecks {
         private ArrayList<NormalSquare> emptySquares;
 

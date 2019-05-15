@@ -35,6 +35,7 @@ public class Hand {
         }
         else
             playerWeapons.add(playerWeapons.size(),weapon);
+
     }
 
     /**
@@ -48,7 +49,7 @@ public class Hand {
     /**
      *this method remove an offload weapon and pay its cost with ammo and power up
      * */
-    public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, CardPowerUp powerUp){
+    /*TODO public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, CardPowerUp powerUp){
         weapon.setCharge(true);
         if(powerUp.getColor()==AmmoColors.RED)
             red--;
@@ -58,7 +59,7 @@ public class Hand {
             blue--;
         decrementAmmo(red,yellow,blue);
         removePowerUp(getPlayerPowerUps().indexOf(powerUp));
-    }
+    }*/
 
     /**
      *this method substitute weapons when the player has three weapons and wants a new weapon
@@ -93,7 +94,7 @@ public class Hand {
     /**
      * This method remove a power up after use its
      * */
-    private void removePowerUp(int position){
+    public void removePowerUp(int position){
         getPlayerPowerUps().remove(position);
     }
 

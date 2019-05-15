@@ -1,10 +1,7 @@
 package Controller;
 
-import Model.Game;
-import Model.Player;
-import network.messages.ActionType;
-import network.messages.Message;
-import network.messages.ReloadMessage;
+import Model.*;
+import network.messages.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ public class GameHandler {
     public GameHandler(int n, List<Player> players, String file) throws FileNotFoundException {
         this.game = new Game(n,file);
         for(Player p:players)
-            game.addPlayer(p);
+            getGame().addPlayer(p);
         finalTurnHandler=new FinalTurnHandler(this);
         turnHandler=new TurnHandler(this);
         getGame().chooseFirstPlayer();
@@ -65,17 +62,24 @@ public class GameHandler {
         getGame().calculatePoints(getGame().getDeadRoute().getMurders(),true,null);
         //messaggio server partita finita
     }
+    public ArrayList<Player> receiveTarget(PossibleTargetShot message){
+        ArrayList<Player> targets=new ArrayList<>();
+        targets=new Injure(getGame().getCurrentPlayer(),null, message.getEffect()).targetablePlayer();
+        return  targets;
+    }
+
+    public List<NormalSquare> receiveSquare(PossibleMove message){
+        ArrayList<NormalSquare> squares=new ArrayList<>();
+        squares=new Move(getGame().getCurrentPlayer(),null,message.getMaxMove()).reachableSquare();
+        return  squares;
+    }
 
     public List<Player> winner(){
         int massimo=0;
         ArrayList<Player> winnerList=new ArrayList<>();
-        /*while(i<5){
-            winnerList.add(null);
-            i++;
-        }*/
         for(Player player:getGame().getPlayers()){
             if(player.getPlayerBoard().getPoints()>massimo) {
-                while(winnerList.size()==0)
+                while(winnerList.size()!=0)
                     winnerList.remove(winnerList.size()-1);
                 massimo=player.getPlayerBoard().getPoints();
                 winnerList.add(player);
@@ -90,7 +94,7 @@ public class GameHandler {
     }
 
 
-    private int countPlayer(Player player){
+    public int countPlayer(Player player){
         int counterPlayer=0;
         for( Player p : getGame().getDeadRoute().getMurders() ){
             if (p==player)
@@ -99,14 +103,14 @@ public class GameHandler {
         return counterPlayer;
     }
     private void modifiedWinnerList(Player player,ArrayList<Player> winnerList){
-        if(countPlayer(player)>winnerList.get(0).getPlayerBoard().getPoints()){
-            while(winnerList.size()==0)
+        if(countPlayer(player)>countPlayer(winnerList.get(0))){
+            while(winnerList.size()!=0){
                 winnerList.remove(winnerList.size()-1);
+            }
             winnerList.add(player);
         }
-        else if(countPlayer(player)==winnerList.get(0).getPlayerBoard().getPoints())
+        else if(countPlayer(player)==countPlayer(winnerList.get(0)))
             winnerList.add(player);
     }
-
 }
 
