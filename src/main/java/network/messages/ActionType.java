@@ -18,7 +18,9 @@ public enum ActionType {
     USEPOWERUP("Use powerup"),
     UPDATECLIENTS("Update clients"),
     PASS("Pass"),
-    TIMEOUT("Time out");
+    TIMEOUT("Time out"),
+    GAMESETTINGSREQUEST("Game settings request"),
+    GAMESETTINGSRESPONSE("Game settings response");
 
     private String abbreviation;
     private ActionType(String abbreviation) {

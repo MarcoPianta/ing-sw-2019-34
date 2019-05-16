@@ -55,9 +55,13 @@ public class SocketClient extends Client{
      * @param message is the message that must be sent to the server
      * */
     //TODO handle exception, maybe with a logger
-    public void send(Message message) throws IOException{
-        out.writeObject(message);
-        out.flush();
+    public void send(Message message) {
+        try {
+            out.writeObject(message);
+            out.flush();
+        }catch (IOException e){
+            //TODO catch exception with logger
+        }
     }
 
     /**

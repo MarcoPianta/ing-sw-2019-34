@@ -48,7 +48,6 @@ public class SocketServerTest {
             }
         }).start();
         socketClient = new SocketClient("localhost", PORT);
-        socketClient.init();
         socketClient.send(new Message());
     }
 }
