@@ -1,50 +1,98 @@
 package network.Server;
 
-import java.net.Socket;
+import network.messages.GameSettingsResponse;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * This class is used to create and handle a queue for client which request to enter in a new game.
  * Server will get from this class clients waiting in the queue to start a new game.
  * */
 public class Queue {
-    private ArrayList<Socket> playersID;
-    private int playersNumber;
+    private LinkedHashMap<Integer, GameSettingsResponse> playersID; //Contains the players' token and the game settings he choose ordered3 by insertion
+    private Server server;
+    private final Object lock = new Object();
 
-    public Queue(){
-        playersID = new ArrayList<>();
-        playersNumber = 0;
+    public Queue(Server server){
+        playersID = new LinkedHashMap<>();
+        this.server = server;
+
+        new Thread(() -> { //This thread check if the player in the queue are more then three
+            while(true){
+                //TODO start new Thread to check multiple times if there are enough players to start multiple Games
+                if (playersID.size() >= 3){
+                    try {
+                        wait(30000);
+                    }catch (InterruptedException e){
+                        //TODO logger
+                    }
+                    synchronized (lock){
+                        ArrayList<Integer> players = getPlayers();
+                        notifyServer(getPlayers());
+                    }
+                }
+            }
+        }).start();
     }
 
     /**
-     * This method adds a new client to the queue and update the current clients number waiting in the queue
+     * This method adds a new client to the queue. The client is inserted in a LinkedHashMap so the insertion order is
+     * guaranteed, this made possible to get the clients which are waiting from more time first.
+     * @param player the token of the client that need to be added to the queue
      * */
-    public void addPlayer(Socket player){
-        playersID.add(player);
-        playersNumber = playersID.size();
-    }
-
-    /**
-     * This method is used to retrieve the current number of client that are waiting in the queue
-     * */
-    public int getPlayersNumber() {
-        return playersNumber;
-    }
-
-    /**
-     * This method returns the client that is waiting from more time in the queue (which is the first of the arrayList),
-     * and update the current number of clients waiting in the queue.
-     * If queue is empty null is returned.
-     * */
-    public Socket getPlayer(){
-        Socket ret;
-        if (!playersID.isEmpty()) {
-            ret = playersID.get(0);
-            playersID.remove(0);
-            playersNumber = playersID.size();
+    public void addPlayer(Integer player){
+        synchronized (lock) {
+            playersID.put(player, null);
         }
-        else
-            ret = null;
+    }
+
+    /**
+     * This method returns the first five clients that are waiting from more time in the queue, if there are less then
+     * five clients it returns all the clients in the queue.
+     * @return the first five players inserted in the LinkedHashMap
+     * */
+    public ArrayList<Integer> getPlayers(){
+        ArrayList<Integer> ret;
+        synchronized (lock) {
+            ArrayList<Integer> newPlayers = new ArrayList<>(playersID.keySet());
+            ret = newPlayers
+                    .stream()
+                    .filter(x -> newPlayers.indexOf(x) < 5)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            notifyServer(ret);
+            playersID.keySet().removeAll(ret);
+        }
         return ret;
+    }
+
+    public void setPreferences(GameSettingsResponse message){
+        playersID.replace(message.getToken(), message);
+    }
+
+    /**
+     * This method notify the server when there are enough players to start a new Game.
+     * It forward to the server the players which will play and the first game settings available of the players.
+     * If none of the player has available game settings those are randomly chosen.
+     * @param players the ArrayList of the players that will take part of the new Game
+     */
+    private void notifyServer(ArrayList<Integer> players){
+        int skullNumber = 0;
+        int map = 0;
+        for(Integer i: players) {
+            if (playersID.get(i) != null) {
+                skullNumber = playersID.get(i).getSkullNumber();
+                map = playersID.get(i).getMapNumber();
+                break;
+            }
+        }
+        if (skullNumber == 0 || map == 0){ //If none of the player choose his game preference those are randomly extracted
+            skullNumber = (Arrays.asList(5, 8).get(new Random().nextInt(2))); //Extract skull number (can be 5 or 8)
+            map = (Arrays.asList(1, 2, 3, 4).get(new Random().nextInt(5))); //Extract map number (can be 1, 2, 3 or 4)
+        }
+        server.notifyFromQueue(players,skullNumber, map);
     }
 }

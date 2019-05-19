@@ -2,10 +2,12 @@ package network.Server;
 
 import network.Server.RMI.RMIServer;
 import network.Server.Socket.SocketServer;
+import network.messages.ActionType;
+import network.messages.GameSettingsRequest;
+import network.messages.GameSettingsResponse;
 import network.messages.Message;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ public class Server {
     private ArrayList<Integer> tokens;
     private HashMap<Integer, Boolean> clients;
     private RMIServer rmiServer;
+    private HashMap<Integer, GameLobby> lobbyHashMap;
 
     /**
      * The constructor creates a new queue which contains the client that are waiting for a new Game to start, it also
@@ -31,7 +34,7 @@ public class Server {
      * and socket clients.
      */
     public Server(){
-        playersQueue = new Queue();
+        playersQueue = new Queue(this);
         socketServer = new SocketServer(this, 10000);
         rmiServer = new RMIServer(this, 10001);
         tokens = new ArrayList<>();
@@ -56,15 +59,18 @@ public class Server {
     }
 
     /**
-     * This method add a new client that connected to the server to the queue of clients waiting for a new Game.
-     * @param client
+     * This method add a new client, that connect to the server, to the queue of clients waiting for a new Game.
+     * @param client the token of the client that had to be added to the queue
      */
-    public void addToQueue(Socket client){
+    public void addToQueue(Integer client){
         playersQueue.addPlayer(client);
     }
 
     public void onReceive(Message message){
-
+        if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
+            GameSettingsResponse m = (GameSettingsResponse) message;
+            playersQueue.setPreferences(m);
+        }
     }
 
     /**
@@ -72,10 +78,9 @@ public class Server {
      * The method, using the hash map, recognize if the client is a Socket or RMI client and use the proper server to
      * forward the message that must be sent.
      * @param message the message that must be sent
-     * @param token the token of the client to which the message must be sent
      * */
-    public void send(Message message, Integer token){
-        if (clients.get(token)) {
+    public void send(Message message){
+        if (clients.get(message.getToken())) {
             //TODO rmiServer.send(message)
         }
         else
@@ -84,7 +89,8 @@ public class Server {
 
     /**
      * This method generates a new unique token, it extracts a random number and check if it has already been extracted,
-     * if not the token is added to the hash map and is returned
+     * if not the token is added to the hash map and is returned.
+     * The method also send a GameSettingsRequest message to the client.
      * @param rmi a boolean that indicates if the client is an RMI client or not
      * @return the generated token to be used from servers to identify the clients
      */
@@ -95,6 +101,8 @@ public class Server {
         }while (tokens.contains(integer));
         tokens.add(integer);
         clients.put(integer, rmi);
+        playersQueue.addPlayer(integer);
+        send(new GameSettingsRequest(integer));
         return integer;
     }
 
@@ -105,5 +113,12 @@ public class Server {
      */
     public void removeClient(Integer token){
         clients.remove(token);
+    }
+
+    public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
+        GameLobby gameLobby = new GameLobby(players, skullNumber, "Map"+map);
+        for (Integer i: players){
+            lobbyHashMap.put(i, gameLobby);
+        }
     }
 }
