@@ -23,8 +23,8 @@ public class DeadRouteTest {
     @Test
     public void addMurdersTest()throws FileNotFoundException{
         Game game=new Game(2,"map1");
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
+        Player player1=new Player(2830, Colors.GREEN);
+        Player player2=new Player(2831, Colors.BLUE);
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.getDeadRoute().addMurders(player1,1);

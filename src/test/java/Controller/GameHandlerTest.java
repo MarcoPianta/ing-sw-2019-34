@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.Colors;
-import Model.Game;
 import Model.Player;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +15,11 @@ public class GameHandlerTest {
     public void winnerTest() throws FileNotFoundException {
         List<Player> winners=new ArrayList<>();
         ArrayList<Player> players=new ArrayList<>();
-        Player player5=new Player("playertest2832", Colors.RED, "playerTest");
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
-        Player player3=new Player("playertest2832", Colors.YELLOW, "playerTest3");
-        Player player4=new Player("playertest2832", Colors.VIOLET, "playerTest4");
+        Player player5=new Player("playertest2832", Colors.RED);
+        Player player1=new Player("playertest2830", Colors.GREEN);
+        Player player2=new Player("playertest2831", Colors.BLUE);
+        Player player3=new Player("playertest2832", Colors.YELLOW);
+        Player player4=new Player("playertest2832", Colors.VIOLET);
         players.add(player1);
         players.add(player2);
         players.add(player3);

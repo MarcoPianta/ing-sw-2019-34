@@ -12,10 +12,14 @@ public class GameHandler {
     private FinalTurnHandler finalTurnHandler;
     private TurnHandler turnHandler;
 
-    public GameHandler(int n, List<Player> players, String file) throws FileNotFoundException {
+    public GameHandler(int n, List<Integer> players, String file) throws FileNotFoundException {
         this.game = new Game(n,file);
-        for(Player p:players)
-            getGame().addPlayer(p);
+        Colors[] colors=Colors.values();
+        int i=0;
+        while(i<players.size()){
+            getGame().addPlayer(new Player(players.get(0),colors[i]));
+            i++;
+        }
         finalTurnHandler=new FinalTurnHandler(this);
         turnHandler=new TurnHandler(this);
         getGame().chooseFirstPlayer();

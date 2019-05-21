@@ -12,9 +12,9 @@ public class HealthTest {
      * */
     @Test
     public void testCountMarksAddMarks(){
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
-        Player playerTest=new Player("playertest2832", Colors.RED, "playerTest");
+        Player player1=new Player(547437543, Colors.GREEN);
+        Player player2=new Player(3456363, Colors.BLUE);
+        Player playerTest=new Player(56754373, Colors.RED);
 
         PlayerBoard playerBoard= new PlayerBoard(playerTest) ;
         playerBoard.getHealthPlayer().addMark(player1, 5 );
@@ -28,9 +28,9 @@ public class HealthTest {
     @Test
     public void testDeath() throws FileNotFoundException{
         Game game = new Game(5,"map1");
-        Player playerTest = new Player("playerTest1", Colors.GREEN, "playertest");
-        Player player1 = new Player("playertest2830", Colors.RED, "playerTest1");
-        Player player2 = new Player("playertest2830", Colors.BLUE, "playerTest2");
+        Player playerTest = new Player(34778346, Colors.GREEN);
+        Player player1 = new Player(243256, Colors.RED);
+        Player player2 = new Player(7889768, Colors.BLUE);
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(playerTest);
@@ -59,8 +59,8 @@ public class HealthTest {
     @Test
     public void testAddDamage()throws FileNotFoundException{
         Game game=new Game(5,"map1");
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        Player playerTest=new Player("playertest2832", Colors.RED, "playerTest");
+        Player player1=new Player(2830, Colors.GREEN);
+        Player playerTest=new Player(832, Colors.RED);
         game.addPlayer(player1);
         game.addPlayer(playerTest);
         //case max damage and adrenaline action=2
@@ -82,11 +82,11 @@ public class HealthTest {
     @Test
     public void killTest()throws FileNotFoundException{
         Game game=new Game(8,"map1");
-        Player player5=new Player("playertest2832", Colors.RED, "playerTest");
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831", Colors.BLUE, "playerTest2");
-        Player player3=new Player("playertest2832", Colors.YELLOW, "playerTest3");
-        Player player4=new Player("playertest2832", Colors.VIOLET, "playerTest4");
+        Player player5=new Player(2832, Colors.RED);
+        Player player1=new Player(2830, Colors.GREEN);
+        Player player2=new Player(283, Colors.BLUE);
+        Player player3=new Player(2832, Colors.YELLOW);
+        Player player4=new Player(2832, Colors.VIOLET);
         game.addPlayer(player1);
         game.addPlayer(player2);
         game.addPlayer(player3);

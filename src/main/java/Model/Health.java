@@ -50,7 +50,6 @@ public class Health {
         if(getPlayerBoard().getPlayer().getGameId().getDeadPlayer().size()>=2)//double kill
             getDamageBar().get(10).getPlayerBoard().addPoints(1);
         resetDamageBar();
-        getPlayerBoard().getPlayer().getGameId().getDeadPlayer().remove(getPlayerBoard().getPlayer());
         getPlayerBoard().getPlayer().newPosition(null);
     }
 

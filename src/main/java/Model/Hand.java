@@ -7,11 +7,13 @@ public class Hand {
     private ArrayList<CardWeapon> playerWeapons;
     private ArrayList<CardPowerUp> playerPowerUps;
     private int[] ammoRYB;
+    private  PlayerBoard playerBoard;
 
-    public Hand(){
+    public Hand(PlayerBoard playerBoard){
         this.playerWeapons = new ArrayList<>();
         this.playerPowerUps = new ArrayList<>();
         this.ammoRYB= new int[3];
+        this.playerBoard=playerBoard;
     }
 
     public List<CardPowerUp> getPlayerPowerUps() {
@@ -26,15 +28,15 @@ public class Hand {
         return ammoRYB;
     }
 
+    public PlayerBoard getPlayerBoard() {
+        return playerBoard;
+    }
+
     /**
      * this method add new weapon after grab cardWeapon and decrement ammo
      * */
     public void addWeapon(CardWeapon weapon) {
-        if(playerWeapons.size()==3) {
-            //TODO throws exception
-        }
-        else
-            playerWeapons.add(playerWeapons.size(),weapon);
+        playerWeapons.add(playerWeapons.size(),weapon);
 
     }
 
@@ -74,21 +76,23 @@ public class Hand {
      * this method add a power up after when the player grabs its when he doesn't have more than three power up
      * */
     public void addPowerUp(CardPowerUp powerUp) {
-        playerPowerUps.add(playerPowerUps.size(),powerUp);// we can delete index
-        if(playerPowerUps.size()>=4) {
-            //TODO removePowerUp();
-        }
+        playerPowerUps.add(powerUp);// we can delete index
     }
 
     /**
      * this method use power up and remove it
      * */
-    public CardPowerUp usePowerUp (int position){
-        CardPowerUp powerUp;
-        powerUp=getPlayerPowerUps().get(position);
-        removePowerUp(getPlayerPowerUps().indexOf(powerUp));
-        return powerUp;
+    public void usePowerUp(CardPowerUp cardPowerUp,Player target,int maxMove,NormalSquare square){
+        if(cardPowerUp.getDamage()==1)
+            target.getPlayerBoard().getHealthPlayer().addDamage(getPlayerBoard().getPlayer(),1);
+        else if(cardPowerUp.getMark()==1)
+            target.getPlayerBoard().getHealthPlayer().addMark(getPlayerBoard().getPlayer(),1);
+        else if(cardPowerUp.getMyMove()!=-1)
+            getPlayerBoard().getPlayer().newPosition(square);
+        else
+            new Move(target,square,2).execute();
 
+        removePowerUp(getPlayerPowerUps().indexOf(cardPowerUp));
     }
 
     /**

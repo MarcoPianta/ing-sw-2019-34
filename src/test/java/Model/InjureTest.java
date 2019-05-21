@@ -10,8 +10,8 @@ public class InjureTest {
 
     @Test
     public void constructorTest() throws FileNotFoundException {
-        Player testShooterPlayer = new Player("shooterID", null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, "name" );
+        Player testShooterPlayer = new Player(6546474, null);
+        Player testTargetPlayer = new Player(6565754, null);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -27,8 +27,8 @@ public class InjureTest {
          * */
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game=new Game(5,"map1");
-        Player testShooterPlayer = new Player("shooterID", color1, "name" );
-        Player testTargetPlayer = new Player("targetID", color2, "name" );
+        Player testShooterPlayer = new Player(65754547, color1);
+        Player testTargetPlayer = new Player(65457547, color2);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
@@ -49,8 +49,8 @@ public class InjureTest {
         //Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game=new Game(5,"map1");
-        Player testShooterPlayer = new Player("shooterID", color1, "name" );
-        Player testTargetPlayer = new Player("targetID", color2, "name" );
+        Player testShooterPlayer = new Player(76765437, color1);
+        Player testTargetPlayer = new Player(85743326, color2);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
@@ -78,8 +78,8 @@ public class InjureTest {
         //  Test 1
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game=new Game(5,"map1");
-        Player testShooterPlayer = new Player("shooterID", color1, "name" );
-        Player testTargetPlayer = new Player("targetID", color2, "name" );
+        Player testShooterPlayer = new Player(234252234, color1);
+        Player testTargetPlayer = new Player(676875443, color2);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
@@ -97,7 +97,7 @@ public class InjureTest {
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
         assertTrue(action.reachableSquare().contains(testTargetPlayer.getPosition()));
         //Test 4
-        Player testTargetPlayer2 = new Player("targetID", color2, "name" );
+        Player testTargetPlayer2 = new Player(34755477, color2);
         testList.add(testTargetPlayer2);
         testTargetPlayer2.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
         action = new Injure(testShooterPlayer, testList, testOtherEffect);
@@ -109,11 +109,11 @@ public class InjureTest {
         //initialization of the test game
         Game game = new Game( 8, "map1");
         Colors color1 = Colors.YELLOW, color2 = Colors.BLUE, color3 = Colors.VIOLET, color4 = Colors.GREEN, color5 = Colors.WHITE;
-        Player testShooterPlayer = new Player("shooterID",color1, "shooter" );
-        Player testTargetPlayer1 = new Player("targetID1",color2, "target1" );
-        Player testTargetPlayer2= new Player("targetID2",color3, "target2" );
-        Player testTargetPlayer3 = new Player("targetID3",color4, "target3" );
-        Player testTargetPlayer4 = new Player("targetID4",color5, "target4" );
+        Player testShooterPlayer = new Player(3656374,color1);
+        Player testTargetPlayer1 = new Player(65364327,color2);
+        Player testTargetPlayer2= new Player(654743754,color3);
+        Player testTargetPlayer3 = new Player(6554367,color4);
+        Player testTargetPlayer4 = new Player(65574323,color5);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer2.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));

@@ -10,8 +10,8 @@ public class MoveTest {
     @Test
     public void constructorTestWithEffect() throws FileNotFoundException {
         GameBoard testGameBoard = new GameBoard("map1");
-        Player testShooterPlayer = new Player("shooterID", null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, "name" );
+        Player testShooterPlayer = new Player(34223434, null);
+        Player testTargetPlayer = new Player(32443342, null);
         testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -23,7 +23,7 @@ public class MoveTest {
     @Test
     public void constructorTestWithoutEffect() throws FileNotFoundException {
         GameBoard testGameBoard = new GameBoard("map1");
-        Player testMoverPlayer = new Player("targetID", null, "name" );
+        Player testMoverPlayer = new Player(2343234, null);
         testMoverPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
         Move action = new Move(testMoverPlayer, testGameBoard.getRooms().get(1).getNormalSquares().get(2), 2);
         assertTrue(action instanceof Move);
@@ -33,8 +33,8 @@ public class MoveTest {
     public void executeTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        Player testShooterPlayer = new Player("shooterID", color1, "name" );
-        Player testTargetPlayer = new Player("targetID", color2, "name" );
+        Player testShooterPlayer = new Player(34243432, color1);
+        Player testTargetPlayer = new Player(767676675, color2);
         game.addPlayer(testShooterPlayer);
         game.addPlayer(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
@@ -49,8 +49,8 @@ public class MoveTest {
     public void isValidTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        Player testShooterPlayer = new Player("shooterID", color1, "name" );
-        Player testTargetPlayer = new Player("targetID", color2, "name" );
+        Player testShooterPlayer = new Player(677777476, color1);
+        Player testTargetPlayer = new Player(6754766, color2);
         game.addPlayer(testShooterPlayer);
         game.addPlayer(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
@@ -77,8 +77,8 @@ public class MoveTest {
     public  void calculateReachableSquareTest() throws FileNotFoundException {
         Colors color1 = Colors.RED, color2 = Colors.BLUE;
         Game game = new Game( 8,"map1");
-        Player testShooterPlayer = new Player("shooterID", color1, "name" );
-        Player testTargetPlayer = new Player("targetID", color2, "name" );
+        Player testShooterPlayer = new Player(67575, color1);
+        Player testTargetPlayer = new Player(67655676, color2);
         game.addPlayer(testShooterPlayer);
         game.addPlayer(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));

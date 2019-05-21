@@ -209,7 +209,6 @@ public class Game {
      * this method add a new player
      * */
     public void addPlayer(Player newPlayer){
-        //TODO  SERVER MUST CREATE A NEW PLAYER
         players.add(newPlayer);
         newPlayer.setGameId(this);
     }

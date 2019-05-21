@@ -15,9 +15,9 @@ public class TurnHandlerTest {
         ArrayList<Player> players=new ArrayList<>();
         List<NormalSquare> squares;
         PossibleMove possibleMove=new PossibleMove(3);
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        Player player2=new Player("playertest2831", Colors.RED, "playerTest2");
-        Player player3=new Player("playertest2832", Colors.BLUE, "playerTest3");
+        Player player1=new Player("playertest2830", Colors.GREEN);
+        Player player2=new Player("playertest2831", Colors.RED);
+        Player player3=new Player("playertest2832", Colors.BLUE);
         players.add(player1);
         players.add(player2);
         players.add(player3);

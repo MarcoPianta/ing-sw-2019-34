@@ -12,7 +12,7 @@ public class HandTest {
      * */
      @Test
      public void constructorTest(){
-         Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+         Player player=new Player(832, Colors.GREEN);
          assertNotNull(player.getPlayerBoard().getHandPlayer());
      }
     /**
@@ -20,7 +20,7 @@ public class HandTest {
      */
     @Test
     public void testAddWeapon() throws FileNotFoundException {
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(2832, Colors.GREEN);
         String file= WeaponDictionary.FURNACE.getAbbreviation();
         CardWeapon cardWeapon=new CardWeapon(file);
         player.getPlayerBoard().getHandPlayer().addAmmo(3,3,3);
@@ -33,7 +33,7 @@ public class HandTest {
      * */
     @Test
     public void testSubstituteWeapons() throws FileNotFoundException{
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(832, Colors.GREEN);
         String file1= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
         CardWeapon cardWeapon1=new CardWeapon(file1);
         player.getPlayerBoard().getHandPlayer().addWeapon(cardWeapon1);
@@ -63,7 +63,7 @@ public class HandTest {
      * */
     @Test
     public void testAddPowerUp() throws FileNotFoundException {
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(2832, Colors.GREEN);
 
         String file= PowerUpEnum.NEWTON_B.getAbbreviation();
         CardPowerUp cardPowerUp=new CardPowerUp(file);
@@ -76,7 +76,7 @@ public class HandTest {
      * */
     @Test
     public void testChargeWeapon() throws FileNotFoundException{
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(2832, Colors.GREEN);
 
         String file1= WeaponDictionary.FURNACE.getAbbreviation();
         CardWeapon cardWeapon1=new CardWeapon(file1);
@@ -114,7 +114,7 @@ public class HandTest {
      * */
     @Test
     public  void testAddAmmo(){
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(832, Colors.GREEN);
 
         int red=2;
         int yellow=1;

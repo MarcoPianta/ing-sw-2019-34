@@ -6,23 +6,19 @@ import java.util.ArrayList;
 
 public class Player {
 
-    private String playerID;
-    private String name;
+    private Integer playerID;
     private Colors color;
-    private int actionCounter;
     private PlayerBoard playerBoard;
     private NormalSquare position;
     private Game gameId;
     private StateMachineEnumerationTurn state;
 
-    public Player(String playerID, Colors color, String name) {
+    public Player(Integer playerID, Colors color) {
         this.playerID=playerID;
-        this.name=name;
         this.color=color;
         this.playerBoard=new PlayerBoard( this);
-        this.actionCounter=2;
         this.position=null;
-        this.gameId=gameId;
+        this.gameId=null;
         this.state= StateMachineEnumerationTurn.WAIT;
     }
 
@@ -36,10 +32,6 @@ public class Player {
 
     public NormalSquare getPosition() {
         return position;
-    }
-
-    public int getActionCounter() {
-        return actionCounter;
     }
 
     public Game getGameId() {
@@ -58,22 +50,6 @@ public class Player {
     }
 
     /*
-     *this method  return true o false if the player can do an action
-     * */
-    public boolean canAct(){
-        return this.getActionCounter() != 0;
-    }
-
-    /*
-     * this method increment action counter
-     * */
-    public void decrementActionCounter(){
-        actionCounter-=1;
-        if (actionCounter==0) {//TODO called controller for change game(currentPlayer)
-        }
-    }
-
-    /*
      *this method is a set position
      * */
     public void newPosition(NormalSquare newPosition){
@@ -82,17 +58,18 @@ public class Player {
     /*
      * this method is used when a player is dead and must spawn
      * */
-    public void spawn(){
+    public void spawn(int counter){
         CardPowerUp newPowerUp;
-        newPowerUp=getGameId().getDeckCollector().getCardPowerUpDrawer().draw();
-        getPlayerBoard().getHandPlayer().addPowerUp(newPowerUp);
-        newPosition(calculateNewPosition(newPowerUp));
+        while(counter!=0){
+            newPowerUp=getGameId().getDeckCollector().getCardPowerUpDrawer().draw();
+            getPlayerBoard().getHandPlayer().addPowerUp(newPowerUp);
+        }
     }
 
     /*
      *this method is called by spawn and calculate the new position
      * */
-    public NormalSquare calculateNewPosition(CardPowerUp powerUp){
+    public void calculateNewPosition(CardPowerUp powerUp){
         boolean isNotFind=true;
         int i=0;
         int j=0;
@@ -108,7 +85,8 @@ public class Player {
             }
             i++;
         }
-        return getGameId().getMap().getRooms().get(i-1).getNormalSquares().get(j);
+        newPosition(getGameId().getMap().getRooms().get(i-1).getNormalSquares().get(j));
+        getPlayerBoard().getHandPlayer().removePowerUp(getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUp));
     }
 }
 

@@ -14,8 +14,8 @@ public class MarkTest {
 
     @Test
     public void constructorTest() throws FileNotFoundException {
-        Player testMarkerPlayer = new Player("shooterID", null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, "name" );
+        Player testMarkerPlayer = new Player(323223, null);
+        Player testTargetPlayer = new Player(23323, null);
         ArrayList<Player> testList = new ArrayList<>();
         testList.add(testTargetPlayer);
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
@@ -30,8 +30,8 @@ public class MarkTest {
          * This method test execute
          * */
         Game game=new Game(5,"map1");
-        Player testMarkerPlayer = new Player("shooterID", null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, "name" );
+        Player testMarkerPlayer = new Player(213123321, null);
+        Player testTargetPlayer = new Player(34354, null);
         game.addPlayer(testMarkerPlayer);
         game.addPlayer(testTargetPlayer);
         ArrayList<Player> testList = new ArrayList<>();
@@ -53,8 +53,8 @@ public class MarkTest {
          * */
         //Test 1
         Game game=new Game(5,"map1");
-        Player testMarkerPlayer = new Player("shooterID", null, "name" );
-        Player testTargetPlayer = new Player("targetID", null, "name" );
+        Player testMarkerPlayer = new Player(323432243, null);
+        Player testTargetPlayer = new Player(3244334, null);
         game.addPlayer(testMarkerPlayer);
         game.addPlayer(testTargetPlayer);
         ArrayList<Player> testList = new ArrayList<>();

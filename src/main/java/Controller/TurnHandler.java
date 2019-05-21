@@ -32,13 +32,9 @@ public class TurnHandler {
     public void start(){
         //TODO messaggio che inizia turno
         getGameHandler().getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
-        for(Player p:getGameHandler().getGame().getPlayers()){
-            if(p.getPosition()==null && p.getPlayerBoard().getMaxReward()!=8)//if player is dead
-                p.spawn();
-            else if(p.getPosition()==null && p==getGameHandler().getGame().getCurrentPlayer())//if is the first turn of player
-            {
-                p.spawn();
-            }
+        if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8){
+            gameHandler.getGame().getCurrentPlayer().spawn(2);
+            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1,1,1);
         }
         setNextState(StateMachineEnumerationTurn.ACTION1);
     }
@@ -60,10 +56,6 @@ public class TurnHandler {
             valueReturn=actionAdrenaline0(message);
         if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
             setNextState(StateMachineEnumerationTurn.ACTION2);
-        else if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION2 && thereAreOnlyChargeWeapon()){
-            setNextState(StateMachineEnumerationTurn.ENDTURN);
-            endTurn();
-        }
         else
             setNextState(StateMachineEnumerationTurn.RELOAD);
         return  valueReturn;
@@ -111,7 +103,7 @@ public class TurnHandler {
             valueReturn=actionGrab(message,2);
         return valueReturn;
     }
-
+    //creare messaggio diverso per weapon =3, stesso messaggio ma costruttore diverso, se ho 3 armki grabbo normalmente  e elimino lintero per rimuovere
     protected boolean actionGrab(Message message,int maxMove){
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.GRABWEAPON ){
@@ -135,13 +127,41 @@ public class TurnHandler {
         return valueReturn;
     }
 
-    private boolean thereAreOnlyChargeWeapon(){
-        boolean valueReturn=true;
-        for(CardWeapon c: getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()){
-            if(!c.isCharge())
-                valueReturn=false;
+    private boolean powerUpIsValid(Message message){
+        boolean valueReturn=false;
+        if(message.getActionType()==ActionType.USEPOWERUP){
+            UsePowerUp newMessage=(UsePowerUp)message;
+            if((newMessage.getPowerUp().getWhen().equals("during") &&(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer())
+                    &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.ENDTURN)))
+                valueReturn=true;
+            else if(newMessage.getPowerUp().getWhen().equals("dealing") &&(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer()))
+                valueReturn=true;
+
+        }
+        else{
+            Shot newMessage=(Shot)message;
+            if(((newMessage.getPowerUp().getWhen().equals("get"))
+                    &&((gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
+                    ||(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION2))))
+                valueReturn=true;
         }
         return valueReturn;
+    }
+
+    public boolean usePowerUp(Message message){
+        boolean valueReturn=false;
+        if(message.getActionType()==ActionType.SHOT && powerUpIsValid(message)){
+            Shot newMessage=(Shot) message;
+            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(newMessage.getPowerUp(),newMessage.getTargetPowerUp(),0,null);
+            valueReturn=true;
+        }
+        else if(powerUpIsValid(message)){
+            UsePowerUp newMessage=(UsePowerUp) message;
+            newMessage.getUser().getPlayerBoard().getHandPlayer().usePowerUp(newMessage.getPowerUp(),newMessage.getTarget(),newMessage.getMaxMove(),newMessage.getSquare());
+            valueReturn=true;
+        }
+        return valueReturn;
+
     }
 
     public boolean actionReload(ReloadMessage message){
@@ -164,7 +184,6 @@ public class TurnHandler {
         endTurnChecks.fillSquare(gameHandler.getGame());
         endTurnChecks.isFinalTurn(gameHandler.getGame());
         start();
-
     }
     class EndTurnChecks {
         private ArrayList<NormalSquare> emptySquares;
@@ -187,7 +206,8 @@ public class TurnHandler {
 
         public void playerIsDead(Game game) {
             int i=game.getDeadPlayer().size()-1;
-            while(game.getDeadPlayer().size() == 0) {
+            while(i>=0) {
+                game.getDeadPlayer().get(i).spawn(1);//extract powerUp
                 game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
                 i--;
             }

@@ -10,7 +10,7 @@ public class ReloadTest {
 
     @Test
     public void constructorTest() throws FileNotFoundException {
-        Player testPlayer = new Player("PlayerID", null, "Tester");
+        Player testPlayer = new Player(564347347, null);
         CardWeapon testWeapon = new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation());
         testPlayer.getPlayerBoard().getHandPlayer().addWeapon(testWeapon);
         testPlayer.getPlayerBoard().getHandPlayer().addAmmo(testWeapon.getRedCost(), testWeapon.getYellowCost(), testWeapon.getBlueCost());
@@ -24,7 +24,7 @@ public class ReloadTest {
 
     @Test
     public void isValidTest() throws FileNotFoundException {
-        Player testPlayer = new Player("PlayerID", null, "Tester");
+        Player testPlayer = new Player(76586485, null);
         CardWeapon testWeapon = new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation());
         testPlayer.getPlayerBoard().getHandPlayer().addWeapon(testWeapon);
         testPlayer.getPlayerBoard().getHandPlayer().addAmmo(testWeapon.getRedCost(), testWeapon.getYellowCost(), testWeapon.getBlueCost());
@@ -34,7 +34,7 @@ public class ReloadTest {
 
     @Test
     public void executeTest() throws FileNotFoundException {
-        Player testPlayer = new Player("PlayerID", null, "Tester");
+        Player testPlayer = new Player(56485, null);
         CardWeapon testWeapon = new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation());
         testPlayer.getPlayerBoard().getHandPlayer().addWeapon(testWeapon);
         testPlayer.getPlayerBoard().getHandPlayer().addAmmo(testWeapon.getRedCost(), testWeapon.getYellowCost(), testWeapon.getBlueCost());

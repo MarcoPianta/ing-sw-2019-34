@@ -1,8 +1,6 @@
 package Model;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerBoardTest  {
@@ -11,7 +9,7 @@ public class PlayerBoardTest  {
      * */
     @Test
     public void testConstructor(){ ;
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(2832, Colors.GREEN);
         assertNotNull(player.getPlayerBoard());
     }
 
@@ -20,7 +18,7 @@ public class PlayerBoardTest  {
      * */
     @Test
     public void testDecrementMaxReward(){
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(2832, Colors.GREEN);
         player.getPlayerBoard().decrementMaxReward();
         assertEquals(6,player.getPlayerBoard().getMaxReward());
     }
@@ -30,7 +28,7 @@ public class PlayerBoardTest  {
      * */
     @Test
     public void testAddPoints(){
-        Player player=new Player("playertest2832", Colors.GREEN, "playerTest");
+        Player player=new Player(2832, Colors.GREEN);
         player.getPlayerBoard().addPoints(4);
         assertEquals(4,player.getPlayerBoard().getPoints());
     }

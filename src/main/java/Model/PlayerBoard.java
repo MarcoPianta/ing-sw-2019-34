@@ -14,7 +14,7 @@ public class PlayerBoard {
         this.maxReward=8;
         this.points = 0;
         this.healthPlayer= new Health(this);
-        this.handPlayer=new Hand();
+        this.handPlayer=new Hand(this);
         this.player=player;
         finalTurn=false;
     }
