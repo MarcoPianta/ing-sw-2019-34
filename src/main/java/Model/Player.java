@@ -22,6 +22,10 @@ public class Player {
         this.state= StateMachineEnumerationTurn.WAIT;
     }
 
+    public Integer getPlayerID() {
+        return playerID;
+    }
+
     public void setGameId(Game gameId) {
         this.gameId = gameId;
     }

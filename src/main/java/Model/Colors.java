@@ -5,7 +5,7 @@ public enum Colors {
     GREEN("green"),
     WHITE("white"),
     YELLOW("yellow"),
-    VIOLET("purple"),
+    VIOLET("violet"),
     RED("red");
 
     private String abbreviation;

@@ -3,7 +3,7 @@
   "roomNumber": 5,
   "Room1": [
       {
-        "color": "blue",
+        "color": "BLUE",
         "dimension": 2,
         "Square": [
           {
@@ -27,7 +27,7 @@
     ],
   "Room2": [
     {
-      "color": "red",
+      "color": "RED",
       "dimension": 2,
       "Square": [
         {
@@ -51,7 +51,7 @@
   ],
   "Room3": [
     {
-      "color": "yellow",
+      "color": "YELLOW",
       "dimension": 2,
       "Square": [
         {
@@ -75,7 +75,7 @@
   ],
   "Room4": [
     {
-      "color": "white",
+      "color": "WHITE",
       "dimension": 3,
       "Square": [
         {
@@ -107,7 +107,7 @@
   ],
   "Room5": [
     {
-      "color": "purple",
+      "color": "VIOLET",
       "dimension": 2,
       "Square": [
         {
