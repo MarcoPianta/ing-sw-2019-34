@@ -10,7 +10,8 @@ public class GrabWeapon extends Message {
     private NormalSquare newSquare;
     private CardWeapon card;
 
-    public GrabWeapon(CardWeapon card,int maxMove,NormalSquare newSquare){
+    public GrabWeapon(Integer token, CardWeapon card,int maxMove,NormalSquare newSquare){
+        this.token = token;
         actionType=ActionType.GRABWEAPON;
         this.card=card;
         this.maxMove=maxMove;
