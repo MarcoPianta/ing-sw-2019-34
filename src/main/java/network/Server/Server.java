@@ -2,10 +2,7 @@ package network.Server;
 
 import network.Server.RMI.RMIServer;
 import network.Server.Socket.SocketServer;
-import network.messages.ActionType;
-import network.messages.GameSettingsRequest;
-import network.messages.GameSettingsResponse;
-import network.messages.Message;
+import network.messages.*;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -71,6 +68,8 @@ public class Server {
             GameSettingsResponse m = (GameSettingsResponse) message;
             playersQueue.setPreferences(m);
         }
+        else
+            lobbyHashMap.get(message.getToken()).receiveMessage(message);
     }
 
     /**
@@ -101,8 +100,7 @@ public class Server {
         }while (tokens.contains(integer));
         tokens.add(integer);
         clients.put(integer, rmi);
-        playersQueue.addPlayer(integer);
-        send(new GameSettingsRequest(integer));
+        addToQueue(integer);
         return integer;
     }
 
@@ -116,9 +114,11 @@ public class Server {
     }
 
     public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
-        GameLobby gameLobby = new GameLobby(players, skullNumber, "Map"+map);
+        GameLobby gameLobby = new GameLobby(players, skullNumber, "Map"+map, this);
         for (Integer i: players){
             lobbyHashMap.put(i, gameLobby);
         }
+        players.parallelStream()
+                .forEach(x -> send(new StartMessage(x, "game")));
     }
 }

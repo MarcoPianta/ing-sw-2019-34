@@ -31,6 +31,7 @@ public abstract class Client {
             this.token = response.getToken();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
+
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
             //TODO update view asking client which configuration want to use to play, then send GAMESETTINGSRESPONSE to the server
@@ -55,4 +56,8 @@ public abstract class Client {
      * @param message the message that must be sent
      * */
     public abstract void send(Message message);
+
+    public void handleUpdate(Message message){
+
+    }
 }
