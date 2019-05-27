@@ -5,18 +5,18 @@ import java.util.ArrayList;
  * This class implements Action
  */
 public class Mark implements Action {
-    private Player markerPlayer;
-    private ArrayList<Player> targetPlayers;
+    private Player shooterPlayer;
+    private Player targetPlayers;
     private Effect markerEffect;
 
     /**
      * @param markerPlayer  The actorPlayer who use the Mark Action
-     * @param targets       The list of Player that are targeted by the actorPlayer
+     * @param target        The Player targeted by the actorPlayer
      * @param effect        The effect used by the actorPlayer to invoke Injure Action
      */
-    public Mark(Player markerPlayer, ArrayList<Player> targets, Effect effect){
-        this.markerPlayer = markerPlayer; //devo ricevere la copia
-        targetPlayers = targets; //devo ricevere l'originale
+    public Mark(Player markerPlayer, Player target, Effect effect){
+        this.shooterPlayer = markerPlayer; //devo ricevere la copia
+        targetPlayers = target; //devo ricevere l'originale
         markerEffect = effect; //devo ricevere la copia
     }
 
@@ -28,13 +28,7 @@ public class Mark implements Action {
      */
     public boolean execute() {
         if (isValid())  {
-            for (int playerCounter = 0; playerCounter < targetPlayers.size(); playerCounter++) {
-                if (markerEffect.isAllTarget()) {
-                    markTarget(targetPlayers.get(playerCounter), markerEffect.getDamage().get(0), markerEffect.getPostCondition());
-                } else {
-                    markTarget(targetPlayers.get(playerCounter), markerEffect.getDamage().get(playerCounter), markerEffect.getPostCondition());
-                }
-            }
+            markTarget(targetPlayers, markerEffect.getDamage().get(0), markerEffect.getPostCondition());
             return true;
         }
         return false;
@@ -48,14 +42,10 @@ public class Mark implements Action {
      */
     public boolean isValid(){
         ArrayList<NormalSquare> reachable = reachableSquare();
-        int playerCounter = 0;
-        while(playerCounter < targetPlayers.size()){
-            if(reachable.contains(targetPlayers.get(playerCounter).getPosition())){
+            if(reachable.contains(targetPlayers.getPosition())){
                 if(markerEffect.getPreCondition().isEnemiesDifferentSquare()) {
-                    reachable.remove(targetPlayers.get(playerCounter).getPosition());
+                    reachable.remove(targetPlayers.getPosition());
                 }
-                playerCounter++;
-            }
             else{
                 return false;
             }
@@ -69,12 +59,12 @@ public class Mark implements Action {
      * @param postCondition Post-condition that must be respected after the marking
      */
     private void markTarget(Player targetPlayer, int damage, Effect.PostCondition postCondition){
-        targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(markerPlayer, damage);
+        targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
         if(postCondition.getTargetMove() != 0)
         {
             //TODO throw shooterHasToMoveTargetException
             // --> receives targetNewSquare
-            Move action = new Move(markerPlayer, targetPlayer, markerEffect, null);
+            Move action = new Move(shooterPlayer, targetPlayer, markerEffect, null);
         }
     }
 
@@ -82,27 +72,28 @@ public class Mark implements Action {
      * This method is
      * @return the list of Square reachable from the startSquare with at least movePass step
      */
+/*
     public ArrayList<NormalSquare> reachableSquare() {
         Effect.PreCondition preCondition = markerEffect.getPreCondition();
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
         ArrayList<NormalSquare> thisStepSquare = new ArrayList<>();
         ArrayList<NormalSquare> allStepSquare = new ArrayList<>();
         ArrayList<Colors> colors = new ArrayList<>();
-        thisStepSquare.add(markerPlayer.getPosition());
-        allStepSquare.add(markerPlayer.getPosition());
+        thisStepSquare.add(shooterPlayer.getPosition());
+        allStepSquare.add(shooterPlayer.getPosition());
         int thisStep;
         if (0 == preCondition.getMinRange())
-            reachableSquare.add(markerPlayer.getPosition());
+            reachableSquare.add(shooterPlayer.getPosition());
         if (preCondition.isVision()) {
-            colors.add(markerPlayer.getPosition().getColor());
-            if (markerPlayer.getPosition().getN().getColor() != markerPlayer.getPosition().getColor())
-                colors.add(markerPlayer.getPosition().getN().getColor());
-            if (markerPlayer.getPosition().getE().getColor() != markerPlayer.getPosition().getColor())
-                colors.add(markerPlayer.getPosition().getE().getColor());
-            if (markerPlayer.getPosition().getS().getColor() != markerPlayer.getPosition().getColor())
-                colors.add(markerPlayer.getPosition().getS().getColor());
-            if (markerPlayer.getPosition().getW().getColor() != markerPlayer.getPosition().getColor())
-                colors.add(markerPlayer.getPosition().getW().getColor());
+            colors.add(shooterPlayer.getPosition().getColor());
+            if (shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor())
+                colors.add(shooterPlayer.getPosition().getN().getColor());
+            if (shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor())
+                colors.add(shooterPlayer.getPosition().getE().getColor());
+            if (shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor())
+                colors.add(shooterPlayer.getPosition().getS().getColor());
+            if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
+                colors.add(shooterPlayer.getPosition().getW().getColor());
         }
         for (int i = 0, j; i < preCondition.getMaxRange(); i++) {
             thisStep = thisStepSquare.size();
@@ -118,11 +109,11 @@ public class Mark implements Action {
         }
         return reachableSquare;
     }
-
+*/
     /**
      * This method is invoked by reachableSquare method
      */
-    private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquare, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int i){
+/*    private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquare, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int i){
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);
             allStepSquare.add(thisSquare);
@@ -130,4 +121,5 @@ public class Mark implements Action {
                 reachableSquare.add(reachableSquare.size(), thisSquare);
         }
     }
+*/
 }

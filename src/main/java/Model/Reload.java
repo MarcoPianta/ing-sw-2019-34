@@ -5,6 +5,7 @@ package Model;
 public class Reload implements Action {
     private CardWeapon selectedWeapon;
     private Player actorPlayer;
+    private CardPowerUp usedPowerUp;
     private int r;
     private int b;
     private int y;
@@ -29,6 +30,7 @@ public class Reload implements Action {
     public Reload(Player reloaderPlayer, CardWeapon grabbedWeapon, CardPowerUp powerUp){
         actorPlayer = reloaderPlayer;
         selectedWeapon = grabbedWeapon;
+        usedPowerUp = powerUp;
         r = selectedWeapon.getRedCost();
         y = selectedWeapon.getYellowCost();
         b = selectedWeapon.getBlueCost();
@@ -64,6 +66,7 @@ public class Reload implements Action {
         else {
             if (isValid()) {
                 actorPlayer.getPlayerBoard().getHandPlayer().chargeWeapon(selectedWeapon, r, y, b);
+                //TODO actorPlayer.getPlayerBoard().getHandPlayer().remove(usedPowerUp);
                 return true;
             }
             return false;
@@ -71,7 +74,7 @@ public class Reload implements Action {
     }
 
     /**
-     * Control the Pre-condition of the Reaload Action
+     * Control the Pre-condition of the Reload Action
      *
      * @return true if the action invocation respect the condition, false otherwise
      */

@@ -1,79 +1,77 @@
 package Model;
 
 import java.util.ArrayList;
-/**
- * This class implements Action
- */
-public class Injure implements Action {
-    private Player shooterPlayer;
-    private Player targetPlayers;
-    private Effect injurerEffect;
 
-    /**
-     * @param shooterPlayer     The actorPlayer who use the Injure Action
-     * @param target            The Player targeted by the actorPlayer
-     * @param effect            The effect used by the actorPlayer to invoke Injure Action
-     */
-    public Injure(Player shooterPlayer, Player target, Effect effect) {
-        this.shooterPlayer = shooterPlayer;
-        targetPlayers = target;
-        injurerEffect = effect;
+public class Shoot {
+    private Effect shootEffect;
+    private Player shooterPlayer;
+    private ArrayList<Player> targets;
+    private NormalSquare targetSquare;
+    private Colors roomColor;
+
+    public Shoot(Effect effect, Player shooter, ArrayList<Player> target){
+        this.shootEffect = effect;
+        this.shooterPlayer = shooter;
+        this.targets = target;
     }
 
-    /**
-     * Invoke the isValid method that control the Pre-condition of the action
-     * This method execute the Injure Action
-     *
-     * @return true if the action has been executed, false otherwise
-     */
-    public boolean execute() {
-        if (isValid())  {
-            injureTarget(targetPlayers, injurerEffect.getDamage().get(0), injurerEffect.getPostCondition());
+    public Shoot(Effect effect, Player shooter, NormalSquare square){
+        this.shootEffect = effect;
+        this.shooterPlayer = shooter;
+        this.targetSquare = square;
+    }
+
+    public Shoot(Effect effect, Player shooter, Colors color){
+        this.shootEffect = effect;
+        this.shooterPlayer = shooter;
+        this.roomColor = color;
+    }
+
+    public boolean execute(){
+        if(isValid()) {
+
             return true;
         }
         return false;
     }
 
-    /**
-     * Control the Pre-condition of the Injure Action
-     * This method invoke reachableSquare method
-     *
-     * @return true if the action invocation respect the condition, false otherwise
-     */
     public boolean isValid(){
-        ArrayList<NormalSquare> reachable = reachableSquare();
-            if(reachable.contains(targetPlayers.getPosition())){
-                if(injurerEffect.getPreCondition().isEnemiesDifferentSquare()) {
-                    reachable.remove(targetPlayers.getPosition());
-                }
-            else{
+        switch (shootEffect.getTarget()){
+            case ('p'):
+       //         if (targets.size() <= shootEffect.getTargetNumber()){
+                    ArrayList<Player> visibleTarget = targetablePlayer();
+                    for (Player target : targets) {
+                        if ((shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)) || (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target)))) {
+                            return false;
+                        }
+                    }
+                    return true;
+       //         }
+                //TODO there are too much target, is it possible to happen??        if not erase the first if condition
+       //         return false;
+
+            case ('s'):
+     //           if(shootEffect.getTargetNumber() == 0)  //TODO useless condition??
+                    return reachableSquare().contains(targetSquare);
+     //           return false;
+
+            case ('r'):
+     //           if(shootEffect.getTargetNumber() == 0)  //TODO useless condition??
+                    for (NormalSquare normalSquare : reachableSquare()){
+                        if(normalSquare.getColor() == roomColor)
+                            return true;
+                    }
                 return false;
-            }
         }
         return true;
     }
 
     /**
-     * @param targetPlayer  The Player that is targeted in this step
-     * @param damage        The number of damage that must be dealt to the targetPlayer
-     * @param postCondition Post-condition that must be respected after the injuring
-     */
-    private void injureTarget(Player targetPlayer, int damage, Effect.PostCondition postCondition){
-        targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
-        if(postCondition.getTargetMove() != 0)
-        {
-            //TODO throw shooterHasToMoveTargetException
-            // --> receives targetNewSquare
-            Move action = new Move(shooterPlayer, targetPlayer, injurerEffect, null);
-        }
-    }
-
-    /**
-     * This method is
+     * This method control the isVision PreCondition
      * @return the list of Square reachable from the startSquare with at least movePass step
      */
     public ArrayList<NormalSquare> reachableSquare() {
-        Effect.PreCondition preCondition = injurerEffect.getPreCondition();
+        Effect.PreCondition preCondition = shootEffect.getPreCondition();
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
         ArrayList<NormalSquare> thisStepSquare = new ArrayList<>();
         ArrayList<NormalSquare> allStepSquare = new ArrayList<>();
@@ -94,8 +92,7 @@ public class Injure implements Action {
             if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getW().getColor());
         }
-        int j;
-        for (int i = 0; i < preCondition.getMaxRange(); i++) {
+        for (int i = 0, j; i < preCondition.getMaxRange(); i++) {
             thisStep = thisStepSquare.size();
             j = 0;
             while (j < thisStep) {
@@ -117,7 +114,7 @@ public class Injure implements Action {
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);
             allStepSquare.add(thisSquare);
-            if ((!preCondition.isVision() || colors.contains(thisSquare.getColor())) && i >= preCondition.getMinRange() && !reachableSquare.contains(thisSquare))
+            if ((!preCondition.isVision() || colors.contains(thisSquare.getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(thisSquare))
                 reachableSquare.add(reachableSquare.size(), thisSquare);
         }
     }
@@ -136,6 +133,4 @@ public class Injure implements Action {
         }
         return reachablePlayer;
     }
-    //TODO se la view mostra solo gli Square raggiungibili, allora devo togliere dei passaggi,
-    // perchè in teoria ottengo come scelta del player solo Square accettabili
 }

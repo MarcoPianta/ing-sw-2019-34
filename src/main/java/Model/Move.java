@@ -23,7 +23,7 @@ public class Move implements Action {
             movePass = effect.getMyMove();
         }
         else{
-            movePass = effect.getOtherMove();
+            movePass = effect.getTargetMove();
         }
         startSquare = targetPlayer.getPosition();
     }
