@@ -33,7 +33,7 @@ public class EffectTest {
         assertEquals(2, effect.getDamage().get(0));
         assertEquals(0, effect.getMark());
         assertEquals(0, effect.getMyMove());
-        assertEquals(0, effect.getOtherMove());
+        assertEquals(0, effect.getTargetMove());
         assertEquals(1, effect.getIteration());
     }
 
@@ -55,7 +55,7 @@ public class EffectTest {
         assertEquals(1, effect.getDamage().get(1));
         assertEquals(0, effect.getMark());
         assertEquals(0, effect.getMyMove());
-        assertEquals(0, effect.getOtherMove());
+        assertEquals(0, effect.getTargetMove());
         assertEquals(1, effect.getIteration());
     }
 

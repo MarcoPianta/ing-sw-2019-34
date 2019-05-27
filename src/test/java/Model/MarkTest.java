@@ -3,7 +3,6 @@ package Model;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,11 +15,9 @@ public class MarkTest {
     public void constructorTest() throws FileNotFoundException {
         Player testMarkerPlayer = new Player(323223, null);
         Player testTargetPlayer = new Player(23323, null);
-        ArrayList<Player> testList = new ArrayList<>();
-        testList.add(testTargetPlayer);
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Mark action = new Mark(testMarkerPlayer, testList, testEffect);
+        Mark action = new Mark(testMarkerPlayer, testTargetPlayer, testEffect);
         assertTrue(action instanceof Mark);
     }
 
@@ -34,13 +31,11 @@ public class MarkTest {
         Player testTargetPlayer = new Player(34354, null);
         game.addPlayer(testMarkerPlayer);
         game.addPlayer(testTargetPlayer);
-        ArrayList<Player> testList = new ArrayList<>();
-        testList.add(testTargetPlayer);
         testMarkerPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(0);
-        Mark action = new Mark(testMarkerPlayer, testList, testEffect);
+        Mark action = new Mark(testMarkerPlayer, testTargetPlayer, testEffect);
         assertTrue(action.execute());
     }
 
@@ -57,13 +52,11 @@ public class MarkTest {
         Player testTargetPlayer = new Player(3244334, null);
         game.addPlayer(testMarkerPlayer);
         game.addPlayer(testTargetPlayer);
-        ArrayList<Player> testList = new ArrayList<>();
-        testList.add(testTargetPlayer);
         testMarkerPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Mark action = new Mark(testMarkerPlayer, testList, testEffect);
+        Mark action = new Mark(testMarkerPlayer, testTargetPlayer, testEffect);
         assertTrue(action.isValid());
         //Test 2
         testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));

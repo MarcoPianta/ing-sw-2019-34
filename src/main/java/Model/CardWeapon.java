@@ -13,6 +13,7 @@ public class CardWeapon implements Card {
     private int yellowCost;
     private int effectsNumber;
     private boolean charge;
+    private ArrayList<Integer> actionSequences;
     private ArrayList<Effect> effects;
     private static final String DIRECTORY = "Weapon";
 
@@ -27,6 +28,8 @@ public class CardWeapon implements Card {
         yellowCost = jsonValues.getJsonArray("cost").getInt(1);
         blueCost = jsonValues.getJsonArray("cost").getInt(2);
         effectsNumber = jsonValues.getInt("effectNumber");
+        actionSequences = new ArrayList<>();
+        setActionSequences(jsonValues);
         effects = new ArrayList<>();
         setEffects(jsonValues);
     }
@@ -75,6 +78,17 @@ public class CardWeapon implements Card {
         while (i < effectsNumber){
             i++;
             this.effects.add(new Effect(jsonValues, i));
+        }
+    }
+
+    /**
+     * This method read the Action Sequences of a weapon from the jsonObject and create an arrayList of Integer
+     * */
+    private void setActionSequences(JsonObject jsonValues){
+        int i = 0;
+        while (i < jsonValues.getJsonArray("cost").size()){
+            i++;
+            this.actionSequences.add(jsonValues.getJsonArray("cost").getInt(i));
         }
     }
 

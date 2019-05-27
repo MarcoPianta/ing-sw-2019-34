@@ -9,46 +9,58 @@ import java.util.List;
  * This Class contains the possible effect of a CardWeapon
  * */
 public class Effect {
+    private char target;
     private int targetNumber;
-    private boolean allTarget;
+    private String actionSequence;
     private ArrayList<Integer> damage;
-    private int mark;
+    private ArrayList<Integer> mark;
     private int myMove;
-    private int otherMove;
+    private int targetMove;
     private int iteration;
     private PreCondition preCondition;
     private PostCondition postCondition;
 
     public Effect(JsonObject jsonValues, int effect){
         String jsonString = "Effect" + effect;
+        JsonArray bonusCost = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("bonusCost");
         JsonArray damageArray;
-        targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("target");
-        allTarget = jsonValues.getJsonArray(jsonString).getJsonObject(0).getBoolean("allTarget");
+        JsonArray markArray;
+        String actionSequence;
+        target = jsonValues.getJsonArray(jsonString).getJsonObject(0).getString("target").charAt(0);
+        targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("targetNumber");
+        actionSequence = jsonValues.getJsonArray(jsonString).getJsonObject(0).getString("actionSequence");
         damageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("damage");
+        markArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("mark");
         damage = new ArrayList<>();
         while (damage.size() < damageArray.size())
             damage.add(damageArray.getInt(damage.size()));
-        mark = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("mark");
+        mark = new ArrayList<>();
+        while (mark.size() < markArray.size())
+            mark.add(damageArray.getInt(mark.size()));
         myMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("myMove");
-        otherMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("otherMove");
+        targetMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("targetMove");
         iteration = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("iteration");
         preCondition = new PreCondition(jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("preCondition").getJsonObject(0));
         postCondition = new PostCondition(jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("postCondition").getJsonObject(0));
+    }
+
+    public char getTarget(){
+        return target;
     }
 
     public int getTargetNumber() {
         return targetNumber;
     }
 
-    public boolean isAllTarget() {
-        return allTarget;
+    public String getActionSequence(){
+        return actionSequence;
     }
 
     public List<Integer> getDamage() {
         return damage;
     }
 
-    public int getMark() {
+    public List<Integer> getMark() {
         return mark;
     }
 
@@ -56,8 +68,8 @@ public class Effect {
         return myMove;
     }
 
-    public int getOtherMove() {
-        return otherMove;
+    public int getTargetMove() {
+        return targetMove;
     }
 
     public int getIteration() {
@@ -77,6 +89,7 @@ public class Effect {
      * */
     class PreCondition{
         private boolean vision;
+        private boolean blind;
         private boolean enemiesDifferentSquare;
         private int minRange;
         private int maxRange;
@@ -84,6 +97,7 @@ public class Effect {
 
         public PreCondition(JsonObject jsonValues){
             vision = jsonValues.getBoolean("vision");
+            blind = jsonValues.getBoolean("blind");
             enemiesDifferentSquare = jsonValues.getBoolean("enemiesDifferentSquare");
             minRange = jsonValues.getInt("minRange");
             maxRange = jsonValues.getInt("maxRange");
@@ -95,6 +109,7 @@ public class Effect {
          * */
         public PreCondition(PreCondition preCondition){
             this.vision = preCondition.isVision();
+            this.blind = preCondition.isBlind();
             this.enemiesDifferentSquare = preCondition.isEnemiesDifferentSquare();
             this.minRange = preCondition.getMinRange();
             this.maxRange = preCondition.getMaxRange();
@@ -103,6 +118,10 @@ public class Effect {
 
         public boolean isVision() {
             return vision;
+        }
+
+        public boolean isBlind() {
+            return blind;
         }
 
         public boolean isCardinal() {
