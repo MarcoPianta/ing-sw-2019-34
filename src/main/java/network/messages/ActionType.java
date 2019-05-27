@@ -2,6 +2,7 @@ package network.messages;
 
 public enum ActionType {
 
+    START("Start"),
     CONNECTIONREQUEST("Connection request"),
     CONNECTIONRESPONSE("Connection response"),
     POSSIBLETARGETSHOT("Possible target shot"),

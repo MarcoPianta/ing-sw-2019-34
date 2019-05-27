@@ -9,7 +9,8 @@ public class GrabNotOnlyAmmo extends Message{
     private NormalSquare newSquare;
     private CardNotOnlyAmmo card;
 
-    public GrabNotOnlyAmmo(CardNotOnlyAmmo card, int maxMove, NormalSquare newSquare){
+    public GrabNotOnlyAmmo(Integer token, CardNotOnlyAmmo card, int maxMove, NormalSquare newSquare){
+        this.token = token;
         actionType=ActionType.GRABNOTONLYAMMO;
         this.card=card;
         this.maxMove=maxMove;

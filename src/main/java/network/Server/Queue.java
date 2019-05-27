@@ -24,15 +24,18 @@ public class Queue {
         new Thread(() -> { //This thread check if the player in the queue are more then three
             while(true){
                 //TODO start new Thread to check multiple times if there are enough players to start multiple Games
-                if (playersID.size() >= 3){
-                    try {
-                        wait(30000);
-                    }catch (InterruptedException e){
-                        //TODO logger
-                    }
-                    synchronized (lock){
+                if (playersID.size() >= 3) {
+                    synchronized (this) {
+                        try {
+                            System.out.println("Wait");
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            //TODO logger
+                        }
+                        System.out.println("Booo");
                         ArrayList<Integer> players = getPlayers();
                         notifyServer(getPlayers());
+                        System.out.println("Booo1");
                     }
                 }
             }
@@ -45,7 +48,7 @@ public class Queue {
      * @param player the token of the client that need to be added to the queue
      * */
     public void addPlayer(Integer player){
-        synchronized (lock) {
+        synchronized (this) {
             playersID.put(player, null);
         }
     }
@@ -57,7 +60,7 @@ public class Queue {
      * */
     public ArrayList<Integer> getPlayers(){
         ArrayList<Integer> ret;
-        synchronized (lock) {
+        synchronized (this) {
             ArrayList<Integer> newPlayers = new ArrayList<>(playersID.keySet());
             ret = newPlayers
                     .stream()
@@ -71,6 +74,10 @@ public class Queue {
 
     public void setPreferences(GameSettingsResponse message){
         playersID.replace(message.getToken(), message);
+    }
+
+    public int getQueueSize(){
+        return playersID.size();
     }
 
     /**
@@ -90,8 +97,8 @@ public class Queue {
             }
         }
         if (skullNumber == 0 || map == 0){ //If none of the player choose his game preference those are randomly extracted
-            skullNumber = (Arrays.asList(5, 8).get(new Random().nextInt(2))); //Extract skull number (can be 5 or 8)
-            map = (Arrays.asList(1, 2, 3, 4).get(new Random().nextInt(5))); //Extract map number (can be 1, 2, 3 or 4)
+            skullNumber = (Arrays.asList(5, 8).get(new Random().nextInt(1))); //Extract skull number (can be 5 or 8)
+            map = (Arrays.asList(1, 2, 3, 4).get(new Random().nextInt(4))); //Extract map number (can be 1, 2, 3 or 4)
         }
         server.notifyFromQueue(players,skullNumber, map);
     }

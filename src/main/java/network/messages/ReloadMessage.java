@@ -8,7 +8,8 @@ public class ReloadMessage extends Message{
     private CardWeapon weapon;
     private CardPowerUp powerUp;
 
-    public ReloadMessage(CardWeapon weapon, CardPowerUp powerUp){
+    public ReloadMessage(Integer token, CardWeapon weapon, CardPowerUp powerUp){
+        this.token = token;
         actionType=ActionType.RELOAD;
         this.weapon=weapon;
         this.powerUp=powerUp;

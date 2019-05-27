@@ -2,6 +2,7 @@ package network.Server.Socket;
 
 import network.Server.Server;
 import network.messages.ConnectionResponse;
+import network.messages.GameSettingsRequest;
 import network.messages.Message;
 
 import java.io.*;
@@ -70,6 +71,7 @@ public class SocketServer {
 
             threadHashMap.put(token, clientHandler);
             clientHandler.respond(new ConnectionResponse(token));
+            send(new GameSettingsRequest(token));
         }
     }
 
@@ -91,7 +93,13 @@ public class SocketServer {
      * */
     public void run() throws IOException{
             init();
-            acceptConnection();
+            new Thread(() -> {
+                try {
+                    acceptConnection();
+                }catch (IOException e){
+                    //TODO log exception
+                }
+            }).start();
     }
 
     /**
