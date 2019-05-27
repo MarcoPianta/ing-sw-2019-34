@@ -1,14 +1,15 @@
 package network.Server.RMI;
 
-import network.Client.RMI.RMIClient;
 import network.messages.Message;
 
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RMIServerInterface extends Remote {
 
-    void acceptConnection() throws RemoteException;
-    void send(Message message) throws RemoteException;
+    void onReceive(Message message)throws RemoteException;
+    Integer generateToken();
+    void acceptConnection(Integer token) throws RemoteException, NotBoundException;
 
 }

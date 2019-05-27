@@ -48,10 +48,12 @@ public class RMIServerTest {
                 //nothing to do
             }
         }).start();
-        RMIClient rmiClient = new RMIClient(PORT);
-        rmiClient.init();
-        rmiClient.send(new Message());
-        rmiClient.send(new Message());
+        RMIClient rmiClient1 = new RMIClient(PORT);
+        RMIClient rmiClient2 = new RMIClient(PORT);
+        rmiClient1.init();
+        rmiClient2.init();
+        rmiClient1.send(new Message());
+        rmiClient2.send(new Message());
     }
 
 }

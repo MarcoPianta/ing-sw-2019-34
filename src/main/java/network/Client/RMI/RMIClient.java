@@ -1,37 +1,45 @@
 package network.Client.RMI;
 
+import network.Server.Client;
 import network.Server.RMI.RMIServerInterface;
 import network.messages.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Logger;
 
 /**
  * This class is used from the client to communicate with RMIServer when a RMI connection is used.
  * */
-public class RMIClient {
-    private int port;
-    //private Client client;
+public class RMIClient extends Client{
+    private int PORT;
     private RMIServerInterface server;
+    private static Logger logger = Logger.getLogger("rmiClient");
 
     /**
-     * The constructor only initialize the host and port attribute, it doesn't establish connection. Attributes will be
+     * The constructor only initialize the host and PORT attribute, it doesn't establish connection. Attributes will be
      * used from init() to establish a new connection to the server
      * */
     public RMIClient(int port){
-        this.port = port;
+        super();
+        this.rmi = true;
+        this.PORT = port;
     }
 
     /**
-     * This method initialize a new RMI connection and set the output and input stream used to send and receive
-     * message from the server.
+     * This method initialize a new RMI connection
+     * get the registry by the port PORT, lookup for "Server"
+     * rebind "Client" for the server that can lookup for it
      * */
-    public void init() {
+    public void init() throws RemoteException{
         try {
-            Registry registry = LocateRegistry.getRegistry(port);
+            Registry registry = LocateRegistry.getRegistry(PORT);
             server = (RMIServerInterface) registry.lookup("Server");
 
+            Integer token = server.generateToken();
+            registry.rebind(token.toString(), new RMIClientImplementation(this));
+            server.acceptConnection(token);
         }catch (Exception e){
             System.out.println("Client Exception: " + e.getMessage());
             e.printStackTrace();
@@ -42,8 +50,13 @@ public class RMIClient {
      * This method send a message to the server
      * @param message is the message that must be sent to the server
      * */
-    public void send(Message message) throws RemoteException {
-            server.send(message);
+    public void send(Message message){
+        try{
+
+            server.onReceive(message);
+        }catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
