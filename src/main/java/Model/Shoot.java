@@ -1,15 +1,16 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Shoot {
     private Effect shootEffect;
     private Player shooterPlayer;
-    private ArrayList<Player> targets;
+    private List<Player> targets;
     private NormalSquare targetSquare;
     private Colors roomColor;
 
-    public Shoot(Effect effect, Player shooter, ArrayList<Player> target){
+    public Shoot(Effect effect, Player shooter, List<Player> target){
         this.shootEffect = effect;
         this.shooterPlayer = shooter;
         this.targets = target;
