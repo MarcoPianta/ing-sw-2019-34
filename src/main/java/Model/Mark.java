@@ -41,15 +41,6 @@ public class Mark implements Action {
      * @return true if the action invocation respect the condition, false otherwise
      */
     public boolean isValid(){
-        ArrayList<NormalSquare> reachable = reachableSquare();
-            if(reachable.contains(targetPlayers.getPosition())){
-                if(markerEffect.getPreCondition().isEnemiesDifferentSquare()) {
-                    reachable.remove(targetPlayers.getPosition());
-                }
-            else{
-                return false;
-            }
-        }
         return true;
     }
 

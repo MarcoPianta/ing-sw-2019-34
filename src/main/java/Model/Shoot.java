@@ -36,6 +36,13 @@ public class Shoot {
         return false;
     }
 
+    /**
+     * Control the Pre-condition of the Shoot Action
+     * This method invoke reachableSquare and targetablePlayer methods
+     *
+     * @return true if the action invocation respect the condition, false otherwise
+     */
+
     public boolean isValid(){
         switch (shootEffect.getTarget()){
             case ('p'):
