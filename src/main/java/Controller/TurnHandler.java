@@ -29,11 +29,15 @@ public class TurnHandler {
         return nextState;
     }
 
+    public EndTurnChecks getEndTurnChecks() {
+        return endTurnChecks;
+    }
+
     public void start(){
         //TODO messaggio che inizia turno
         getGameHandler().getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8){
-            gameHandler.getGame().getCurrentPlayer().spawn(2);
+            gameHandler.getGame().getCurrentPlayer().spawn(2);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1,1,1);
         }
         setNextState(StateMachineEnumerationTurn.ACTION1);
@@ -67,7 +71,11 @@ public class TurnHandler {
             valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 3).execute();}
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
-            valueReturn= new Injure(gameHandler.getGame().getCurrentPlayer(), (ArrayList<Player>) newMessage.getTargets(),newMessage.getEffect()).execute();
+            if(newMessage.getPowerUp()!=null){
+                if(!usePowerUp(message)){}
+                    //send message at server for failure powerup
+            }
+            valueReturn= actionShot(newMessage);
         }
         else
             valueReturn=actionGrab(message,1);
@@ -81,7 +89,7 @@ public class TurnHandler {
             valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 3).execute();}
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
-            valueReturn= new Injure(gameHandler.getGame().getCurrentPlayer(), (ArrayList<Player>) newMessage.getTargets(),newMessage.getEffect()).execute();
+            valueReturn= actionShot(newMessage);
         }
         else
             valueReturn=actionGrab(message,2);
@@ -97,10 +105,20 @@ public class TurnHandler {
             Shot newMessage=(Shot)message;
             if(newMessage.getMaxMove()==1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 1).execute();
-            valueReturn= new Injure(gameHandler.getGame().getCurrentPlayer(), (ArrayList<Player>) newMessage.getTargets(),newMessage.getEffect()).execute();
+            valueReturn= actionShot(newMessage);
         }
         else
             valueReturn=actionGrab(message,2);
+        return valueReturn;
+    }
+    protected boolean actionShot(Shot message){
+        boolean valueReturn=false;
+        if(message.getNewSquare()==null && message.getRoom()==null)
+            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(), message.getTargets()).execute();
+        else if(message.getNewSquare()==null && message.getTargets()==null)
+            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getRoom().getColor()).execute();
+        else
+            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getSquare()).execute();
         return valueReturn;
     }
     //creare messaggio diverso per weapon =3, stesso messaggio ma costruttore diverso, se ho 3 armki grabbo normalmente  e elimino lintero per rimuovere
@@ -111,18 +129,24 @@ public class TurnHandler {
             if(newMessage.getMaxMove()>=1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), maxMove).execute();
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getCard()).execute();
+            if(valueReturn)
+                endTurnChecks.getEmptySquares().add(newMessage.getNewSquare());
         }
         else if(message.getActionType()==ActionType.GRABAMMO){
             GrabAmmo newMessage=(GrabAmmo) message;
             if(newMessage.getMaxMove()>=1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), maxMove).execute();
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getCard()).execute();
+            if(valueReturn)
+                endTurnChecks.getEmptySquares().add(newMessage.getNewSquare());
         }
         else{
             GrabNotOnlyAmmo newMessage=(GrabNotOnlyAmmo) message;
             if(newMessage.getMaxMove()>=1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), maxMove).execute();
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getCard()).execute();
+            if(valueReturn)
+                endTurnChecks.getEmptySquares().add(newMessage.getNewSquare());
         }
         return valueReturn;
     }
@@ -177,16 +201,16 @@ public class TurnHandler {
     public void endTurn(){
         //TODO messaggio che è finito turno
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ENDTURN);
-        endTurnChecks.playerIsDead(gameHandler.getGame());
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
         gameHandler.getGame().incrementCurrentPlayer();
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         endTurnChecks.fillSquare(gameHandler.getGame());
         endTurnChecks.isFinalTurn(gameHandler.getGame());
+        endTurnChecks.playerIsDead(gameHandler.getGame());
         start();
     }
     class EndTurnChecks {
-        private ArrayList<NormalSquare> emptySquares;
+        private ArrayList<NormalSquare> emptySquares=new ArrayList<>();
 
         public List<NormalSquare> getEmptySquares() {
             return emptySquares;
@@ -194,7 +218,7 @@ public class TurnHandler {
 
         public void fillSquare(Game game) {
             int i = emptySquares.size() - 1;
-            while (emptySquares.size() == 0) {
+            while (emptySquares.isEmpty()) {
                 if (emptySquares.get(i).isSpawn())
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                 else
@@ -207,15 +231,15 @@ public class TurnHandler {
         public void playerIsDead(Game game) {
             int i=game.getDeadPlayer().size()-1;
             while(i>=0) {
-                game.getDeadPlayer().get(i).spawn(1);//extract powerUp
+                game.getDeadPlayer().get(i). spawn(1);//extract powerUp
                 game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
                 i--;
             }
         }
 
-        private void isFinalTurn(Game game){
+        public void isFinalTurn(Game game){
             if(game.getDeadRoute().isFinalTurn())
-                game.getDeadRoute().finalTurnPlayer();
+                game.getDeadRoute().setFinalTurnPlayer();
             getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
             if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getFinalTurnHandler().getFirstFinalTurnPlayer())
                 getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);

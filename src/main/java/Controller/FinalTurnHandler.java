@@ -12,13 +12,13 @@ public class FinalTurnHandler extends TurnHandler {
     private Player firstFinalTurnPlayer;
     private GameHandler gameHandler;
     private EndFinalTurnChecks endFinalTurnChecks;
-    private boolean alreadyFirsPlayer;
+    private boolean alreadyFirstPlayer;
 
     public FinalTurnHandler(GameHandler gameHandler) {
         super(gameHandler);
         this.firstFinalTurnPlayer=null;
         endFinalTurnChecks=new EndFinalTurnChecks();
-        alreadyFirsPlayer=false;
+        alreadyFirstPlayer=false;
     }
 
     public void setFirstFinalTurnPlayer(Player firstFinalTurnPlayer) {
@@ -30,7 +30,7 @@ public class FinalTurnHandler extends TurnHandler {
     }
 
     public void setAlreadyFirsPlayer(boolean alreadyFirsPlayer) {
-        this.alreadyFirsPlayer = alreadyFirsPlayer;
+        this.alreadyFirstPlayer = alreadyFirsPlayer;
     }
 
     public boolean actionFinalTurn(Message message){
@@ -44,7 +44,7 @@ public class FinalTurnHandler extends TurnHandler {
             setNextState(StateMachineEnumerationTurn.ENDTURN);
         }
 
-        if(alreadyFirsPlayer)
+        if(alreadyFirstPlayer)
             valueReturn=actionAfterFirstPlayer(message);
         else
             valueReturn=actionBeforeFirstPlayer(message);
@@ -63,7 +63,7 @@ public class FinalTurnHandler extends TurnHandler {
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 1).execute();
             if(newMessage.isReload())
                 new Reload(gameHandler.getGame().getCurrentPlayer(), newMessage.getWeapon()).execute();
-            valueReturn= new Injure(gameHandler.getGame().getCurrentPlayer(), (ArrayList<Player>) newMessage.getTargets(),newMessage.getEffect()).execute();
+            valueReturn= actionShot(newMessage);
         }
         else
             valueReturn=actionGrab(message,2);
@@ -78,7 +78,7 @@ public class FinalTurnHandler extends TurnHandler {
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 2).execute();
             if(newMessage.isReload())
                 new Reload(gameHandler.getGame().getCurrentPlayer(), newMessage.getWeapon()).execute();
-            valueReturn= new Injure(gameHandler.getGame().getCurrentPlayer(), (ArrayList<Player>) newMessage.getTargets(),newMessage.getEffect()).execute();
+            valueReturn= actionShot(newMessage);
         }
         else
             valueReturn=actionGrab(message,3);
@@ -96,6 +96,7 @@ public class FinalTurnHandler extends TurnHandler {
             gameHandler.getGame().incrementCurrentPlayer();
             gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
             endFinalTurnChecks.fillSquare(gameHandler.getGame());
+            endFinalTurnChecks.playerIsDead(gameHandler.getGame());
             endFinalTurnChecks.isFirstPlayer();
             start();
         }
