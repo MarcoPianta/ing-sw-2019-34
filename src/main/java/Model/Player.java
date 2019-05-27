@@ -22,6 +22,10 @@ public class Player {
         this.state= StateMachineEnumerationTurn.WAIT;
     }
 
+    public Integer getPlayerID() {
+        return playerID;
+    }
+
     public void setGameId(Game gameId) {
         this.gameId = gameId;
     }
@@ -76,7 +80,6 @@ public class Player {
         while((i<getGameId().getMap().getRooms().size()) &&(isNotFind)){
             j=0;
             while((j<getGameId().getMap().getRooms().get(i).getNormalSquares().size())&&(isNotFind)){
-                 //assert(getGameId().getMap().getRooms().get(i).getNormalSquares().get(j).getColor()!=null);
                 if(getGameId().getMap().getRooms().get(i).getNormalSquares().get(j).isSpawn()&&
                         (getGameId().getMap().getRooms().get(i).getColor().getAbbreviation().equals(powerUp.getColor().getAbbreviation())))
                     isNotFind=false;
