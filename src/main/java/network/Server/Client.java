@@ -1,9 +1,12 @@
 package network.Server;
 
+import Model.NormalSquare;
 import Model.Player;
 import network.messages.ActionType;
 import network.messages.ConnectionResponse;
 import network.messages.Message;
+import network.messages.UpdateClient;
+import view.View;
 
 /**
  * This Class represents the client, it is extended from the Socket or RMI client.
@@ -13,6 +16,7 @@ public abstract class Client {
     protected Player player;
     protected boolean rmi;
     protected Integer token;
+    protected View view;
 
     public Client(){
         this.player = null;
@@ -20,8 +24,8 @@ public abstract class Client {
 
     /**
      * This method receive a message from the server and handle it.
-     * The method is called from when a new message is received on input stream it is read and passed as
-     * parameter.
+     * The method is called when a new message is received on input stream, it is read and passed as parameter, then
+     * the proper action is executed.
      * @param message is the message received from the server
      * */
     public void onReceive(Message message) {
@@ -31,7 +35,8 @@ public abstract class Client {
             this.token = response.getToken();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
-
+            UpdateClient update = (UpdateClient) message;
+            handleUpdate(update);
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
             //TODO update view asking client which configuration want to use to play, then send GAMESETTINGSRESPONSE to the server
@@ -57,7 +62,17 @@ public abstract class Client {
      * */
     public abstract void send(Message message);
 
-    public void handleUpdate(Message message){
+    public void handleUpdate(UpdateClient message){
+        if (message.getUpdateType().equals(UpdateClient.DAMAGEBAR))
+            view.setDamageBar(message.getDamageBar());
 
+        else if (message.getUpdateType().equals(UpdateClient.POSITION))
+            view.setMyPositionID(message.getSquareID());
+
+        else if (message.getUpdateType().equals(UpdateClient.POSSIBLESQUARES))
+            view.showReachableSquares();
+
+        else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
+            view.showMessage(message.getMessage());
     }
 }
