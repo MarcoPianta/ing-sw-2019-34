@@ -38,13 +38,13 @@ public class GameLobby {
         if (message.getActionType().getAbbreviation().equals(ActionType.POSSIBLETARGETSHOT.getAbbreviation())) {
 
             ArrayList<Player> targets = gameHandler.receiveTarget(((PossibleTargetShot) message));
-            server.send(new UpdateClient(message.getToken()));
+            server.send(new UpdateClient(message.getToken(), targets));
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.POSSIBLEMOVE.getAbbreviation())) {
 
             List<NormalSquare> squares = gameHandler.receiveSquare((PossibleMove) message);
-            server.send(new UpdateClient(message.getToken()));
+            server.send(new UpdateClient(message.getToken(), squares));
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.SHOT.getAbbreviation())) {
@@ -53,7 +53,7 @@ public class GameLobby {
             Shot m = (Shot) message;
             if (done){
                 for (Player p: m.getTargets()) {
-                    server.send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHealthPlayer().getDamageBar()));
+                    server.send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHealthPlayer().getDamageBar().toArray(new Player[12])));
                 }
             }
         }
