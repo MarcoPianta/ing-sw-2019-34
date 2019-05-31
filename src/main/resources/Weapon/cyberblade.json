@@ -7,45 +7,14 @@
   ],
   "color": "YELLOW",
   "effectNumber": 5,
-  "Effect1": [
-    {
-      "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 0
-        }
-      ],
-      "target": 'p',
-      "targetNumber": 1,
-      "actionSequence": "mi",
-      "damage": [
-        2
-      ],
-      "mark": [
-        0
-      ],
-      "myMove": 1,
-      "targetMove": 0,
-      "iteration": 1,
-      "preCondition": [
-        {
-          "vision": true,
-          "blind": false,
-          "minRange": 0,
-          "maxRange": 0,
-          "cardinal": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition": [
-        {
-          "targetMove": 0
-        }
-      ]
-    }
+  "actionSequences": [
+    12,
+    21,
+    123,
+    132,
+    213
   ],
-  "Effect2": [
+"Effect1": [
     {
       "bonusCost": [
         {
@@ -83,6 +52,44 @@
       ]
     }
   ],
+  "Effect2": [
+    {
+      "bonusCost": [
+        {
+          "R": 0,
+          "Y": 0,
+          "B": 0
+        }
+      ],
+      "target": 'p',
+      "targetNumber": 1,
+      "actionSequence": "mi",
+      "damage": [
+        2
+      ],
+      "mark": [
+        0
+      ],
+      "myMove": 1,
+      "targetMove": 0,
+      "iteration": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "blind": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false
+        }
+      ],
+      "postCondition": [
+        {
+          "targetMove": 0
+        }
+      ]
+    }
+  ],
   "Effect3": [
     {
       "bonusCost": [
@@ -94,7 +101,7 @@
       ],
       "target": 'p',
       "targetNumber": 2,
-      "actionSequence": "mii",
+      "actionSequence": "imi",
       "damage": [
         2,
         2
@@ -174,7 +181,7 @@
       ],
       "target": 'p',
       "targetNumber": 1,
-      "actionSequence": "imi",
+      "actionSequence": "mii",
       "damage": [
         2,
         2
