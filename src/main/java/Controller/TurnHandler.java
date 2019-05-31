@@ -34,8 +34,8 @@ public class TurnHandler {
     }
 
     public void start(){
+        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         //TODO messaggio che inizia turno
-        getGameHandler().getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8){
             gameHandler.getGame().getCurrentPlayer().spawn(2);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1,1,1);
@@ -119,6 +119,17 @@ public class TurnHandler {
             valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getRoom().getColor()).execute();
         else
             valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getSquare()).execute();
+        //use venom
+        if(valueReturn){
+            for(Player p:message.getTargets()){
+                for(CardPowerUp powerUp:p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()){
+                    CanUseVenom canUseVenom;
+                    if(powerUp.getWhen().equals("get"))
+                        canUseVenom=new CanUseVenom(p.getPlayerID());
+                }
+
+            }
+        }
         return valueReturn;
     }
     //creare messaggio diverso per weapon =3, stesso messaggio ma costruttore diverso, se ho 3 armki grabbo normalmente  e elimino lintero per rimuovere
@@ -128,7 +139,7 @@ public class TurnHandler {
             GrabWeapon newMessage=(GrabWeapon) message;
             if(newMessage.getMaxMove()>=1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), maxMove).execute();
-            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getCard()).execute();
+            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare().getWeapons().get(newMessage.getPositionWeapon())).execute();
             if(valueReturn)
                 endTurnChecks.getEmptySquares().add(newMessage.getNewSquare());
         }
@@ -136,7 +147,7 @@ public class TurnHandler {
             GrabAmmo newMessage=(GrabAmmo) message;
             if(newMessage.getMaxMove()>=1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), maxMove).execute();
-            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getCard()).execute();
+            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardOnlyAmmo) newMessage.getNewSquare().getItem()).execute();
             if(valueReturn)
                 endTurnChecks.getEmptySquares().add(newMessage.getNewSquare());
         }
@@ -144,10 +155,14 @@ public class TurnHandler {
             GrabNotOnlyAmmo newMessage=(GrabNotOnlyAmmo) message;
             if(newMessage.getMaxMove()>=1)
                 new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), maxMove).execute();
-            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),newMessage.getCard()).execute();
+            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardNotOnlyAmmo) newMessage.getNewSquare().getItem()).execute();
             if(valueReturn)
                 endTurnChecks.getEmptySquares().add(newMessage.getNewSquare());
         }
+        SubstituteWeapon substituteWeapon= new SubstituteWeapon(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons());
+
+        if(valueReturn && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()==4)
+            {}
         return valueReturn;
     }
 
@@ -156,13 +171,13 @@ public class TurnHandler {
         if(message.getActionType()==ActionType.USEPOWERUP){
             UsePowerUp newMessage=(UsePowerUp)message;
             if((newMessage.getPowerUp().getWhen().equals("during") &&(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer())
-                    &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.ENDTURN)))
+                    &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.WAIT)))
                 valueReturn=true;
             else if(newMessage.getPowerUp().getWhen().equals("dealing") &&(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer()))
                 valueReturn=true;
 
         }
-        else{
+        else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
             if(((newMessage.getPowerUp().getWhen().equals("get"))
                     &&((gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
@@ -200,10 +215,9 @@ public class TurnHandler {
 
     public void endTurn(){
         //TODO messaggio che è finito turno
-        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ENDTURN);
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
         gameHandler.getGame().incrementCurrentPlayer();
-        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
+        setNextState(StateMachineEnumerationTurn.START);
         endTurnChecks.fillSquare(gameHandler.getGame());
         endTurnChecks.isFinalTurn(gameHandler.getGame());
         endTurnChecks.playerIsDead(gameHandler.getGame());
@@ -241,7 +255,7 @@ public class TurnHandler {
             if(game.getDeadRoute().isFinalTurn())
                 game.getDeadRoute().setFinalTurnPlayer();
             getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
-            if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getFinalTurnHandler().getFirstFinalTurnPlayer())
+            if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())
                 getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
         }
     }

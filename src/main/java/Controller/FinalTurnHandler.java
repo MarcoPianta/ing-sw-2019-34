@@ -25,12 +25,20 @@ public class FinalTurnHandler extends TurnHandler {
         this.firstFinalTurnPlayer = firstFinalTurnPlayer;
     }
 
+    public boolean isAlreadyFirstPlayer() {
+        return alreadyFirstPlayer;
+    }
+
     public Player getFirstFinalTurnPlayer() {
         return firstFinalTurnPlayer;
     }
 
     public void setAlreadyFirsPlayer(boolean alreadyFirsPlayer) {
         this.alreadyFirstPlayer = alreadyFirsPlayer;
+    }
+
+    public EndFinalTurnChecks getEndFinalTurnChecks() {
+        return endFinalTurnChecks;
     }
 
     public boolean actionFinalTurn(Message message){
@@ -89,27 +97,26 @@ public class FinalTurnHandler extends TurnHandler {
     public void endTurn(Pass message){
         //TODO messaggio che è finito turno
         endFinalTurnChecks.playerIsDead(gameHandler.getGame());
+        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
+        gameHandler.getGame().incrementCurrentPlayer();
+        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         if(endFinalTurnChecks.finalTurnIsEnd())
             getGameHandler().endGame();
         else{
-            gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
-            gameHandler.getGame().incrementCurrentPlayer();
-            gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
             endFinalTurnChecks.fillSquare(gameHandler.getGame());
-            endFinalTurnChecks.playerIsDead(gameHandler.getGame());
             endFinalTurnChecks.isFirstPlayer();
             start();
         }
 
     }
 
-    private class EndFinalTurnChecks extends EndTurnChecks{
-        private void isFirstPlayer(){
-            if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getFinalTurnHandler().getFirstFinalTurnPlayer())
+    class EndFinalTurnChecks extends EndTurnChecks{
+        public void isFirstPlayer(){
+            if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer() )
                 setAlreadyFirsPlayer(true);
         }
 
-        private boolean finalTurnIsEnd(){
+        public boolean finalTurnIsEnd(){
             boolean valueReturn=false;
             if(getGameHandler().getGame().getCurrentPlayer()==getFirstFinalTurnPlayer())
                 valueReturn=true;

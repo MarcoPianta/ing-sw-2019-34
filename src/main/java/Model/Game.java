@@ -48,6 +48,10 @@ public class Game {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+    //for test
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 
     public  DeckCollector getDeckCollector() {
         return deckCollector;

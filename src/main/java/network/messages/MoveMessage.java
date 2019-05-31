@@ -6,8 +6,9 @@ import Model.NormalSquare;
 public class MoveMessage extends Message {
     private  NormalSquare newSquare;
 
-    public MoveMessage(NormalSquare newSquare){
+    public MoveMessage(Integer token,NormalSquare newSquare){
         actionType=ActionType.MOVE;
+        this.token=token;
         this.newSquare=newSquare;
     }
 

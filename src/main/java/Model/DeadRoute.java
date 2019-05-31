@@ -31,22 +31,27 @@ public class DeadRoute {
         return finalTurn;
     }
 
+    public void setFinalTurn(boolean finalTurn) {
+        this.finalTurn = finalTurn;
+    }
+
     /*
      *This method adds a murder in the dead route
      * */
     public void addMurders(Player player, int counter){
         while(counter >0){
-        getMurders().add(player);
-        counter--;}
+            getMurders().add(player);
+            counter--;
+        }
         skulls--;
         if(skulls<=0){
             finalTurn=true;
         }
     }
 
-    public void finalTurnPlayer(){
+    public void setFinalTurnPlayer(){
         for(Player p:getGameId().getPlayers()){
-            if(p.getPlayerBoard().getHealthPlayer().getDamageBar().size()==0)
+            if(p.getPlayerBoard().getHealthPlayer().getDamageBar().isEmpty())
                 p.getPlayerBoard().setMaxReward(2);
         }
     }

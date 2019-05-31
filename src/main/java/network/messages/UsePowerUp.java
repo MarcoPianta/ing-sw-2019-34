@@ -12,8 +12,9 @@ public class UsePowerUp extends Message{
     private int maxMove;
 
 
-    public  UsePowerUp(CardPowerUp cardPowerUp,Player user,Player target,NormalSquare square,int  maxMove){
+    public  UsePowerUp(Integer token,CardPowerUp cardPowerUp,Player user,Player target,NormalSquare square,int  maxMove){
         actionType=ActionType.USEPOWERUP;
+        this.token=token;
         this.powerUp=cardPowerUp;
         this.target=target;
         this.square=square;

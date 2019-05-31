@@ -41,21 +41,27 @@ public class GameHandler {
         if(!getGame().getDeadRoute().isFinalTurn()){
             if((message.getActionType()==ActionType.GRABAMMO) ||(message.getActionType()==ActionType.MOVE)||
                     (message.getActionType()==ActionType.SHOT)||(message.getActionType()==ActionType.GRABWEAPON)||(message.getActionType()==ActionType.GRABNOTONLYAMMO))
-                valueReturn=getTurnHandler().actionState(message);
+                valueReturn=turnHandler.actionState(message);
             else if(message.getActionType()==ActionType.PASS){
-                getTurnHandler().endTurn();
+                turnHandler.endTurn();
                 valueReturn=true;
             }
             else if(message.getActionType()==ActionType.RELOAD)
-                valueReturn=getTurnHandler().actionReload((ReloadMessage) message);
+                valueReturn=turnHandler.actionReload((ReloadMessage) message);
+            else if(message.getActionType()==ActionType.USEPOWERUP)
+                valueReturn=turnHandler.usePowerUp(message);
         }
-        else
-        if((message.getActionType()==ActionType.GRABAMMO) ||(message.getActionType()==ActionType.MOVE)||
-                (message.getActionType()==ActionType.SHOT)||(message.getActionType()==ActionType.GRABWEAPON)||(message.getActionType()==ActionType.GRABNOTONLYAMMO))
-            valueReturn=getFinalTurnHandler().actionFinalTurn(message);
-        else if(message.getActionType()==ActionType.PASS){
-            getFinalTurnHandler().endTurn();
-            valueReturn=true;
+        else{
+            if((message.getActionType()==ActionType.GRABAMMO) ||(message.getActionType()==ActionType.MOVE)||
+                    (message.getActionType()==ActionType.SHOT)||(message.getActionType()==ActionType.GRABWEAPON)||(message.getActionType()==ActionType.GRABNOTONLYAMMO))
+                valueReturn=finalTurnHandler.actionFinalTurn(message);
+            else if(message.getActionType()==ActionType.PASS){
+                finalTurnHandler.endTurn();
+                valueReturn=true;
+            }
+            else if(message.getActionType()==ActionType.USEPOWERUP)
+                valueReturn=finalTurnHandler.usePowerUp(message);
+
         }
         return valueReturn;
     }
@@ -83,8 +89,10 @@ public class GameHandler {
         ArrayList<Player> winnerList=new ArrayList<>();
         for(Player player:getGame().getPlayers()){
             if(player.getPlayerBoard().getPoints()>massimo) {
-                while(winnerList.size()!=0)
-                    winnerList.remove(winnerList.size()-1);
+                while(!winnerList.isEmpty()){
+                    winnerList.remove(0);
+                    assert (winnerList.size()==0);
+                }
                 massimo=player.getPlayerBoard().getPoints();
                 winnerList.add(player);
             }
@@ -108,9 +116,11 @@ public class GameHandler {
     }
     private void modifiedWinnerList(Player player,ArrayList<Player> winnerList){
         if(countPlayer(player)>countPlayer(winnerList.get(0))){
-            while(winnerList.size()!=0){
-                winnerList.remove(winnerList.size()-1);
+            while(!winnerList.isEmpty()){
+                winnerList.remove(0);
+
             }
+            assert(winnerList.size()==0);
             winnerList.add(player);
         }
         else if(countPlayer(player)==countPlayer(winnerList.get(0)))
