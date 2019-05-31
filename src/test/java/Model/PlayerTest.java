@@ -44,7 +44,7 @@ public class PlayerTest {
         player.spawn(1);
         CardPowerUp cardPowerUp=player.getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0);
         player.calculateNewPosition(player.getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0));
-        assertEquals(cardPowerUp.getColor(),player.getPosition().getColor());
+        assertEquals(cardPowerUp.getColor().getAbbreviation(),player.getPosition().getColor().getAbbreviation());
         assertTrue(player.getPosition().isSpawn());
 
     }

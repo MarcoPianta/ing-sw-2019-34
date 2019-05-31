@@ -7,12 +7,10 @@ import Model.NormalSquare;
 public class GrabNotOnlyAmmo extends Message{
     private int maxMove;
     private NormalSquare newSquare;
-    private CardNotOnlyAmmo card;
 
-    public GrabNotOnlyAmmo(Integer token, CardNotOnlyAmmo card, int maxMove, NormalSquare newSquare){
+    public GrabNotOnlyAmmo(Integer token, int maxMove, NormalSquare newSquare){
         this.token = token;
         actionType=ActionType.GRABNOTONLYAMMO;
-        this.card=card;
         this.maxMove=maxMove;
         this.newSquare=newSquare;
     }
@@ -24,9 +22,6 @@ public class GrabNotOnlyAmmo extends Message{
         return newSquare;
     }
 
-    public CardNotOnlyAmmo getCard() {
-        return card;
-    }
 }
 
 

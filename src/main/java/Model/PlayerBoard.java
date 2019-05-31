@@ -8,7 +8,7 @@ public class PlayerBoard {
     private Health healthPlayer;
     private Hand handPlayer;
     private Player player;
-    private boolean finalTurn;
+    private boolean finalTurn;//max reward=2;
 
     public PlayerBoard(Player player){
         this.maxReward=8;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Shot extends Message {
-    private ArrayList<Player> targets;
+    private List<Player> targets;
     private Effect effect;
     private int maxMove;
     private NormalSquare newSquare;
@@ -17,7 +17,7 @@ public class Shot extends Message {
     private CardPowerUp powerUp;
     private Player targetPowerUp;
 
-    public Shot(ArrayList<Player> targets, Effect effect, int maxMove, NormalSquare newSquare, CardWeapon weapon,boolean reload,CardPowerUp powerUp,Player targetPowerUp){
+    public Shot(List<Player> targets, Effect effect, int maxMove, NormalSquare newSquare, CardWeapon weapon,boolean reload,CardPowerUp powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;

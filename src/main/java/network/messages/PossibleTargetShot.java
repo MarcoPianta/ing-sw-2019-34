@@ -6,8 +6,9 @@ import Model.Game;
 public class PossibleTargetShot extends  Message{
     private Effect effect;
 
-    public PossibleTargetShot(Effect effect){
+    public PossibleTargetShot(Integer token,Effect effect){
         actionType= ActionType.POSSIBLETARGETSHOT;
+        this.token=token;
         this.effect=effect;
     }
 

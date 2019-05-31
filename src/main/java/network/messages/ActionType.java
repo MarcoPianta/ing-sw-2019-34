@@ -21,7 +21,10 @@ public enum ActionType {
     PASS("Pass"),
     TIMEOUT("Time out"),
     GAMESETTINGSREQUEST("Game settings request"),
-    GAMESETTINGSRESPONSE("Game settings response");
+    GAMESETTINGSRESPONSE("Game settings response"),
+    STARTTURNMESSAGE("Start turn message"),
+    SUBSTITUTEWEAPON("Substitute weapon"),
+    CANUSEVENOM("Can use venom");
 
     private String abbreviation;
     private ActionType(String abbreviation) {

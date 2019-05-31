@@ -1,9 +1,13 @@
 package Model;
 
+import Controller.GameHandler;
+import network.messages.PossibleMove;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HandTest {
@@ -128,5 +132,29 @@ public class HandTest {
         player.getPlayerBoard().getHandPlayer().addAmmo(red,yellow,blue);
         assertEquals(3,player.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
     }
+    /*
+     *this method tests the use of power up
+     * */
+    @Test
+    public void usePowerUpTest() throws  FileNotFoundException{
+        List<NormalSquare> squares=new ArrayList<>();
+        ArrayList<Integer> tokens=new ArrayList<>();
+        tokens.add(1322);
+        tokens.add(32525);
+        GameHandler gameHandler=new GameHandler(5,tokens,"map1");
+        CardPowerUp cardPowerUp = new CardPowerUp(PowerUpEnum.NEWTON_B.getAbbreviation());
+        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().addPowerUp(cardPowerUp);
+        gameHandler.getGame().getPlayers().get(1).spawn(2);
+        gameHandler.getGame().getPlayers().get(1).calculateNewPosition(gameHandler.getGame().getPlayers().get(1).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0));
+
+        PossibleMove possibleMove=new PossibleMove(1);
+        squares=gameHandler.receiveSquare(possibleMove);
+        //use powerUp
+        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0),gameHandler.getGame().getPlayers().get(1),1,squares.get(0));
+
+        assertEquals(squares.get(0),gameHandler.getGame().getPlayers().get(1).getPosition());
+        assertEquals(0,gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());
+    }
+
 
 }

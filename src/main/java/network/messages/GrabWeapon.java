@@ -8,14 +8,14 @@ public class GrabWeapon extends Message {
 
     private int maxMove;
     private NormalSquare newSquare;
-    private CardWeapon card;
+    private int positionWeapon;
 
-    public GrabWeapon(Integer token, CardWeapon card,int maxMove,NormalSquare newSquare){
+    public GrabWeapon(Integer tokenint,int  maxMove,NormalSquare newSquare,int positionWeapon){
         this.token = token;
         actionType=ActionType.GRABWEAPON;
-        this.card=card;
         this.maxMove=maxMove;
         this.newSquare=newSquare;
+        this.positionWeapon=positionWeapon;
     }
 
     public int getMaxMove() {
@@ -26,7 +26,8 @@ public class GrabWeapon extends Message {
         return newSquare;
     }
 
-    public CardWeapon getCard() {
-        return card;
+    public int getPositionWeapon() {
+        return positionWeapon;
     }
+
 }
