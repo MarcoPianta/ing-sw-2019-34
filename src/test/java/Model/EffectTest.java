@@ -28,19 +28,19 @@ public class EffectTest {
         reader.close();
 
         Effect effect = new Effect(jsonValues, 1);
+        assertEquals(0, effect.getBonusCost().get(0));
         assertEquals(1, effect.getTargetNumber());
-        assertTrue(effect.isAllTarget());
+        assertEquals("mp", effect.getActionSequence());
         assertEquals(2, effect.getDamage().get(0));
-        assertEquals(0, effect.getMark());
-        assertEquals(0, effect.getMyMove());
+        assertEquals(0, effect.getMark().get(0));
+        assertEquals(1, effect.getMyMove());
         assertEquals(0, effect.getTargetMove());
-        assertEquals(1, effect.getIteration());
     }
 
     @Test
     public void constructorTestDoubleDamage() throws FileNotFoundException {
         JsonObject jsonValues;
-        String file = WeaponDictionary.FLAMETHROWER.getAbbreviation();
+        String file = WeaponDictionary.CYBERBLADE.getAbbreviation();
         File fileJson = new File(getClass().getResource("/Weapon/"+file+".json").getFile());
         InputStream fis = new FileInputStream(fileJson);
         JsonReader reader = Json.createReader(fis);
@@ -48,15 +48,13 @@ public class EffectTest {
         reader.close();
 
         Effect effect = new Effect(jsonValues, 2);
+        assertEquals(1, effect.getBonusCost().get(1));
         assertEquals(2, effect.getTargetNumber());
-        assertFalse(effect.isAllTarget());
-        assertEquals(2, effect.getDamage().size());
-        assertEquals(2, effect.getDamage().get(0));
-        assertEquals(1, effect.getDamage().get(1));
-        assertEquals(0, effect.getMark());
-        assertEquals(0, effect.getMyMove());
+        assertEquals("pmp", effect.getActionSequence());
+        assertEquals(2, effect.getDamage().get(1));
+        assertEquals(0, effect.getMark().get(1));
+        assertEquals(1, effect.getMyMove());
         assertEquals(0, effect.getTargetMove());
-        assertEquals(1, effect.getIteration());
     }
 
     /**
@@ -76,10 +74,11 @@ public class EffectTest {
         Effect effect = new Effect(jsonValues, 1);
 
         assertTrue(effect.getPreCondition().isVision());
-        assertFalse(effect.getPreCondition().isEnemiesDifferentSquare());
+        assertFalse(effect.getPreCondition().isBlind());
         assertEquals(0, effect.getPreCondition().getMinRange());
         assertEquals(0, effect.getPreCondition().getMaxRange());
         assertFalse(effect.getPreCondition().isCardinal());
+        assertFalse(effect.getPreCondition().isEnemiesDifferentSquare());
     }
 
     @Test

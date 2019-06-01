@@ -20,9 +20,8 @@
       "Y": 0,
       "B": 0
     }
-    "target": --> type of target ('p' for Player / 's' for Square / 'r' for Room )
     "targetNumber": --> number of target ( if target == to 's' or 'r' it's 0 )
-    "actionSequence": --> describe how to combine the single action to compose the effect
+    "actionSequence": --> describe how to combine the single action to compose the effect 'p' for Player, 's' for Square, 'r' for Room
     "damage":{ --> array of damage for targets
         2,
         4,
