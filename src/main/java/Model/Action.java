@@ -4,5 +4,4 @@ package Model;
  * */
 public interface Action{
     boolean execute();
-    boolean isValid();
 }

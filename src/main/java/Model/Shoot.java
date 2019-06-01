@@ -3,37 +3,58 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shoot {
+public class Shoot implements Action{
     private Effect shootEffect;
     private Player shooterPlayer;
     private List<Player> targets;
     private NormalSquare targetSquare;
     private Colors roomColor;
+    private char actionType;
+    private List<Player> gamePlayers;
 
     public Shoot(Effect effect, Player shooter, List<Player> target){
         this.shootEffect = effect;
         this.shooterPlayer = shooter;
         this.targets = target;
+        this.actionType = 'p';
     }
 
     public Shoot(Effect effect, Player shooter, NormalSquare square){
         this.shootEffect = effect;
         this.shooterPlayer = shooter;
+        this.gamePlayers = shooterPlayer.getGameId().getPlayers();
         this.targetSquare = square;
+        this.actionType = 's';
     }
 
     public Shoot(Effect effect, Player shooter, Colors color){
         this.shootEffect = effect;
         this.shooterPlayer = shooter;
+        this.gamePlayers = shooterPlayer.getGameId().getPlayers();
         this.roomColor = color;
+        this.actionType = 'r';
     }
 
     public boolean execute(){
-        if(isValid()) {
+        if (isValid()){
+            switch(actionType) {
+                case ('p'):
+                    caseP();
+                    return true;
 
-            return true;
+                case ('s'):
+                    caseS();
+                    return true;
+
+                case ('r'):
+                    caseR();
+                    return true;
+
+                default:
+                    return false;
+            }
         }
-        return false;
+        else    return false;
     }
 
     /**
@@ -44,32 +65,40 @@ public class Shoot {
      */
 
     public boolean isValid(){
-        switch (shootEffect.getTarget()){
+        switch (actionType){
             case ('p'):
-       //         if (targets.size() <= shootEffect.getTargetNumber()){
-                    ArrayList<Player> visibleTarget = targetablePlayer();
+                    List<Player> visibleTarget = targetablePlayer();
+                    ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
                     for (Player target : targets) {
-                        if ((shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)) || (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target)))) {
+                        if(!conditionControll(target, visibleTarget, targetListSquare)){
                             return false;
                         }
                     }
                     return true;
-       //         }
-                //TODO there are too much target, is it possible to happen??        if not erase the first if condition
-       //         return false;
 
             case ('s'):
-     //           if(shootEffect.getTargetNumber() == 0)  //TODO useless condition??
-                    return reachableSquare().contains(targetSquare);
-     //           return false;
+                return reachableSquare().contains(targetSquare);
 
             case ('r'):
-     //           if(shootEffect.getTargetNumber() == 0)  //TODO useless condition??
                     for (NormalSquare normalSquare : reachableSquare()){
                         if(normalSquare.getColor() == roomColor)
                             return true;
                     }
                 return false;
+            default:
+                return false;
+        }
+    }
+
+    private boolean conditionControll(Player target, List<Player> visibleTarget, ArrayList<NormalSquare> targetListSquare){
+        if ((shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)) || (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target)))) {
+            return false;
+        }
+        if (shootEffect.getPreCondition().isEnemiesDifferentSquare()){
+            if (targetListSquare.contains(target.getPosition()))
+                return false;
+            else
+                targetListSquare.add(target.getPosition());
         }
         return true;
     }
@@ -78,7 +107,7 @@ public class Shoot {
      * This method control the isVision PreCondition
      * @return the list of Square reachable from the startSquare with at least movePass step
      */
-    public ArrayList<NormalSquare> reachableSquare() {
+    public List<NormalSquare> reachableSquare() {
         Effect.PreCondition preCondition = shootEffect.getPreCondition();
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
         ArrayList<NormalSquare> thisStepSquare = new ArrayList<>();
@@ -87,6 +116,8 @@ public class Shoot {
         thisStepSquare.add(shooterPlayer.getPosition());
         allStepSquare.add(shooterPlayer.getPosition());
         int thisStep;
+        int i;
+        int j;
         if (0 == preCondition.getMinRange())
             reachableSquare.add(shooterPlayer.getPosition());
         if (preCondition.isVision()) {
@@ -100,7 +131,7 @@ public class Shoot {
             if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getW().getColor());
         }
-        for (int i = 0, j; i < preCondition.getMaxRange(); i++) {
+        for (i = 0; i < preCondition.getMaxRange(); i++) {
             thisStep = thisStepSquare.size();
             j = 0;
             while (j < thisStep) {
@@ -130,7 +161,7 @@ public class Shoot {
     /**
      * @return the list of Player that can be targeted by the actorPlayer
      */
-    public ArrayList<Player> targetablePlayer(){
+    public List<Player> targetablePlayer(){
         ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
         int i = 0;
         while(i < reachablePlayer.size()){
@@ -140,5 +171,48 @@ public class Shoot {
                 i++;
         }
         return reachablePlayer;
+    }
+
+    /**
+     * @param targetPlayer  The Player that is targeted in this step
+     * @param mark        The number of mark that must be dealt to the targetPlayer
+     * This method mark the target
+     */
+    private void markTarget(Player targetPlayer, int mark){
+        targetPlayer.getPlayerBoard().getHealthPlayer().addMark(shooterPlayer, mark);
+    }
+
+    /**
+     * @param targetPlayer  The Player that is targeted in this step
+     * @param damage        The number of mark that must be dealt to the targetPlayer
+     * This method damage the target
+     */
+    private void injureTarget(Player targetPlayer, int damage){
+        targetPlayer.getPlayerBoard().getHealthPlayer().addMark(shooterPlayer, damage);
+    }
+
+    private void caseP(){
+        for (int i = 0; i < targets.size(); i++) {
+            injureTarget(targets.get(i), shootEffect.getDamage().get(i));
+            markTarget(targets.get(i), shootEffect.getMark().get(i));
+        }
+    }
+
+    private void caseS(){
+        for (Player target: gamePlayers) {
+            if(target.getPosition() == targetSquare) {
+                injureTarget(target, shootEffect.getDamage().get(0));
+                markTarget(target, shootEffect.getMark().get(0));
+            }
+        }
+    }
+
+    private void caseR(){
+        for (Player target: gamePlayers) {
+            if (target.getPosition().getColor() == roomColor){
+                injureTarget(target, shootEffect.getDamage().get(0));
+                markTarget(target, shootEffect.getMark().get(0));
+            }
+        }
     }
 }

@@ -4,7 +4,6 @@ package Model;
  */
 public class Grab implements Action {
     private Player actorPlayer;
-    private NormalSquare playerSquare;
     private Card grabbedItem;
     private int execution;
 
@@ -14,7 +13,6 @@ public class Grab implements Action {
      */
     public Grab(Player grabberPlayer, CardWeapon grabbedCard){
         actorPlayer = grabberPlayer;
-        playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 0;
     }
@@ -25,7 +23,6 @@ public class Grab implements Action {
      */
     public Grab(Player grabberPlayer, CardOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
-        playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 1;
     }
@@ -36,7 +33,6 @@ public class Grab implements Action {
      */
     public Grab(Player grabberPlayer, CardNotOnlyAmmo grabbedCard){
         actorPlayer = grabberPlayer;
-        playerSquare = grabberPlayer.getPosition();
         grabbedItem = grabbedCard;
         execution = 2;
     }
@@ -80,6 +76,7 @@ public class Grab implements Action {
      */
     public boolean isValid(){
         if(actorPlayer.getPosition().isSpawn()){
+            //TODO devo controllare se ho abbastanza ammo/powerUp per caricare
             return actorPlayer.getPosition().getWeapons().contains(grabbedItem);
         }
         else{
@@ -104,4 +101,3 @@ public class Grab implements Action {
         return RYB;
     }
 }
-
