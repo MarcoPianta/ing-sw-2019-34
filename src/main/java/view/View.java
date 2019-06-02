@@ -3,6 +3,8 @@ package view;
 import Model.*;
 import network.Server.Client;
 import network.messages.GameSettingsResponse;
+import network.messages.RespawnMessage;
+import network.messages.WinnerMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,9 +54,15 @@ public abstract class View {
 
     public abstract void showPossibleTarget(List<String> targets);
 
+    public abstract void showPowerUpChooseRespawn();
+
     public abstract void showMessage(String message);
 
-    public abstract GameSettingsResponse showGameSettingsRequest();
+    public abstract void showVenomRequest();//TODO send UsePowerUp if player to use it venom
+
+    public abstract void showGameSettingsRequest();
+
+    public abstract void endGame(boolean winner);
 
     /**
      * This method add a weapon to the player hand
@@ -77,6 +85,10 @@ public abstract class View {
         this.myPositionID = myPositionID;
     }
 
+    public void addPowerup(CardPowerUp powerUp){
+        powerUps.add(powerUp);
+    }
+
     public void setBlueAmmo(int blueAmmo) {
         this.blueAmmo = blueAmmo;
     }
@@ -87,5 +99,9 @@ public abstract class View {
 
     public void setYellowAmmo(int yellowAmmo) {
         this.yellowAmmo = yellowAmmo;
+    }
+
+    public void respawnResponse(CardPowerUp powerUp){
+        client.send(new RespawnMessage(client.getToken(), powerUp));
     }
 }

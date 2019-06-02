@@ -1,5 +1,6 @@
 package network.messages;
 
+import Model.CardPowerUp;
 import Model.Colors;
 import Model.NormalSquare;
 import Model.Player;
@@ -13,7 +14,8 @@ public class UpdateClient extends Message {
     private ArrayList<String> reachableSquares; //ArrayList of IDs of squares to be send
     private ArrayList<String> reachableTarget; //ArrayList of possible target Players' square ID
     private String type; //Type of update (position, damageBar, etc.)
-    private String message;
+    private CardPowerUp powerUp;
+    private String textMessage;
 
     private void setMessageInfo(Integer token, String type){
         this.actionType = ActionType.UPDATECLIENTS;
@@ -68,6 +70,11 @@ public class UpdateClient extends Message {
             this.reachableTarget.add(p.getPosition().getId());
     }
 
+    public UpdateClient(Integer token, CardPowerUp powerUp){
+        setMessageInfo(token, RESPAWN);
+        this.powerUp = powerUp;
+    }
+
     /**
      * This constructor is used to build messages to send to the client a text message to be displayed.
      * @param token token of the clients who need to be updated
@@ -75,7 +82,7 @@ public class UpdateClient extends Message {
      */
     public UpdateClient(Integer token, String message){
         setMessageInfo(token, MESSAGE);
-        this.message = message;
+        this.textMessage = message;
     }
 
     public String getUpdateType() {
@@ -89,6 +96,7 @@ public class UpdateClient extends Message {
     public static final String DAMAGEBARUPDATE ="DAMAGEBAR";
     public static final String POSSIBLESQUARES = "POSSIBLESQUARES";
     public static final String POSITION = "POSITION";
+    public static final String RESPAWN = "RESPAWN";
     public static final String MESSAGE = "MESSAGE";
 
 
@@ -108,7 +116,11 @@ public class UpdateClient extends Message {
         return squareID;
     }
 
+    public CardPowerUp getPowerUp() {
+        return powerUp;
+    }
+
     public String getMessage() {
-        return message;
+        return textMessage;
     }
 }

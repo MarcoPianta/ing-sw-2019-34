@@ -24,7 +24,10 @@ public enum ActionType {
     GAMESETTINGSRESPONSE("Game settings response"),
     STARTTURNMESSAGE("Start turn message"),
     SUBSTITUTEWEAPON("Substitute weapon"),
-    CANUSEVENOM("Can use venom");
+    CANUSEVENOM("Can use venom"),
+    RESPAWN("Respwan"),
+    WINNER("Winner"),
+    END("End");
 
     private String abbreviation;
     private ActionType(String abbreviation) {
