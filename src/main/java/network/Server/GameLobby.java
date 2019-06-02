@@ -1,36 +1,53 @@
 package network.Server;
 
 import Controller.GameHandler;
+import Model.CardPowerUp;
 import Model.NormalSquare;
 import Model.Player;
 import network.messages.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameLobby {
-    private ArrayList<Player> players;
+    private HashMap<Integer, Player> players;
     private ArrayList<Integer> clients;
     private Server server;
     private GameHandler gameHandler;
+    private Integer currentPlayer; //token of the current player
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
         this.clients = clients;
         this.server = server;
+        this.currentPlayer = null;
+        this.players = new HashMap<>();
         try {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map);
+            for(Player p: gameHandler.getGame().getPlayers()){
+                players.put(p.getPlayerID(), p);
+            }
         }catch (FileNotFoundException e){
-            //TODO error message to clients
+            for (Integer i: clients){
+                server.send(new UpdateClient(i, "Server internal error, unable to create a new game"));
+            }
         }
+    }
+
+    public void startTurn(Integer token){
+        if (currentPlayer != null)
+            server.send(new EndMessage(currentPlayer));
+        server.send(new StartMessage(token, "turn"));
+        currentPlayer = token;
     }
 
     public ArrayList<Integer> getClients() {
         return clients;
     }
 
-    public ArrayList<Player> getPlayers() {
-        return new ArrayList<>(players);
+    public HashMap<Integer, Player> getPlayers() {
+        return players;
     }
 
     public void receiveMessage(Message message){
@@ -101,11 +118,32 @@ public class GameLobby {
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.USEPOWERUP.getAbbreviation())) {
+            gameHandler.receiveServerMessage(message);
+        }
 
+        else if (message.getActionType().getAbbreviation().equals(ActionType.RESPAWN.getAbbreviation())) {
+            RespawnMessage respawnMessage = (RespawnMessage) message;
+            players.get(respawnMessage.getToken()).calculateNewPosition(respawnMessage.getPowerUp());
+            server.send(new UpdateClient(respawnMessage.getToken(), players.get(respawnMessage.getToken()).getPosition()));
         }
     }
 
-    //TODO add method to receive from controller
+    public void respawn(Integer token, CardPowerUp powerUp){
+        server.send(new UpdateClient(token, powerUp));
+    }
+
+    public void canUseVenom(Integer player){
+        server.send(new CanUseVenom(player));
+    }
+
+    public void endGame(Integer winner){
+        for (Integer i: clients){
+            if (!(i.equals(winner)))
+                server.send(new WinnerMessage(i, false));
+            else
+                server.send(new WinnerMessage(i, true));
+        }
+    }
 }
 /*
 * quando in start arriva messagio con giocatore corrente e lista giocatori morti, faccio rinascere tutti e poi faccio iniziare il turno
