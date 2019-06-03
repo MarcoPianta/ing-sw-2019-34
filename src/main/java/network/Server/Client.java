@@ -19,6 +19,8 @@ public abstract class Client {
         this.player = null;
     }
 
+    public abstract void close();
+
     /**
      * This method receive a message from the server and handle it.
      * The method is called when a new message is received on input stream, it is read and passed as parameter, then

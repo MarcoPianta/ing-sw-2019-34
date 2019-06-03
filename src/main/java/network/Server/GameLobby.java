@@ -145,6 +145,3 @@ public class GameLobby {
         }
     }
 }
-/*
-* quando in start arriva messagio con giocatore corrente e lista giocatori morti, faccio rinascere tutti e poi faccio iniziare il turno
-* */

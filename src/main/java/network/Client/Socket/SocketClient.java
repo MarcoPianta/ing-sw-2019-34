@@ -68,9 +68,13 @@ public class SocketClient extends Client{
      * This method is used to close connection between the client and the server. Before closing connection input and
      * output streams are closed.
      * */
-    public void close() throws IOException {
-        in.close();
-        out.close();
-        connection.close();
+    public void close() {
+        try {
+            in.close();
+            out.close();
+            connection.close();
+        }catch (IOException e){
+            //TODO logger
+        }
     }
 }
