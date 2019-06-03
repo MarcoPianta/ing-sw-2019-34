@@ -2,9 +2,7 @@ package view;
 
 import Model.*;
 import network.Server.Client;
-import network.messages.GameSettingsResponse;
 import network.messages.RespawnMessage;
-import network.messages.WinnerMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +47,8 @@ public abstract class View {
 
         this.client = client;
     }
+
+    public View(){} //TODO delete this constructor used only for GUI testing purpose
 
     public abstract void showReachableSquares(List<String> squares);
 
