@@ -10,13 +10,12 @@ import view.View;
  * The class contains attributes and methods common to Socket and RMI
  */
 public abstract class Client {
-    protected Player player;
     protected boolean rmi;
     protected Integer token;
     protected View view;
 
-    public Client(){
-        this.player = null;
+    public Client(View view){
+        this.view = view;
     }
 
     public abstract void close();
@@ -32,6 +31,7 @@ public abstract class Client {
             //If the message is a ConnectionResponse it contains the token, so it is saved
             ConnectionResponse response = (ConnectionResponse) message;
             this.token = response.getToken();
+            view.showToken();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
             UpdateClient update = (UpdateClient) message;
@@ -50,16 +50,12 @@ public abstract class Client {
             view.showVenomRequest();
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
-            view.showGameSettingsRequest();
+            //view.showGameSettingsRequest();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.WINNER.getAbbreviation())){
             WinnerMessage winnerMessage = (WinnerMessage) message;
             view.endGame(winnerMessage.isWinner());
         }
-    }
-
-    private void setPlayer(Player player){
-        this.player = player;
     }
 
     /**

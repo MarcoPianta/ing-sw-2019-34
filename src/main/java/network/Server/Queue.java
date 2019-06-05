@@ -15,27 +15,63 @@ import java.util.stream.Collectors;
 public class Queue {
     private LinkedHashMap<Integer, GameSettingsResponse> playersID; //Contains the players' token and the game settings he choose ordered3 by insertion
     private Server server;
-    private final Object lock = new Object();
+    private final Object lockIndex = new Object();
+    private Integer index;
+    private ArrayList<Integer[]> chuncks;
 
     public Queue(Server server){
         playersID = new LinkedHashMap<>();
         this.server = server;
+        this.index = 1;
+        startCheckThread();
+    }
 
+    /**
+     * This method starts a Thread to check if there are enough player (at least 3) to starts a new Game.
+     * If there are more then three player the Queue wait for some times (a timer is started) in case other player
+     * connects, when timer times out a new Game with a maximum of 5 player is created.
+     * Meanwhile a new Thread check if there are more then 5 people to start a new Thread with the same functionality as
+     * the first, check if there are enough player to start a new Game.
+     * TODO possible improvement use chucnk of 5 people to start a new Game with the chunk
+     */
+    private void startCheckThread(){
         new Thread(() -> { //This thread check if the player in the queue are more then three
             while(true){
                 //TODO start new Thread to check multiple times if there are enough players to start multiple Games
                 if (playersID.size() >= 3) {
-                    synchronized (this) {
-                        try {
-                            System.out.println("Wait");
-                            Thread.sleep(300);
-                        } catch (InterruptedException e) {
-                            //TODO logger
-                        }
-                        System.out.println("Booo");
-                        ArrayList<Integer> players = getPlayers();
-                        notifyServer(getPlayers());
-                        System.out.println("Booo1");
+                    checkIfMoreThenFive();
+
+                    checkAndCreate();
+                }
+            }
+        }).start();
+    }
+
+    private void checkAndCreate(){
+        synchronized (this) {
+            try {
+                this.wait(300);
+            } catch (InterruptedException e) {
+                //TODO logger
+            }
+            notifyServer(getPlayers(index));
+            synchronized (lockIndex) {
+                if (index > 1) {
+                    index--;
+                }
+            }
+        }
+    }
+
+    private void checkIfMoreThenFive(){
+        new Thread(() -> {//This thread starts to check if there are more then 5 people waiting to crate a new Game
+            while (true) {
+                if (playersID.size() > 5 * index) {
+                    synchronized (lockIndex) {
+                        index++;
+                    }
+                    if (playersID.size() >= 5 * (index - 1) + 3) {
+                        checkAndCreate();
                     }
                 }
             }
@@ -58,13 +94,13 @@ public class Queue {
      * five clients it returns all the clients in the queue.
      * @return the first five players inserted in the LinkedHashMap
      * */
-    public ArrayList<Integer> getPlayers(){
+    public ArrayList<Integer> getPlayers(int index){
         ArrayList<Integer> ret;
         synchronized (this) {
             ArrayList<Integer> newPlayers = new ArrayList<>(playersID.keySet());
             ret = newPlayers
                     .stream()
-                    .filter(x -> newPlayers.indexOf(x) < 5)
+                    .filter(x -> newPlayers.indexOf(x) >= (5 * (index - 1)) && newPlayers.indexOf(x) < (5 * index))
                     .collect(Collectors.toCollection(ArrayList::new));
             notifyServer(ret);
             playersID.keySet().removeAll(ret);

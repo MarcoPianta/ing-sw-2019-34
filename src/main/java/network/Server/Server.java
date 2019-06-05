@@ -17,7 +17,7 @@ import java.util.HashMap;
  * the client is an RMI client or not.
  */
 public class Server {
-    private Queue playersQueue;
+    private QueueChunk playersQueue;
     private SocketServer socketServer;
     private ArrayList<Integer> tokens;
     private HashMap<Integer, Boolean> clients;
@@ -31,7 +31,7 @@ public class Server {
      * and socket clients.
      */
     public Server(){
-        playersQueue = new Queue(this);
+        playersQueue = new QueueChunk(this);
         socketServer = new SocketServer(this, 10000);
         rmiServer = new RMIServer(this, 10001);
         tokens = new ArrayList<>();
@@ -120,5 +120,9 @@ public class Server {
         }
         players.parallelStream()
                 .forEach(x -> send(new StartMessage(x, "game")));
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server();
     }
 }

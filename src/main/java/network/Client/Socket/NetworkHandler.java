@@ -14,7 +14,6 @@ import java.net.Socket;
  * */
 public class NetworkHandler implements Runnable{
     private SocketClient client;
-    private Socket connection;
     private ObjectInputStream in; //Used to send message to server
     private ObjectOutputStream out; //Used to receive message from server
     private boolean loop;
@@ -22,14 +21,12 @@ public class NetworkHandler implements Runnable{
     /**
      * The constructor create input and output stream of the socket connection to communicate with server.
      * @param client the client of which the connection must be handled
-     * @param connection the Socket object that represents the connection with the server
      */
-    public NetworkHandler(SocketClient client, Socket connection){
+    public NetworkHandler(SocketClient client, ObjectInputStream in, ObjectOutputStream out){
         try {
-            this.connection = connection;
-            out = new ObjectOutputStream(this.connection.getOutputStream());
-            out.flush();
-            in = new ObjectInputStream(connection.getInputStream());
+            this.out = out;
+            this.out.flush();
+            this.in = in;
             this.client = client;
             loop = true;
         }catch (IOException e){
@@ -55,6 +52,7 @@ public class NetworkHandler implements Runnable{
                     client.onReceive(message);
             }catch (IOException|ClassNotFoundException e){
                 loop = false;
+                System.out.println("Error in client");
             }
         }
     }

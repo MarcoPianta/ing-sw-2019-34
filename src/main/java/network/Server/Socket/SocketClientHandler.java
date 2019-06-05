@@ -47,6 +47,7 @@ public class SocketClientHandler implements Runnable{
     public void respond(Message message) {
         try {
             out.writeObject(message);
+            out.flush();
         } catch (IOException e) {
             //TODO catch exception, logger
         }
