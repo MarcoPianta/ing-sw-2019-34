@@ -3,6 +3,7 @@ package network.Client.RMI;
 import network.Server.Client;
 import network.Server.RMI.RMIServerInterface;
 import network.messages.Message;
+import view.View;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -21,8 +22,8 @@ public class RMIClient extends Client{
      * The constructor only initialize the host and PORT attribute, it doesn't establish connection. Attributes will be
      * used from init() to establish a new connection to the server
      * */
-    public RMIClient(int port){
-        super();
+    public RMIClient(int port, View view){
+        super(view);
         this.rmi = true;
         this.PORT = port;
     }

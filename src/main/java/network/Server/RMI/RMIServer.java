@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-public class RMIServer extends Server{
+public class RMIServer {
 
     private final int PORT;
     private Server server;

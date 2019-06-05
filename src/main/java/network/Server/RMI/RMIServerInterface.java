@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 public interface RMIServerInterface extends Remote {
 
     void onReceive(Message message)throws RemoteException;
-    Integer generateToken();
+    Integer generateToken() throws RemoteException;
     void acceptConnection(Integer token) throws RemoteException, NotBoundException;
 
 }
