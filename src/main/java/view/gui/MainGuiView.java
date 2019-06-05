@@ -1,7 +1,11 @@
 package view.gui;
 
-import network.Server.Client;
+import network.Client.RMI.RMIClient;
+import network.Client.Socket.SocketClient;
+import network.messages.UsePowerUp;
 import view.View;
+import view.gui.Dictionaries.StringDictionary;
+import view.gui.actionHandler.CreateNewGame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +16,12 @@ import java.util.List;
 public class MainGuiView extends View {
     private JFrame frame;
     private JLabel imageLabel;
+    private JPanel buttonAndTextPanel;
     private JPanel mainPanel;
+    private StringDictionary dictionary;
+
+    public static final double GOLDENRATIO = 1.6180339887; //Used to have a good ratio between width and height
+    private static final int INITIALWINDOWHEIGHT = 500;
 
     public MainGuiView(){
         super();//TODO super(client);
@@ -24,10 +33,39 @@ public class MainGuiView extends View {
                 client.close();
             }
         });*/
-        mainPanel = new JPanel();
+        mainPanel = new JPanel(new BorderLayout());
+
         ImageIcon icon = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "homeAdrenaline.png");
         imageLabel = new JLabel(icon);
-        mainPanel.add(imageLabel, Component.BOTTOM_ALIGNMENT);
+
+        mainPanel.add(imageLabel, BorderLayout.CENTER);
+
+        buttonAndTextPanel = new JPanel(new BorderLayout());
+
+        JTextField text = new JTextField("000000", 25);
+        buttonAndTextPanel.add(text, BorderLayout.LINE_START);
+
+        String[] connectionString = {"Socket", "RMI"};
+        JComboBox<String> socketRMI = new JComboBox<>(connectionString);
+        buttonAndTextPanel.add(socketRMI, BorderLayout.CENTER);
+
+        JButton button = new JButton("Start a new Game");
+        button.setSize(buttonAndTextPanel.getWidth()*10/100, buttonAndTextPanel.getHeight());
+        button.addActionListener(new CreateNewGame(client, text , frame) );
+        MainGuiView self = this;
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (socketRMI.getSelectedIndex() == 0)
+                    client = new SocketClient("localhost", 10000, self);
+                else
+                    client = new RMIClient(10001, self);
+                //JOptionPane.showMessageDialog(frame, "Connection request send, waiting for server");
+            }
+        });
+        buttonAndTextPanel.add(button, BorderLayout.LINE_END);
+
+        mainPanel.add(buttonAndTextPanel, BorderLayout.PAGE_END);
 
         mainPanel.addComponentListener(new ComponentListener() {
             @Override
@@ -36,7 +74,6 @@ public class MainGuiView extends View {
                     ImageIcon im = new ImageIcon(icon.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
                     imageLabel.setIcon(im);
                 }).start();
-
             }
 
             @Override
@@ -55,13 +92,22 @@ public class MainGuiView extends View {
             }
         });
 
+
         frame.add(mainPanel);
-        frame.pack();
+        //frame.pack();
+        int panelWidth = new Double(INITIALWINDOWHEIGHT *GOLDENRATIO).intValue();
+        frame.setSize(panelWidth, INITIALWINDOWHEIGHT);
     }
 
     public static void main(String[] args) {
         MainGuiView view = new MainGuiView();
         view.frame.setVisible(true);
+    }
+
+    @Override
+    public void showToken() {
+        JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
+        showGameSettingsRequest();
     }
 
     @Override
@@ -81,21 +127,26 @@ public class MainGuiView extends View {
 
     @Override
     public void showMessage(String message) {
-
+        JOptionPane.showMessageDialog(frame, message);
     }
 
     @Override
     public void showVenomRequest() {
-
+        int value = JOptionPane.showConfirmDialog(frame, "");
     }
 
     @Override
     public void showGameSettingsRequest() {
-
+        //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        frame.setVisible(false);
+        frame = new GameSettingsChoose();
     }
 
     @Override
     public void endGame(boolean winner) {
-
+        if (winner)
+            JOptionPane.showMessageDialog(frame, "The game is over.\nCongratulation, you won!");
+        else
+            JOptionPane.showMessageDialog(frame, "The game is over.\nUnfortunately you didn't win");
     }
 }

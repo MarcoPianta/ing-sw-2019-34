@@ -50,6 +50,8 @@ public abstract class View {
 
     public View(){} //TODO delete this constructor used only for GUI testing purpose
 
+    public abstract void showToken();
+
     public abstract void showReachableSquares(List<String> squares);
 
     public abstract void showPossibleTarget(List<String> targets);
@@ -87,6 +89,10 @@ public abstract class View {
 
     public void addPowerup(CardPowerUp powerUp){
         powerUps.add(powerUp);
+    }
+
+    public ArrayList<CardPowerUp> getPowerUps() {
+        return powerUps;
     }
 
     public void setBlueAmmo(int blueAmmo) {

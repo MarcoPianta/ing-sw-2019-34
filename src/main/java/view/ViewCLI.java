@@ -42,4 +42,9 @@ public class ViewCLI extends View{
     public void endGame(boolean winner) {
         //TODO implement method
     }
+
+    @Override
+    public void showToken() {
+        //TODO implement method
+    }
 }
