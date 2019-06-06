@@ -50,7 +50,7 @@ public abstract class Client {
             view.showVenomRequest();
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
-            //view.showGameSettingsRequest();
+            view.showGameSettingsRequest();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.WINNER.getAbbreviation())){
             WinnerMessage winnerMessage = (WinnerMessage) message;

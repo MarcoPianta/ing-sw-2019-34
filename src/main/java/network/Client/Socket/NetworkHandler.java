@@ -46,13 +46,15 @@ public class NetworkHandler implements Runnable{
         while (loop){
             try {
                 Message message = (Message) in.readObject();
-                if (message == null)
+                if (message == null) {
                     loop = false;
-                else
+                }
+                else {
                     client.onReceive(message);
+                }
             }catch (IOException|ClassNotFoundException e){
                 loop = false;
-                System.out.println("Error in client");
+                e.printStackTrace();
             }
         }
     }

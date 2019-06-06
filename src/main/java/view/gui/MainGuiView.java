@@ -2,7 +2,6 @@ package view.gui;
 
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
-import network.messages.UsePowerUp;
 import view.View;
 import view.gui.Dictionaries.StringDictionary;
 import view.gui.actionHandler.CreateNewGame;
@@ -21,12 +20,18 @@ public class MainGuiView extends View {
     private StringDictionary dictionary;
 
     public static final double GOLDENRATIO = 1.6180339887; //Used to have a good ratio between width and height
-    private static final int INITIALWINDOWHEIGHT = 500;
+    private static final int INITIALWINDOWHEIGHT = 600;
 
     public MainGuiView(){
         super();//TODO super(client);
+
+        int panelWidth = new Double(INITIALWINDOWHEIGHT *GOLDENRATIO).intValue();
+
         frame = new JFrame("Adrenaline");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(panelWidth, INITIALWINDOWHEIGHT);
+
+        frame.setMinimumSize(new Dimension(panelWidth, INITIALWINDOWHEIGHT));
         /*frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -57,10 +62,11 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("localhost", 10000, self);
+                    client = new SocketClient("192.168.0.9", 10000, self);
                 else
                     client = new RMIClient(10001, self);
-                //JOptionPane.showMessageDialog(frame, "Connection request send, waiting for server");
+                //showGameSettingsRequest();
+                //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
         });
         buttonAndTextPanel.add(button, BorderLayout.LINE_END);
@@ -95,11 +101,12 @@ public class MainGuiView extends View {
 
         frame.add(mainPanel);
         //frame.pack();
-        int panelWidth = new Double(INITIALWINDOWHEIGHT *GOLDENRATIO).intValue();
-        frame.setSize(panelWidth, INITIALWINDOWHEIGHT);
     }
 
     public static void main(String[] args) {
+        setUIManager();
+
+        System.out.println(javax.swing.SwingUtilities.isEventDispatchThread());
         MainGuiView view = new MainGuiView();
         view.frame.setVisible(true);
     }
@@ -107,7 +114,7 @@ public class MainGuiView extends View {
     @Override
     public void showToken() {
         JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
-        showGameSettingsRequest();
+        new Thread(this::showGameSettingsRequest).start();
     }
 
     @Override
@@ -139,7 +146,7 @@ public class MainGuiView extends View {
     public void showGameSettingsRequest() {
         //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setVisible(false);
-        frame = new GameSettingsChoose();
+        frame = new GameSettingsChoose(client);
     }
 
     @Override
@@ -148,5 +155,16 @@ public class MainGuiView extends View {
             JOptionPane.showMessageDialog(frame, "The game is over.\nCongratulation, you won!");
         else
             JOptionPane.showMessageDialog(frame, "The game is over.\nUnfortunately you didn't win");
+    }
+
+    private static void setUIManager() {
+        try {
+            // Set System L&F
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            JFrame.setDefaultLookAndFeelDecorated(false);
+            System.out.println("Look and feel not found");
+        }
     }
 }
