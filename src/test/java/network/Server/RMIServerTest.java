@@ -5,6 +5,7 @@ import network.Server.RMI.RMIServer;
 import network.messages.Message;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import view.View;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -48,12 +49,11 @@ public class RMIServerTest {
                 //nothing to do
             }
         }).start();
-        RMIClient rmiClient1 = new RMIClient(PORT);
-        RMIClient rmiClient2 = new RMIClient(PORT);
+
+        RMIClient rmiClient1 = new RMIClient(PORT, null);
+        RMIClient rmiClient2 = new RMIClient(PORT, null);
         rmiClient1.init();
-        rmiClient2.init();
         rmiClient1.send(new Message());
-        rmiClient2.send(new Message());
     }
 
 }

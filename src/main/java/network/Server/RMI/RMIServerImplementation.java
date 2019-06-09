@@ -1,5 +1,6 @@
 package network.Server.RMI;
 
+import network.Client.RMI.RMIClientInterface;
 import network.Server.Server;
 import network.messages.Message;
 
@@ -18,11 +19,10 @@ public class RMIServerImplementation extends UnicastRemoteObject implements RMIS
 
     public void onReceive(Message message) {
        server.onReceive(message);
-        System.out.println("Il client ha chiamato la onReceive e funziona");
     }
 
-    public void acceptConnection(Integer token) throws RemoteException, NotBoundException {
-        rmiServer.acceptConnection(token);
+    public void acceptConnection(RMIClientInterface client, Integer token) throws RemoteException, NotBoundException {
+        rmiServer.acceptConnection(client, token);
     }
 
     public Integer generateToken() throws RemoteException {

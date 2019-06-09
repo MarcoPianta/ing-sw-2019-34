@@ -38,9 +38,8 @@ public class RMIClient extends Client{
             Registry registry = LocateRegistry.getRegistry(PORT);
             server = (RMIServerInterface) registry.lookup("Server");
 
-            Integer token = server.generateToken();
-            registry.rebind(token.toString(), new RMIClientImplementation(this));
-            server.acceptConnection(token);
+            token = server.generateToken();
+            server.acceptConnection(new RMIClientImplementation(this), token);
         }catch (Exception e){
             System.out.println("Client Exception: " + e.getMessage());
             e.printStackTrace();
@@ -67,4 +66,8 @@ public class RMIClient extends Client{
         System.exit(1);
     }
 
+
+    public void onReceive(Message message){
+        System.out.println("Sono il Client RMI: ho ricevuto questo messaggio --> " + message.getActionType() + " da " + message.getToken());
+    }
 }

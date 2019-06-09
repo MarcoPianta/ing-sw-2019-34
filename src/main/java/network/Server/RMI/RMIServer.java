@@ -1,5 +1,6 @@
 package network.Server.RMI;
 
+import network.Client.RMI.RMIClientImplementation;
 import network.Client.RMI.RMIClientInterface;
 import network.Server.Server;
 import network.messages.GameSettingsRequest;
@@ -40,6 +41,7 @@ public class RMIServer {
     public RMIServer(Server server, int port) {
         this.server = server;
         this.PORT = port;
+        rmiHashMap = new HashMap<>();
         clients = new ArrayList<>();
     }
 
@@ -63,16 +65,17 @@ public class RMIServer {
     }
 
     public void run() throws RemoteException {
-        System.out.println("Sono nel  RUN");
         init();
 
     }
 
-    public void acceptConnection(Integer token) throws RemoteException, NotBoundException {
+    public void acceptConnection(RMIClientInterface client, Integer token) throws RemoteException, NotBoundException {
+        /*
         Registry registry = LocateRegistry.getRegistry(PORT);
         RMIClientInterface client = (RMIClientInterface) registry.lookup(token.toString());
         clients.add(client);
-        rmiHashMap.put(token, client);
+        */
+        this.rmiHashMap.put(token, client);
         client.onReceive(new GameSettingsRequest(token));
     }
 }
