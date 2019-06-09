@@ -3,6 +3,7 @@ package Model;
 import Controller.StateMachineEnumerationTurn;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
@@ -91,5 +92,80 @@ public class Player {
         newPosition(getGameId().getMap().getRooms().get(i-1).getNormalSquares().get(j));
         getPlayerBoard().getHandPlayer().removePowerUp(getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUp));
     }
+
+    private Integer[] calculateMaxAmmo(boolean set){
+        Integer[] ammoRyb=new Integer[3];
+        int i=0;
+        while(i<3){
+            ammoRyb[i]=getPlayerBoard().getHandPlayer().getAmmoRYB()[i];
+            i++;
+        }
+        i=0;
+        while(i<getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()){
+            if(!set){
+                if(getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.RED.getAbbreviation())){
+                    ammoRyb[0]++;
+                    i++;
+                }
+                else if(getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.YELLOW.getAbbreviation())){
+                    ammoRyb[1]++;
+                    i++;
+                }
+                else{
+                    ammoRyb[2]++;
+                    i++;
+                }
+            }
+            else{
+                if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")&&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.RED.getAbbreviation())){
+                    ammoRyb[0]++;
+                    i++;
+                }
+                else if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")&&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.YELLOW.getAbbreviation())){
+                    ammoRyb[1]++;
+                    i++;
+                }
+                else if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")&&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.BLUE.getAbbreviation())){
+                    ammoRyb[2]++;
+                    i++;
+                }
+                else
+                    set=false;
+            }
+
+        }
+
+        return ammoRyb;
+    }
+
+
+    public boolean isValidCost(List<Integer> cost, boolean set){
+        boolean valueReturn=true;
+        if(!set) {
+            Integer[] ammoRyb = calculateMaxAmmo(set);
+            for (int i = 0; i < 3; i++) {
+                if (ammoRyb[i] < cost.get(i))
+                    valueReturn = false;
+            }
+        }
+        else{
+            Integer[] ammoRyb=calculateMaxAmmo(set);
+            for(int i=0;i<3;i++){
+                if(ammoRyb[i]< cost.get(i))
+                    valueReturn=false;
+            }
+            if(valueReturn && ammoRyb[0]+ammoRyb[1]+ammoRyb[2]==0)
+                valueReturn=false;
+        }
+        return valueReturn;
+    }
+    public boolean isValidCost(int i){
+        boolean valueReturn=false;
+        if(getPlayerBoard().getHandPlayer().getAmmoRYB()[0]>=i|| getPlayerBoard().getHandPlayer().getAmmoRYB()[1]>=i||getPlayerBoard().getHandPlayer().getAmmoRYB()[2]>=i)
+            valueReturn=true;
+
+        return  valueReturn;
+    }
+
 }
 

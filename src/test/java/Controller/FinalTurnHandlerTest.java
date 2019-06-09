@@ -77,7 +77,7 @@ public class FinalTurnHandlerTest {
 
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(0),6);//adrenalineAction
         //test gameHandler receiveTarget
-        ArrayList<Player>  playersTarget=new ArrayList<>();
+        ArrayList<Player>  playersTarget;
 
         playersTarget=gameHandler.receiveTarget(shotMessage);
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).setCharge(false);

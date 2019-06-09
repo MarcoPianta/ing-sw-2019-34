@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Injure;
+import Model.CardPowerUp;
 import Model.Move;
 import Model.Player;
 import Model.Reload;
@@ -61,40 +61,45 @@ public class FinalTurnHandler extends TurnHandler {
     }
 
     private boolean actionBeforeFirstPlayer(Message message){
-        boolean valueReturn=false;
+        boolean valueReturn;
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 4).execute();}
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
-            if(newMessage.getMaxMove()==1)
-                new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 1).execute();
-            if(newMessage.isReload())
-                new Reload(gameHandler.getGame().getCurrentPlayer(), newMessage.getWeapon()).execute();
             valueReturn= actionShot(newMessage);
         }
         else
-            valueReturn=actionGrab(message,2);
+            valueReturn=actionGrab(message);
         return valueReturn;
     }
 
     private boolean actionAfterFirstPlayer(Message message){
-        boolean valueReturn=false;
+        boolean valueReturn;
         if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
-            if(newMessage.getMaxMove()>=1)
-                new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 2).execute();
-            if(newMessage.isReload())
-                new Reload(gameHandler.getGame().getCurrentPlayer(), newMessage.getWeapon()).execute();
             valueReturn= actionShot(newMessage);
         }
         else
-            valueReturn=actionGrab(message,3);
+            valueReturn=actionGrab(message);
         return valueReturn;
+    }
+    @Override
+    public boolean actionReload(ReloadMessage message){
+        boolean valueReturn=false;
+        ArrayList<CardPowerUp> powerUps=new ArrayList<>();
+        for(Integer i:message.getPowerUp())
+            powerUps.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
+        if(message.getPowerUp()==null)
+            valueReturn=new Reload(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon())).execute();
+        else
+            valueReturn=new Reload(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()),powerUps).execute();
+        return valueReturn;
+
     }
 
 
-    public void endTurn(Pass message){
+    public void endTurn(){
         //TODO messaggio che è finito turno
         endFinalTurnChecks.playerIsDead(gameHandler.getGame());
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);

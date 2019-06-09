@@ -24,7 +24,9 @@ public enum ActionType {
     GAMESETTINGSRESPONSE("Game settings response"),
     STARTTURNMESSAGE("Start turn message"),
     SUBSTITUTEWEAPON("Substitute weapon"),
-    CANUSEVENOM("Can use venom");
+    CANUSEVENOM("Can use venom"),
+    RECEIVETARGETSQUARE("Receive target square"),
+    RECEIVETARGETSQUARERESPONSE("Receive target square response");
 
     private String abbreviation;
     private ActionType(String abbreviation) {

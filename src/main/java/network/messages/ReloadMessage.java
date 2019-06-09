@@ -4,22 +4,25 @@ import Model.CardPowerUp;
 import Model.CardWeapon;
 import Model.Game;
 
-public class ReloadMessage extends Message{
-    private CardWeapon weapon;
-    private CardPowerUp powerUp;
+import java.util.ArrayList;
+import java.util.List;
 
-    public ReloadMessage(Integer token, CardWeapon weapon, CardPowerUp powerUp){
+public class ReloadMessage extends Message{
+    private Integer weaponPosition;
+    private List<Integer> positionPowerUp;
+
+    public ReloadMessage(Integer token, Integer weaponPosition, List<Integer> positionPowerUp){
         this.token = token;
         actionType=ActionType.RELOAD;
-        this.weapon=weapon;
-        this.powerUp=powerUp;
+        this.weaponPosition=weaponPosition;
+        this.positionPowerUp=positionPowerUp;
     }
 
-    public CardPowerUp getPowerUp() {
-        return powerUp;
+    public List<Integer> getPowerUp() {
+        return positionPowerUp;
     }
 
-    public CardWeapon getWeapon() {
-        return weapon;
+    public Integer getWeapon() {
+        return weaponPosition;
     }
 }

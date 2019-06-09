@@ -2,59 +2,73 @@ package network.messages;
 
 import Model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Shot extends Message {
     private List<Player> targets;
     private Effect effect;
-    private int maxMove;
-    private NormalSquare newSquare;
     private NormalSquare square;
     private Room room;
     private CardWeapon weapon;
-    private  boolean reload;
-    private CardPowerUp powerUp;
+    private Integer powerUp;
     private Player targetPowerUp;
 
-    public Shot(List<Player> targets, Effect effect, int maxMove, NormalSquare newSquare, CardWeapon weapon,boolean reload,CardPowerUp powerUp,Player targetPowerUp){
+    public Shot(List<Player> targets, Effect effect,CardWeapon weapon,Integer powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;
         this.square=null;
         this.targets =targets;
-        this.maxMove=maxMove;
-        this.newSquare=newSquare;
         this.weapon=weapon;
-        this.reload=reload;
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
     }
-    public Shot(Effect effect,Room room, int maxMove,NormalSquare newSquare,CardWeapon weapon,boolean reload,CardPowerUp powerUp,Player targetPowerUp){
+    public Shot(Effect effect,Room room,CardWeapon weapon,Integer powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=room;
         this.square=null;
         this.targets =null;
-        this.maxMove=maxMove;
-        this.newSquare=newSquare;
         this.weapon=weapon;
-        this.reload=reload;
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
     }
-    public Shot(Effect effect,NormalSquare square, int maxMove,NormalSquare newSquare,CardWeapon weapon,boolean reload,CardPowerUp powerUp,Player targetPowerUp){
+    public Shot(Effect effect,NormalSquare square,CardWeapon weapon,Integer powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;
-        this.square=newSquare;
+        this.square=square;
         this.targets =null;
-        this.maxMove=maxMove;
-        this.newSquare=square;
         this.weapon=weapon;
-        this.reload=reload;
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
+    }
+
+    public Shot(List<Player> targets, Effect effect,CardWeapon weapon){
+        actionType=ActionType.SHOT;
+        this.effect =effect;
+        this.room=null;
+        this.square=null;
+        this.targets =targets;
+        this.weapon=weapon;
+
+    }
+    public Shot(Effect effect,Room room,CardWeapon weapon){
+        actionType=ActionType.SHOT;
+        this.effect =effect;
+        this.room=room;
+        this.square=null;
+        this.targets =null;
+        this.weapon=weapon;
+
+    }
+    public Shot(Effect effect,NormalSquare square,CardWeapon weapon){
+        actionType=ActionType.SHOT;
+        this.effect =effect;
+        this.room=null;
+        this.square=square;
+        this.targets =null;
+        this.weapon=weapon;
     }
 
     public NormalSquare getSquare() {
@@ -69,12 +83,8 @@ public class Shot extends Message {
         return targetPowerUp;
     }
 
-    public CardPowerUp getPowerUp() {
+    public Integer getPowerUp() {
         return powerUp;
-    }
-
-    public boolean isReload() {
-        return reload;
     }
 
     public CardWeapon getWeapon() {
@@ -89,12 +99,5 @@ public class Shot extends Message {
         return effect;
     }
 
-    public int getMaxMove() {
-        return maxMove;
-    }
-
-    public NormalSquare getNewSquare() {
-        return newSquare;
-    }
 }
 

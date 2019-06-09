@@ -51,17 +51,19 @@ public class Hand {
     /**
      *this method remove an offload weapon and pay its cost with ammo and power up
      * */
-    /*TODO public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, CardPowerUp powerUp){
+     public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue, List<CardPowerUp> powerUp){
         weapon.setCharge(true);
-        if(powerUp.getColor()==AmmoColors.RED)
-            red--;
-        else if(powerUp.getColor()==AmmoColors.YELLOW)
-            yellow--;
-        else if(powerUp.getColor()==AmmoColors.BLUE)
-            blue--;
+        for(CardPowerUp p:powerUp){
+            if(p.getColor()==AmmoColors.RED)
+                red--;
+            else if(p.getColor()==AmmoColors.YELLOW)
+                yellow--;
+            else if(p.getColor()==AmmoColors.BLUE)
+                blue--;
+            removePowerUp(getPlayerPowerUps().indexOf(p));
+        }
         decrementAmmo(red,yellow,blue);
-        removePowerUp(getPlayerPowerUps().indexOf(powerUp));
-    }*/
+    }
 
     /**
      *this method substitute weapons when the player has three weapons and wants a new weapon
@@ -120,7 +122,7 @@ public class Hand {
     /**
      * This method decrement the value of array ammoRYB, exception by controller
      * */
-    private void decrementAmmo(int red,int yellow,int blue){
+    public void decrementAmmo(int red,int yellow,int blue){
         ammoRYB[0]-=red;
         ammoRYB[1]-=yellow;
         ammoRYB[2]-=blue;

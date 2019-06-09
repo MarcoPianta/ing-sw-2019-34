@@ -147,7 +147,7 @@ public class HandTest {
         gameHandler.getGame().getPlayers().get(1).spawn(2);
         gameHandler.getGame().getPlayers().get(1).calculateNewPosition(gameHandler.getGame().getPlayers().get(1).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0));
 
-        PossibleMove possibleMove=new PossibleMove(1);
+        PossibleMove possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1);
         squares=gameHandler.receiveSquare(possibleMove);
         //use powerUp
         gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0),gameHandler.getGame().getPlayers().get(1),1,squares.get(0));
