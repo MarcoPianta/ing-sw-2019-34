@@ -68,6 +68,12 @@ public class Server {
             GameSettingsResponse m = (GameSettingsResponse) message;
             playersQueue.setPreferences(m);
         }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.RECONNECTIONRESPONSE.getAbbreviation())) {
+
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT.getAbbreviation())) {
+            //TODO delete token from clients
+        }
         else
             lobbyHashMap.get(message.getToken()).receiveMessage(message);
     }
@@ -93,11 +99,29 @@ public class Server {
      * @param rmi a boolean that indicates if the client is an RMI client or not
      * @return the generated token to be used from servers to identify the clients
      */
-    public Integer generateToken(boolean rmi){
+    public Integer generateToken(Integer token, boolean rmi){
+        if (token == 0) {
+            return createToken(rmi);
+        }
+        else {
+            if (clients.containsKey(token)){
+                if (lobbyHashMap.containsKey(token)) {
+                    //TODO send new RECONNECTIONREQUEST
+                    return token;
+                }
+                else
+                    return createToken(rmi);
+            }
+            else
+                return createToken(rmi);
+        }
+    }
+
+    private Integer createToken(boolean rmi){
         Integer integer;
-        do{
+        do {
             integer = new SecureRandom().nextInt(1147483647) + 1000000000;
-        }while (tokens.contains(integer));
+        } while (tokens.contains(integer));
         tokens.add(integer);
         clients.put(integer, rmi);
         addToQueue(integer);
@@ -123,6 +147,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        Server server = new Server();
+        new Server();
     }
 }

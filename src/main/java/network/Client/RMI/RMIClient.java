@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  * This class is used from the client to communicate with RMIServer when a RMI connection is used.
  * */
 public class RMIClient extends Client{
+    private String hostname;
     private int PORT;
     private RMIServerInterface server;
     private static Logger logger = Logger.getLogger("rmiClient");
@@ -22,10 +23,16 @@ public class RMIClient extends Client{
      * The constructor only initialize the host and PORT attribute, it doesn't establish connection. Attributes will be
      * used from init() to establish a new connection to the server
      * */
-    public RMIClient(int port, View view){
+    public RMIClient(String hostname, int port, View view){
         super(view);
         this.rmi = true;
         this.PORT = port;
+        this.hostname = hostname;
+        try {
+            init();
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -35,7 +42,7 @@ public class RMIClient extends Client{
      * */
     public void init() throws RemoteException{
         try {
-            Registry registry = LocateRegistry.getRegistry(PORT);
+            Registry registry = LocateRegistry.getRegistry(hostname, PORT);
             server = (RMIServerInterface) registry.lookup("Server");
 
             token = server.generateToken();
@@ -64,10 +71,5 @@ public class RMIClient extends Client{
      * */
     public void close(){
         System.exit(1);
-    }
-
-
-    public void onReceive(Message message){
-        System.out.println("Sono il Client RMI: ho ricevuto questo messaggio --> " + message.getActionType() + " da " + message.getToken());
     }
 }

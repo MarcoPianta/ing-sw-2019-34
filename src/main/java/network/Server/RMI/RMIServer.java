@@ -1,6 +1,5 @@
 package network.Server.RMI;
 
-import network.Client.RMI.RMIClientImplementation;
 import network.Client.RMI.RMIClientInterface;
 import network.Server.Server;
 import network.messages.GameSettingsRequest;
@@ -19,7 +18,7 @@ public class RMIServer {
     private final int PORT;
     private Server server;
     private ArrayList<RMIClientInterface> clients;
-    private HashMap<Integer ,RMIClientInterface> rmiHashMap;
+    private HashMap<Integer , RMIClientInterface> rmiHashMap;
     private static Logger logger = Logger.getLogger("rmiServer");
 
     /**
@@ -46,6 +45,7 @@ public class RMIServer {
     }
 
     private void init() throws RemoteException{
+        System.setProperty("java.rmi.server.hostname", "192.168.0.6");
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));

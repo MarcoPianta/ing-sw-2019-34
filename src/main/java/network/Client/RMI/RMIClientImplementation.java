@@ -2,8 +2,6 @@ package network.Client.RMI;
 
 import network.messages.Message;
 
-
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 

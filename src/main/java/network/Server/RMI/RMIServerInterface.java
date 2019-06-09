@@ -1,6 +1,5 @@
 package network.Server.RMI;
 
-import network.Client.RMI.RMIClientImplementation;
 import network.Client.RMI.RMIClientInterface;
 import network.messages.Message;
 
