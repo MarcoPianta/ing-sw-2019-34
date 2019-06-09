@@ -12,6 +12,7 @@ public class GrabWeapon extends Message {
         this.token = token;
         actionType=ActionType.GRABWEAPON;
         this.positionWeapon=positionWeapon;
+
     }
 
     public int getPositionWeapon() {

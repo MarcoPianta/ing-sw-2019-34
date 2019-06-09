@@ -2,6 +2,7 @@ package network.Client.Socket;
 
 import network.Server.Client;
 import network.messages.Message;
+import view.View;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,15 +26,15 @@ public class SocketClient extends Client{
      * @param host the ip of the server to which you have to connect.
      * @param port the port of the server to which you have to connect.
      * */
-    public SocketClient(String host, int port){
-        super();
+    public SocketClient(String host, int port, View view){
+        super(view);
         this.rmi = false;
         this.host = host;
         this.port = port;
         try {
             init();
         }catch (IOException e){
-            //TODO logger
+            //e.printStackTrace();
         }
     }
 
@@ -46,7 +47,7 @@ public class SocketClient extends Client{
         out = new ObjectOutputStream(connection.getOutputStream());
         out.flush();
         in = new ObjectInputStream(connection.getInputStream());
-        networkHandler = new Thread(new NetworkHandler(this, connection));
+        networkHandler = new Thread(new NetworkHandler(this, in, out));
         networkHandler.start();
     }
 
@@ -68,9 +69,13 @@ public class SocketClient extends Client{
      * This method is used to close connection between the client and the server. Before closing connection input and
      * output streams are closed.
      * */
-    public void close() throws IOException {
-        in.close();
-        out.close();
-        connection.close();
+    public void close() {
+        try {
+            in.close();
+            out.close();
+            connection.close();
+        }catch (IOException e){
+            //TODO logger
+        }
     }
 }

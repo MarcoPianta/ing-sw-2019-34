@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-public class RMIServer extends Server{
+public class RMIServer {
 
     private final int PORT;
     private Server server;
     private ArrayList<RMIClientInterface> clients;
-    private HashMap<Integer ,RMIClientInterface> rmiHashMap;
+    private HashMap<Integer , RMIClientInterface> rmiHashMap;
     private static Logger logger = Logger.getLogger("rmiServer");
 
     /**
@@ -40,10 +40,12 @@ public class RMIServer extends Server{
     public RMIServer(Server server, int port) {
         this.server = server;
         this.PORT = port;
+        rmiHashMap = new HashMap<>();
         clients = new ArrayList<>();
     }
 
     private void init() throws RemoteException{
+        System.setProperty("java.rmi.server.hostname", "192.168.0.6");
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));
@@ -63,16 +65,17 @@ public class RMIServer extends Server{
     }
 
     public void run() throws RemoteException {
-        System.out.println("Sono nel  RUN");
         init();
 
     }
 
-    public void acceptConnection(Integer token) throws RemoteException, NotBoundException {
+    public void acceptConnection(RMIClientInterface client, Integer token) throws RemoteException, NotBoundException {
+        /*
         Registry registry = LocateRegistry.getRegistry(PORT);
         RMIClientInterface client = (RMIClientInterface) registry.lookup(token.toString());
         clients.add(client);
-        rmiHashMap.put(token, client);
+        */
+        this.rmiHashMap.put(token, client);
         client.onReceive(new GameSettingsRequest(token));
     }
 }

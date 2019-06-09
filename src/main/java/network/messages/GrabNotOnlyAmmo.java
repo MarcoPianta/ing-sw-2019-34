@@ -1,7 +1,6 @@
 package network.messages;
 
-import Model.CardNotOnlyAmmo;
-import Model.Game;
+import Model.CardAmmo;
 import Model.NormalSquare;
 
 public class GrabNotOnlyAmmo extends Message{

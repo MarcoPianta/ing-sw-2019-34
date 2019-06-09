@@ -3,6 +3,7 @@ package network.Client.RMI;
 import network.Server.Client;
 import network.Server.RMI.RMIServerInterface;
 import network.messages.Message;
+import view.View;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
  * This class is used from the client to communicate with RMIServer when a RMI connection is used.
  * */
 public class RMIClient extends Client{
+    private String hostname;
     private int PORT;
     private RMIServerInterface server;
     private static Logger logger = Logger.getLogger("rmiClient");
@@ -21,10 +23,16 @@ public class RMIClient extends Client{
      * The constructor only initialize the host and PORT attribute, it doesn't establish connection. Attributes will be
      * used from init() to establish a new connection to the server
      * */
-    public RMIClient(int port){
-        super();
+    public RMIClient(String hostname, int port, View view){
+        super(view);
         this.rmi = true;
         this.PORT = port;
+        this.hostname = hostname;
+        try {
+            init();
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -34,12 +42,11 @@ public class RMIClient extends Client{
      * */
     public void init() throws RemoteException{
         try {
-            Registry registry = LocateRegistry.getRegistry(PORT);
+            Registry registry = LocateRegistry.getRegistry(hostname, PORT);
             server = (RMIServerInterface) registry.lookup("Server");
 
-            Integer token = server.generateToken();
-            registry.rebind(token.toString(), new RMIClientImplementation(this));
-            server.acceptConnection(token);
+            token = server.generateToken();
+            server.acceptConnection(new RMIClientImplementation(this), token);
         }catch (Exception e){
             System.out.println("Client Exception: " + e.getMessage());
             e.printStackTrace();
@@ -65,5 +72,4 @@ public class RMIClient extends Client{
     public void close(){
         System.exit(1);
     }
-
 }

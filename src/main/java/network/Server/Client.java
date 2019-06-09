@@ -2,10 +2,7 @@ package network.Server;
 
 import Model.NormalSquare;
 import Model.Player;
-import network.messages.ActionType;
-import network.messages.ConnectionResponse;
-import network.messages.Message;
-import network.messages.UpdateClient;
+import network.messages.*;
 import view.View;
 
 /**
@@ -13,14 +10,15 @@ import view.View;
  * The class contains attributes and methods common to Socket and RMI
  */
 public abstract class Client {
-    protected Player player;
     protected boolean rmi;
     protected Integer token;
     protected View view;
 
-    public Client(){
-        this.player = null;
+    public Client(View view){
+        this.view = view;
     }
+
+    public abstract void close();
 
     /**
      * This method receive a message from the server and handle it.
@@ -33,18 +31,31 @@ public abstract class Client {
             //If the message is a ConnectionResponse it contains the token, so it is saved
             ConnectionResponse response = (ConnectionResponse) message;
             this.token = response.getToken();
+            view.showToken();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
             UpdateClient update = (UpdateClient) message;
             handleUpdate(update);
         }
-        else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
-            //TODO update view asking client which configuration want to use to play, then send GAMESETTINGSRESPONSE to the server
-        }
-    }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.RELOADED.getAbbreviation())) {
+            ReloadedMessage reloadedMessage = (ReloadedMessage) message;
+            if (reloadedMessage.getStatus()){}
 
-    private void setPlayer(Player player){
-        this.player = player;
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONRESPONSE.getAbbreviation())){
+            GrabWeaponResponse grabWeaponResponse = (GrabWeaponResponse) message;
+            //view.addWeapon();
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
+            view.showVenomRequest();
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
+            view.showGameSettingsRequest();
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.WINNER.getAbbreviation())){
+            WinnerMessage winnerMessage = (WinnerMessage) message;
+            view.endGame(winnerMessage.isWinner());
+        }
     }
 
     /**
@@ -63,16 +74,28 @@ public abstract class Client {
     public abstract void send(Message message);
 
     public void handleUpdate(UpdateClient message){
-        if (message.getUpdateType().equals(UpdateClient.DAMAGEBAR))
+        if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE))
             view.setDamageBar(message.getDamageBar());
 
         else if (message.getUpdateType().equals(UpdateClient.POSITION))
             view.setMyPositionID(message.getSquareID());
 
         else if (message.getUpdateType().equals(UpdateClient.POSSIBLESQUARES))
-            view.showReachableSquares();
+            view.showReachableSquares(message.getReachableSquares());
+
+        else if (message.getUpdateType().equals(UpdateClient.POSSIBLETARGET))
+            view.showPossibleTarget(message.getReachableTarget());
+
+        else if (message.getUpdateType().equals(UpdateClient.RESPAWN)) {
+            view.addPowerup(message.getPowerUp());
+            view.showPowerUpChooseRespawn();
+        }
 
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());
+    }
+
+    public Integer getToken() {
+        return token;
     }
 }
