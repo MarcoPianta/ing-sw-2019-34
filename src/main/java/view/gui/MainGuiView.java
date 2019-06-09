@@ -7,9 +7,13 @@ import view.gui.Dictionaries.StringDictionary;
 import view.gui.actionHandler.CreateNewGame;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class MainGuiView extends View {
@@ -21,6 +25,7 @@ public class MainGuiView extends View {
 
     public static final double GOLDENRATIO = 1.6180339887; //Used to have a good ratio between width and height
     private static final int INITIALWINDOWHEIGHT = 600;
+    private final String RULESWEBSITE = "https://czechgames.com/files/rules/adrenaline-rules-en.pdf";
 
     public MainGuiView(){
         super();//TODO super(client);
@@ -43,6 +48,24 @@ public class MainGuiView extends View {
         ImageIcon icon = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "homeAdrenaline.png");
         imageLabel = new JLabel(icon);
 
+        FlowLayout flowLayout = new FlowLayout();
+        flowLayout.setAlignment(FlowLayout.RIGHT);
+        imageLabel.setLayout(flowLayout);
+        JButton rules = new JButton("Press to read rules");
+        rules.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    java.awt.Desktop.getDesktop().browse(new URI(RULESWEBSITE));
+                }catch (URISyntaxException| IOException i){
+                    JOptionPane.showMessageDialog(frame, "Cannot show rules");
+                }
+            }
+        });
+        rules.setFont(new Font("Arial", Font.PLAIN, 15));
+        rules.setBorderPainted(false);
+        rules.setBackground(new Color(255, 255, 255 , 80));
+        imageLabel.add(rules);
+
         mainPanel.add(imageLabel, BorderLayout.CENTER);
 
         buttonAndTextPanel = new JPanel(new BorderLayout());
@@ -62,9 +85,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("192.168.0.9", 10000, self);
+                    client = new SocketClient("192.168.0.6", 10000, self);
                 else
-                    client = new RMIClient(10001, self);
+                    client = new RMIClient("192.168.0.6",10001, self);
                 //showGameSettingsRequest();
                 //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -98,7 +121,6 @@ public class MainGuiView extends View {
             }
         });
 
-
         frame.add(mainPanel);
         //frame.pack();
     }
@@ -114,7 +136,7 @@ public class MainGuiView extends View {
     @Override
     public void showToken() {
         JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
-        new Thread(this::showGameSettingsRequest).start();
+        //new Thread(this::showGameSettingsRequest).start();
     }
 
     @Override
@@ -140,6 +162,8 @@ public class MainGuiView extends View {
     @Override
     public void showVenomRequest() {
         int value = JOptionPane.showConfirmDialog(frame, "");
+        //if (value == 1)
+        //client.send(new UsePowerUp(client.getToken(), ));
     }
 
     @Override
@@ -166,5 +190,9 @@ public class MainGuiView extends View {
             JFrame.setDefaultLookAndFeelDecorated(false);
             System.out.println("Look and feel not found");
         }
+        //Code to solve focus border bug of swing
+        UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+        UIManager.put("CheckBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+        UIManager.put("ComboBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
     }
 }

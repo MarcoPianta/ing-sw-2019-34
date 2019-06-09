@@ -5,6 +5,8 @@ public enum ActionType {
     START("Start"),
     CONNECTIONREQUEST("Connection request"),
     CONNECTIONRESPONSE("Connection response"),
+    RECONNECTIONREQUEST("Reconnection request"),
+    RECONNECTIONRESPONSE("Reconnection response"),
     POSSIBLETARGETSHOT("Possible target shot"),
     SHOT("Shot"),
     POSSIBLEMOVE("Possible move"),
@@ -27,7 +29,8 @@ public enum ActionType {
     CANUSEVENOM("Can use venom"),
     RESPAWN("Respwan"),
     WINNER("Winner"),
-    END("End");
+    END("End"),
+    DISCONNECT("Disconnect");
 
     private String abbreviation;
     private ActionType(String abbreviation) {
