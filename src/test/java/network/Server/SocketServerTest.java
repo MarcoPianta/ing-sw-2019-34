@@ -5,6 +5,7 @@ import network.Server.Socket.SocketServer;
 import network.messages.Message;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import view.gui.MainGuiView;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -47,7 +48,7 @@ public class SocketServerTest {
                 //Do nothing
             }
         }).start();
-        socketClient = new SocketClient("localhost", PORT);
+        socketClient = new SocketClient("localhost", PORT, new MainGuiView());
         socketClient.send(new Message());
     }
 }

@@ -50,8 +50,8 @@ public class RMIServerTest {
             }
         }).start();
 
-        RMIClient rmiClient1 = new RMIClient(PORT, null);
-        RMIClient rmiClient2 = new RMIClient(PORT, null);
+        RMIClient rmiClient1 = new RMIClient("localhost", PORT, null);
+        RMIClient rmiClient2 = new RMIClient("localhost", PORT, null);
         rmiClient1.init();
         rmiClient1.send(new Message());
     }

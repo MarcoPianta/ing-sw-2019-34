@@ -26,6 +26,6 @@ public class RMIServerImplementation extends UnicastRemoteObject implements RMIS
     }
 
     public Integer generateToken() throws RemoteException {
-        return server.generateToken(true);
+        return server.generateToken(0, true);
     }
 }
