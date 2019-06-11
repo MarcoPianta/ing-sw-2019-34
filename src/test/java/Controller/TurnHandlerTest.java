@@ -58,7 +58,7 @@ public class TurnHandlerTest {
         //test gameHandler receiveTarget
         ArrayList<Player>  playersTarget=new ArrayList<>();
         playersTarget=gameHandler.receiveTarget(shotMessage);
-        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),1,gameHandler.getGame().getPlayers().get(1).getPosition(),null,false,null,null);
+        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
         assertTrue(gameHandler.getTurnHandler().actionState(shot));
 
         assertEquals(StateMachineEnumerationTurn.ACTION2,gameHandler.getGame().getCurrentPlayer().getState());
@@ -69,7 +69,7 @@ public class TurnHandlerTest {
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
         PossibleMove possibleMove1=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1);
         squares=gameHandler.receiveSquare(possibleMove1);
-        GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getCurrentPlayer().getPlayerID(),1,squares.get(squares.size()-1));
+        GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         assertTrue(gameHandler.receiveServerMessage(grabNotOnlyAmmo));
     }
     /*@Test
@@ -99,18 +99,18 @@ public class TurnHandlerTest {
         CardNotOnlyAmmo cardNotOnlyAmmo=new CardNotOnlyAmmo(AmmoEnum.AMMO1.getAbbreviation());
         NormalSquare normalSquare=new NormalSquare();
         normalSquare.setItems(cardNotOnlyAmmo);
-        GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1,normalSquare);
+        GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getPlayers().get(0).getPlayerID());
         valueReturn=gameHandler.receiveServerMessage(grabNotOnlyAmmo);
 
         NormalSquare normalSquare1=new NormalSquare();
-        UsePowerUp usePowerUp=new UsePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0),gameHandler.getGame().getPlayers().get(0),gameHandler.getGame().getPlayers().get(1),normalSquare1,2);
+        UsePowerUp usePowerUp=new UsePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerID(),0,gameHandler.getGame().getPlayers().get(0),gameHandler.getGame().getPlayers().get(1),normalSquare1);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getPlayers().get(0));
-        if(usePowerUp.getPowerUp().getWhen().equals("during")&&(usePowerUp.getUser()==gameHandler.getGame().getCurrentPlayer())
+        if(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(usePowerUp.getPowerUp()).getWhen().equals("during")&&(usePowerUp.getUser()==gameHandler.getGame().getCurrentPlayer())
                 &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.ENDTURN))
             assertTrue(gameHandler.receiveServerMessage(usePowerUp));
-        else if((usePowerUp.getPowerUp().getWhen().equals("dealing") &&(usePowerUp.getUser()!=gameHandler.getGame().getCurrentPlayer())))
+        else if(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(usePowerUp.getPowerUp()).getWhen().equals("dealing") &&(usePowerUp.getUser()!=gameHandler.getGame().getCurrentPlayer()))
             assertFalse(gameHandler.receiveServerMessage(usePowerUp));
-        else if(usePowerUp.getPowerUp().getWhen().equals("get"))
+        else if(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(usePowerUp.getPowerUp()).getWhen().equals("get"))
             assertFalse(gameHandler.receiveServerMessage(usePowerUp));
     }
 

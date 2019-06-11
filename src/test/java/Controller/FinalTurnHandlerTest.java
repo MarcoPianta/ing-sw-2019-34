@@ -82,7 +82,7 @@ public class FinalTurnHandlerTest {
         playersTarget=gameHandler.receiveTarget(shotMessage);
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).setCharge(false);
 
-        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),2,gameHandler.getGame().getPlayers().get(1).getPosition(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0),true,null,null);
+        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
         assertTrue(gameHandler.getTurnHandler().actionState(shot));
 
         //test Grab firstPlayer
@@ -90,7 +90,7 @@ public class FinalTurnHandlerTest {
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
         PossibleMove possibleMove1=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),3);
         squares=gameHandler.receiveSquare(possibleMove1);
-        GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getCurrentPlayer().getPlayerID(),3,squares.get(squares.size()-1));
+        GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         assertTrue(gameHandler.receiveServerMessage(grabNotOnlyAmmo));
     }
 }

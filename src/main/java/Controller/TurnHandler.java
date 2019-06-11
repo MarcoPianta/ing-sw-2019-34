@@ -67,8 +67,7 @@ public class TurnHandler {
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
             if(newMessage.getPowerUp()!=null){
-                if(!usePowerUp(message)){}
-                    //send message at server for failure powerup
+                usePowerUp(message);
             }
             valueReturn= actionShot(newMessage);
         }
@@ -118,12 +117,15 @@ public class TurnHandler {
         else
             valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getSquare()).execute();
         //use venom
+        if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
+            usePowerUp(message);
+        }
         if(valueReturn){
             for(Player p:message.getTargets()){
                 for(CardPowerUp powerUp:p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()){
-                    CanUseVenom canUseVenom;
-                    if(powerUp.getWhen().equals("get"))
-                        canUseVenom=new CanUseVenom(p.getPlayerID());
+                    if(powerUp.getWhen().equals("get")){
+                        //canUseTagback(p.getPlayerID());
+                        }
                 }
 
             }
@@ -156,10 +158,10 @@ public class TurnHandler {
             if(valueReturn)
                 endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
         }
-        SubstituteWeapon substituteWeapon= new SubstituteWeapon(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons());
 
         if(valueReturn && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()==4)
-            {}
+            {//substituteWeapons(gameHandler.getGame().getCurrentPlayer());
+            }
         return valueReturn;
     }
 
@@ -191,12 +193,12 @@ public class TurnHandler {
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.SHOT && powerUpIsValid(message)){
             Shot newMessage=(Shot) message;
-            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),newMessage.getTargetPowerUp(),0,null);
+            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),newMessage.getTargetPowerUp(),null);
             valueReturn=true;
         }
         else if(powerUpIsValid(message)){
             UsePowerUp newMessage=(UsePowerUp) message;
-            convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().usePowerUp(convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),convertedPlayer(newMessage.getTarget()),newMessage.getMaxMove(),newMessage.getSquare());
+            convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().usePowerUp(convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),convertedPlayer(newMessage.getTarget()),newMessage.getSquare());
             valueReturn=true;
         }
         return valueReturn;

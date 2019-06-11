@@ -50,6 +50,7 @@ public class Shot extends Message {
         this.room=null;
         this.square=null;
         this.targets =targets;
+        this.powerUp=-1;
         this.weapon=weapon;
 
     }
@@ -59,6 +60,7 @@ public class Shot extends Message {
         this.room=room;
         this.square=null;
         this.targets =null;
+        this.powerUp=-1;
         this.weapon=weapon;
 
     }
@@ -68,6 +70,7 @@ public class Shot extends Message {
         this.room=null;
         this.square=square;
         this.targets =null;
+        this.powerUp=-1;
         this.weapon=weapon;
     }
 

@@ -84,7 +84,7 @@ public class Hand {
     /**
      * this method use power up and remove it
      * */
-    public void usePowerUp(CardPowerUp cardPowerUp,Player target,int maxMove,NormalSquare square){
+    public void usePowerUp(CardPowerUp cardPowerUp,Player target,NormalSquare square){
         if(cardPowerUp.getDamage()==1)
             target.getPlayerBoard().getHealthPlayer().addDamage(getPlayerBoard().getPlayer(),1);
         else if(cardPowerUp.getMark()==1)

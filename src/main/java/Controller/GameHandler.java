@@ -12,6 +12,13 @@ public class GameHandler {
     private FinalTurnHandler finalTurnHandler;
     private TurnHandler turnHandler;
 
+    /**
+     * The constructor of gameHandler
+     * @param n the numbers of skulls
+     * @param players the list of tokens' player
+     * @param file  the map's file
+     * @throws FileNotFoundException
+     */
     public GameHandler(int n, List<Integer> players, String file) throws FileNotFoundException {
         this.game = new Game(n,file);
         Colors[] colors=Colors.values();
@@ -36,6 +43,11 @@ public class GameHandler {
         return game;
     }
 
+    /**
+     * This method directs the course of the turn based on the parameter
+     * @param message contains the type of action to be performed
+     * @return true if the action was completed correctly
+     */
     public boolean receiveServerMessage(Message message){
         boolean valueReturn=false;
         if(!getGame().getDeadRoute().isFinalTurn()){
@@ -63,59 +75,94 @@ public class GameHandler {
                 valueReturn=finalTurnHandler.actionReload((ReloadMessage)message);
             else if(message.getActionType()==ActionType.USEPOWERUP)
                 valueReturn=finalTurnHandler.usePowerUp(message);
-
         }
         return valueReturn;
     }
 
+    /**
+     *this method calculates the last planks and the death route
+     */
     public void endGame(){
         for(Player p:getGame().getPlayers())
             p.getPlayerBoard().getHealthPlayer().death();
         getGame().calculatePoints(getGame().getDeadRoute().getMurders(),true,null);
         //messaggio server partita finita
     }
-    public List<Player> receiveTarget(PossibleTargetShot message){
-        List<Player> targets;
-        targets=new Shoot(message.getEffect(),getGame().getCurrentPlayer(),(List<Player>) null).targetablePlayer();
+
+    /**
+     * this method calculates the possible targets
+     * @param message contains the effect
+     * @return a list of possible targets
+     */
+    public ArrayList<Player> receiveTarget(PossibleTargetShot message){
+        ArrayList<Player> targets;
+        targets=(ArrayList<Player>) new Shoot(message.getEffect(),getGame().getCurrentPlayer(),(List<Player>) null).targetablePlayer();
         return  targets;
     }
 
+    /**
+     * this method indicates all the possible squares that the player can reach
+     * @param message  contains the max move
+     * @return the list of possible square
+     */
     public List<NormalSquare> receiveSquare(PossibleMove message){
         ArrayList<NormalSquare> squares;
         squares=new Move(getGame().getCurrentPlayer(),null,message.getMaxMove()).reachableSquare();
         return  squares;
     }
-    //move
+
+    /**
+     * This method verifies the validity of the move action
+     * @param target    the Player that is target by the action
+     * @param square    the NormalSquare selected by the actor as the final NormalSquare for the target
+     * @param maxMove   the max number of pass that the actorPlayer can do
+     * @return true if the action is valid
+     */
     public boolean actionValid(Player target,NormalSquare square,int maxMove){
         return  new Move(target,square,maxMove).isValid();
     }
-    //shot
-    public boolean actionValid(ArrayList<Player> targets,Effect effect, boolean powerUp){
+
+    /**
+     * this method verifies the validity of the shoot action with targets
+     * @param targets  the list of targets who received damage or mark
+     * @param effect   the effect uses for the shoot
+     * @param powerUp  the possible powerUp sight
+     * @return true if the action is valid
+     */
+    public boolean actionValid(ArrayList<Player> targets,Effect effect, int powerUp){
         boolean valueReturn;
-        if(!powerUp){
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),powerUp))
+        if(powerUp==-1){
+            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
                 valueReturn=new Shoot(effect,game.getCurrentPlayer(),targets).isValid();
             else
                 valueReturn=false;
         }
         else{
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),powerUp))
+            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
                 valueReturn=new Shoot(effect,game.getCurrentPlayer(),targets).isValid();
             else
                 valueReturn=false;
         }
         return valueReturn;
     }
-    public boolean actionValid(NormalSquare square,Effect effect,boolean powerUp){
+
+    /**
+     * this method verifies the validity of the shoot action with square
+     * @param square   square where is the targets who received damage or mark
+     * @param effect   the effect uses for the shoot
+     * @param powerUp  the possible powerUp sight
+     * @return true if the action is valid
+     */
+    public boolean actionValid(NormalSquare square,Effect effect,int powerUp){
         boolean valueReturn;
-        if(!powerUp){
+        if(powerUp==-1){
             if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
                 valueReturn=new Shoot(effect,game.getCurrentPlayer(),square).isValid();
             else
                 valueReturn=false;
         }
         else{
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true))
+            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
                 valueReturn=new Shoot(effect,game.getCurrentPlayer(),square).isValid();
             else
                 valueReturn=false;
@@ -123,16 +170,23 @@ public class GameHandler {
         return valueReturn;
     }
 
-    public boolean actionValid(Room room,Effect effect,boolean powerUp){
+    /**
+     * this method verifies the validity of the shoot action with room
+     * @param room     room where is the targets who received damage or mark
+     * @param effect   the effect uses for the shoot
+     * @param powerUp  the possible powerUp sight
+     * @return true if the action is valid
+     */
+    public boolean actionValid(Room room,Effect effect,int powerUp){
         boolean valueReturn;
-        if(!powerUp){
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),powerUp))
+        if(powerUp==-1){
+            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
                 valueReturn=new Shoot(effect,game.getCurrentPlayer(),room.getColor()).isValid();
             else
                 valueReturn=false;
         }
         else{
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),powerUp))
+            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true) &&game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
                 valueReturn=new Shoot(effect,game.getCurrentPlayer(),room.getColor()).isValid();
             else
                 valueReturn=false;
@@ -140,7 +194,12 @@ public class GameHandler {
         return valueReturn;
     }
 
-    //grab
+    /**
+     * this method verified the validity of the grab weapon action
+     * @param square the square where grab the action
+     * @param i      the position of the weapon
+     * @return true if the action is valid
+     */
     public boolean actionValid(SpawnSquare square, int i){
         ArrayList<Integer> cost=new ArrayList<>();
         cost.add(square.getWeapons().get(i).getBlueCost());
@@ -148,7 +207,12 @@ public class GameHandler {
         cost.add(square.getWeapons().get(i).getRedCost());
         return game.getCurrentPlayer().isValidCost(cost,false);
     }
-    //reload
+
+    /**
+     * this method verified the validity of the reload action
+     * @param i   the position of the weapon that must be recharged
+     * @return true if the action is valid
+     */
     public boolean actionValid(int i){
         ArrayList<Integer> cost=new ArrayList<>();
         cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getBlueCost());
@@ -157,6 +221,11 @@ public class GameHandler {
         return game.getCurrentPlayer().isValidCost(cost,false);
     }
 
+    /**
+     * this method  verified the first action that the player can do, in basic adrenaline action and final turn
+     * @param message  indicates the type of action that the player want do
+     * @return a updateClient message with a list of possible target or possible move
+     */
     public UpdateClient firstPartAction(ReceiveTargetSquare message){
         UpdateClient messageReturn;
         if(message.getType().equals("shoot"))
@@ -167,6 +236,12 @@ public class GameHandler {
             messageReturn=receiveMove(message);
         return messageReturn;
     }
+
+    /**
+     * this method  verified the first action shoot that the player can do, in basic adrenaline action and final turn
+     * @param message  indicates only the token for updateClient
+     * @return a updateClient message with a list of possible target or possible move
+     */
     private UpdateClient receiveShoot(ReceiveTargetSquare message){
         UpdateClient messageReturn=new UpdateClient(null,(ArrayList<NormalSquare>)null);
         if(getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
@@ -182,43 +257,55 @@ public class GameHandler {
         //verified if there is sight power up
         boolean isFind=false;
         for(int i=0;i<3 && !isFind;i++){
-            if(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")){
+            if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")){
                 isFind=true;
-                //TODO chiamata per uso mirino
+                //canUseScope(game.getCurrentPlayer());
             }
         }
         return messageReturn;
     }
+
+    /**
+     * this method  verified the first action grab that the player can do, in basic adrenaline action and final turn
+     * @param   message  indicates only the token for updateClient
+     * @return a updateClient message with possible move
+     */
     private UpdateClient receiveGrab(ReceiveTargetSquare message){
         UpdateClient messageReturn=new UpdateClient(getGame().getCurrentPlayer().getPlayerID(),(ArrayList<NormalSquare>) null);
-        if(getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
-                &&!getGame().getDeadRoute().isFinalTurn())
+        if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
+                &&!game.getDeadRoute().isFinalTurn())
             messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
         else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
-                ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ) &&!getGame().getDeadRoute().isFinalTurn())
+                ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ) &&!game.getDeadRoute().isFinalTurn())
             messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
-        else if (getGame().getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
+        else if (game.getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
             messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,3).reachableSquare());
-        else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
+        else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
             messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare());
         return  messageReturn;
     }
 
+    /**
+     * this method  verified the first action move that the player can do, in basic adrenaline action and final turn
+     * @param   message  indicates only the token for updateClient
+     * @return a updateClient message with possible move
+     */
     private UpdateClient receiveMove(ReceiveTargetSquare message){
         //case  final turn e Already firstPlayer
         UpdateClient messageReturn=new UpdateClient(getGame().getCurrentPlayer().getPlayerID(),(ArrayList<NormalSquare>)null);
-        if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
-                ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0)
-                &&!getGame().getDeadRoute().isFinalTurn())
+        if((game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
+                ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0)
+                &&!game.getDeadRoute().isFinalTurn())
             messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
-        else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
+        else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
             messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,4).reachableSquare());
         return  messageReturn;
     }
 
-
-
-
+    /**
+     * this method values who are/is win the game
+     * @return the list of the winner
+     */
     public List<Player> winner(){
         int massimo=0;
         ArrayList<Player> winnerList=new ArrayList<>();
@@ -239,7 +326,11 @@ public class GameHandler {
         return winnerList;
     }
 
-
+    /**
+     * this method counts the points in the death route for the parameter
+     * @param player  player who is evaluated
+     * @return the count of points
+     */
     public int countPlayer(Player player){
         int counterPlayer=0;
         for( Player p : getGame().getDeadRoute().getMurders() ){
@@ -248,6 +339,12 @@ public class GameHandler {
         }
         return counterPlayer;
     }
+
+    /**
+     *
+     * @param player
+     * @param winnerList
+     */
     private void modifiedWinnerList(Player player,ArrayList<Player> winnerList){
         if(countPlayer(player)>countPlayer(winnerList.get(0))){
             while(!winnerList.isEmpty()){
@@ -259,6 +356,11 @@ public class GameHandler {
             winnerList.add(player);
     }
 
+    /**
+     * this method serves to pay the effect o reload, with powerUp
+     * @param cost    is the cost to pay
+     * @param powerUp the list of powerUp with which to pay
+     */
     public void payment(List<Integer> cost, List<Integer> powerUp){
         ArrayList<CardPowerUp> powerUps=new ArrayList<>();
         ArrayList<Integer> ammo=new ArrayList<>();
@@ -275,8 +377,52 @@ public class GameHandler {
         }
         game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(ammo.get(0),ammo.get(1),ammo.get(2));
     }
+
+    /**
+     * this method serves to pay the effect o reload,
+     * @param cost is the cost to pay
+     */
     public void payment(List<Integer> cost){
-        getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost.get(0),cost.get(1),cost.get(2));
+        game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost.get(0),cost.get(1),cost.get(2));
+    }
+
+    /**
+     * this methos serves to pay the powerUp with an other powerUp
+     * @param powerUp power with which to pay
+     * @return true if the action is possible
+     */
+    public boolean paymentPowerUp(int powerUp){
+        boolean valueReturn;
+        if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp)!=null){
+            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(powerUp);
+            valueReturn=true;
+        }
+        else
+            valueReturn=false;
+        return  valueReturn;
+    }
+
+    /**
+     * this methos serves to pay the powerUp
+     * @param ammo indicates the color of ammo to be removed
+     * @return true if the action is possible
+     */
+    public boolean paymentPowerUp(String ammo){
+        //r,y,b
+        boolean valueReturn=false;
+        if(ammo.equals("r") && game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]!=0 ){
+            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(1,0,0);
+            valueReturn=true;
+        }
+        else if(ammo.equals("y") && game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]!=0 ){
+            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(0,1,0);
+            valueReturn=true;
+        }
+        else if(ammo.equals("b") && game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2]!=0 ){
+            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(0,0,1);
+            valueReturn=true;
+        }
+        return valueReturn;
     }
 }
 
