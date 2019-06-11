@@ -16,12 +16,10 @@
   ],
 "Effect1": [
     {
-      "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 0
-        }
+      "bonusCost":[
+        0,
+        0,
+        0
       ],
       "targetNumber": 1,
       "actionSequence": "pm",
@@ -54,11 +52,9 @@
   "Effect2": [
     {
       "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 0
-        }
+        0,
+        0,
+        0
       ],
       "targetNumber": 1,
       "actionSequence": "mp",
@@ -90,11 +86,9 @@
   "Effect3": [
     {
       "bonusCost": [
-        {
-          "R": 0,
-          "Y": 1,
-          "B": 0
-        }
+        0,
+        1,
+        0
       ],
       "targetNumber": 2,
       "actionSequence": "pmp",
@@ -128,11 +122,9 @@
   "Effect4": [
     {
       "bonusCost": [
-        {
-          "R": 0,
-          "Y": 1,
-          "B": 0
-        }
+        0,
+        1,
+        0
       ],
       "targetNumber": 2,
       "actionSequence": "ppm",
@@ -166,11 +158,9 @@
   "Effect5": [
     {
       "bonusCost": [
-        {
-          "R": 0,
-          "Y": 1,
-          "B": 0
-        }
+        0,
+        1,
+        0
       ],
       "targetNumber": 1,
       "actionSequence": "mpp",
