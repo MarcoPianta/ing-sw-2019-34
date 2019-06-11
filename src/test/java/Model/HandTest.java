@@ -150,7 +150,7 @@ public class HandTest {
         PossibleMove possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1);
         squares=gameHandler.receiveSquare(possibleMove);
         //use powerUp
-        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0),gameHandler.getGame().getPlayers().get(1),1,squares.get(0));
+        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0),gameHandler.getGame().getPlayers().get(1),squares.get(0));
 
         assertEquals(squares.get(0),gameHandler.getGame().getPlayers().get(1).getPosition());
         assertEquals(0,gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());

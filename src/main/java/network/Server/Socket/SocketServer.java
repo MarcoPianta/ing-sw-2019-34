@@ -63,7 +63,7 @@ public class SocketServer {
         while (threadHashMap.size() < 100) {
             Socket socket = serverSocket.accept();
 
-            int token = server.generateToken(false);
+            int token = server.generateToken(0,false);
             SocketClientHandler clientHandler = new SocketClientHandler(socket, token, this);
 
             Thread thread = new Thread(clientHandler);
