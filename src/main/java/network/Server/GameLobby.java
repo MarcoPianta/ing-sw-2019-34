@@ -87,7 +87,7 @@ public class GameLobby {
         else if (message.getActionType().getAbbreviation().equals(ActionType.RELOAD.getAbbreviation())) {
 
             boolean done = gameHandler.receiveServerMessage(message);
-            ReloadMessage m = (ReloadMessage) message;
+            ReloadedMessage m = (ReloadedMessage) message;
             server.send(new ReloadedMessage(message.getToken(), m.getWeapon(), done));
         }
 
@@ -100,21 +100,21 @@ public class GameLobby {
 
             boolean done = gameHandler.receiveServerMessage(message);
             GrabWeapon m = (GrabWeapon) message;
-            server.send(new GrabWeaponResponse(message.getToken(), m.getCard(), done));
+            server.send(new GrabWeaponResponse(m.getToken(), m.getPositionWeapon(), done));
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABAMMO.getAbbreviation())) {
 
             boolean done = gameHandler.receiveServerMessage(message);
             GrabAmmo m = (GrabAmmo) message;
-            server.send(new GrabResponse(message.getToken(), m.getCard(), done));
+            //server.send(new GrabResponse(message.getToken(), m.getCard(), done));
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABNOTONLYAMMO.getAbbreviation())) {
 
             boolean done = gameHandler.receiveServerMessage(message);
             GrabNotOnlyAmmo m = (GrabNotOnlyAmmo) message;
-            server.send(new GrabResponse(message.getToken(), m.getCard(), done));
+            //server.send(new GrabResponse(message.getToken(), m.getCard(), done));
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.USEPOWERUP.getAbbreviation())) {
@@ -132,8 +132,8 @@ public class GameLobby {
         server.send(new UpdateClient(token, powerUp));
     }
 
-    public void canUseVenom(Integer player){
-        server.send(new CanUseVenom(player));
+    public void canUseTagBack(Integer player){
+        server.send(new CanUseTagBack(player));
     }
 
     public void endGame(Integer winner){

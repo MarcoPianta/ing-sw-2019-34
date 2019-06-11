@@ -3,7 +3,6 @@ package view.gui;
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
 import view.View;
-import view.gui.Dictionaries.StringDictionary;
 import view.gui.actionHandler.CreateNewGame;
 
 import javax.swing.*;
@@ -21,7 +20,6 @@ public class MainGuiView extends View {
     private JLabel imageLabel;
     private JPanel buttonAndTextPanel;
     private JPanel mainPanel;
-    private StringDictionary dictionary;
 
     public static final double GOLDENRATIO = 1.6180339887; //Used to have a good ratio between width and height
     private static final int INITIALWINDOWHEIGHT = 600;
