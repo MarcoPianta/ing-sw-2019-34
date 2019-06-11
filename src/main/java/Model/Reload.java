@@ -1,11 +1,14 @@
 package Model;
+
+import java.util.List;
+
 /**
  * This class implements Action
  */
 public class Reload implements Action {
     private CardWeapon selectedWeapon;
     private Player actorPlayer;
-    private CardPowerUp usedPowerUp;
+    private List<CardPowerUp> usedPowerUps;
     private int r;
     private int b;
     private int y;
@@ -25,30 +28,34 @@ public class Reload implements Action {
     /**
      * @param reloaderPlayer    The actorPlayer who use the Grab Action
      * @param grabbedWeapon     The card that is grabbed by the actorPlayer
-     * @param powerUp           The powerUp used as a reload payment
+     * @param powerUps           List of powerUp used as a reload payment
      */
-    public Reload(Player reloaderPlayer, CardWeapon grabbedWeapon, CardPowerUp powerUp){
+    public Reload(Player reloaderPlayer, CardWeapon grabbedWeapon, List<CardPowerUp> powerUps){
         actorPlayer = reloaderPlayer;
         selectedWeapon = grabbedWeapon;
-        usedPowerUp = powerUp;
+        usedPowerUps = powerUps;
         r = selectedWeapon.getRedCost();
         y = selectedWeapon.getYellowCost();
         b = selectedWeapon.getBlueCost();
+    }
+
+    private boolean controlPowerUp(CardPowerUp powerUp) {
         if(powerUp.getColor().getAbbreviation().equals("r"))
             if((r - 1) < 0){
-                //TODO throw exception uselessPowerUp
+                return false;
             }
-            r -= 1;
+        r -= 1;
         if(powerUp.getColor().getAbbreviation().equals("y"))
             if((y - 1) < 0){
-                //TODO throw exception uselessPowerUp
+                return false;
             }
-            y -= 1;
+        y -= 1;
         if(powerUp.getColor().getAbbreviation().equals("b"))
             if((b - 1) < 0){
-                //TODO throw exception uselessPowerUp
+                return false;
             }
-            b -= 1;
+        b -= 1;
+        return true;
     }
 
     /**
@@ -66,8 +73,10 @@ public class Reload implements Action {
         else {
             if (isValid()) {
                 actorPlayer.getPlayerBoard().getHandPlayer().chargeWeapon(selectedWeapon, r, y, b);
-                //TODO actorPlayer.getPlayerBoard().getHandPlayer().remove(usedPowerUp);
-                return true;
+                for (CardPowerUp powerUp: usedPowerUps) {
+                    actorPlayer.getPlayerBoard().getHandPlayer().removePowerUp(actorPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUp));
+                }
+             return true;
             }
             return false;
         }
@@ -79,6 +88,9 @@ public class Reload implements Action {
      * @return true if the action invocation respect the condition, false otherwise
      */
     public boolean isValid(){
+        for (CardPowerUp powerUp: usedPowerUps)
+            if(controlPowerUp(powerUp))
+                return false;
         int[] a = actorPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB();
         if(a[0] < r || a[1] < y || a[2] < b)
             return false;

@@ -3,6 +3,7 @@ package Model;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,8 +18,12 @@ public class ReloadTest {
         Reload action = new Reload(testPlayer, testWeapon);
         assertTrue(action instanceof Reload);
 
-        CardPowerUp testPowerUp = new CardPowerUp("newton_R");
-        action = new Reload(testPlayer, testWeapon, testPowerUp);
+        ArrayList<CardPowerUp> testPowerUps = new ArrayList<>();
+        CardPowerUp testPowerUp1 = new CardPowerUp("newton_R");
+        CardPowerUp testPowerUp2 = new CardPowerUp("newton_Y");
+        testPowerUps.add(testPowerUp1);
+        testPowerUps.add(testPowerUp2);
+        action = new Reload(testPlayer, testWeapon, testPowerUps);
         assertTrue(action instanceof Reload);
     }
 
