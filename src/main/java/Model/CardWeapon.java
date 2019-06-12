@@ -87,7 +87,7 @@ public class CardWeapon implements Card {
     private void setActionSequences(JsonObject jsonValues){
         int i = 0;
         while (i < jsonValues.getJsonArray("actionSequences").size()){
-            this.actionSequences.add(jsonValues.getJsonArray("actionSequences").getInt(i));
+            actionSequences.add(jsonValues.getJsonArray("actionSequences").getInt(i));
             i++;
         }
     }

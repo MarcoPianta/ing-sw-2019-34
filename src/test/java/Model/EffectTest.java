@@ -30,29 +30,9 @@ public class EffectTest {
         Effect effect = new Effect(jsonValues, 1);
         assertEquals(0, effect.getBonusCost().get(0));
         assertEquals(1, effect.getTargetNumber());
-        assertEquals("mp", effect.getActionSequence());
+        assertEquals("pm", effect.getActionSequence());
         assertEquals(2, effect.getDamage().get(0));
-        assertEquals(0, effect.getMark().get(0));
-        assertEquals(1, effect.getMyMove());
-        assertEquals(0, effect.getTargetMove());
-    }
-
-    @Test
-    public void constructorTestDoubleDamage() throws FileNotFoundException {
-        JsonObject jsonValues;
-        String file = WeaponDictionary.CYBERBLADE.getAbbreviation();
-        File fileJson = new File(getClass().getResource("/Weapon/"+file+".json").getFile());
-        InputStream fis = new FileInputStream(fileJson);
-        JsonReader reader = Json.createReader(fis);
-        jsonValues = reader.readObject();
-        reader.close();
-
-        Effect effect = new Effect(jsonValues, 2);
-        assertEquals(1, effect.getBonusCost().get(1));
-        assertEquals(2, effect.getTargetNumber());
-        assertEquals("pmp", effect.getActionSequence());
-        assertEquals(2, effect.getDamage().get(1));
-        assertEquals(0, effect.getMark().get(1));
+        assertEquals(2, effect.getMark().get(0));
         assertEquals(1, effect.getMyMove());
         assertEquals(0, effect.getTargetMove());
     }

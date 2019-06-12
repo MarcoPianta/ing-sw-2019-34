@@ -19,7 +19,7 @@ public class CardWeaponTest {
         }
         assertEquals(WeaponDictionary.CYBERBLADE.getAbbreviation(), weapon.getName());
         assertEquals(AmmoColors.YELLOW, weapon.getColor());
-        assertEquals(3,weapon.getEffectsNumber());
+        assertEquals(5,weapon.getEffectsNumber());
         assertTrue(weapon instanceof CardWeapon);
     }
 
@@ -30,12 +30,12 @@ public class CardWeaponTest {
     public void testGetEffects(){
         CardWeapon cardWeapon;
         try {
-            cardWeapon = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
+            cardWeapon = new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation());
         }catch (FileNotFoundException e){
             return;
         }
-        assertTrue(cardWeapon.getEffects().size() == 2); //Expected size value  of effects for electroscyte is 1
-        assertEquals(4 ,cardWeapon.getEffects().get(0).getTargetNumber()); //Expected value of target is 4
+        assertTrue(cardWeapon.getEffects().size() == 5); //Expected size value  of effects for electroscyte is 1
+        assertEquals(1 ,cardWeapon.getEffects().get(0).getTargetNumber()); //Expected value of target is 4
     }
 
     /**

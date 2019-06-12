@@ -24,11 +24,10 @@ public class Effect {
         JsonArray cost = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("bonusCost");
         JsonArray damageArray;
         JsonArray markArray;
-        String actionSequence;
+        actionSequence = jsonValues.getJsonArray(jsonString).getJsonObject(0).getString("actionSequence");
         for (int i = 0; i < cost.size(); i++)
             this.bonusCost.add(cost.getInt(i));
         targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("targetNumber");
-        actionSequence = jsonValues.getJsonArray(jsonString).getJsonObject(0).getString("actionSequence");
         damageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("damage");
         markArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("mark");
         damage = new ArrayList<>();
