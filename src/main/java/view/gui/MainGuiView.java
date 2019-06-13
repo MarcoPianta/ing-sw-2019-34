@@ -2,6 +2,7 @@ package view.gui;
 
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
+import network.Server.Client;
 import view.View;
 import view.gui.actionHandler.CreateNewGame;
 
@@ -83,9 +84,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("192.168.0.6", 10000, self);
+                    client = new SocketClient("localhost", 10000, self);
                 else
-                    client = new RMIClient("192.168.0.6",10001, self);
+                    client = new RMIClient("localhost",10001, self);
                 //showGameSettingsRequest();
                 //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -177,6 +178,10 @@ public class MainGuiView extends View {
             JOptionPane.showMessageDialog(frame, "The game is over.\nCongratulation, you won!");
         else
             JOptionPane.showMessageDialog(frame, "The game is over.\nUnfortunately you didn't win");
+    }
+
+    public void setClient(Client client){
+        this.client = client;
     }
 
     private static void setUIManager() {

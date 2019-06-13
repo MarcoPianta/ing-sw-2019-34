@@ -2,19 +2,26 @@ package Model;
 
 import org.junit.jupiter.api.Test;
 import java.io.FileNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DrawerTest {
 
     @Test
-    public void drawTest()throws FileNotFoundException {
-        Deck<CardWeapon> deck = new Deck<>(false);
+    public void drawWeaponTest()throws FileNotFoundException {
+        DeckCreator deckCreator = new DeckCreator();
+        Deck<CardWeapon> deck = deckCreator.createDeck("WEAPON");
         Drawer<CardWeapon> drawer = deck.createDrawer();
 
-        deck.add(new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation()));
         assertTrue(drawer.hasNext());
         CardWeapon c = drawer.draw();
-        assertEquals(c.getName(), new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation()).getName());
+        assertTrue(() -> {
+            for (int i=0; i < WeaponDictionary.values().length; i++){
+                if (c.getName().toUpperCase().equals(WeaponDictionary.values()[i].toString()))
+                    return true;
+            }
+            return false;
+        });
         assertFalse(drawer.hasNext());
     }
 }

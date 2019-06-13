@@ -36,6 +36,7 @@ public class Server {
         rmiServer = new RMIServer(this, 10001);
         tokens = new ArrayList<>();
         clients = new HashMap<>();
+        lobbyHashMap = new HashMap<>();
         startServers();
     }
 

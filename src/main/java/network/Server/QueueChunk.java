@@ -15,6 +15,7 @@ public class QueueChunk {
     private ArrayList<ArrayList<Integer>> chunks;
     private int maxChunkIndex;
     private HashMap<Integer, Boolean> startedCheck; //This variable is used to know if a Thread to create a new Game is yet started
+    public static final int QUEUEWAITTIME = 5000; //Time to wait when the player number is reached in millis
 
     public QueueChunk(){}
 
@@ -48,7 +49,7 @@ public class QueueChunk {
                                     notifyServer(chunks.get(maxChunkIndex));
                                 }
                             })
-                            , 30000);
+                            , QUEUEWAITTIME);
                 }
             } else {
                 maxChunkIndex++;
@@ -72,20 +73,24 @@ public class QueueChunk {
     private void notifyServer(ArrayList<Integer> players){
         int skullNumber = 0;
         int map = 0;
-        for(Integer i: players) {
-            if (playersID.get(i) != null) {
-                skullNumber = playersID.get(i).getSkullNumber();
-                map = playersID.get(i).getMapNumber();
-                break;
+        synchronized (this) {
+            for (Integer i : players) {
+                if (playersID.get(i) != null) {
+                    skullNumber = playersID.get(i).getSkullNumber();
+                    map = playersID.get(i).getMapNumber();
+                    break;
+                }
             }
         }
         if (skullNumber == 0 || map == 0){ //If none of the player choose his game preference those are randomly extracted
             skullNumber = (Arrays.asList(5, 8).get(new Random().nextInt(1))); //Extract skull number (can be 5 or 8)
-            map = (Arrays.asList(1, 2, 3, 4).get(new Random().nextInt(4))); //Extract map number (can be 1, 2, 3 or 4)
+            map = (Arrays.asList(1, 2, 3, 4).get(new Random().nextInt(3))); //Extract map number (can be 1, 2, 3 or 4)
         }
         server.notifyFromQueue(players,skullNumber, map);
         synchronized (this){
             chunks.remove(players);
+            for (Integer i: players)
+                playersID.remove(i);
             if (maxChunkIndex > 0)
                 maxChunkIndex--;
         }

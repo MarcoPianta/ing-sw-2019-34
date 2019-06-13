@@ -15,7 +15,7 @@ public class DeckCollectorTest {
         Deck<CardPowerUp> cardPowerUpDeck = deckCollector.getCardPowerUpDeck();
         Deck<CardAmmo> cardAmmoDeck = deckCollector.getCardAmmoDeck();
 
-        assertEquals(2, deckCollector.getCardWeaponDeck().getSize()); //TODO Now expected is 2 but must be changed when all cardWeapon json file will be checked
+        assertEquals(1, deckCollector.getCardWeaponDeck().getSize()); //TODO Now expected is 2 but must be changed when all cardWeapon json file will be checked
         assertEquals(12, deckCollector.getCardPowerUpDeck().getSize()); //Expected value for PowerUp deck size is 12
         assertEquals(36, deckCollector.getCardAmmoDeck().getSize()); //Expected value for Ammo deck size is 36
 
