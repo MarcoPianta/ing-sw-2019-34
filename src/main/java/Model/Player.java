@@ -90,10 +90,12 @@ public class Player {
             i++;
         }
         newPosition(getGameId().getMap().getRooms().get(i-1).getNormalSquares().get(j));
+
+        System.out.println(getPosition().getColor());
         getPlayerBoard().getHandPlayer().removePowerUp(getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUp));
     }
 
-    private Integer[] calculateMaxAmmo(boolean set){
+    public Integer[] calculateMaxAmmo(boolean set){
         Integer[] ammoRyb=new Integer[3];
         int i=0;
         while(i<3){
@@ -117,20 +119,22 @@ public class Player {
                 }
             }
             else{
-                if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")&&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.RED.getAbbreviation())){
+                if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get") &&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.RED.getAbbreviation())){
                     ammoRyb[0]++;
                     i++;
                 }
-                else if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")&&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.YELLOW.getAbbreviation())){
+                else if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get") &&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.YELLOW.getAbbreviation())){
                     ammoRyb[1]++;
                     i++;
                 }
-                else if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")&&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.BLUE.getAbbreviation())){
+                else if(!getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")  &&getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.BLUE.getAbbreviation())){
                     ammoRyb[2]++;
                     i++;
                 }
-                else
+                else{//player had scope and use it
                     set=false;
+                    i++;
+                }
             }
 
         }
@@ -142,19 +146,19 @@ public class Player {
     public boolean isValidCost(List<Integer> cost, boolean set){
         boolean valueReturn=true;
         if(!set) {
-            Integer[] ammoRyb = calculateMaxAmmo(set);
+            Integer[] ammoRyb = calculateMaxAmmo(false);
             for (int i = 0; i < 3; i++) {
                 if (ammoRyb[i] < cost.get(i))
                     valueReturn = false;
             }
         }
         else{
-            Integer[] ammoRyb=calculateMaxAmmo(set);
+            Integer[] ammoRyb=calculateMaxAmmo(true);
             for(int i=0;i<3;i++){
                 if(ammoRyb[i]< cost.get(i))
                     valueReturn=false;
             }
-            if(valueReturn && ammoRyb[0]+ammoRyb[1]+ammoRyb[2]==0)
+            if(valueReturn && (ammoRyb[0]+ammoRyb[1]+ammoRyb[2] - (cost.get(0)+cost.get(1)+cost.get(2))==0))
                 valueReturn=false;
         }
         return valueReturn;

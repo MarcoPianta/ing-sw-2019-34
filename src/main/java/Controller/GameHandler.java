@@ -11,6 +11,9 @@ public class GameHandler {
     private Game game;
     private FinalTurnHandler finalTurnHandler;
     private TurnHandler turnHandler;
+    private Player playerValid;// save player's position for action shot's valid
+    private PaymentController paymentController;
+
 
     /**
      * The constructor of gameHandler
@@ -29,8 +32,22 @@ public class GameHandler {
         }
         finalTurnHandler=new FinalTurnHandler(this);
         turnHandler=new TurnHandler(this);
+        paymentController=new PaymentController(this);
         getGame().chooseFirstPlayer();
-        getTurnHandler().start();
+        playerValid=game.getCurrentPlayer();
+        //getTurnHandler().start();
+    }
+
+    public PaymentController getPaymentController() {
+        return paymentController;
+    }
+
+    public void setPlayerValid (Player playerValid) {
+        this.playerValid = playerValid;
+    }
+
+    public Player getPlayerValid() {
+        return playerValid;
     }
 
     public FinalTurnHandler getFinalTurnHandler() {
@@ -111,115 +128,7 @@ public class GameHandler {
         return  squares;
     }
 
-    /**
-     * This method verifies the validity of the move action
-     * @param target    the Player that is target by the action
-     * @param square    the NormalSquare selected by the actor as the final NormalSquare for the target
-     * @param maxMove   the max number of pass that the actorPlayer can do
-     * @return true if the action is valid
-     */
-    public boolean actionValid(Player target,NormalSquare square,int maxMove){
-        return  new Move(target,square,maxMove).isValid();
-    }
 
-    /**
-     * this method verifies the validity of the shoot action with targets
-     * @param targets  the list of targets who received damage or mark
-     * @param effect   the effect uses for the shoot
-     * @param powerUp  the possible powerUp sight
-     * @return true if the action is valid
-     */
-    public boolean actionValid(ArrayList<Player> targets,Effect effect, int powerUp){
-        boolean valueReturn;
-        if(powerUp==-1){
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect,game.getCurrentPlayer(),targets).isValid();
-            else
-                valueReturn=false;
-        }
-        else{
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect,game.getCurrentPlayer(),targets).isValid();
-            else
-                valueReturn=false;
-        }
-        return valueReturn;
-    }
-
-    /**
-     * this method verifies the validity of the shoot action with square
-     * @param square   square where is the targets who received damage or mark
-     * @param effect   the effect uses for the shoot
-     * @param powerUp  the possible powerUp sight
-     * @return true if the action is valid
-     */
-    public boolean actionValid(NormalSquare square,Effect effect,int powerUp){
-        boolean valueReturn;
-        if(powerUp==-1){
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect,game.getCurrentPlayer(),square).isValid();
-            else
-                valueReturn=false;
-        }
-        else{
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect,game.getCurrentPlayer(),square).isValid();
-            else
-                valueReturn=false;
-        }
-        return valueReturn;
-    }
-
-    /**
-     * this method verifies the validity of the shoot action with room
-     * @param room     room where is the targets who received damage or mark
-     * @param effect   the effect uses for the shoot
-     * @param powerUp  the possible powerUp sight
-     * @return true if the action is valid
-     */
-    public boolean actionValid(Room room,Effect effect,int powerUp){
-        boolean valueReturn;
-        if(powerUp==-1){
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect,game.getCurrentPlayer(),room.getColor()).isValid();
-            else
-                valueReturn=false;
-        }
-        else{
-            if(game.getCurrentPlayer().isValidCost(effect.getBonusCost(),true) &&game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect,game.getCurrentPlayer(),room.getColor()).isValid();
-            else
-                valueReturn=false;
-        }
-        return valueReturn;
-    }
-
-    /**
-     * this method verified the validity of the grab weapon action
-     * @param square the square where grab the action
-     * @param i      the position of the weapon
-     * @return true if the action is valid
-     */
-    public boolean actionValid(SpawnSquare square, int i){
-        ArrayList<Integer> cost=new ArrayList<>();
-        cost.add(square.getWeapons().get(i).getBlueCost());
-        cost.add(square.getWeapons().get(i).getYellowCost());
-        cost.add(square.getWeapons().get(i).getRedCost());
-        return game.getCurrentPlayer().isValidCost(cost,false);
-    }
-
-    /**
-     * this method verified the validity of the reload action
-     * @param i   the position of the weapon that must be recharged
-     * @return true if the action is valid
-     */
-    public boolean actionValid(int i){
-        ArrayList<Integer> cost=new ArrayList<>();
-        cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getBlueCost());
-        cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getYellowCost());
-        cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getRedCost());
-        return game.getCurrentPlayer().isValidCost(cost,false);
-    }
 
     /**
      * this method  verified the first action that the player can do, in basic adrenaline action and final turn
@@ -361,68 +270,6 @@ public class GameHandler {
      * @param cost    is the cost to pay
      * @param powerUp the list of powerUp with which to pay
      */
-    public void payment(List<Integer> cost, List<Integer> powerUp){
-        ArrayList<CardPowerUp> powerUps=new ArrayList<>();
-        ArrayList<Integer> ammo=new ArrayList<>();
-        for(Integer i:powerUp)
-            powerUps.add(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
-        for(CardPowerUp p:powerUps){
-            if(p.getColor()==AmmoColors.RED)
-                ammo.add(cost.get(0) -1);
-            else if(p.getColor()==AmmoColors.YELLOW)
-                ammo.add(cost.get(1) -1);
-            else if(p.getColor()==AmmoColors.BLUE)
-                ammo.add(cost.get(2) -1);
-            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(p));
-        }
-        game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(ammo.get(0),ammo.get(1),ammo.get(2));
-    }
 
-    /**
-     * this method serves to pay the effect o reload,
-     * @param cost is the cost to pay
-     */
-    public void payment(List<Integer> cost){
-        game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost.get(0),cost.get(1),cost.get(2));
-    }
-
-    /**
-     * this methos serves to pay the powerUp with an other powerUp
-     * @param powerUp power with which to pay
-     * @return true if the action is possible
-     */
-    public boolean paymentPowerUp(int powerUp){
-        boolean valueReturn;
-        if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp)!=null){
-            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(powerUp);
-            valueReturn=true;
-        }
-        else
-            valueReturn=false;
-        return  valueReturn;
-    }
-
-    /**
-     * this methos serves to pay the powerUp
-     * @param ammo indicates the color of ammo to be removed
-     * @return true if the action is possible
-     */
-    public boolean paymentPowerUp(String ammo){
-        //r,y,b
-        boolean valueReturn=false;
-        if(ammo.equals("r") && game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]!=0 ){
-            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(1,0,0);
-            valueReturn=true;
-        }
-        else if(ammo.equals("y") && game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]!=0 ){
-            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(0,1,0);
-            valueReturn=true;
-        }
-        else if(ammo.equals("b") && game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2]!=0 ){
-            game.getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(0,0,1);
-            valueReturn=true;
-        }
-        return valueReturn;
-    }
 }
 

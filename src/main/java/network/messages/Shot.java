@@ -9,11 +9,11 @@ public class Shot extends Message {
     private Effect effect;
     private NormalSquare square;
     private Room room;
-    private CardWeapon weapon;
+    private int weapon;
     private Integer powerUp;
     private Player targetPowerUp;
 
-    public Shot(List<Player> targets, Effect effect,CardWeapon weapon,Integer powerUp,Player targetPowerUp){
+    public Shot(List<Player> targets, Effect effect,int weapon,Integer powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;
@@ -23,7 +23,7 @@ public class Shot extends Message {
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
     }
-    public Shot(Effect effect,Room room,CardWeapon weapon,Integer powerUp,Player targetPowerUp){
+    public Shot(Room room,Effect effect,int weapon,Integer powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=room;
@@ -33,7 +33,7 @@ public class Shot extends Message {
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
     }
-    public Shot(Effect effect,NormalSquare square,CardWeapon weapon,Integer powerUp,Player targetPowerUp){
+    public Shot(NormalSquare square,Effect effect,int weapon,Integer powerUp,Player targetPowerUp){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;
@@ -44,7 +44,7 @@ public class Shot extends Message {
         this.targetPowerUp=targetPowerUp;
     }
 
-    public Shot(List<Player> targets, Effect effect,CardWeapon weapon){
+    public Shot(List<Player> targets, Effect effect,int weapon){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;
@@ -54,7 +54,7 @@ public class Shot extends Message {
         this.weapon=weapon;
 
     }
-    public Shot(Effect effect,Room room,CardWeapon weapon){
+    public Shot(Room room,Effect effect,int weapon){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=room;
@@ -64,7 +64,7 @@ public class Shot extends Message {
         this.weapon=weapon;
 
     }
-    public Shot(Effect effect,NormalSquare square,CardWeapon weapon){
+    public Shot(NormalSquare square,Effect effect,int weapon){
         actionType=ActionType.SHOT;
         this.effect =effect;
         this.room=null;
@@ -90,7 +90,7 @@ public class Shot extends Message {
         return powerUp;
     }
 
-    public CardWeapon getWeapon() {
+    public int getWeapon() {
         return weapon;
     }
 

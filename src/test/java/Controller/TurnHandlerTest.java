@@ -35,30 +35,29 @@ public class TurnHandlerTest {
         players.add(4324525);
         GameHandler gameHandler=new GameHandler(5,players,"map1");
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getPlayers().get(0));
+        //test gameHandler receive square
         PossibleMove possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),3);
-        //move test+ adrenaline 0
+        //move test
         squares=gameHandler.receiveSquare(possibleMove);
         NormalSquare newSquare= squares.get(0);
         MoveMessage message=new MoveMessage(gameHandler.getGame().getPlayers().get(0).getPlayerID(),newSquare);
         assertTrue(gameHandler.getTurnHandler().actionState(message));
         assertEquals(StateMachineEnumerationTurn.ACTION1,gameHandler.getGame().getCurrentPlayer().getState());
         assertEquals(StateMachineEnumerationTurn.ACTION2,gameHandler.getTurnHandler().getNextState());
+
         String file= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
         CardWeapon cardWeapon=new CardWeapon(file);
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(3,3,3);
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addWeapon(cardWeapon);
-        //shot test+ adrenaline 2
-        PossibleTargetShot shotMessage= new PossibleTargetShot(gameHandler.getGame().getPlayers().get(0).getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0));
-        possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1);
-        //test gameHandler receive square
-        squares=gameHandler.receiveSquare(possibleMove);
-        gameHandler.getGame().getPlayers().get(1).newPosition(squares.get(0));
-
-        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(0),6);//adrenalineAction
         //test gameHandler receiveTarget
-        ArrayList<Player>  playersTarget=new ArrayList<>();
-        playersTarget=gameHandler.receiveTarget(shotMessage);
-        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
+        //shot test
+        PossibleTargetShot shotMessage= new PossibleTargetShot(gameHandler.getGame().getPlayers().get(0).getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0));
+        gameHandler.getGame().getPlayers().get(1).newPosition(gameHandler.getGame().getCurrentPlayer().getPosition());
+
+        ArrayList<Player>  playersTarget;
+        playersTarget=gameHandler.receiveTarget(shotMessage);//receive target
+
+        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),0);
         assertTrue(gameHandler.getTurnHandler().actionState(shot));
 
         assertEquals(StateMachineEnumerationTurn.ACTION2,gameHandler.getGame().getCurrentPlayer().getState());
@@ -67,16 +66,13 @@ public class TurnHandlerTest {
 
         //grab
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
-        PossibleMove possibleMove1=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1);
-        squares=gameHandler.receiveSquare(possibleMove1);
         GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         assertTrue(gameHandler.receiveServerMessage(grabNotOnlyAmmo));
     }
-    /*@Test
+    @Test
     public void actionReloadMessage() throws  FileNotFoundException{
-        ArrayList<Player> players=new ArrayList<>();
-        Player player1=new Player("playertest2830", Colors.GREEN, "playerTest1");
-        players.add(player1);
+        ArrayList<Integer> players=new ArrayList<>();
+        players.add(23532);
         GameHandler gameHandler=new GameHandler(5,players,"map1");
         String file= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
         CardWeapon cardWeapon=new CardWeapon(file);
@@ -84,14 +80,13 @@ public class TurnHandlerTest {
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addWeapon(cardWeapon);
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).setCharge(false);
 
-        ReloadMessage reloadMessage=new ReloadMessage(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0),null);
+        ReloadMessage reloadMessage=new ReloadMessage(gameHandler.getGame().getCurrentPlayer().getPlayerID(),0,null);
         assertTrue(gameHandler.receiveServerMessage(reloadMessage));
-    }*/
+    }
 
     @Test
     public void usePowerUpTest() throws FileNotFoundException{
         ArrayList<Integer> players=new ArrayList<>();
-        boolean valueReturn=false;
         players.add(32413);
         players.add(4324525);
         GameHandler gameHandler=new GameHandler(5,players,"map1");
@@ -100,7 +95,7 @@ public class TurnHandlerTest {
         NormalSquare normalSquare=new NormalSquare();
         normalSquare.setItems(cardNotOnlyAmmo);
         GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getPlayers().get(0).getPlayerID());
-        valueReturn=gameHandler.receiveServerMessage(grabNotOnlyAmmo);
+        gameHandler.receiveServerMessage(grabNotOnlyAmmo);
 
         NormalSquare normalSquare1=new NormalSquare();
         UsePowerUp usePowerUp=new UsePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerID(),0,gameHandler.getGame().getPlayers().get(0),gameHandler.getGame().getPlayers().get(1),normalSquare1);

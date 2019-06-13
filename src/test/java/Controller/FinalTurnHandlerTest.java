@@ -68,28 +68,22 @@ public class FinalTurnHandlerTest {
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addWeapon(cardWeapon);
         //shot test no firstPlayer
         PossibleTargetShot shotMessage= new PossibleTargetShot(gameHandler.getGame().getPlayers().get(0).getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0));
-        possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),2);
-        //test gameHandler receive square
-        squares=gameHandler.receiveSquare(possibleMove);
-
-        gameHandler.getGame().getPlayers().get(1).newPosition(squares.get(squares.size()-1));
 
 
-        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(0),6);//adrenalineAction
-        //test gameHandler receiveTarget
+        gameHandler.getGame().getPlayers().get(1).newPosition(gameHandler.getGame().getCurrentPlayer().getPosition());
+
         ArrayList<Player>  playersTarget;
 
         playersTarget=gameHandler.receiveTarget(shotMessage);
-        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).setCharge(false);
+        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).setCharge(true);
 
-        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
-        assertTrue(gameHandler.getTurnHandler().actionState(shot));
+        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),0);
+        //assertTrue(gameHandler.getTurnHandler().actionState(shot));
 
         //test Grab firstPlayer
         gameHandler.getFinalTurnHandler().setAlreadyFirsPlayer(true);
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
-        PossibleMove possibleMove1=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),3);
-        squares=gameHandler.receiveSquare(possibleMove1);
+
         GrabNotOnlyAmmo grabNotOnlyAmmo=new GrabNotOnlyAmmo(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         assertTrue(gameHandler.receiveServerMessage(grabNotOnlyAmmo));
     }

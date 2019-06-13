@@ -41,6 +41,7 @@ public class TurnHandler {
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1,1,1);
         }
         setNextState(StateMachineEnumerationTurn.ACTION1);
+        gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());
     }
     public boolean actionState(Message message){
         boolean valueReturn=false;
@@ -121,19 +122,20 @@ public class TurnHandler {
             usePowerUp(message);
         }
         if(valueReturn){
-            for(Player p:message.getTargets()){
-                for(CardPowerUp powerUp:p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()){
-                    if(powerUp.getWhen().equals("get")){
+            for(Player p:message.getTargets()) {
+                for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
+                    if (powerUp.getWhen().equals("get")) {
                         //canUseTagback(p.getPlayerID());
-                        }
+                    }
                 }
-
             }
         }
+        if(valueReturn)
+            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).setCharge(false);
         return valueReturn;
     }
 
-    //creare messaggio diverso per weapon =3, stesso messaggio ma costruttore diverso, se ho 3 armki grabbo normalmente  e elimino lintero per rimuovere
+    //creare messaggio diverso per weapon =3, stesso messaggio ma costruttore diverso, se ho 3 armi grabbo normalmente  e elimino lintero per rimuovere
     protected boolean actionGrab(Message message){
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.GRABWEAPON ){
