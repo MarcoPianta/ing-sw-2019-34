@@ -1,6 +1,9 @@
 package Model;
 
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckCollectorTest {
@@ -9,8 +12,8 @@ public class DeckCollectorTest {
      * This method tests if deck collector is created correctly
      * */
     @Test
-    public void createDecksTest(){
-        DeckCollector deckCollector = new DeckCollector();
+    public void createDecksTest() throws FileNotFoundException {
+        DeckCollector deckCollector = new Game(5, "map1").getDeckCollector();
         Deck<CardWeapon> cardWeaponDeck = deckCollector.getCardWeaponDeck();
         Deck<CardPowerUp> cardPowerUpDeck = deckCollector.getCardPowerUpDeck();
         Deck<CardAmmo> cardAmmoDeck = deckCollector.getCardAmmoDeck();
@@ -22,5 +25,15 @@ public class DeckCollectorTest {
         assertNotNull(deckCollector.getCardWeaponDrawer().draw());
         assertNotNull(deckCollector.getCardPowerUpDrawer().draw());
         assertNotNull(deckCollector.getCardAmmoDrawer().draw());
+
+        assertEquals(0, deckCollector.getCardWeaponDeck().getSize());
+        assertEquals(11, deckCollector.getCardPowerUpDeck().getSize());
+        assertEquals(35, deckCollector.getCardAmmoDeck().getSize());
+
+        assertNotNull(deckCollector.getCardPowerUpDrawer().draw());
+        assertNotNull(deckCollector.getCardAmmoDrawer().draw());
+
+        assertEquals(10, deckCollector.getCardPowerUpDeck().getSize());
+        assertEquals(34, deckCollector.getCardAmmoDeck().getSize());
     }
 }

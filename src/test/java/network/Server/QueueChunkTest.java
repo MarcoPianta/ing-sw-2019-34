@@ -44,7 +44,7 @@ public class QueueChunkTest {
         synchronized (this) {
             MainGuiView mainGuiView = new MainGuiView();
             mainGuiView.setClient(s = new SocketClient("localhost", 10000, mainGuiView));
-            mainGuiView.main(null);
+            mainGuiView.main();
         }
         while(s.getToken()==null){}
         return s.getToken();
