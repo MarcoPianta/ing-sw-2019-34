@@ -38,7 +38,7 @@ public class GameLobby {
     public void startTurn(Integer token){
         if (currentPlayer != null)
             server.send(new EndMessage(currentPlayer));
-        server.send(new StartMessage(token, "turn"));
+        server.send(new StartMessage(token, "turn", 0, ""));
         currentPlayer = token;
     }
 

@@ -49,6 +49,13 @@ public abstract class Client {
         else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
             view.showVenomRequest();
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.START.getAbbreviation())){
+            StartMessage startMessage = (StartMessage) message;
+            if (startMessage.getType().equals("game"))
+                view.startGame();
+            else if (startMessage.getType().equals("turn"))
+                view.startTurn();
+        }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
             view.showGameSettingsRequest();
         }

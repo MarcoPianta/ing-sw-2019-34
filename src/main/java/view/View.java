@@ -27,7 +27,7 @@ public abstract class View {
     protected ArrayList<String> otherPlayersPosition; /**This ArrayList contains the IDs of the square where other players are on*/
     protected HashMap<String, Boolean> charge;
 
-    public View(Client client){
+    public View(){
         this.weapons = new ArrayList<>(4);
         while (weapons.size() < 4)
             weapons.add(null);
@@ -45,10 +45,7 @@ public abstract class View {
         this.maxReward = 0;
         this.otherPlayersPosition = new ArrayList<>();
 
-        this.client = client;
     }
-
-    public View(){} //TODO delete this constructor used only for GUI testing purpose
 
     public abstract void showToken();
 
@@ -63,6 +60,10 @@ public abstract class View {
     public abstract void showVenomRequest();//TODO send UsePowerUp if player to use it venom
 
     public abstract void showGameSettingsRequest();
+
+    public abstract void startGame();
+
+    public abstract void startTurn();
 
     public abstract void endGame(boolean winner);
 

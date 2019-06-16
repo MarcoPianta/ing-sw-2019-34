@@ -1,8 +1,10 @@
-package view;
+package view.cli;
+
+import view.View;
 
 import java.util.List;
 
-public class ViewCLI extends View{
+public class ViewCLI extends View {
     private final String horizontalWall = "____________________";
     private final String horizontalDoor = "_______      _______";
     private final String leftWall = "|";
@@ -41,6 +43,16 @@ public class ViewCLI extends View{
     @Override
     public void endGame(boolean winner) {
         //TODO implement method
+    }
+
+    @Override
+    public void startGame() {
+
+    }
+
+    @Override
+    public void startTurn() {
+
     }
 
     @Override

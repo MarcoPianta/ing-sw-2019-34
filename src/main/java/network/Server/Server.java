@@ -144,7 +144,7 @@ public class Server {
             lobbyHashMap.put(i, gameLobby);
         }
         players.parallelStream()
-                .forEach(x -> send(new StartMessage(x, "game")));
+                .forEach(x -> send(new StartMessage(x, "game", skullNumber, ("map"+map))));
     }
 
     public static void main(String[] args) {

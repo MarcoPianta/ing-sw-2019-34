@@ -127,9 +127,12 @@ public class MainGuiView extends View {
     public static void main(String[] args) {
         setUIManager();
 
-        System.out.println(javax.swing.SwingUtilities.isEventDispatchThread());
         MainGuiView view = new MainGuiView();
         view.frame.setVisible(true);
+    }
+
+    public void main() {
+        this.frame.setVisible(true);
     }
 
     @Override
@@ -173,6 +176,17 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void startGame() {
+        frame.setVisible(false);
+        frame = new MapGui();
+    }
+
+    @Override
+    public void startTurn() {
+
+    }
+
+    @Override
     public void endGame(boolean winner) {
         if (winner)
             JOptionPane.showMessageDialog(frame, "The game is over.\nCongratulation, you won!");
@@ -184,7 +198,7 @@ public class MainGuiView extends View {
         this.client = client;
     }
 
-    private static void setUIManager() {
+    public static void setUIManager() {
         try {
             // Set System L&F
             UIManager.setLookAndFeel(
