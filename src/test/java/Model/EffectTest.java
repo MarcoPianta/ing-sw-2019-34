@@ -30,9 +30,14 @@ public class EffectTest {
         Effect effect = new Effect(jsonValues, 1);
         assertEquals(0, effect.getBonusCost().get(0));
         assertEquals(1, effect.getTargetNumber());
-        assertEquals("pm", effect.getActionSequence());
-        assertEquals(2, effect.getDamage().get(0));
-        assertEquals(2, effect.getMark().get(0));
+        assertEquals(0, effect.getSquareNumber());
+        assertEquals("pM", effect.getActionSequence());
+        assertEquals(2, effect.getpDamage().get(0));
+        assertEquals(2, effect.getpMark().get(0));
+        assertEquals(0, effect.getsDamage().get(0));
+        assertEquals(0, effect.getsMark().get(0));
+        assertEquals(0, effect.getrDamage());
+        assertEquals(0, effect.getrMark());
         assertEquals(1, effect.getMyMove());
         assertEquals(0, effect.getTargetMove());
     }
@@ -55,24 +60,11 @@ public class EffectTest {
 
         assertTrue(effect.getPreCondition().isVision());
         assertFalse(effect.getPreCondition().isBlind());
+        assertTrue(effect.getPreCondition().isMelee());
         assertEquals(0, effect.getPreCondition().getMinRange());
         assertEquals(0, effect.getPreCondition().getMaxRange());
         assertFalse(effect.getPreCondition().isCardinal());
         assertFalse(effect.getPreCondition().isEnemiesDifferentSquare());
-    }
-
-    @Test
-    public void postConditionTest() throws FileNotFoundException{
-        JsonObject jsonValues;
-        String file = WeaponDictionary.CYBERBLADE.getAbbreviation();
-        File fileJson = new File(getClass().getResource("/Weapon/"+file+".json").getFile());
-        InputStream fis = new FileInputStream(fileJson);
-        JsonReader reader = Json.createReader(fis);
-        jsonValues = reader.readObject();
-        reader.close();
-
-        Effect effect = new Effect(jsonValues, 1);
-
-        assertEquals(0, effect.getPostCondition().getTargetMove());
+        assertFalse(effect.getPreCondition().isSameSquare());
     }
 }
