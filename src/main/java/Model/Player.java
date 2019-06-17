@@ -68,6 +68,7 @@ public class Player {
         while(counter!=0){
             newPowerUp=getGameId().getDeckCollector().getCardPowerUpDrawer().draw();
             getPlayerBoard().getHandPlayer().addPowerUp(newPowerUp);
+            counter--;
         }
     }
 

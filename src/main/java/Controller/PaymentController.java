@@ -2,6 +2,7 @@ package Controller;
 
 import Model.AmmoColors;
 import Model.CardPowerUp;
+import Model.Colors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +15,16 @@ public class PaymentController {
     }
 
     public void payment(List<Integer> cost, List<Integer> powerUp){
-        ArrayList<CardPowerUp> powerUps=new ArrayList<>();
-        ArrayList<Integer> ammo=new ArrayList<>();
-        for(Integer i:powerUp)
-            powerUps.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
-        for(CardPowerUp p:powerUps){
-            if(p.getColor()== AmmoColors.RED)
-                ammo.add(cost.get(0) -1);
-            else if(p.getColor()==AmmoColors.YELLOW)
-                ammo.add(cost.get(1) -1);
-            else if(p.getColor()==AmmoColors.BLUE)
-                ammo.add(cost.get(2) -1);
-            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(p));
+        for(Integer i:powerUp){
+            if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.RED.getAbbreviation()))
+                cost.set(0,cost.get(0) -1);
+            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.YELLOW.getAbbreviation()))
+                cost.set(1,cost.get(1) -1);
+            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.BLUE.getAbbreviation()))
+                cost.set(2,cost.get(2) -1);
+            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(i);
         }
-        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(ammo.get(0),ammo.get(1),ammo.get(2));
+        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost.get(0),cost.get(1),cost.get(2));
     }
 
     /**

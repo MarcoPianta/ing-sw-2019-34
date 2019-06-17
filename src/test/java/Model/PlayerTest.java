@@ -107,13 +107,5 @@ public class PlayerTest {
         assertTrue(game.getPlayers().get(0).isValidCost(cost,true));
 
         assertTrue(game.getPlayers().get(0).isValidCost(1));
-
-
-
-
-
-
     }
-
-
 }

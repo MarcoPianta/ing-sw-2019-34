@@ -44,7 +44,7 @@ public class TurnHandler {
         gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());
     }
     public boolean actionState(Message message){
-        boolean valueReturn=false;
+        boolean valueReturn;
         if (gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.START){
             gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
             setNextState(StateMachineEnumerationTurn.ACTION2);
@@ -171,10 +171,10 @@ public class TurnHandler {
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.USEPOWERUP){
             UsePowerUp newMessage=(UsePowerUp)message;
-            if((gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()).getWhen().equals("during")
+            if((gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("during")
                     &&(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer())
                     &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.WAIT)) ||
-                    (gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()).equals("dealing")
+                    (gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("dealing")
                             &&(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer())))
                 valueReturn=true;
         }
@@ -200,7 +200,7 @@ public class TurnHandler {
         }
         else if(powerUpIsValid(message)){
             UsePowerUp newMessage=(UsePowerUp) message;
-            convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().usePowerUp(convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),convertedPlayer(newMessage.getTarget()),newMessage.getSquare());
+            convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().usePowerUp(convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()),convertedPlayer(newMessage.getTarget()),newMessage.getSquare());
             valueReturn=true;
         }
         return valueReturn;
@@ -267,7 +267,7 @@ public class TurnHandler {
 
         public void fillSquare(Game game) {
             int i = emptySquares.size() - 1;
-            while (emptySquares.isEmpty()) {
+            while (!emptySquares.isEmpty()) {
                 if (emptySquares.get(i).isSpawn())
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                 else
@@ -280,7 +280,7 @@ public class TurnHandler {
         public void playerIsDead(Game game) {
             int i=game.getDeadPlayer().size()-1;
             while(i>=0) {
-                game.getDeadPlayer().get(i). spawn(1);//extract powerUp
+                game.getDeadPlayer().get(i).spawn(1);//extract powerUp
                 game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
                 i--;
             }

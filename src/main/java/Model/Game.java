@@ -225,7 +225,6 @@ public class Game {
             currentPlayer=players.get(0);
         else
             currentPlayer=players.get(players.indexOf(currentPlayer)+1);
-        currentPlayer.setState(StateMachineEnumerationTurn.START);
     }
 
     /**

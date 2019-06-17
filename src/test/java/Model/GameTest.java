@@ -68,17 +68,14 @@ public class GameTest {
         game.addPlayer(player2);
         game.addPlayer(player3);
 
-        game.chooseFirstPlayer();
-        Player playerTest=game.getFirstPlayer();
+        game.setCurrentPlayer(game.getPlayers().get(2));
 
         game.incrementCurrentPlayer();
-        if(game.getPlayers().indexOf(playerTest)==2)
-            assertEquals(0,game.getPlayers().indexOf(game.getCurrentPlayer()));
-        else
-            assertEquals(game.getPlayers().indexOf(playerTest) +1,game.getPlayers().indexOf(game.getCurrentPlayer()));
+
+        assertEquals(game.getPlayers().get(0),game.getCurrentPlayer());
         game.incrementCurrentPlayer();
         game.incrementCurrentPlayer();
-        assertEquals(game.getCurrentPlayer(),playerTest);
+        assertEquals(game.getPlayers().get(2),game.getCurrentPlayer());
     }
 
 }

@@ -33,7 +33,7 @@ public class DeadRoute {
 
     public void setFinalTurn(boolean finalTurn) {
         this.finalTurn = finalTurn;
-    }
+    }//for test
 
     /*
      *This method adds a murder in the dead route

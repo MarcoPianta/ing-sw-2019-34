@@ -25,7 +25,7 @@ public class HandTest {
     @Test
     public void testAddWeapon() throws FileNotFoundException {
         Player player=new Player(2832, Colors.GREEN);
-        String file= WeaponDictionary.FURNACE.getAbbreviation();
+        String file= WeaponDictionary.ELECTROSCYTE.getAbbreviation();
         CardWeapon cardWeapon=new CardWeapon(file);
         player.getPlayerBoard().getHandPlayer().addAmmo(3,3,3);
         player.getPlayerBoard().getHandPlayer().addWeapon(cardWeapon);

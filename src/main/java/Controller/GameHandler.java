@@ -27,7 +27,7 @@ public class GameHandler {
         Colors[] colors=Colors.values();
         int i=0;
         while(i<players.size()){
-            getGame().addPlayer(new Player(players.get(0),colors[i]));
+            game.addPlayer(new Player(players.get(0),colors[i]));
             i++;
         }
         finalTurnHandler=new FinalTurnHandler(this);
@@ -35,7 +35,7 @@ public class GameHandler {
         paymentController=new PaymentController(this);
         getGame().chooseFirstPlayer();
         playerValid=game.getCurrentPlayer();
-        //getTurnHandler().start();
+        getTurnHandler().start();
     }
 
     public PaymentController getPaymentController() {
@@ -221,8 +221,7 @@ public class GameHandler {
         for(Player player:getGame().getPlayers()){
             if(player.getPlayerBoard().getPoints()>massimo) {
                 while(!winnerList.isEmpty()){
-                    winnerList.remove(0);
-                    assert (winnerList.isEmpty());
+                    winnerList.remove(winnerList.size()-1);
                 }
                 massimo=player.getPlayerBoard().getPoints();
                 winnerList.add(player);
@@ -256,9 +255,8 @@ public class GameHandler {
      */
     private void modifiedWinnerList(Player player,ArrayList<Player> winnerList){
         if(countPlayer(player)>countPlayer(winnerList.get(0))){
-            while(!winnerList.isEmpty()){
-                winnerList.remove(0);
-            }
+            while(!winnerList.isEmpty())
+                winnerList.remove(winnerList.size()-1);
             winnerList.add(player);
         }
         else if(countPlayer(player)==countPlayer(winnerList.get(0)))
