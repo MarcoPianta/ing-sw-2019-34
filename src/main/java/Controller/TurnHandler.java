@@ -112,11 +112,11 @@ public class TurnHandler {
     protected boolean actionShot(Shot message){
         boolean valueReturn;
         if(message.getSquare()==null && message.getRoom()==null)
-            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),convertedPlayer(message.getTargets())).execute();
+            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),convertedPlayer(message.getTargets()), null, false).execute();
         else if(message.getSquare()==null && message.getTargets()==null)
             valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getRoom().getColor()).execute();
         else
-            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getSquare()).execute();
+            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(), null, null /*message.getSquare()*/, true).execute();
         //use venom
         if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
             usePowerUp(message);

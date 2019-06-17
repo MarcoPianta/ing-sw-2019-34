@@ -113,7 +113,7 @@ public class GameHandler {
      */
     public ArrayList<Player> receiveTarget(PossibleTargetShot message){
         ArrayList<Player> targets;
-        targets=(ArrayList<Player>) new Shoot(message.getEffect(),getGame().getCurrentPlayer(),(List<Player>) null).targetablePlayer();
+        targets=(ArrayList<Player>) new Shoot(message.getEffect(),getGame().getCurrentPlayer(), null, null, false).targetablePlayer();
         return  targets;
     }
 
@@ -158,7 +158,7 @@ public class GameHandler {
             messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
         else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
                 ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 ) &&!getGame().getDeadRoute().isFinalTurn())
-            messageReturn= new UpdateClient(message.getToken(),(ArrayList<Player>)new  Shoot(message.getEffect(),getGame().getCurrentPlayer(),(List<Player>) null).targetablePlayer());
+            messageReturn= new UpdateClient(message.getToken(),(ArrayList<Player>)new  Shoot(message.getEffect(),getGame().getCurrentPlayer(), null, null, false).targetablePlayer());
         else if (getGame().getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
             messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare());
         else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())

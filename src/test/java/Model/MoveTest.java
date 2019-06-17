@@ -7,18 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MoveTest {
 
-    @Test
-    public void constructorTestWithEffect() throws FileNotFoundException {
-        GameBoard testGameBoard = new GameBoard("map1");
-        Player testShooterPlayer = new Player(34223434, null);
-        Player testTargetPlayer = new Player(32443342, null);
-        testShooterPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        testTargetPlayer.newPosition(testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
-        Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testTargetPlayer, testEffect, null);
-        assertTrue(action instanceof Move);
-    }
 
     @Test
     public void constructorTestWithoutEffect() throws FileNotFoundException {
@@ -41,7 +29,7 @@ public class MoveTest {
         testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testTargetPlayer, testEffect, game.getMap().getRooms().get(1).getNormalSquares().get(1));
+        Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
         assertFalse(action.execute());
     }
 
@@ -57,7 +45,7 @@ public class MoveTest {
         testTargetPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testShooterPlayer, testEffect,game.getMap().getRooms().get(0).getNormalSquares().get(1));
+        Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
         //TODO fix when GameBoard is fixed
         /*
             System.out.println("--TEST-- " + testGameBoard.getRooms().get(0).getNormalSquares().get(0));
@@ -69,7 +57,7 @@ public class MoveTest {
         */
         assertTrue(action.isValid());
 
-        action = new Move(testShooterPlayer, testTargetPlayer, testEffect, game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
         assertFalse(action.isValid());
     }
 
@@ -85,7 +73,7 @@ public class MoveTest {
         testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testShooterPlayer, testShooterPlayer, testEffect, game.getMap().getRooms().get(1).getNormalSquares().get(1));
+        Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
         assertEquals(2, action.reachableSquare().size());
     }
 }

@@ -3,6 +3,7 @@ package Controller;
 import Model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActionValidController {
     private GameHandler gameHandler;
@@ -37,17 +38,17 @@ public class ActionValidController {
      * @param powerUp  the possible powerUp sight
      * @return true if the action is valid
      */
-    public boolean actionValid(ArrayList<Player> targets, Effect effect, int powerUp){
+    public boolean actionValid(List<Player> targets, Effect effect, int powerUp){
         boolean valueReturn;
         if(powerUp==-1){
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect,gameHandler.getPlayerValid(),targets).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), targets, null, false).isValid();
             else
                 valueReturn=false;
         }
         else{
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect,gameHandler.getPlayerValid(),targets).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), targets, null, false).isValid();
             else
                 valueReturn=false;
         }
@@ -61,17 +62,17 @@ public class ActionValidController {
      * @param powerUp  the possible powerUp sight
      * @return true if the action is valid
      */
-    public boolean actionValid(NormalSquare square,Effect effect,int powerUp){
+    public boolean actionValid(ArrayList<NormalSquare> square,Effect effect,int powerUp){
         boolean valueReturn;
         if(powerUp==-1){
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect,gameHandler.getPlayerValid(),square).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), null, square, true).isValid();
             else
                 valueReturn=false;
         }
         else{
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect,gameHandler.getPlayerValid(),square).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), null, square, true).isValid();
             else
                 valueReturn=false;
         }

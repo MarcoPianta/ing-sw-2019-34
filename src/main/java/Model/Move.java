@@ -10,28 +10,11 @@ public class Move implements Action {
     private NormalSquare startSquare;
     private NormalSquare selectedSquare;
     private int movePass;
-    /**
-     * @param actor     the Player that call the action
-     * @param target    the Player that is target by the action
-     * @param effect    the Effect that implements the action
-     * @param square    the NormalSquare selected by the actor as the final NormalSquare for the target
-     */
-    public Move(Player actor, Player target, Effect effect, NormalSquare square){
-        targetPlayer = target;
-        selectedSquare = square;
-        if(actor == target){
-            movePass = effect.getMyMove();
-        }
-        else{
-            movePass = effect.getTargetMove();
-        }
-        startSquare = targetPlayer.getPosition();
-    }
 
     /**
      * @param target    the Player that is target by the action
-     * @param square    the NormalSquare selected by the actor as the final NormalSquare for the target
-     * @param move      the max number of pass that the actorPlayer can do
+     * @param square    the NormalSquare selected by the Player as the final NormalSquare for the target
+     * @param move      the max number of pass that the Player can do
      */
     public Move(Player target, NormalSquare square, int move){
         targetPlayer = target;
@@ -69,8 +52,8 @@ public class Move implements Action {
      * In reachableSquare it will be putted the Square directly connected with the Square that I take into consideration in the current step
      * In reachable it will be putted all the Square reachable from startSquare with a number of step equal or less then "move"
      *
-     * This method return the reachable square from the actor player
-     * This method is invoked to show to the actorPlayer where he can go with the view
+     * This method return the reachable square from the player
+     * This method is invoked to show to the Player where he can go with the view
      *  */
     public ArrayList<NormalSquare> reachableSquare(){
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();

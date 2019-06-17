@@ -7,54 +7,51 @@ public class Shoot implements Action{
     private Effect shootEffect;
     private Player shooterPlayer;
     private List<Player> targets;
-    private NormalSquare targetSquare;
+    private List<NormalSquare> targetSquare;
     private Colors roomColor;
     private char actionType;
     private List<Player> gamePlayers;
 
-    public Shoot(Effect effect, Player shooter, List<Player> target){
+    public Shoot(Effect effect, Player shooter, List<Player> target, List<NormalSquare> square, Boolean isSquare){
         this.shootEffect = effect;
         this.shooterPlayer = shooter;
         this.targets = target;
-        this.actionType = 'p';
-    }
-
-    public Shoot(Effect effect, Player shooter, NormalSquare square){
-        this.shootEffect = effect;
-        this.shooterPlayer = shooter;
-        this.gamePlayers = shooterPlayer.getGameId().getPlayers();
         this.targetSquare = square;
-        this.actionType = 's';
+        if (isSquare) {
+            this.actionType = 's';
+            this.gamePlayers = shooterPlayer.getGameId().getPlayers();
+            gamePlayers.remove(shooterPlayer);
+        }
+        else
+            this.actionType = 'p';
     }
 
     public Shoot(Effect effect, Player shooter, Colors color){
         this.shootEffect = effect;
         this.shooterPlayer = shooter;
-        this.gamePlayers = shooterPlayer.getGameId().getPlayers();
         this.roomColor = color;
         this.actionType = 'r';
+        this.gamePlayers = shooterPlayer.getGameId().getPlayers();
+        gamePlayers.remove(shooterPlayer);
     }
 
     public boolean execute(){
-        if (isValid()){
             switch(actionType) {
                 case ('p'):
-                    caseP();
+                    execP();
                     return true;
 
                 case ('s'):
-                    caseS();
+                    execS();
                     return true;
 
                 case ('r'):
-                    caseR();
+                    execR();
                     return true;
 
                 default:
                     return false;
             }
-        }
-        else    return false;
     }
 
     /**
@@ -67,17 +64,38 @@ public class Shoot implements Action{
     public boolean isValid(){
         switch (actionType){
             case ('p'):
-                    List<Player> visibleTarget = targetablePlayer();
-                    ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
-                    for (Player target : targets) {
-                        if(!conditionControll(target, visibleTarget, targetListSquare)){
-                            return false;
-                        }
+                List<Player> visibleTarget = targetablePlayer();
+                ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
+                for (Player target : targets) {
+                    if(!conditionControll(target, visibleTarget, targetListSquare)){
+                        return false;
                     }
-                    return true;
+                }
+                if(shootEffect.getPreCondition().isCardinal()) {
+                    targetListSquare = new ArrayList<>();
+                    targetListSquare.add(shooterPlayer.getPosition());
+                    for (Player target : targets) {
+                        targetListSquare.add(target.getPosition());
+                    }
+                    return cardinalControl(targetListSquare);
+                }
+                return true;
 
             case ('s'):
-                return reachableSquare().contains(targetSquare);
+                List<NormalSquare> a = reachableSquare();
+                for (NormalSquare square: targetSquare) {
+                    if(!(a.contains(square)))
+                        return false;
+                }
+                if(shootEffect.getPreCondition().isCardinal()) {
+                    targetListSquare = new ArrayList<>();
+                    targetListSquare.add(shooterPlayer.getPosition());
+                    for (NormalSquare square: targetSquare)
+                        targetListSquare.add(square);
+                    return cardinalControl(targetListSquare);
+                }
+
+                return true;
 
             case ('r'):
                     for (NormalSquare normalSquare : reachableSquare()){
@@ -90,10 +108,25 @@ public class Shoot implements Action{
         }
     }
 
-    private boolean conditionControll(Player target, List<Player> visibleTarget, ArrayList<NormalSquare> targetListSquare){
-        if ((shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)) || (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target)))) {
-            return false;
+    private boolean cardinalControl(List<NormalSquare> square) {
+        int i;
+        int j;
+        int x = 0;
+        int y = 0;
+        for (j = 0,i = 1; i < square.size() && (x == 0 || y == 0); i++) {
+            if (square.get(i).getId().charAt(0) != square.get(j).getId().charAt(0))
+                x++;
+            if (square.get(i).getId().charAt(2) != square.get(j).getId().charAt(2))
+                y++;
         }
+        return (x == 0 || y == 0);
+    }
+
+    private boolean conditionControll(Player target, List<Player> visibleTarget, ArrayList<NormalSquare> targetListSquare){
+        if (shootEffect.getPreCondition().isMelee() && shooterPlayer.getPosition() != target.getPosition())
+            return false;
+        if ((shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)) || (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target))))
+            return false;
         if (shootEffect.getPreCondition().isEnemiesDifferentSquare()){
             if (targetListSquare.contains(target.getPosition()))
                 return false;
@@ -104,22 +137,24 @@ public class Shoot implements Action{
     }
 
     /**
-     * This method control the isVision PreCondition
+     * This method control the effect's PreCondition
      * @return the list of Square reachable from the startSquare with at least movePass step
      */
     public List<NormalSquare> reachableSquare() {
         Effect.PreCondition preCondition = shootEffect.getPreCondition();
-        ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
+        ArrayList<NormalSquare> reachableSquares = new ArrayList<>();
         ArrayList<NormalSquare> thisStepSquare = new ArrayList<>();
         ArrayList<NormalSquare> allStepSquare = new ArrayList<>();
         ArrayList<Colors> colors = new ArrayList<>();
         thisStepSquare.add(shooterPlayer.getPosition());
         allStepSquare.add(shooterPlayer.getPosition());
         int thisStep;
-        int i;
+        int range = 0;
         int j;
-        if (0 == preCondition.getMinRange())
-            reachableSquare.add(shooterPlayer.getPosition());
+        if(preCondition.isMelee()) {
+            reachableSquares.add(shooterPlayer.getPosition());
+            return reachableSquares;
+        }
         if (preCondition.isVision()) {
             colors.add(shooterPlayer.getPosition().getColor());
             if (shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor())
@@ -131,30 +166,34 @@ public class Shoot implements Action{
             if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
                 colors.add(shooterPlayer.getPosition().getW().getColor());
         }
-        for (i = 0; i < preCondition.getMaxRange(); i++) {
+        if (0 == preCondition.getMinRange()) {
+            reachableSquares.add(shooterPlayer.getPosition());
+        }
+        while((preCondition.getMaxRange() == 0 && !thisStepSquare.isEmpty()) || (range <= preCondition.getMaxRange())){
             thisStep = thisStepSquare.size();
             j = 0;
             while (j < thisStep) {
-                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getN(), colors, preCondition, i);
-                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getE(), colors, preCondition, i);
-                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getS(), colors, preCondition, i);
-                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquare, thisStepSquare.get(0).getW(), colors, preCondition, i);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquares, thisStepSquare.get(0).getN(), colors, preCondition, range);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquares, thisStepSquare.get(0).getE(), colors, preCondition, range);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquares, thisStepSquare.get(0).getS(), colors, preCondition, range);
+                isAlreadyReachable(allStepSquare, thisStepSquare, reachableSquares, thisStepSquare.get(0).getW(), colors, preCondition, range);
                 thisStepSquare.remove(0);
                 j++;
             }
+            range++;
         }
-        return reachableSquare;
+        return reachableSquares;
     }
 
     /**
      * This method is invoked by reachableSquare method
      */
-    private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquare, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int i){
+    private void isAlreadyReachable(ArrayList<NormalSquare> allStepSquare, ArrayList<NormalSquare> thisStepSquare, ArrayList<NormalSquare> reachableSquares, NormalSquare thisSquare, ArrayList<Colors> colors, Effect.PreCondition preCondition, int range){
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);
             allStepSquare.add(thisSquare);
-            if ((!preCondition.isVision() || colors.contains(thisSquare.getColor())) && i > preCondition.getMinRange() && !reachableSquare.contains(thisSquare))
-                reachableSquare.add(reachableSquare.size(), thisSquare);
+            if (!reachableSquares.contains(thisSquare) && preCondition.isVision() && colors.contains((thisSquare.getColor())) && (!preCondition.isCardinal() || (thisSquare.getId().charAt(0) == shooterPlayer.getPosition().getId().charAt(0) || thisSquare.getId().charAt(2) == shooterPlayer.getPosition().getId().charAt(2))))
+                reachableSquares.add(reachableSquares.size(), thisSquare);
         }
     }
 
@@ -163,6 +202,7 @@ public class Shoot implements Action{
      */
     public List<Player> targetablePlayer(){
         ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
+        reachablePlayer.remove(shooterPlayer);
         int i = 0;
         while(i < reachablePlayer.size()){
             if((!reachableSquare().contains(reachablePlayer.get(i).getPosition()) || (reachablePlayer.get(i) == shooterPlayer)))
@@ -191,27 +231,29 @@ public class Shoot implements Action{
         targetPlayer.getPlayerBoard().getHealthPlayer().addMark(shooterPlayer, damage);
     }
 
-    private void caseP(){
+    private void execP(){
         for (int i = 0; i < targets.size(); i++) {
-            injureTarget(targets.get(i), shootEffect.getDamage().get(i));
-            markTarget(targets.get(i), shootEffect.getMark().get(i));
+            injureTarget(targets.get(i), shootEffect.getpDamage().get(i));
+            markTarget(targets.get(i), shootEffect.getpMark().get(i));
         }
     }
 
-    private void caseS(){
-        for (Player target: gamePlayers) {
-            if(target.getPosition() == targetSquare) {
-                injureTarget(target, shootEffect.getDamage().get(0));
-                markTarget(target, shootEffect.getMark().get(0));
+    private void execS(){
+        for (int i = 0; i < targetSquare.size(); i++) {
+            for (Player target : gamePlayers) {
+                if (target.getPosition() == targetSquare.get(i)) {
+                    injureTarget(target, shootEffect.getsDamage().get(i));
+                    markTarget(target, shootEffect.getsMark().get(i));
+                }
             }
         }
     }
 
-    private void caseR(){
+    private void execR(){
         for (Player target: gamePlayers) {
             if (target.getPosition().getColor() == roomColor){
-                injureTarget(target, shootEffect.getDamage().get(0));
-                markTarget(target, shootEffect.getMark().get(0));
+                injureTarget(target, shootEffect.getpDamage().get(0));
+                markTarget(target, shootEffect.getpMark().get(0));
             }
         }
     }
