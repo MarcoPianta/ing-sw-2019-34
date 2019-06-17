@@ -11,35 +11,51 @@ import java.util.List;
 public class Effect {
     ArrayList<Integer> bonusCost = new ArrayList<>();
     private int targetNumber;
+    private int squareNumber;
     private String actionSequence;
-    private ArrayList<Integer> damage;
-    private ArrayList<Integer> mark;
+    private ArrayList<Integer> pDamage;
+    private ArrayList<Integer> pMark;
+    private ArrayList<Integer> sDamage;
+    private ArrayList<Integer> sMark;
+    private int rDamage;
+    private int rMark;
     private int myMove;
     private int targetMove;
-     private PreCondition preCondition;
-    private PostCondition postCondition;
+    private PreCondition preCondition;
 
     public Effect(JsonObject jsonValues, int effect){
         String jsonString = "Effect" + effect;
         JsonArray cost = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("bonusCost");
-        JsonArray damageArray;
-        JsonArray markArray;
+        JsonArray pDamageArray;
+        JsonArray pMarkArray;
+        JsonArray sDamageArray;
+        JsonArray sMarkArray;
         actionSequence = jsonValues.getJsonArray(jsonString).getJsonObject(0).getString("actionSequence");
         for (int i = 0; i < cost.size(); i++)
             this.bonusCost.add(cost.getInt(i));
         targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("targetNumber");
-        damageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("damage");
-        markArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("mark");
-        damage = new ArrayList<>();
-        while (damage.size() < damageArray.size())
-            damage.add(damageArray.getInt(damage.size()));
-        mark = new ArrayList<>();
-        while (mark.size() < markArray.size())
-            mark.add(damageArray.getInt(mark.size()));
+        squareNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("squareNumber");
+        pDamageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("pDamage");
+        pMarkArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("pMark");
+        pDamage = new ArrayList<>();
+        while (pDamage.size() < pDamageArray.size())
+            pDamage.add(pDamageArray.getInt(pDamage.size()));
+        pMark = new ArrayList<>();
+        while (pMark.size() < pMarkArray.size())
+            pMark.add(pDamageArray.getInt(pMark.size()));
+        sDamageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("sDamage");
+        sMarkArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("sMark");
+        sDamage = new ArrayList<>();
+        while (sDamage.size() < sDamageArray.size())
+            sDamage.add(sDamageArray.getInt(sDamage.size()));
+        sMark = new ArrayList<>();
+        while (sMark.size() < sMarkArray.size())
+            sMark.add(sDamageArray.getInt(sMark.size()));
+        rDamage = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("rDamage");
+        rMark = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("rMark");
         myMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("myMove");
         targetMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("targetMove");
         preCondition = new PreCondition(jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("preCondition").getJsonObject(0));
-        postCondition = new PostCondition(jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("postCondition").getJsonObject(0));
     }
 
     public ArrayList<Integer> getBonusCost(){
@@ -50,16 +66,36 @@ public class Effect {
         return targetNumber;
     }
 
+    public int getSquareNumber() {
+        return squareNumber;
+    }
+
     public String getActionSequence(){
         return actionSequence;
     }
 
-    public List<Integer> getDamage() {
-        return damage;
+    public List<Integer> getpDamage() {
+        return pDamage;
     }
 
-    public List<Integer> getMark() {
-        return mark;
+    public List<Integer> getpMark() {
+        return pMark;
+    }
+
+    public List<Integer> getsDamage() {
+        return sDamage;
+    }
+
+    public List<Integer> getsMark() {
+        return sMark;
+    }
+
+    public int getrDamage() {
+        return rDamage;
+    }
+
+    public int getrMark() {
+        return rMark;
     }
 
     public int getMyMove() {
@@ -74,9 +110,6 @@ public class Effect {
         return new PreCondition(preCondition);
     }
 
-    public PostCondition getPostCondition() {
-        return new PostCondition(postCondition);
-    }
 
     /**
      * This inner class is used to contains the pre condition read from Weapon json file
@@ -84,18 +117,22 @@ public class Effect {
     class PreCondition{
         private boolean vision;
         private boolean blind;
+        private boolean melee;
         private boolean enemiesDifferentSquare;
         private int minRange;
         private int maxRange;
         private boolean cardinal;
+        private boolean sameSquare;
 
         public PreCondition(JsonObject jsonValues){
             vision = jsonValues.getBoolean("vision");
             blind = jsonValues.getBoolean("blind");
+            melee = jsonValues.getBoolean("melee");
             enemiesDifferentSquare = jsonValues.getBoolean("enemiesDifferentSquare");
             minRange = jsonValues.getInt("minRange");
             maxRange = jsonValues.getInt("maxRange");
             cardinal = jsonValues.getBoolean("cardinal");
+            sameSquare = jsonValues.getBoolean("sameSquare");
         }
 
         /**
@@ -104,10 +141,12 @@ public class Effect {
         public PreCondition(PreCondition preCondition){
             this.vision = preCondition.isVision();
             this.blind = preCondition.isBlind();
+            this.melee = preCondition.isMelee();
             this.enemiesDifferentSquare = preCondition.isEnemiesDifferentSquare();
             this.minRange = preCondition.getMinRange();
             this.maxRange = preCondition.getMaxRange();
             this.cardinal = preCondition.isCardinal();
+            this.sameSquare = preCondition.isSameSquare();
         }
 
         public boolean isVision() {
@@ -116,6 +155,10 @@ public class Effect {
 
         public boolean isBlind() {
             return blind;
+        }
+
+        public boolean isMelee() {
+            return melee;
         }
 
         public boolean isCardinal() {
@@ -133,27 +176,7 @@ public class Effect {
         public int getMinRange() {
             return minRange;
         }
-    }
 
-    /**
-     * This inner class is used to contains the post condition read from Weapon json file
-     * */
-    class PostCondition{
-        private int targetMove;
-
-        public PostCondition(JsonObject jsonValues){
-            targetMove = jsonValues.getInt("targetMove");
-        }
-
-        /**
-         * This constructor can be used to create copy of a PostCondition object
-         * */
-        public PostCondition(PostCondition postCondition){
-            this.targetMove = postCondition.getTargetMove();
-        }
-
-        public int getTargetMove() {
-            return targetMove;
-        }
+        public boolean isSameSquare() { return sameSquare;}
     }
 }
