@@ -1,8 +1,8 @@
 "name": --> weapon name
-"cost": { --> weapon reload cost
-"R": 0,
-"Y": 0,
-"B": 1
+"cost": { --> weapon reload cost in order Red, Yellow, Blue
+    0,
+    0,
+    1
 }
 "color": --> weapon color
 "effectNumber": --> effect number of weapon that can be used
@@ -15,26 +15,38 @@
 }
 "EffectX": [ --> where X represents the number of that effect
 
-    "bonusCost":{ --> effect bonus cost
-      "R": 0,
-      "Y": 0,
-      "B": 0
+    "bonusCost":{ --> effect bonus cost in order Red, Yellow, Blue
+        0,
+        0,
+        0
     }
-    "targetNumber": --> number of target ( if target == to 's' or 'r' it's 0 )
-    "actionSequence": --> describe how to combine the single action to compose the effect 'p' for Player, 's' for Square, 'r' for Room
-    "damage":{ --> array of damage for targets
+    "actionSequence": --> describe how to combine the single action to compose the effect 'p' for Player, 's' for Square, 'r' for Room,
+                          'm' for TargetPlayer move, 'M' for ShooterPlayer move
+    "targetNumber": --> number of target in p( it's considered only for 'p' case)
+    "pDamage":{ --> array of damage for 'p' targets
         2,
         4,
         1
     }
-    "mark":{ --> array of mark for targets
+    "pMark":{ --> array of mark for 'p' targets
         2,
         4,
         1
     }
+    "sDamage":{ --> array of damage for 's' targets
+        2,
+        4,
+        1
+    }
+    "sMark":{ --> array of mark for 's' targets
+        2,
+        4,
+        1
+    }
+    "rDamage": --> damage for 'r' targets
+    "rMark": --> mark for 'r' targets
     "myMove": --> qty of steps that the weapon allow me to do
-    "otherMove": --> qty of steps that the weapon allow me to make enemy do
-    "iteration": --> how many times the effect can be used
+    "targetMove": --> qty of steps that the weapon allow me to make enemy do
 
     "preCondition": [ --> condition that have to be true before using the weapon
 
@@ -44,7 +56,4 @@
         "maxRange": --> maximum of range of weapon
         "cardinal": --> can I shoot only in cardinal direction? (True if yes)
         "enemiesDifferentSquare": --> Trye if targets should be in different square
-
-    "postCondition":[ --> condition that have to be true after using the weapon
-
-        "targetMove": --> steps that the enemy have to do
+        "sameSquare": --> True if all the shoot should hit the same Square (eg. 'p.Square == s')

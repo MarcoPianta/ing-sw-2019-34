@@ -1,65 +1,95 @@
 {
   "name": "lockRifle",
-  "cost": {
-    "R": 0,
-    "Y": 0,
-    "B": 2
-  },
-  "color": "blue",
+  "cost": [
+    0,
+    0,
+    2
+  ],
+  "color": "BLUE",
   "effectNumber": 2,
-  "effectOrder": true,
-  "alternativeEffect": false,
-  "basicEffect": [
+  "actionSequences": [
+    1,
+    12
+  ],
+  "Effect1": [
     {
-      "target": 1,
-      "allTarget": true,
-      "damage": 2,
-      "mark": 1,
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        1
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
-          "minRange": -1,
-          "maxRange": -1,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
   ],
-  "secondEffect": [
+
+  "Effect2": [
     {
-      "bonusCost": [
-        {
-          "R": 1,
-          "Y": 0,
-          "B": 0
-        }
+      "bonusCost":[
+        0,
+        0,
+        1
       ],
-      "target": 1,// diverso da quello di prima
-      "allTarget": true,
-      "damage": 0,
-      "mark": 1,
-      "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetNumber": 2,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2,
+        0
+      ],
+      "pMark": [
+        1,
+        1
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 1,
+      "targetMove": 1,
       "preCondition": [
         {
           "vision": true,
-          "minRange": -1,
-          "maxRange": -1,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }

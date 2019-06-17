@@ -1,11 +1,11 @@
 {
-  "name": "electroscyte",
+  "name": "shockwave",
   "cost": [
     0,
-    0,
-    1
+    1,
+    0
   ],
-  "color": "BLUE",
+  "color": "YELLOW",
   "effectNumber": 2,
   "actionSequences": [
     1,
@@ -18,17 +18,21 @@
         0,
         0
       ],
-      "targetNumber": 0,
-      "squareNumber": 1,
-      "actionSequence": "s",
+      "targetNumber": 3,
+      "squareNumber": 0,
+      "actionSequence": "p",
       "pDamage": [
-        0
+        1,
+        1,
+        1
       ],
       "pMark": [
+        0,
+        0,
         0
       ],
       "sDamage": [
-        1
+        0
       ],
       "sMark": [
         0
@@ -41,25 +45,26 @@
         {
           "vision": true,
           "blind": false,
-          "melee": true,
-          "minRange": 0,
-          "maxRange": 0,
+          "melee": false,
+          "minRange": 1,
+          "maxRange": 1,
           "cardinal": false,
-          "enemiesDifferentSquare": false,
+          "enemiesDifferentSquare": true,
           "sameSquare": false
         }
       ]
     }
   ],
+
   "Effect2": [
     {
       "bonusCost":[
         0,
-        0,
+        1,
         0
       ],
       "targetNumber": 0,
-      "squareNumber": 1,
+      "squareNumber": 4,
       "actionSequence": "s",
       "pDamage": [
         0
@@ -68,9 +73,15 @@
         0
       ],
       "sDamage": [
-        2
+        1,
+        1,
+        1,
+        1
       ],
       "sMark": [
+        0,
+        0,
+        0,
         0
       ],
       "rDamage": 0,
@@ -81,9 +92,9 @@
         {
           "vision": true,
           "blind": false,
-          "melee": true,
-          "minRange": 0,
-          "maxRange": 0,
+          "melee": false,
+          "minRange": 1,
+          "maxRange": 1,
           "cardinal": false,
           "enemiesDifferentSquare": false,
           "sameSquare": false

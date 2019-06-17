@@ -1,11 +1,11 @@
 {
-  "name": "electroscyte",
+  "name": "railgun",
   "cost": [
     0,
-    0,
+    2,
     1
   ],
-  "color": "BLUE",
+  "color": "YELLOW",
   "effectNumber": 2,
   "actionSequences": [
     1,
@@ -18,17 +18,17 @@
         0,
         0
       ],
-      "targetNumber": 0,
-      "squareNumber": 1,
-      "actionSequence": "s",
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
       "pDamage": [
-        0
+        3
       ],
       "pMark": [
         0
       ],
       "sDamage": [
-        1
+        0
       ],
       "sMark": [
         0
@@ -39,9 +39,9 @@
       "targetMove": 0,
       "preCondition": [
         {
-          "vision": true,
+          "vision": false,
           "blind": false,
-          "melee": true,
+          "melee": false,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
@@ -53,22 +53,24 @@
   ],
   "Effect2": [
     {
-      "bonusCost":[
+      "bonusCost": [
         0,
         0,
         0
       ],
-      "targetNumber": 0,
-      "squareNumber": 1,
-      "actionSequence": "s",
+      "targetNumber": 2,
+      "squareNumber": 0,
+      "actionSequence": "p",
       "pDamage": [
-        0
+        2,
+        2
       ],
       "pMark": [
+        0,
         0
       ],
       "sDamage": [
-        2
+        0
       ],
       "sMark": [
         0
@@ -79,12 +81,12 @@
       "targetMove": 0,
       "preCondition": [
         {
-          "vision": true,
+          "vision": false,
           "blind": false,
-          "melee": true,
+          "melee": false,
           "minRange": 0,
           "maxRange": 0,
-          "cardinal": false,
+          "cardinal": true,
           "enemiesDifferentSquare": false,
           "sameSquare": false
         }

@@ -1,100 +1,141 @@
 {
-  "name": "T.H.O.R.",
-  "cost": {
-    "R": 1,
-    "Y": 0,
-    "B": 1
-  },
-  "color": "blue",
+  "name": "thor",
+  "cost": [
+    1,
+    0,
+    1
+  ],
+  "color": "BLUE",
   "effectNumber": 3,
-  "effectOrder": true,
-  "alternativeEffect": false,
-  "basicEffect": [
+  "actionSequences": [
+    1,
+    12,
+    123
+  ],
+  "Effect1": [
     {
-      "target": 2,
-      "allTarget": true,
-      "damage": 1,
-      "mark": 0,
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
-          "minRange": -1,
-          "maxRange": -1,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": true,
+          "sameSquare": false
         }
       ]
     }
   ],
-  "secondEffect": [
+
+  "Effect2": [
     {
-      "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 1
-        }
+      "bonusCost":[
+        0,
+        1,
+        0
       ],
-      "target": 1,
-      "allTarget": true,
-      "damage": 1,
-      "mark": 0,
+      "targetNumber": 2,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2,
+        1
+      ],
+      "pMark": [
+        0,
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
-          //il target è diverso
-          "vision": false,//deve essere visibile dal primo target
-          "minRange": -1,
-          "maxRange": -1,
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
-  ],
-  "thirdEffect": [
-    {
-      "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 1
-        }
-      ],
-      "target": 1,
-      "allTarget": true,
-      "damage": 2,
-      "mark": 0,
-      "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
-      "preCondition": [
-        {
-          //il target è diverso da entrambi i precedenti
-          "vision": false,//deve essere visibile dal secondo target
-          "minRange": -1,
-          "maxRange": -1,
-          "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
-        }
-      ]
-    }
-  ]
+  ],"Effect3": [
+  {
+    "bonusCost":[
+      0,
+      1,
+      1
+    ],
+    "targetNumber": 3,
+    "squareNumber": 0,
+    "actionSequence": "p",
+    "pDamage": [
+      2,
+      1,
+      2
+    ],
+    "pMark": [
+      0,
+      0,
+      0
+    ],
+    "sDamage": [
+      0
+    ],
+    "sMark": [
+      0
+    ],
+    "rDamage": 0,
+    "rMark": 0,
+    "myMove": 0,
+    "targetMove": 0,
+    "preCondition": [
+      {
+        "vision": true,
+        "blind": false,
+        "melee": false,
+        "minRange": 0,
+        "maxRange": 0,
+        "cardinal": false,
+        "enemiesDifferentSquare": true,
+        "sameSquare": false
+      }
+    ]
+  }
+]
 }

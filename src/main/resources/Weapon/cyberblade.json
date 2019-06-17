@@ -22,29 +22,34 @@
         0
       ],
       "targetNumber": 1,
-      "actionSequence": "pm",
-      "damage": [
+      "squareNumber": 0,
+      "actionSequence": "pM",
+      "pDamage": [
         2
       ],
-      "mark": [
+      "pMark": [
         0
       ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 1,
       "targetMove": 0,
-      "iteration": 1,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
+          "melee": true,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition": [
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
@@ -57,28 +62,34 @@
         0
       ],
       "targetNumber": 1,
-      "actionSequence": "mp",
-      "damage": [
+      "squareNumber": 0,
+      "actionSequence": "Mp",
+      "pDamage": [
         2
       ],
-      "mark": [
+      "pMark": [
         0
       ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 1,
       "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
+          "melee": true,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition": [
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
@@ -90,31 +101,35 @@
         1,
         0
       ],
-      "targetNumber": 2,
-      "actionSequence": "pmp",
-      "damage": [
-        2,
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "pMp",
+      "pDamage": [
         2
       ],
-      "mark": [
-        0,
+      "pMark": [
         0
       ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 1,
       "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
+          "melee": true,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition": [
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
@@ -127,30 +142,36 @@
         0
       ],
       "targetNumber": 2,
-      "actionSequence": "ppm",
-      "damage": [
+      "squareNumber": 0,
+      "actionSequence": "pM",
+      "pDamage": [
         2,
         2
       ],
-      "mark": [
+      "pMark": [
         0,
         0
       ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 1,
       "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
+          "melee": true,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition": [
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
@@ -162,31 +183,37 @@
         1,
         0
       ],
-      "targetNumber": 1,
-      "actionSequence": "mpp",
-      "damage": [
+      "targetNumber": 2,
+      "squareNumber": 0,
+      "actionSequence": "Mp",
+      "pDamage": [
         2,
         2
       ],
-      "mark": [
+      "pMark": [
         0,
         0
       ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 1,
       "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
+          "melee": true,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition": [
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }

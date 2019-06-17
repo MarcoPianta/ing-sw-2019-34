@@ -7,68 +7,91 @@
   ],
   "color": "RED",
   "effectNumber": 2,
-  "effectOrder": false,
-  "alternativeEffect": true,
+  "actionSequences": [
+    1,
+    2
+  ],
   "Effect1": [
     {
-      "target": 2,
-      "allTarget": true,
-      "damage": [
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 2,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        1,
         1
       ],
-      "mark": 0,
+      "pMark": [
+        0,
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
+          "blind": false,
+          "melee": false,
           "minRange": 1,
           "maxRange": 2,
-          "cardinal": false,
-          "otherPosition": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "cardinal": true,
+          "enemiesDifferentSquare": true,
+          "sameSquare": false
         }
       ]
     }
   ],
+
   "Effect2": [
     {
-      "bonusCost": [
-        {
-          "R": 0,
-          "Y": 2,
-          "B": 0
-        }
+      "bonusCost":[
+        0,
+        2,
+        0
       ],
-      "target": 2,
-      "allTarget": false,
-      "damage": [
+      "targetNumber": 0,
+      "squareNumber": 2,
+      "actionSequence": "s",
+      "pDamage": [
+        0
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
         2,
         1
       ],
-      "mark": 0,
+      "sMark": [
+        0,
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
+          "blind": false,
+          "melee": false,
           "minRange": 1,
           "maxRange": 2,
-          "cardinal": false,
-          "otherPosition": false,
-          "enemiesDifferentSquare": false
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "cardinal": true,
+          "enemiesDifferentSquare": true,
+          "sameSquare": false
         }
       ]
     }

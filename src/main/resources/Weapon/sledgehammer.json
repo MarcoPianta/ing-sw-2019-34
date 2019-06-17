@@ -1,72 +1,95 @@
 {
-  " nome " : " sldgehammer " ,
-  " costo " : {
-    " R " : 0 ,
-    " Y " : 1 ,
-    " B " : 0
-  },
-  " color " : " yellow" ,
-  " effectNumber " : 1 ,
-  " effectOrder " : false ,
-  " alternativeEffect " :true  ,
-  " basicEffect " : [
+  "name": "sldgehammer",
+  "cost": [
+    0,
+    1,
+    0
+  ],
+  "color": "YELLOW",
+  "effectNumber": 2,
+  "actionSequences": [
+    1,
+    2
+  ],
+  "Effect1": [
     {
-      " obiettivo " : 1 ,
-      " allTarget " : true ,
-      " danno " : 2 ,
-      " mark " : 0 ,
-      " myMove " : 0 ,
-      " otherMove " : 0 ,
-      " iterazione " : 1 ,
-      " preCondition " : [
-        {
-          " visione " : true ,
-          "enemiesDifferentSquare": false,
-          " minRange " : 0 ,
-          " maxRange " : 0 ,
-          " cardinale " : false
-        }
+      "bonusCost":[
+        0,
+        0,
+        0
       ],
-      " postCondition " : [
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 0,
+      "targetMove": 0,
+      "preCondition": [
         {
-          " targetMove " : 0
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": true,
+          "sameSquare": false
         }
       ]
     }
   ],
-  " secondEffect " : [
+
+  "Effect2": [
     {
-      " bonusCost " : [
-        {
-          " R " : 1 ,
-          " Y " : 0 ,
-          " B " : 0
-        }
+      "bonusCost":[
+        1,
+        0,
+        0
       ],
-      " obiettivo " : 1,
-      " allTarget " : true ,
-      " danno " : 3 ,
-      " mark " : 0 ,
-      " myMove " : 0,
-      " otherMove " : 0 ,
-      " iterazione " : 1 ,
-      " preCondition " : [
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "pm",
+      "pDamage": [
+        3
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 0,
+      "targetMove": 2,
+      "preCondition": [
         {
-          " visione " : true ,
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
           "enemiesDifferentSquare": false,
-          " minRange " : 0 ,
-          " maxRange " : 0 ,
-          " cardinale " : false
-        }
-      ],
-      " postCondition " : [
-        {
-          " targetMove " : 3,
-          // 3 a scelta
+          "sameSquare": false
         }
       ]
     }
-  ],
+  ]
 }
-
-

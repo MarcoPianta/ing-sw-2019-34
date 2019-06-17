@@ -1,36 +1,51 @@
 {
   "name": "heatseeker",
-  "cost": {
-    "R": 1,
-    "Y": 1,
-    "B": 0
-  },
-  "color": "red",
+  "cost": [
+    1,
+    1,
+    0
+  ],
+  "color": "RED",
   "effectNumber": 1,
-  "effectOrder": false,
-  "alternativeEffect": true,
-  "basicEffect": [
+  "actionSequences": [
+    1
+  ],
+  "Effect1": [
     {
-      "target": 1,
-      "allTarget": true,
-      "damage": 3,
-      "mark": 0,
-      "markToOthers": 0, ------------------------mark added to others player not the target
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        1
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 1,
       "preCondition": [
         {
-          "vision": false,
-          "minRange": -1,
-          "maxRange": -1,
+          "vision": true,
+          "blind": true,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-          "otherPosition": false ----------------------- deve essere in un posizione diversa dalla mia
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }

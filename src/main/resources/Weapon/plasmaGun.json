@@ -1,97 +1,256 @@
 {
   "name": "plasmaGun",
-  "cost": {
-    "R": 0,
-    "Y": 1,
-    "B": 1
-  },
-  "color": "blue",
-  "effectNumber": 3,
-  "effectOrder": false,
-  "alternativeEffect": false,
-  "basicEffect": [
+  "cost": [
+    0,
+    1,
+    1
+  ],
+  "color": "BLUE",
+  "effectNumber": 6,
+  "actionSequences": [
+    1,
+    12,
+    21,
+    13,
+    132,
+    213
+  ],
+  "Effect1": [
     {
-      "target": 1,
-      "allTarget": true,
-      "damage": 2,
-      "mark": 0,
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
-          "minRange": -1,
-          "maxRange": -1,
-          "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
-        }
-      ]
-    }
-  ],
-  "secondEffect": [
-    {
-      "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 0
-        }
-      ],
-      "target": 0,
-      "allTarget": true,
-      "damage": 0,
-      "mark": 0,
-      "myMove": 2,
-      "otherMove": 0,
-      "iteration": 1,
-      "preCondition": [
-        {
-          "vision": false,
+          "blind": false,
+          "melee": false,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }
   ],
-  "thirdEffect": [
+  "Effect2": [
     {
       "bonusCost": [
-        {
-          "R": 0,
-          "Y": 0,
-          "B": 1
-        }
+        0,
+        0,
+        0
       ],
-      "target": 1,
-      "allTarget": true,
-      "damage": 1,
-      "mark": 0,
-      "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "pM",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 2,
+      "targetMove": 0,
       "preCondition": [
         {
-          //è lo stesso bersaglio dell'effetto base
           "vision": true,
-          "minRange": -1,
-          "maxRange": -1,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
+      ]
+    }
+  ],
+  "Effect3": [
+    {
+      "bonusCost": [
+        0,
+        0,
+        0
       ],
-      "postCondition":[
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "Mp",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 2,
+      "targetMove": 0,
+      "preCondition": [
         {
-          "targetMove": 0
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
+        }
+      ]
+    }
+  ],
+  "Effect4": [
+    {
+      "bonusCost": [
+        0,
+        0,
+        1
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        3
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 0,
+      "targetMove": 0,
+      "preCondition": [
+        {
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
+        }
+      ]
+    }
+  ],
+  "Effect5": [
+    {
+      "bonusCost": [
+        0,
+        0,
+        1
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "pM",
+      "pDamage": [
+        3
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 2,
+      "targetMove": 0,
+      "preCondition": [
+        {
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
+        }
+      ]
+    }
+  ],
+  "Effect6": [
+    {
+      "bonusCost": [
+        0,
+        0,
+        1
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "Mp",
+      "pDamage": [
+        3
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 2,
+      "targetMove": 0,
+      "preCondition": [
+        {
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
         }
       ]
     }

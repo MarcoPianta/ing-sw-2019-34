@@ -1,15 +1,16 @@
 {
-  "name": "electroscyte",
+  "name": "grenadeLauncher",
   "cost": [
+    1,
     0,
-    0,
-    1
+    0
   ],
-  "color": "BLUE",
-  "effectNumber": 2,
+  "color": "RED",
+  "effectNumber": 3,
   "actionSequences": [
     1,
-    2
+    12,
+    21
   ],
   "Effect1": [
     {
@@ -18,11 +19,51 @@
         0,
         0
       ],
-      "targetNumber": 0,
-      "squareNumber": 1,
-      "actionSequence": "s",
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "pm",
       "pDamage": [
+        1
+      ],
+      "pMark": [
         0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 0,
+      "targetMove": 1,
+      "preCondition": [
+        {
+          "vision": true,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
+        }
+      ]
+    }
+  ],
+  "Effect2": [
+    {
+      "bonusCost":[
+        1,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 1,
+      "actionSequence": "pms",
+      "pDamage": [
+        1
       ],
       "pMark": [
         0
@@ -36,12 +77,12 @@
       "rDamage": 0,
       "rMark": 0,
       "myMove": 0,
-      "targetMove": 0,
+      "targetMove": 1,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
-          "melee": true,
+          "melee": false,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
@@ -51,24 +92,24 @@
       ]
     }
   ],
-  "Effect2": [
+  "Effect3": [
     {
       "bonusCost":[
-        0,
+        1,
         0,
         0
       ],
-      "targetNumber": 0,
+      "targetNumber": 1,
       "squareNumber": 1,
-      "actionSequence": "s",
+      "actionSequence": "spm",
       "pDamage": [
-        0
+        1
       ],
       "pMark": [
         0
       ],
       "sDamage": [
-        2
+        1
       ],
       "sMark": [
         0
@@ -76,12 +117,12 @@
       "rDamage": 0,
       "rMark": 0,
       "myMove": 0,
-      "targetMove": 0,
+      "targetMove": 1,
       "preCondition": [
         {
           "vision": true,
           "blind": false,
-          "melee": true,
+          "melee": false,
           "minRange": 0,
           "maxRange": 0,
           "cardinal": false,
