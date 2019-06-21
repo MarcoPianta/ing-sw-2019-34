@@ -27,10 +27,10 @@ public class MoveTest {
         game.addPlayer(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
         testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.SLEDGEHAMMER.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
-        assertFalse(action.execute());
+        Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(2), testEffect.getTargetMove());
+        assertTrue(action.execute());
     }
 
     @Test
@@ -43,22 +43,15 @@ public class MoveTest {
         game.addPlayer(testTargetPlayer);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.POWERGLOVE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
-        Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
-        //TODO fix when GameBoard is fixed
-        /*
-            System.out.println("--TEST-- " + testGameBoard.getRooms().get(0).getNormalSquares().get(0));
-            System.out.println("n " + testGameBoard.getRooms().get(0).getNormalSquares().get(0).getN());
-            System.out.println("e " + testGameBoard.getRooms().get(0).getNormalSquares().get(1));
-            System.out.println("s " + testGameBoard.getRooms().get(1).getNormalSquares().get(0));
-            System.out.println("w " + testGameBoard.getRooms().get(0).getNormalSquares().get(0).getW());
-            System.out.println(action.reachableSquare());
-        */
+        Move action = new Move(testShooterPlayer, game.getMap().getRooms().get(0).getNormalSquares().get(1), testEffect.getMyMove());
         assertTrue(action.isValid());
-
-        action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
-        assertFalse(action.isValid());
+        //Test 2
+        testWeapon = new CardWeapon (WeaponDictionary.SLEDGEHAMMER.getAbbreviation());
+        testEffect = testWeapon.getEffects().get(1);
+        action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getTargetMove());
+        assertTrue(action.isValid());
     }
 
     @Test
