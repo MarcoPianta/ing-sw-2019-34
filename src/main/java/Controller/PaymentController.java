@@ -14,25 +14,40 @@ public class PaymentController {
         this.gameHandler=gameHandler;
     }
 
-    public void payment(List<Integer> cost, List<Integer> powerUp){
-        for(Integer i:powerUp){
-            if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.RED.getAbbreviation()))
-                cost.set(0,cost.get(0) -1);
-            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.YELLOW.getAbbreviation()))
-                cost.set(1,cost.get(1) -1);
-            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(Colors.BLUE.getAbbreviation()))
-                cost.set(2,cost.get(2) -1);
-            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(i);
+    public void payment(int[] cost, List<Integer> powerUps){
+        int x;
+        ArrayList<CardPowerUp> realPowerUp = new ArrayList<>();
+
+        for(Integer powerUp: powerUps)
+            realPowerUp.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp));
+
+        while(!realPowerUp.isEmpty()){
+            x = 0;
+            if(realPowerUp.get(0).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
+                cost[0]--;
+                x = 1;
+            }
+            else if(realPowerUp.get(0).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
+                cost[1]--;
+                x = 1;
+            }
+            else if(realPowerUp.get(0).getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0){
+                cost[2]--;
+                x = 1;
+            }
+            if(x == 1)
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(realPowerUp.get(0)));
+            realPowerUp.remove(0);
         }
-        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost.get(0),cost.get(1),cost.get(2));
+        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost[0], cost[1], cost[2]);
     }
 
     /**
      * this method serves to pay the effect o reload,
      * @param cost is the cost to pay
      */
-    public void payment(List<Integer> cost){
-        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost.get(0),cost.get(1),cost.get(2));
+    public void payment(int[] cost){
+        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost[0], cost[1], cost[2]);
     }
 
     /**
@@ -42,12 +57,12 @@ public class PaymentController {
      */
     public boolean paymentPowerUp(int powerUp){
         boolean valueReturn;
-        if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp)!=null){
+        if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp)!= null){
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(powerUp);
-            valueReturn=true;
+            valueReturn = true;
         }
         else
-            valueReturn=false;
+            valueReturn = false;
         return  valueReturn;
     }
 

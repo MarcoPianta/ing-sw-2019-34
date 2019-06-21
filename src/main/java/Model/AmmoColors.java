@@ -1,14 +1,16 @@
 package Model;
 
 public enum AmmoColors{
-    BLUE("blue"),
-    RED("red"),
-    YELLOW("yellow");
+    BLUE("BLUE"),
+    YELLOW("YELLOW"),
+    RED("RED");
 
     private String abbreviation;
-    private AmmoColors(String abbreviation) {
-        this.abbreviation=abbreviation;
+
+    AmmoColors(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
+
     public String getAbbreviation(){
         return abbreviation;
     }
