@@ -21,8 +21,9 @@ public class MainGuiView extends View {
     private JLabel imageLabel;
     private JPanel buttonAndTextPanel;
     private JPanel mainPanel;
+    private boolean gameStarted;
 
-    public static final double GOLDENRATIO = 1.6180339887; //Used to have a good ratio between width and height
+    public static final double GOLDENRATIO = 1.31846473; //Used to have a good ratio between width and height
     private static final int INITIALWINDOWHEIGHT = 600;
     private final String RULESWEBSITE = "https://czechgames.com/files/rules/adrenaline-rules-en.pdf";
 
@@ -60,9 +61,6 @@ public class MainGuiView extends View {
                 }
             }
         });
-        rules.setFont(new Font("Arial", Font.PLAIN, 15));
-        rules.setBorderPainted(false);
-        rules.setBackground(new Color(255, 255, 255 , 80));
         imageLabel.add(rules);
 
         mainPanel.add(imageLabel, BorderLayout.CENTER);
@@ -178,7 +176,8 @@ public class MainGuiView extends View {
     @Override
     public void startGame() {
         frame.setVisible(false);
-        frame = new MapGui();
+        frame = new MapGui(client.getPlayerColor());
+        gameStarted = true;
     }
 
     @Override

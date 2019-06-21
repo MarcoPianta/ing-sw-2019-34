@@ -1,5 +1,6 @@
 package network.Server;
 
+import Model.Colors;
 import Model.NormalSquare;
 import Model.Player;
 import network.messages.*;
@@ -13,6 +14,7 @@ public abstract class Client {
     protected boolean rmi;
     protected Integer token;
     protected View view;
+    protected Colors playerColor = Colors.GREEN; //TODO delete assignment used only for testing
 
     public Client(View view){
         this.view = view;
@@ -104,5 +106,9 @@ public abstract class Client {
 
     public Integer getToken() {
         return token;
+    }
+
+    public Colors getPlayerColor() {
+        return playerColor;
     }
 }
