@@ -31,6 +31,8 @@ public enum ActionType {
     RESPAWN("Respwan"),
     WINNER("Winner"),
     END("End"),
+    SHOTRESPONSE("Shot response"),
+    MOVERESPONSE("Move response"),
     DISCONNECT("Disconnect");
 
 
