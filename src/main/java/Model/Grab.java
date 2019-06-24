@@ -38,17 +38,14 @@ public class Grab implements Action {
     }
 
     /**
-     * Invoke the isValid method that control the Pre-condition of the action
      * This method execute the Grab Action
      *
      * @return true if the action has been executed, false otherwise
      */
     public boolean execute(){
-        if(isValid()){
             if( execution == 0 ){
                 SpawnSquare actorSquare = (SpawnSquare) actorPlayer.getPosition();
-                actorPlayer.getPlayerBoard().getHandPlayer().addWeapon((CardWeapon) grabbedItem);
-                actorSquare.grabItem(actorPlayer.getPosition().getWeapons().indexOf(grabbedItem));
+                actorPlayer.getPlayerBoard().getHandPlayer().addWeapon((CardWeapon) actorSquare.grabItem(actorPlayer.getPosition().getWeapons().indexOf(grabbedItem)));
             }
             else if( execution == 1 ){
                 CardOnlyAmmo grabbedOnlyAmmo = (CardOnlyAmmo) grabbedItem;
@@ -65,8 +62,6 @@ public class Grab implements Action {
                 //TODO prompt fullPowerUp in else
             }
             return true;
-        }
-        return false;
     }
 
     /**
@@ -76,7 +71,7 @@ public class Grab implements Action {
      */
     public boolean isValid(){
         if(actorPlayer.getPosition().isSpawn()){
-            //TODO devo controllare se ho abbastanza ammo/powerUp per caricare
+
             return actorPlayer.getPosition().getWeapons().contains(grabbedItem);
         }
         else{

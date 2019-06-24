@@ -45,7 +45,6 @@ public class Hand {
      * */
     public void  chargeWeapon(CardWeapon weapon,int red, int yellow, int blue){
         weapon.setCharge(true);
-        decrementAmmo(red,yellow,blue);
     }
 
     /**
