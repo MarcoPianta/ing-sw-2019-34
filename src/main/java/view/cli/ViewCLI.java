@@ -1,28 +1,109 @@
 package view.cli;
 
+import Model.CardPowerUp;
+import Model.Colors;
+import Model.NormalSquare;
+import Model.Player;
+import network.messages.*;
 import view.View;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ViewCLI extends View {
-    private final String horizontalWall = "____________________";
-    private final String horizontalDoor = "_______      _______";
-    private final String leftWall = "|";
-    private final String rightWall      = "                    |";
+    private static PrintWriter out=new PrintWriter(System.out,true);
+    private static Scanner in=new Scanner(System.in);
+    private int numberAction;
+    private ActionCLI actionCLI;
 
-    @Override
-    public void showReachableSquares(List<String> squares) {
-        //TODO implement method
+    public int getNumberAction() {
+        return numberAction;
+    }
+    public ViewCLI(){
+        this.numberAction=1;
+        actionCLI=new ActionCLI();
+    }
+
+    public static void main(String[] args) {
+        ViewCLI viewCLI=new ViewCLI();
+        viewCLI.showPowerUpChooseRespawn();
     }
 
     @Override
-    public void showPossibleTarget(List<String> targets) {
-        //TODO implement method
+    public void showReachableSquares(List<String> squares) {
+        out.println("you can reach these squares: \n");
+        int i=1;
+        for(String  s:squares){
+            out.println(i+ "="+s +"t");
+            i++;
+        }
+        out.println("choose a number from 1 to "+ squares.size() +"or another key to cancel \n");
+
+        i=in.nextInt();
+        if(i>=0 && i<=squares.size()){
+            out.println("Are you sure you want to move ?? press any key to confirm, z to cancel. \n");
+            if (in.next().equals("z") || in.next().equals("Z")) {
+                in.close();
+                startActions();
+            }
+            else {
+                //client.send(new MoveMessage(client.getToken(), squares.get(i-1)));
+            }
+        }
+        else{
+            in.close();
+            startActions();
+        }
+    }
+
+    @Override
+    public void showPossibleTarget(List<Colors> targets) {
+        out.println("you can shot these targets: \n");
+        for(Colors c:targets){
+            out.println(c +"\t");
+        }
+        out.println("\n choose a number from 0 to "+ targets.size() +"or z to cancel \n");
+
+        if(in.next().equals("z") || in.next().equals("Z")){
+            in.close();
+            startActions();
+        }
+        else{
+            out.println("Are you sure you want to shot ?? press any key to confirm, z to cancel. \n");
+            if(in.next().equals("z") || in.next().equals("Z")){
+                in.close();
+                startActions();
+            }
+            else{
+                //client.send(new );
+            }
+        }
     }
 
     @Override
     public void showPowerUpChooseRespawn() {
-        //TODO implement method
+        out.println("choose the power up to discard to spawn in that color:\n");
+        int i=1;
+        for(CardPowerUp p:powerUps){
+            out.println(i +":"+p.getName()+", "+p.getColor()+ "\t");
+            i++;
+        }
+        out.println("\n choose a number from 1 to "+ powerUps.size() +"\n" );
+        boolean corrected=false;
+        while(!corrected) {
+            i=in.nextInt();
+            if(i>=1 && i<=powerUps.size()){
+                client.send(new RespawnMessage(client.getToken(),i-1));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to "+ powerUps.size() +"\n" );
+            }
+        }
     }
 
     @Override
@@ -30,9 +111,77 @@ public class ViewCLI extends View {
         //TODO implement method
     }
 
+    public void showScopeRequest(ArrayList<Integer> playersId){
+        out.println("\nYou can use Scope's powerUp\n press 1 to use scope or any key to cancel.\n");
+        if(in.nextInt()==1){
+            int i;
+            if(playersId.size()==1){
+
+            }
+            else {
+                for (i = 1; i <= playersId.size(); i++)
+                    out.println(i + ":" + playersId.get(i - 1) + "\t");
+                out.println("\n choose a number from 1 to" + playersId.size() + "\n");
+                boolean corrected = false;
+                while (!corrected) {
+                    i = in.nextInt();
+                    if (i >= 1 && i <= playersId.size()) {
+
+                        corrected = true;
+                    } else {
+                        out.println("it's not difficult, you can do it \n");
+                        out.println("choose a number from 1 to " + playersId.size() + "\n");
+                    }
+                }
+            }
+        }
+    }
+
     @Override
-    public void showVenomRequest() {
-        //TODO implement method
+    public void showVenomRequest(Colors player) {
+        ArrayList<Integer> powerUp=new ArrayList<>();
+        out.println("\n"+ player+"attacked you, do you want revenge ??\n press 1 to use grenade or any key to cancel.\n");
+        if (in.nextInt()==1){
+            int i;
+            for(i=0; i<powerUps.size();i++){
+                if(powerUps.get(i).getWhen().equals("deal")) {
+                    powerUp.add(i);
+                }
+            }
+            if(powerUp.size()==1){
+                //client.send(new UsePowerUp(client.getToken(),powerUp.get(0),,player));
+                }
+            else{
+                for(i=1;i<=powerUp.size();i++){
+                    out.println(i+"="+powerUps.get(powerUp.get(i-1))+"\t");
+                }
+                out.println("\n choose a number or 9 to cancel");
+                boolean corrected=false;
+                i=in.nextInt();
+                while(!corrected){
+                    if(i==1){
+                        //client.send(new UsePowerUp(client.getToken(),powerUp.get(0),,player));
+                        corrected=true;
+                    }
+                    else if(i==2){
+                        //client.send(new UsePowerUp(client.getToken(),powerUp.get(1),,player));
+                        corrected=true;
+                    }
+                    else if(i==3 && powerUp.size()==3){
+                        //client.send(new UsePowerUp(client.getToken(),powerUp.get(1),,player));
+                        corrected=true;
+                    }
+                    else if(i==9){
+                        in.close();
+                        corrected=true;
+                    }
+                    else
+                        out.println("\n choose a  correct number or 9 to cancel");
+                }
+            }
+        }
+        else
+            in.close();
     }
 
     @Override
@@ -42,21 +191,101 @@ public class ViewCLI extends View {
 
     @Override
     public void endGame(boolean winner) {
-        //TODO implement method
+        if(winner)
+            out.println("The game is over.\nCongratulation, you won!");
+        else
+            out.println("The game is over.\nCongratulation, you didn't win!");
     }
 
     @Override
     public void startGame() {
-
+        out.println("The game started, GOOD LUCK!!\n");
     }
 
     @Override
     public void startTurn() {
-
+        numberAction=1;
+        out.println("it's officially your turn \n");
+        startActions();
     }
 
     @Override
     public void showToken() {
         //TODO implement method
+    }
+
+    public void startActions(){
+        out.println("Is the action number" +numberAction+"\n you can choose:\n");
+        out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass \n type a number from 1 to 6 \n");
+        boolean corrected=false;
+        while(!corrected){
+            int i=in.nextInt();
+            if(i==1){
+                client.send(new ReceiveTargetSquare(client.getToken(),"move"));
+                corrected=true;
+            }
+            else if(i==2){
+                //actionShot();
+                corrected=true;
+            }
+            else if(i==3){
+                client.send(new ReceiveTargetSquare(client.getToken(),"grab"));
+                corrected=true;
+            }
+            else if(i==4){
+                //actionPowerUp();
+                corrected=true;
+            }
+            else if(i==5){
+                //actionReload();
+                corrected=true;
+            }
+            else if(i==6){
+                client.send(new Pass(client.getToken()));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass \n type a number from 1 to 6 \n");
+            }
+
+        }
+    }
+    public void finalActions(){
+        out.println("you have finished your turn you can recharge using some powerUp or pass\n");
+        out.println("1:Use power up 2:Reload, 3:Pass \n type a number from 1 to 3 \n");
+        boolean corrected=false;
+        while(!corrected){
+            int i=in.nextInt();
+            if(i==1){
+                //actionPowerUp();
+                corrected=true;
+            }
+            else if(i==2){
+                //actionReload();
+                corrected=true;
+            }
+            else if(i==3){
+                client.send(new Pass(client.getToken()));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("1:Use power up 2:Reload, 3:Pass \n type a number from 1 to 3 \n");
+            }
+        }
+    }
+
+    public  void endAction(Boolean executed){
+        if(executed){
+            out.println("the action was executed, the game was updated\n");
+            numberAction++;
+            if(numberAction==3)
+                finalActions();
+            else
+                startActions();
+        }
+        else
+            out.println("There was an error, please try again\n");
     }
 }

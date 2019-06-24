@@ -51,13 +51,13 @@ public abstract class View {
 
     public abstract void showReachableSquares(List<String> squares);
 
-    public abstract void showPossibleTarget(List<String> targets);
+    public abstract void showPossibleTarget(List<Colors> targets);
 
     public abstract void showPowerUpChooseRespawn();
 
     public abstract void showMessage(String message);
 
-    public abstract void showVenomRequest();//TODO send UsePowerUp if player to use it venom
+    public abstract void showVenomRequest(Colors color);//TODO send UsePowerUp if player to use it venom
 
     public abstract void showGameSettingsRequest();
 
@@ -108,7 +108,7 @@ public abstract class View {
         this.yellowAmmo = yellowAmmo;
     }
 
-    public void respawnResponse(CardPowerUp powerUp){
+    public void respawnResponse(Integer powerUp){
         client.send(new RespawnMessage(client.getToken(), powerUp));
     }
 }

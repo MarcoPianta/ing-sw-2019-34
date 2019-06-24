@@ -12,6 +12,12 @@ public class ReceiveTargetSquare extends Message {
         this.type=string;
         this.effect=effect;
     }
+    public ReceiveTargetSquare(Integer token,String string){
+        actionType=ActionType.RECEIVETARGETSQUARE;
+        this.token=token;
+        this.type=string;
+        this.effect=null;
+    }
 
     public String getType() {
         return type;
