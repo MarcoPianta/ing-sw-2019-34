@@ -74,7 +74,7 @@ public class MapGui extends JFrame{
 
         c.gridx = 0;
         c.gridy = 1;
-        c.weightx = 0.0;
+        c.weightx = 0.6;
         c.weighty = 0.5;
         c.gridwidth = 1;
         c.insets = new Insets(2,2,2,2);
@@ -89,13 +89,18 @@ public class MapGui extends JFrame{
         c.gridwidth = 1;
         c.insets = new Insets(2,2,2,2);
         c.fill = GridBagConstraints.BOTH;
+        JPanel chat = new JPanel(new BorderLayout());
         JLabel chatLabel = new JLabel("This is the chat");
         chatLabel.setHorizontalTextPosition(JLabel.LEFT);
         chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
         chatLabel.setForeground(Color.WHITE);
-        chatLabel.setBackground(Color.black);
+        chatLabel.setOpaque(false);
+        JTextField text = new JTextField();
+
+        //chat.add(chatLabel, BorderLayout.CENTER);
+        //chat.add(text, BorderLayout.SOUTH);
         chatPane = new JScrollPane(chatLabel);
-        chatPane.setOpaque(false);
+        chatPane.getViewport().setBackground(Color.BLACK);
         this.add(chatPane, c);
 
 
@@ -125,7 +130,12 @@ public class MapGui extends JFrame{
         }
     }
 
+    public void weaponChosen(String choose){
+        System.out.println(choose);
+    }
+
     private void addComponentListeners(){
+        MapGui self = this;
 
         map.addComponentListener(new ComponentAdapter() {
             @Override
@@ -178,6 +188,44 @@ public class MapGui extends JFrame{
                 System.out.println("Prediction :" + ((411*map.getWidth())/2545) + " actual : " + e.getX());
                 System.out.println("Prediction :" + ((399*map.getHeight())/1928) + " actual : " + e.getY());
                 addRedCross(Arrays.asList(ViewMap.getIds()));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        player.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 60 * player.getHeight()/274) && (e.getY() < (60+32) * player.getHeight()/274))){
+                    System.out.println("move");
+                }
+                else if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 104 * player.getHeight()/274) && (e.getY() < (104+32) * player.getHeight()/274))){
+                    System.out.println("grab");
+                }
+                else if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 147 * player.getHeight()/274) && (e.getY() < (147+32) * player.getHeight()/274))){
+                    ArrayList<String> weaponsName = new ArrayList<>();
+                    weaponsName.add("cyberblade");
+                    weaponsName.add("electroscyte");
+                    new WeaponChooseGui(weaponsName, self);
+                }
             }
 
             @Override

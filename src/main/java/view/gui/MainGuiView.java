@@ -15,10 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainGuiView extends View {
     private JFrame frame;
+    private MapGui mapGui;
     private JLabel imageLabel;
     private JPanel buttonAndTextPanel;
     private JPanel mainPanel;
@@ -142,7 +145,9 @@ public class MainGuiView extends View {
 
     @Override
     public void showReachableSquares(List<String> squares) {
-
+        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ids.removeAll(squares);
+        mapGui.addRedCross(ids);
     }
 
     @Override
@@ -162,7 +167,7 @@ public class MainGuiView extends View {
 
     @Override
     public void showVenomRequest(Colors playerColor) {
-        int value = JOptionPane.showConfirmDialog(frame, "");
+        int value = JOptionPane.showConfirmDialog(mapGui, "");
         //if (value == 1)
         //client.send(new UsePowerUp(client.getToken(), ));
     }
@@ -177,7 +182,8 @@ public class MainGuiView extends View {
     @Override
     public void startGame() {
         frame.setVisible(false);
-        frame = new MapGui(client.getPlayerColor());
+        frame = null;
+        mapGui = new MapGui(client.getPlayerColor());
         gameStarted = true;
     }
 
@@ -197,6 +203,20 @@ public class MainGuiView extends View {
     public void setClient(Client client){
         this.client = client;
     }
+
+    public void showPossibleRooms(List<Colors> targets){
+
+    } //For shot action
+
+    public void showPossibleSquares(List<Colors> targets){
+
+    } // For shot action
+
+    public void showTargetMove(List<Colors> targets){
+
+    } //When need to be shown target which have to be moved for a weapon effect
+
+    public void payment(){}
 
     public static void setUIManager() {
         try {
