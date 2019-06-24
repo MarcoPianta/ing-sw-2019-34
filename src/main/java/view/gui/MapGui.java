@@ -4,27 +4,26 @@ import Model.Colors;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import static view.gui.MainGuiView.GOLDENRATIO;
 
 public class MapGui extends JFrame{
     private static final double RATIO = 1.320020;
-    private static final int PLAYERBOARDSPERCENTAGE = 40;
-    private JPanel mainPanel;
+    private static final int PLAYERBOARDSPERCENTAGE = 39;
+    private static final int MAPWIDTHPERCENTAGE = 60;
+    private static final int MAPEIGTHPERCENTAGE = 79;
+    private static final int PLAYERBOARDHEIGTHERCENTAGE = 19;
+    private static final int ENEMYHEIGTHPERCENTAGE = 24;
+
     private JPanel playerBoards;
     private JLabel map;
     private Colors myColor;
     private JLabel[] players = new JLabel[4];
     private JLabel player;
+    private JScrollPane chatPane;
     private ArrayList<JButton> redCrosses;
     private ImageIcon playerBoard;
     private ImageIcon redCross;
@@ -37,166 +36,140 @@ public class MapGui extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.myColor = myColor;
         this.redCrosses = new ArrayList<>();
+        this.setLayout(new GridBagLayout());
+
         playerBoard = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + ".png");
         redCross = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "redCross.png");
         mapImage = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "mappe" + File.separatorChar + "map1.png");
 
-
-        mainPanel = new JPanel(new BorderLayout());
-        playerBoards = new JPanel(new GridLayout(4,1));
-        playerBoards.setSize(this.getWidth()*PLAYERBOARDSPERCENTAGE/100, this.getHeight());
-        playerBoards.setBackground(new Color(0,0,0));
-
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0.6;
+        c.weighty = 0.4;
+        c.insets = new Insets(2,2,2,2);
+        c.fill = GridBagConstraints.BOTH;
         map = new JLabel(mapImage);
+        this.add(map, c);
 
-        mainPanel.add(map, BorderLayout.CENTER);
-        mainPanel.setSize(this.getWidth(), this.getHeight()*65/100);
-
-        player = new JLabel(playerBoard);
-        player.setSize(this.getWidth(), this.getHeight()*20/100);
-
-        mainPanel.add(player, BorderLayout.PAGE_END);
-
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 0.4;
+        c.weighty = 0.4;
+        c.insets = new Insets(2,2,2,2);
+        c.fill = GridBagConstraints.BOTH;
+        playerBoards = new JPanel(new GridLayout(4, 1));
         int index = 0;
         for (int i = 0; i < 5; i++){
             ImageIcon playerBoardIm;
             if (!Colors.values()[i].getAbbreviation().equals(myColor.getAbbreviation())) {
                 playerBoardIm = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + Colors.values()[i].getAbbreviation() + ".png");
                 players[index] = new JLabel(playerBoardIm);
-                players[index].setSize(playerBoards.getWidth(), playerBoards.getHeight()*24/100);
+                players[index].setName(Colors.values()[i].getAbbreviation());
                 playerBoards.add(players[index]);
                 index++;
             }
         }
-        mainPanel.add(playerBoards, BorderLayout.LINE_END);
+        this.add(playerBoards, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weightx = 0.0;
+        c.weighty = 0.5;
+        c.gridwidth = 1;
+        c.insets = new Insets(2,2,2,2);
+        c.fill = GridBagConstraints.BOTH;
+        player = new JLabel(playerBoard);
+        this.add(player, c);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 0.4;
+        c.weighty = 0.5;
+        c.gridwidth = 1;
+        c.insets = new Insets(2,2,2,2);
+        c.fill = GridBagConstraints.BOTH;
+        JLabel chatLabel = new JLabel("This is the chat");
+        chatLabel.setHorizontalTextPosition(JLabel.LEFT);
+        chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        chatLabel.setForeground(Color.WHITE);
+        chatLabel.setBackground(Color.black);
+        chatPane = new JScrollPane(chatLabel);
+        chatPane.setOpaque(false);
+        this.add(chatPane, c);
+
 
         addComponentListeners();
 
-        addRedCross(Arrays.asList(ViewMap.getIds()));
-
-        this.add(mainPanel);
-
-        int frameWidth = new Double(600*RATIO).intValue();
-        setSize(new Dimension(frameWidth, 600));
+        //this.add(mainPanel);
+        this.pack();
         this.setVisible(true);
+        int frameWidth = new Double(600*RATIO).intValue();
+        this.setMinimumSize(new Dimension(frameWidth, 600));
     }
 
     public void addRedCross(List<String> id){
         for (String s: id){
-            JButton button = new JButton();
-            button.setName(s);
-            button.setBounds((ViewMap.getXCoordinates(s) * map.getWidth() / 2545), (ViewMap.getYCoordinates(s) * map.getHeight() / 1928), (500 * map.getWidth() / 2545), (440 * map.getHeight() / 1928));
-            button.setBorderPainted(false);
-            button.setOpaque(false);
-            button.setIcon(redCross);
-            redCrosses.add(button);
-            map.add(button);
+            new Thread(() -> {
+                JButton button = new JButton();
+                button.setName(s);
+                button.setBorderPainted(false);
+                button.setOpaque(false);
+                button.setIcon(redCross);
+                synchronized (lock) {
+                    button.setBounds((ViewMap.getXCoordinates(s) * map.getWidth() / 2545), (ViewMap.getYCoordinates(s) * map.getHeight() / 1928), (500 * map.getWidth() / 2545), (440 * map.getHeight() / 1928));
+                    redCrosses.add(button);
+                    map.add(button);
+                }
+            }).start();
         }
     }
 
     private void addComponentListeners(){
-        this.addComponentListener(new ComponentListener() {
+
+        map.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                new SwingWorker<Void, Void>(){
-                    @Override
-                    protected Void doInBackground() {
-                        int frameWidth = new Double(getHeight() *RATIO).intValue();
-                        setSize(new Dimension(frameWidth, getHeight()));
-                        return null;
-                    }
-                }.execute();
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
+                JLabel label = (JLabel) e.getComponent();
+                resizeImage(label, mapImage);
             }
         });
 
-        map.addComponentListener(new ComponentListener() {
+        playerBoards.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                new Thread(() -> {
-                    ImageIcon im = new ImageIcon(mapImage.getImage().getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT));
-                    map.setIcon(im);
-                }).start();
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
-        });
-
-        mainPanel.addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                synchronized (lock) {
-                    while (playerBoards.getWidth() == mainPanel.getWidth()) {
-                        try {lock.wait();}catch (InterruptedException i) {}
-                    }
-                    playerBoards.setSize(mainPanel.getWidth() * PLAYERBOARDSPERCENTAGE / 100, mainPanel.getHeight());
-                    player.setSize(mainPanel.getWidth(), mainPanel.getHeight() * 20 / 100);
-                    lock.notifyAll();
+                for (int i= 0; i < 4; i++) {
+                    int a = i;
+                    new Thread(() ->
+                            resizeImage(players[a], new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + players[a].getName() + ".png"))
+                    ).start();
                 }
-                new Thread(() -> {
-                    synchronized (lock) {
-                        ImageIcon im = new ImageIcon(playerBoard.getImage().getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT));
-                        player.setIcon(im);
-                        lock.notifyAll();
-                    }
-                }).start();
-                new Thread(() -> {
-                    synchronized (lock) {
-                        for (int i = 0; i < 4; i++) {
-                            int a = i;
-                            new Thread(() -> {
-                                players[a].setSize(playerBoards.getWidth(), playerBoards.getHeight() * 24 / 100);
-                                ImageIcon playerBoardIm = new ImageIcon(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + Colors.values()[a].getAbbreviation() + ".png").getImage().getScaledInstance(players[a].getWidth(), players[a].getHeight(), Image.SCALE_DEFAULT));
-                                players[a].setIcon(playerBoardIm);
-                            }).start();
-                        }
-                        lock.notifyAll();
-                    }
-                }).start();
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-
             }
         });
+
+        player.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                JLabel label = (JLabel) e.getComponent();
+                resizeImage(label, playerBoard);
+            }
+        });
+
+        map.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                JLabel label = (JLabel) e.getComponent();
+                Dimension size = new Dimension(label.getIcon().getIconWidth(), label.getIcon().getIconHeight());
+                new Thread(() -> {
+                    for(JButton button: redCrosses) {
+                        button.setBounds((ViewMap.getXCoordinates(ViewMap.getIds()[Character.getNumericValue(button.getName().charAt(0))]) * size.width / 2545), (ViewMap.getYCoordinates(ViewMap.getIds()[Character.getNumericValue(button.getName().charAt(2))]) * size.height / 1928), (500 * size.width / 2545), (440 * size.height / 1928));
+                        ImageIcon im = new ImageIcon(redCross.getImage().getScaledInstance(button.getWidth(), button.getHeight(), Image.SCALE_DEFAULT));
+                        button.setIcon(im);
+                    }
+                }).start();
+            }
+        });
+
 
         map.addMouseListener(new MouseListener() {
             @Override
@@ -204,6 +177,7 @@ public class MapGui extends JFrame{
                 System.out.println(map.getWidth());
                 System.out.println("Prediction :" + ((411*map.getWidth())/2545) + " actual : " + e.getX());
                 System.out.println("Prediction :" + ((399*map.getHeight())/1928) + " actual : " + e.getY());
+                addRedCross(Arrays.asList(ViewMap.getIds()));
             }
 
             @Override
@@ -226,6 +200,26 @@ public class MapGui extends JFrame{
 
             }
         });
+    }
+
+    private void resizeImage(JLabel label, ImageIcon imageIcon){
+        Dimension size = label.getSize();
+        Image resized = imageIcon.getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT);
+        label.setIcon(new ImageIcon(resized));
+    }
+
+    private Color getPaintingColor(){
+        if (myColor.getAbbreviation().equals("blue"))
+            return Color.BLUE;
+        else if (myColor.getAbbreviation().equals("green"))
+            return Color.GREEN;
+        else if (myColor.getAbbreviation().equals("white"))
+            return Color.GRAY;
+        else if (myColor.getAbbreviation().equals("yellow"))
+            return Color.YELLOW;
+        else
+            return new Color(212, 25, 255);
+
     }
 
     public static void main(String[] args) {

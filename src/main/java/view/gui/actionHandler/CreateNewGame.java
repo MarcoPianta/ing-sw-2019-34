@@ -1,6 +1,6 @@
 package view.gui.actionHandler;
 
-import network.Server.Client;
+import network.Client.Client;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

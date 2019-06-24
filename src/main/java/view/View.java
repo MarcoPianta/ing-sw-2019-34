@@ -1,7 +1,7 @@
 package view;
 
 import Model.*;
-import network.Server.Client;
+import network.Client.Client;
 import network.messages.RespawnMessage;
 
 import java.util.ArrayList;

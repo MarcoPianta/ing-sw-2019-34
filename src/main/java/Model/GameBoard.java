@@ -25,6 +25,14 @@ public final class GameBoard {
         return name;
     }
 
+    public NormalSquare getSquareFromId(String id){
+        for (Room r: rooms)
+            for (NormalSquare s: r.getNormalSquares())
+                if (s.getId().equals(id))
+                    return s;
+        return null;
+    }
+
     private void createRooms(JsonObject jsonValues){
         int roomNumber;
         int roomDimension;

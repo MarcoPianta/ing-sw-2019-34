@@ -1,4 +1,4 @@
-package network.Server;
+package network.Client;
 
 import Model.Colors;
 import Model.NormalSquare;

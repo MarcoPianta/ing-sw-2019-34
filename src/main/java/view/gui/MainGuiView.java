@@ -2,7 +2,7 @@ package view.gui;
 
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
-import network.Server.Client;
+import network.Client.Client;
 import view.View;
 import view.gui.actionHandler.CreateNewGame;
 

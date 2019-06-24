@@ -1,6 +1,6 @@
 package network.Client.Socket;
 
-import network.Server.Client;
+import network.Client.Client;
 import network.messages.Message;
 import view.View;
 

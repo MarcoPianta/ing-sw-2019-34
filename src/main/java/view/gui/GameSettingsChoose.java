@@ -1,6 +1,6 @@
 package view.gui;
 
-import network.Server.Client;
+import network.Client.Client;
 import network.messages.GameSettingsResponse;
 
 import javax.swing.*;
