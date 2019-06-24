@@ -1,5 +1,6 @@
 package view.gui;
 
+import Model.Colors;
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
 import network.Server.Client;
@@ -145,7 +146,7 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void showPossibleTarget(List<String> targets) {
+    public void showPossibleTarget(List<Colors> targets) {
 
     }
 
@@ -160,7 +161,7 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void showVenomRequest() {
+    public void showVenomRequest(Colors playerColor) {
         int value = JOptionPane.showConfirmDialog(frame, "");
         //if (value == 1)
         //client.send(new UsePowerUp(client.getToken(), ));

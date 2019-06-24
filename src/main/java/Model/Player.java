@@ -92,7 +92,6 @@ public class Player {
         }
         newPosition(getGameId().getMap().getRooms().get(i-1).getNormalSquares().get(j));
 
-        System.out.println(getPosition().getColor());
         getPlayerBoard().getHandPlayer().removePowerUp(getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUp));
     }
 
