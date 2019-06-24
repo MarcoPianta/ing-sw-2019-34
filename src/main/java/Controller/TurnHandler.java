@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import network.messages.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +9,15 @@ public class TurnHandler {
     private StateMachineEnumerationTurn nextState;
     private EndTurnChecks endTurnChecks;
     private GameHandler gameHandler;
+    private ActionValidController actionValidController;
+    private PaymentController paymentController;
 
     public TurnHandler(GameHandler gameHandler){
         this.gameHandler=gameHandler;
         this.endTurnChecks=new EndTurnChecks();
         this.nextState=null;
+        this.actionValidController = gameHandler.getActionValidController();
+        this.paymentController = gameHandler.getPaymentController();
     }
 
     public GameHandler getGameHandler() {
@@ -209,16 +212,27 @@ public class TurnHandler {
 
     public boolean actionReload(ReloadMessage message){
         boolean valueReturn;
-        ArrayList<CardPowerUp> powerUps=new ArrayList<>();
+        ArrayList<CardPowerUp> powerUps = new ArrayList<>();
+        int[] cost = {0, 0, 0};
+        cost[0] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getRedCost();
+        cost[1] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getYellowCost();
+        cost[2] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getBlueCost();
         for(Integer i:message.getPowerUp())
             powerUps.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
 
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.RELOAD);
-
-        if(message.getPowerUp()==null)
-            valueReturn=new Reload(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon())).execute();
-        else
-            valueReturn=new Reload(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()),powerUps).execute();
+        if(message.getPowerUp() == null) {
+            if (paymentController.payment(cost))
+                valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon())).execute();
+            else
+                valueReturn = false;
+        }else {
+            if(actionValidController.actionValid(message.getWeapon()) && paymentController.payment(cost, powerUps)) {
+                    valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
+                }
+            else
+                valueReturn = false;
+        }
         setNextState(StateMachineEnumerationTurn.ENDTURN);
         return valueReturn;
     }
