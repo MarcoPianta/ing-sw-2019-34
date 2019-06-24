@@ -35,6 +35,11 @@ public class Shoot implements Action{
         gamePlayers.remove(shooterPlayer);
     }
 
+    /**
+     * This method execute the Shoot Action
+     *
+     * @return true if the action has been executed, false otherwise
+     */
     public boolean execute(){
             switch(actionType) {
                 case ('p'):
@@ -54,55 +59,81 @@ public class Shoot implements Action{
             }
     }
 
+
+    /**
+     * This method is invoked by isValid
+     * Control the pre-condition of case P
+     * */
+    private boolean isValidP(){
+        List<Player> visibleTarget = targetablePlayer();
+        ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
+        for (Player target : targets) {
+            if(!conditionControll(target, visibleTarget, targetListSquare)){
+                return false;
+            }
+        }
+        if(shootEffect.getPreCondition().isCardinal()) {
+            targetListSquare = new ArrayList<>();
+            targetListSquare.add(shooterPlayer.getPosition());
+            for (Player target : targets) {
+                targetListSquare.add(target.getPosition());
+            }
+            return cardinalControl(targetListSquare);
+        }
+        return true;
+    }
+
+    /**
+     * This method is invoked by isValid
+     * Control the pre-condition of case S
+     * */
+    private boolean isValidS(){
+        List<NormalSquare> a = reachableSquare();
+        ArrayList<NormalSquare> targetListSquare;
+        for (NormalSquare square: targetSquare) {
+            if(!(a.contains(square)))
+                return false;
+        }
+        if(shootEffect.getPreCondition().isCardinal()) {
+            targetListSquare = new ArrayList<>();
+            targetListSquare.add(shooterPlayer.getPosition());
+            targetListSquare.addAll(targetSquare);
+            return cardinalControl(targetListSquare);
+        }
+        return true;
+    }
+
+
+    /**
+     * This method is invoked by isValid
+     * Control the pre-condition of case R
+     * */
+    private boolean isValidR(){
+        for (NormalSquare normalSquare : reachableSquare()){
+            if(normalSquare.getColor() == roomColor)
+                return true;
+        }
+        return false;
+    }
+
+
     /**
      * Control the Pre-condition of the Shoot Action
-     * This method invoke reachableSquare and targetablePlayer methods
+     * This method invoke isValidP, isValidS and isValidR methods
      *
      * @return true if the action invocation respect the condition, false otherwise
      */
-
     public boolean isValid(){
         switch (actionType){
             case ('p'):
-                List<Player> visibleTarget = targetablePlayer();
-                ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
-                for (Player target : targets) {
-                    if(!conditionControll(target, visibleTarget, targetListSquare)){
-                        return false;
-                    }
-                }
-                if(shootEffect.getPreCondition().isCardinal()) {
-                    targetListSquare = new ArrayList<>();
-                    targetListSquare.add(shooterPlayer.getPosition());
-                    for (Player target : targets) {
-                        targetListSquare.add(target.getPosition());
-                    }
-                    return cardinalControl(targetListSquare);
-                }
-                return true;
+                return isValidP();
 
             case ('s'):
-                List<NormalSquare> a = reachableSquare();
-                for (NormalSquare square: targetSquare) {
-                    if(!(a.contains(square)))
-                        return false;
-                }
-                if(shootEffect.getPreCondition().isCardinal()) {
-                    targetListSquare = new ArrayList<>();
-                    targetListSquare.add(shooterPlayer.getPosition());
-                    for (NormalSquare square: targetSquare)
-                        targetListSquare.add(square);
-                    return cardinalControl(targetListSquare);
-                }
-
-                return true;
+                return isValidS();
 
             case ('r'):
-                    for (NormalSquare normalSquare : reachableSquare()){
-                        if(normalSquare.getColor() == roomColor)
-                            return true;
-                    }
-                return false;
+                return isValidR();
+
             default:
                 return false;
         }

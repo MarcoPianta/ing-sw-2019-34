@@ -123,7 +123,7 @@ public class ActionValidController {
      * @return true if the action is valid
      */
     public boolean actionValid(int i){
-        ArrayList<Integer> cost=new ArrayList<>();
+        ArrayList<Integer> cost = new ArrayList<>();
         cost.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getBlueCost());
         cost.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getYellowCost());
         cost.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getRedCost());

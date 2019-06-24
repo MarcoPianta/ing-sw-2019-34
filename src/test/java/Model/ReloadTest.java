@@ -23,8 +23,6 @@ public class ReloadTest {
         CardPowerUp testPowerUp2 = new CardPowerUp("newton_Y");
         testPowerUps.add(testPowerUp1);
         testPowerUps.add(testPowerUp2);
-        action = new Reload(testPlayer, testWeapon, testPowerUps);
-        assertTrue(action instanceof Reload);
     }
 
     @Test

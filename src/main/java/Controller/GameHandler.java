@@ -12,6 +12,7 @@ public class GameHandler {
     private FinalTurnHandler finalTurnHandler;
     private TurnHandler turnHandler;
     private Player playerValid;// save player's position for action shot's valid
+    private ActionValidController actionValidController;
     private PaymentController paymentController;
 
 
@@ -36,6 +37,7 @@ public class GameHandler {
         getGame().chooseFirstPlayer();
         playerValid=game.getCurrentPlayer();
         getTurnHandler().start();
+        this.actionValidController = new ActionValidController(this);
     }
 
     public PaymentController getPaymentController() {
@@ -261,6 +263,10 @@ public class GameHandler {
         }
         else if(countPlayer(player)==countPlayer(winnerList.get(0)))
             winnerList.add(player);
+    }
+
+    public ActionValidController getActionValidController() {
+        return actionValidController;
     }
 
     /**

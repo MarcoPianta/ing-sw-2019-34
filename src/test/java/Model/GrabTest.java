@@ -61,13 +61,6 @@ public class GrabTest {
         testSpawnSquare.setItems(testWeapon);
         Grab action = new Grab(testPlayer, testWeapon);
         assertTrue(action.execute());
-        //Test 2
-        CardOnlyAmmo testOnlyAmmo = new CardOnlyAmmo (AmmoEnum.AMMO1.getAbbreviation());
-        action = new Grab(testPlayer, testOnlyAmmo);
-        assertFalse(action.execute());
-        //Test 3
-        CardNotOnlyAmmo testNotOnlyAmmo = new CardNotOnlyAmmo (AmmoEnum.AMMO1.getAbbreviation());
-        action = new Grab(testPlayer, testNotOnlyAmmo);
-        assertFalse(action.execute());
+        assertEquals(testWeapon,testPlayer.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
     }
 }

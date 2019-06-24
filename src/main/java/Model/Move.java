@@ -24,17 +24,13 @@ public class Move implements Action {
     }
 
     /**
-     * Invoke the isValid method that control the Pre-condition of the action
      * This method execute the Move Action
      *
      * @return true if the action has been executed, false otherwise
      */
     public boolean execute(){
-        if(isValid()) {
             targetPlayer.newPosition(selectedSquare);
             return true;
-        }
-        return false;
     }
 
     /**
