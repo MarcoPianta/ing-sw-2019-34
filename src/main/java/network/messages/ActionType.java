@@ -33,6 +33,7 @@ public enum ActionType {
     END("End"),
     SHOTRESPONSE("Shot response"),
     MOVERESPONSE("Move response"),
+    GRABWEAPONREQUEST("Grab weapon request"),
     DISCONNECT("Disconnect");
 
 

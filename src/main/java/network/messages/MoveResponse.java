@@ -7,4 +7,8 @@ public class MoveResponse extends Message {
         this.token = token;
         squareId = id;
     }
+
+    public String getSquareId() {
+        return squareId;
+    }
 }
