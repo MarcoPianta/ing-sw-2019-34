@@ -26,6 +26,10 @@ public abstract class View {
     protected String myPositionID; /**This variable contains the ID of player's current square */
     protected ArrayList<String> otherPlayersPosition; /**This ArrayList contains the IDs of the square where other players are on*/
     protected HashMap<String, Boolean> charge;
+    protected Integer posWeapon;
+    protected Integer posEffect;
+    protected HashMap<Colors,Integer> players;//bisogna inizializzare
+    protected ArrayList<Colors> playersColor;//bisogna inizializzare
 
     public View(){
         this.weapons = new ArrayList<>(4);
