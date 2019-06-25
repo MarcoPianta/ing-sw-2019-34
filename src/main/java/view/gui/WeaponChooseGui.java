@@ -78,11 +78,12 @@ public class WeaponChooseGui extends JFrame {
             index++;
         }
 
+        System.out.println(index);
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0.0;
         constraints.weighty = 0.0;
-        constraints.gridwidth = index - 1;
+        constraints.gridwidth = index;
         constraints.insets = new Insets(5, 5, 5, 5);
         JLabel info = new JLabel("Choose one weapon");
         this.add(info, constraints);

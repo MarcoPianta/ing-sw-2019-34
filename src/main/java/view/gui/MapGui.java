@@ -1,6 +1,8 @@
 package view.gui;
 
 import Model.Colors;
+import network.Client.Client;
+import network.messages.ReceiveTargetSquare;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,17 +14,15 @@ import java.util.List;
 
 public class MapGui extends JFrame{
     private static final double RATIO = 1.320020;
-    private static final int PLAYERBOARDSPERCENTAGE = 39;
-    private static final int MAPWIDTHPERCENTAGE = 60;
-    private static final int MAPEIGTHPERCENTAGE = 79;
-    private static final int PLAYERBOARDHEIGTHERCENTAGE = 19;
-    private static final int ENEMYHEIGTHPERCENTAGE = 24;
+    private Client client;
 
     private JPanel playerBoards;
     private JLabel map;
     private Colors myColor;
     private JLabel[] players = new JLabel[4];
     private JLabel player;
+    private JPanel chatArea;
+    private JTextField text;
     private JScrollPane chatPane;
     private ArrayList<JButton> redCrosses;
     private ImageIcon playerBoard;
@@ -31,12 +31,13 @@ public class MapGui extends JFrame{
 
     private static final Object lock = new Object();
 
-    public MapGui(Colors myColor){
+    public MapGui(Colors myColor, Client client){
         super("Adrenaline");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.myColor = myColor;
         this.redCrosses = new ArrayList<>();
         this.setLayout(new GridBagLayout());
+        this.client = client;
 
         playerBoard = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + ".png");
         redCross = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "redCross.png");
@@ -74,9 +75,8 @@ public class MapGui extends JFrame{
 
         c.gridx = 0;
         c.gridy = 1;
-        c.weightx = 0.6;
+        c.weightx = 0.0;
         c.weighty = 0.5;
-        c.gridwidth = 1;
         c.insets = new Insets(2,2,2,2);
         c.fill = GridBagConstraints.BOTH;
         player = new JLabel(playerBoard);
@@ -86,27 +86,31 @@ public class MapGui extends JFrame{
         c.gridy = 1;
         c.weightx = 0.4;
         c.weighty = 0.5;
-        c.gridwidth = 1;
         c.insets = new Insets(2,2,2,2);
         c.fill = GridBagConstraints.BOTH;
-        JPanel chat = new JPanel(new BorderLayout());
+
+        chatArea = new JPanel();
+        chatArea.setBackground(Color.black);
+        chatArea.setLayout(new BoxLayout(chatArea, BoxLayout.PAGE_AXIS));
+
         JLabel chatLabel = new JLabel("This is the chat");
         chatLabel.setHorizontalTextPosition(JLabel.LEFT);
         chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
         chatLabel.setForeground(Color.WHITE);
         chatLabel.setOpaque(false);
-        JTextField text = new JTextField();
+        chatArea.add(chatLabel);
+        chatPane = new JScrollPane(chatArea);
+        chatPane.getVerticalScrollBar().addAdjustmentListener(e -> e.getAdjustable().setValue(e.getAdjustable().getMaximum()));
 
-        //chat.add(chatLabel, BorderLayout.CENTER);
-        //chat.add(text, BorderLayout.SOUTH);
-        chatPane = new JScrollPane(chatLabel);
-        chatPane.getViewport().setBackground(Color.BLACK);
-        this.add(chatPane, c);
+        text = new JTextField();
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, chatPane, text);
+        splitPane.setDividerLocation(0.75);
+        this.add(splitPane, c);
 
 
         addComponentListeners();
 
-        //this.add(mainPanel);
         this.pack();
         this.setVisible(true);
         int frameWidth = new Double(600*RATIO).intValue();
@@ -131,6 +135,7 @@ public class MapGui extends JFrame{
     }
 
     public void weaponChosen(String choose){
+        client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0), Character.getNumericValue(choose.charAt(2)))));
         System.out.println(choose);
     }
 
@@ -215,9 +220,11 @@ public class MapGui extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 60 * player.getHeight()/274) && (e.getY() < (60+32) * player.getHeight()/274))){
+                    client.send(new ReceiveTargetSquare(client.getToken(), "move"));
                     System.out.println("move");
                 }
                 else if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 104 * player.getHeight()/274) && (e.getY() < (104+32) * player.getHeight()/274))){
+                    client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
                     System.out.println("grab");
                 }
                 else if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 147 * player.getHeight()/274) && (e.getY() < (147+32) * player.getHeight()/274))){
@@ -248,6 +255,23 @@ public class MapGui extends JFrame{
 
             }
         });
+
+        text.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Fatto");
+                if (!text.getText().equals("")) {
+                    JLabel chatLabel = new JLabel(text.getText());
+                    chatLabel.setHorizontalTextPosition(JLabel.LEFT);
+                    chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
+                    chatLabel.setForeground(Color.WHITE);
+                    chatLabel.setOpaque(false);
+                    chatArea.add(chatLabel);
+                    chatArea.revalidate();
+                }
+                text.setText("");
+            }
+        });
     }
 
     private void resizeImage(JLabel label, ImageIcon imageIcon){
@@ -273,6 +297,6 @@ public class MapGui extends JFrame{
     public static void main(String[] args) {
         MainGuiView.setUIManager();
 
-        new MapGui(Colors.GREEN);
+        new MapGui(Colors.GREEN, null);
     }
 }
