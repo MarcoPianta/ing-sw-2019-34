@@ -24,7 +24,7 @@ public abstract class View {
     protected GameBoard map;
     protected int maxReward; /**The max reward gained from other players when player die*/
     protected String myPositionID; /**This variable contains the ID of player's current square */
-    protected ArrayList<String> otherPlayersPosition; /**This ArrayList contains the IDs of the square where other players are on*/
+    protected String[] otherPlayersPosition = new String[4]; /**This ArrayList contains the IDs of the square where other players are on*/
     protected HashMap<String, Boolean> charge;
     protected Integer posWeapon;
     protected Integer posEffect;
@@ -47,15 +47,26 @@ public abstract class View {
 
         this.powerUps = new ArrayList<>();
         this.maxReward = 0;
-        this.otherPlayersPosition = new ArrayList<>();
 
     }
 
     public abstract void showToken();
 
-    public abstract void showReachableSquares(List<String> squares);
+    public abstract void showReachableSquares(List<String> squares);// for move
 
     public abstract void showPossibleTarget(List<Colors> targets);
+
+    public abstract void showPossibleRooms(List<String> ids); //For shot action
+
+    public abstract void showPossibleSquares(List<Colors> targets); // For shot action
+
+    public abstract void showTargetMove(List<Colors> targets); //When need to be shown target which have to be moved for a weapon effect
+
+    public abstract void payment();
+
+    public abstract void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player);
+
+    public abstract void updateEnemyPosition(Colors player, String position);
 
     public abstract void showPowerUpChooseRespawn();
 
@@ -114,5 +125,9 @@ public abstract class View {
 
     public void respawnResponse(Integer powerUp){
         client.send(new RespawnMessage(client.getToken(), powerUp));
+    }
+
+    public void setOtherPosition(int player, String position){
+        otherPlayersPosition[player] = position;
     }
 }
