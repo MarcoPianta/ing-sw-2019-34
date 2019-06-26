@@ -98,32 +98,20 @@ public class FinalTurnHandler extends TurnHandler {
     @Override
     public boolean actionReload(ReloadMessage message){
         boolean valueReturn;
-        ArrayList<CardPowerUp> powerUps=new ArrayList<>();
+
         int[] cost = {0, 0, 0};
         cost[0] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getRedCost();
         cost[1] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getYellowCost();
         cost[2] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getBlueCost();
-        for(Integer i:message.getPowerUp())
-            powerUps.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
-        if(message.getPowerUp() == null) {
-            if (paymentController.payment(cost))
-                valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon())).execute();
-            else
-                valueReturn = false;
-        }
-        else {
-            if (actionValidController.actionValid(message.getWeapon()) && paymentController.payment(cost, powerUps)) {
-                valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
-            } else
-                valueReturn = false;
-        }
+
+        valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
         return valueReturn;
 
     }
 
 
     public void endTurn(){
-        //TODO messaggio che è finito turno
+
         endFinalTurnChecks.playerIsDead(gameHandler.getGame());
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
         gameHandler.getGame().incrementCurrentPlayer();

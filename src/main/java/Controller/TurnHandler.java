@@ -115,11 +115,11 @@ public class TurnHandler {
     protected boolean actionShot(Shot message){
         boolean valueReturn;
         if(message.getSquare()==null && message.getRoom()==null)
-            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),convertedPlayer(message.getTargets()), null, false).execute();
+            valueReturn=new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()),gameHandler.getGame().getCurrentPlayer(),convertedPlayer(message.getTargets()), null, false).execute();
         else if(message.getSquare()==null && message.getTargets()==null)
-            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(),message.getRoom().getColor()).execute();
+            valueReturn=new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()),gameHandler.getGame().getCurrentPlayer(),message.getRoom().getColor()).execute();
         else
-            valueReturn=new Shoot(message.getEffect(),gameHandler.getGame().getCurrentPlayer(), null, null /*message.getSquare()*/, true).execute();
+            valueReturn=new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()),gameHandler.getGame().getCurrentPlayer(), null, null /*message.getSquare()*/, true).execute();
         //use venom
         if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
             usePowerUp(message);
@@ -212,27 +212,14 @@ public class TurnHandler {
 
     public boolean actionReload(ReloadMessage message){
         boolean valueReturn;
-        ArrayList<CardPowerUp> powerUps = new ArrayList<>();
+
         int[] cost = {0, 0, 0};
         cost[0] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getRedCost();
         cost[1] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getYellowCost();
         cost[2] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getBlueCost();
-        for(Integer i:message.getPowerUp())
-            powerUps.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
 
-        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.RELOAD);
-        if(message.getPowerUp() == null) {
-            if (paymentController.payment(cost))
-                valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon())).execute();
-            else
-                valueReturn = false;
-        }else {
-            if(actionValidController.actionValid(message.getWeapon()) && paymentController.payment(cost, powerUps)) {
-                    valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
-                }
-            else
-                valueReturn = false;
-        }
+        valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
+
         setNextState(StateMachineEnumerationTurn.ENDTURN);
         return valueReturn;
     }

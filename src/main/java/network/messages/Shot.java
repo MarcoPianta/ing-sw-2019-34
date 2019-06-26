@@ -7,16 +7,16 @@ import java.util.List;
 
 public class Shot extends Message {
     private List<Player> targets;
-    private Effect effect;
+    private Integer posEffect;
     private ArrayList<NormalSquare> squares;
     private Room room;
     private int weapon;
     private Integer powerUp;
     private Player targetPowerUp;
 
-    public Shot(List<Player> targets, Effect effect, int weapon, Integer powerUp, Player targetPowerUp){
+    public Shot(List<Player> targets, Integer posEffect, int weapon, Integer powerUp, Player targetPowerUp){
         actionType=ActionType.SHOT;
-        this.effect =effect;
+        this.posEffect =posEffect;
         this.room=null;
         this.squares=null;
         this.targets =targets;
@@ -24,9 +24,9 @@ public class Shot extends Message {
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
     }
-    public Shot(ArrayList<NormalSquare> square, Effect effect, int weapon, Integer powerUp, Player targetPowerUp){
+    public Shot(ArrayList<NormalSquare> square, Integer posEffect, int weapon, Integer powerUp, Player targetPowerUp){
         actionType=ActionType.SHOT;
-        this.effect =effect;
+        this.posEffect =posEffect;
         this.room=null;
         this.squares=squares;
         this.targets =null;
@@ -34,9 +34,9 @@ public class Shot extends Message {
         this.powerUp=powerUp;
         this.targetPowerUp=targetPowerUp;
     }
-    public Shot(Room room, Effect effect, int weapon, Integer powerUp, Player targetPowerUp){
+    public Shot(Room room, Integer posEffect, int weapon, Integer powerUp, Player targetPowerUp){
         actionType=ActionType.SHOT;
-        this.effect =effect;
+        this.posEffect =posEffect;
         this.room=room;
         this.squares=null;
         this.targets =null;
@@ -45,9 +45,9 @@ public class Shot extends Message {
         this.targetPowerUp=targetPowerUp;
     }
 
-    public Shot(List<Player> targets, Effect effect, int weapon){
+    public Shot(List<Player> targets, Integer posEffect, int weapon){
         actionType=ActionType.SHOT;
-        this.effect =effect;
+        this.posEffect =posEffect;
         this.room=null;
         this.squares=null;
         this.targets =targets;
@@ -55,18 +55,18 @@ public class Shot extends Message {
         this.weapon=weapon;
 
     }
-    public Shot(ArrayList<NormalSquare> square, Effect effect, int weapon){
+    public Shot(ArrayList<NormalSquare> square, Integer posEffect, int weapon){
         actionType=ActionType.SHOT;
-        this.effect =effect;
+        this.posEffect =posEffect;
         this.room=null;
         this.squares=square;
         this.targets =null;
         this.powerUp=-1;
         this.weapon=weapon;
     }
-    public Shot(Room room, Effect effect, int weapon){
+    public Shot(Room room, Integer posposEffect, int weapon){
         actionType=ActionType.SHOT;
-        this.effect =effect;
+        this.posEffect =posEffect;
         this.room=room;
         this.squares=null;
         this.targets =null;
@@ -99,8 +99,8 @@ public class Shot extends Message {
         return targets;
     }
 
-    public Effect getEffect() {
-        return effect;
+    public Integer getPosEffect() {
+        return posEffect;
     }
 
     public void setPowerUp(Integer powerUp) {
