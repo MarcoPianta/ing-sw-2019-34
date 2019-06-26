@@ -103,5 +103,8 @@ public class Shot extends Message {
         return effect;
     }
 
+    public void setPowerUp(Integer powerUp) {
+        this.powerUp = powerUp;
+    }
 }
 

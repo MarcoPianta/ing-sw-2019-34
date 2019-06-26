@@ -14,26 +14,26 @@ public class PaymentController {
         this.gameHandler=gameHandler;
     }
 
-    public boolean payment(int[] cost, List<CardPowerUp> powerUps){
+    public boolean payment(int[] cost, List<Integer> powerUps){
         if(isValidPayment(cost, powerUps))
             return false;
         boolean x;
-        while(!powerUps.isEmpty()){
+        for(Integer i:powerUps){
             x = false;
-            if(powerUps.get(0).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
+            if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
                 cost[0]--;
                 x = true;
             }
-            else if(powerUps.get(0).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
+            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
                 cost[1]--;
                 x = true;
             }
-            else if(powerUps.get(0).getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0){
+            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0){
                 cost[2]--;
                 x = true;
             }
             if(x)
-                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUps.get(0)));
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(i);
             powerUps.remove(0);
         }
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost[0], cost[1], cost[2]);
@@ -88,19 +88,16 @@ public class PaymentController {
         return valueReturn;
     }
 
-    public boolean isValidPayment(int[] cost, List<CardPowerUp> powerUps){
-        int i = 0;
-        while(i < powerUps.size()) {
-            if (powerUps.get(0).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
+    private boolean isValidPayment(int[] cost, List<Integer> powerUps){
+        for(Integer i:powerUps){
+            if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0)
                 cost[0]--;
-            } else if (powerUps.get(0).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
+            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0)
                 cost[1]--;
-            } else if (powerUps.get(0).getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0) {
+            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0)
                 cost[2]--;
-            }
             else
                 return false;
-            i++;
         }
         return true;
     }

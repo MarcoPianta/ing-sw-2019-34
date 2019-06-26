@@ -40,25 +40,22 @@ public class ViewCLI extends View {
             out.println(i+ "="+s +"t");
             i++;
         }
-        out.println("choose a number from 1 to "+ squares.size() +"or another key to cancel \n");
+        out.println("choose a number from 1 to "+ squares.size() +"\n");
+        boolean corrected=false;
+        while(!corrected) {
+            i=in.nextInt();
+            if(i>=1 && i<=squares.size()){
+                client.send(new MoveResponse(client.getToken(),squares.get(i-1)));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to "+ squares.size() +"\n" );
+            }
+        }
 
-        i=in.nextInt();
-        if(i>=0 && i<=squares.size()){
-            out.println("Are you sure you want to move ?? press any key to confirm, z to cancel. \n");
-            if (in.next().equals("z") || in.next().equals("Z")) {
-                in.close();
-                startActions();
-            }
-            else {
-                //client.send(new MoveMessage(client.getToken(), squares.get(i-1)));
-            }
-        }
-        else{
-            in.close();
-            startActions();
-        }
     }
-
+    //aggiunngere show possible square e room
     @Override
     public void showPossibleTarget(List<Colors> targets) {
         out.println("you can shot these targets: \n");
@@ -66,22 +63,10 @@ public class ViewCLI extends View {
             out.println(c +"\t");
         }
         out.println("\n choose a number from 0 to "+ targets.size() +"or z to cancel \n");
-
-        if(in.next().equals("z") || in.next().equals("Z")){
-            in.close();
-            startActions();
-        }
-        else{
-            out.println("Are you sure you want to shot ?? press any key to confirm, z to cancel. \n");
-            if(in.next().equals("z") || in.next().equals("Z")){
-                in.close();
-                startActions();
-            }
-            else{
-                //client.send(new );
-            }
-        }
+        //modificare perchè possono essere scelti più target
     }
+
+
 
     @Override
     public void showPowerUpChooseRespawn() {
@@ -105,13 +90,13 @@ public class ViewCLI extends View {
             }
         }
     }
-
+    //substituteweapons
     @Override
     public void showMessage(String message) {
-        //TODO implement method
+        out.println(message);
     }
 
-    public void showScopeRequest(ArrayList<Integer> playersId){
+    public void showScopeRequest(ArrayList<Colors> playersId){
         out.println("\nYou can use Scope's powerUp\n press 1 to use scope or any key to cancel.\n");
         if(in.nextInt()==1){
             int i;
@@ -138,7 +123,7 @@ public class ViewCLI extends View {
     }
 
     @Override
-    public void showVenomRequest(Colors player) {
+    public void showVenomRequest(Colors player){
         ArrayList<Integer> powerUp=new ArrayList<>();
         out.println("\n"+ player+"attacked you, do you want revenge ??\n press 1 to use grenade or any key to cancel.\n");
         if (in.nextInt()==1){
@@ -211,7 +196,7 @@ public class ViewCLI extends View {
 
     @Override
     public void showToken() {
-        //TODO implement method
+        out.println(client.getToken());
     }
 
     public void startActions(){
@@ -225,7 +210,7 @@ public class ViewCLI extends View {
                 corrected=true;
             }
             else if(i==2){
-                //actionShot();
+                actionCLI.actionShot();
                 corrected=true;
             }
             else if(i==3){
@@ -233,11 +218,11 @@ public class ViewCLI extends View {
                 corrected=true;
             }
             else if(i==4){
-                //actionPowerUp();
+                actionCLI.actionPowerUp();
                 corrected=true;
             }
             else if(i==5){
-                //actionReload();
+                actionCLI.actionReload();
                 corrected=true;
             }
             else if(i==6){
@@ -258,7 +243,7 @@ public class ViewCLI extends View {
         while(!corrected){
             int i=in.nextInt();
             if(i==1){
-                //actionPowerUp();
+                actionCLI.actionPowerUp();
                 corrected=true;
             }
             else if(i==2){
@@ -276,7 +261,7 @@ public class ViewCLI extends View {
         }
     }
 
-    public  void endAction(Boolean executed){
+    /*public  void endAction(Boolean executed){
         if(executed){
             out.println("the action was executed, the game was updated\n");
             numberAction++;
@@ -287,5 +272,5 @@ public class ViewCLI extends View {
         }
         else
             out.println("There was an error, please try again\n");
-    }
+    }*/
 }
