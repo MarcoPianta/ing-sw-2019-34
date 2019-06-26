@@ -21,7 +21,6 @@ public class GameLobby {
     private boolean useScoop;
 
     private String currentSquare;
-    private
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
         this.clients = clients;

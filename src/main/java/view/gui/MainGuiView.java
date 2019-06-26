@@ -138,6 +138,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void setDamageBar(List<Colors> damageBar) {
+        mapGui.addDamage(damageBar);
+    }
+
+    @Override
     public void showToken() {
         JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
         //new Thread(this::showGameSettingsRequest).start();
@@ -145,6 +150,7 @@ public class MainGuiView extends View {
 
     @Override
     public void showReachableSquares(List<String> squares) {
+        mapGui.setActionType("move");
         List<String> ids = Arrays.asList(ViewMap.getIds());
         ids.removeAll(squares);
         mapGui.addRedCross(ids);
@@ -152,7 +158,7 @@ public class MainGuiView extends View {
 
     @Override
     public void showPossibleTarget(List<Colors> targets) {
-
+        new TargetChooseGui(targets);
     }
 
     @Override
@@ -183,7 +189,7 @@ public class MainGuiView extends View {
     public void startGame() {
         frame.setVisible(false);
         frame = null;
-        mapGui = new MapGui(client.getPlayerColor());
+        mapGui = new MapGui(client.getPlayerColor(), client);
         gameStarted = true;
     }
 
@@ -204,8 +210,16 @@ public class MainGuiView extends View {
         this.client = client;
     }
 
-    public void showPossibleRooms(List<Colors> targets){
+    @Override
+    public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
+        mapGui.updateOthersBar(damageBar, player);
+    }
 
+    public void showPossibleRooms(List<String> targets){
+        mapGui.setActionType("room");
+        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ids.removeAll(targets);
+        mapGui.addRedCross(ids);
     } //For shot action
 
     public void showPossibleSquares(List<Colors> targets){
@@ -215,6 +229,11 @@ public class MainGuiView extends View {
     public void showTargetMove(List<Colors> targets){
 
     } //When need to be shown target which have to be moved for a weapon effect
+
+    @Override
+    public void updateEnemyPosition(Colors player, String position) {
+        mapGui.updateEnemyPosition(player, position);
+    }
 
     public void payment(){}
 
