@@ -164,7 +164,9 @@ public abstract class View {
         otherPlayersPosition[player] = position;
     }
 
-    public void setMyTurn(boolean myTurn) {
+    public void setMyTurn(boolean myTurn){
         this.myTurn = myTurn;
     }
 }
+
+

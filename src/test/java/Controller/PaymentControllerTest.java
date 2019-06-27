@@ -26,7 +26,7 @@ public class PaymentControllerTest {
         powerUps.add(1);
         powerUps.add(2);
         players.add(1233);
-        GameHandler gameHandler = new GameHandler(8, players,"map1");
+        GameHandler gameHandler = new GameHandler(8, players,"map1",null);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getPlayers().get(0));
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addPowerUp(gameHandler.getGame().getDeckCollector().getCardPowerUpDrawer().draw());
 

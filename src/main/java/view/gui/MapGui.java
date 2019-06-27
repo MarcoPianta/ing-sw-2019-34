@@ -212,7 +212,7 @@ public class MapGui extends JFrame{
     }
 
     public void canUseVenom(){
-        new UsePowerUpGui(powerUps, this, true);
+        new UsePowerUpGUI(powerUps, this, true);
     }
 
     public void myTurn(boolean turn){
@@ -385,7 +385,7 @@ public class MapGui extends JFrame{
                     System.out.println("info");
                 }
                 else if ( ((e.getX() > 615 * player.getWidth()/1120) && (e.getX() < (615+75) * player.getWidth()/1120)) && (e.getY() > 185 * player.getHeight()/274)) {
-                    new UsePowerUpGui(powerUps, self, false);
+                    new UsePowerUpGUI(powerUps, self, false);
                     System.out.println("powerup");
                 }
             }

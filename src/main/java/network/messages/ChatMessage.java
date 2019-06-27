@@ -14,3 +14,4 @@ public class ChatMessage extends Message{
         return message;
     }
 }
+
