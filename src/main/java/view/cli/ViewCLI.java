@@ -66,7 +66,40 @@ public class ViewCLI extends View {
         //modificare perchè possono essere scelti più target
     }
 
+    @Override
+    public void payment(Payment message) {
 
+    }
+
+    @Override
+    public void chatMessage(String message) {
+
+    }
+
+    @Override
+    public void showPossibleRooms(List<String> ids) {
+
+    }
+
+    @Override
+    public void showPossibleSquares(List<Colors> targets) {
+
+    }
+
+    @Override
+    public void showTargetMove(List<Colors> targets) {
+
+    }
+
+    @Override
+    public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
+
+    }
+
+    @Override
+    public void updateEnemyPosition(Colors player, String position) {
+
+    }
 
     @Override
     public void showPowerUpChooseRespawn() {
