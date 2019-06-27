@@ -28,7 +28,7 @@ public class GameLobby {
         this.actionPerformed = new HashMap<>();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
-            this.gameHandler = new GameHandler(skullNumber, this.clients, map,this);
+            this.gameHandler = new GameHandler(skullNumber, this.clients, map);
             for(Player p: gameHandler.getGame().getPlayers()){
                 players.put(p.getPlayerID(), p);
             }
@@ -59,7 +59,8 @@ public class GameLobby {
                 }
                 else {
                     server.send(new TimeOut(player));
-                    //TODO tell controller to pass turn
+                    if (player == currentPlayer)
+                        gameHandler.receiveServerMessage(new Pass(player));
                 }
             }
         }, 30000);

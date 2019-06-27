@@ -71,7 +71,6 @@ public class ViewCLI extends View {
 
     }
 
-    @Override
     public void chatMessage(String message) {
 
     }

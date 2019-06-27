@@ -87,7 +87,7 @@ public class Server {
      * */
     public void send(Message message){
         if (clients.get(message.getToken())) {
-            //TODO rmiServer.send(message)
+            rmiServer.send(message);
         }
         else
             socketServer.send(message);

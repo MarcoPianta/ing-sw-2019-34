@@ -5,10 +5,7 @@ import Model.Colors;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +13,8 @@ import java.util.Arrays;
 public class WeaponChooseGui extends JFrame {
     private ArrayList<JButton> weaponButtons;
     private int choose;
+    String weaponChoose;
+    boolean choosed = false;
 
     public WeaponChooseGui(ArrayList<String> cards, MapGui mapGui){
         super("Weapon choose");
@@ -43,16 +42,25 @@ public class WeaponChooseGui extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     choose = buttonChoose;
-                    if ((e.getY() > (180) * e.getComponent().getHeight()/406) && (e.getY() < (180+100) * e.getComponent().getHeight()/406)){
-                        mapGui.weaponChosen(choose +","+ 0);
+                    if (!choosed) {
+                        if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
+                            weaponChoose = choose + "," + (0+1);
+                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 10 * e.getComponent().getWidth() / 240) && (e.getX() < (10 + 105) * e.getComponent().getWidth() / 240))) {
+                            weaponChoose = choose + "," + (1+1);
+                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
+                            weaponChoose = choose + "," + (2+1);
+                        }
+                        choosed = true;
                     }
-                    else if((e.getY() > 300 * e.getComponent().getHeight()/406) && ((e.getX() > 10 * e.getComponent().getWidth()/240) && (e.getX() < (10+105) * e.getComponent().getWidth()/240))){
-                        mapGui.weaponChosen(choose +","+ 1);
+                    else{
+                        if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
+                            weaponChoose = weaponChoose + (0+1);
+                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 10 * e.getComponent().getWidth() / 240) && (e.getX() < (10 + 105) * e.getComponent().getWidth() / 240))) {
+                            weaponChoose = weaponChoose + (1+1);
+                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
+                            weaponChoose = weaponChoose + (2+1);
+                        }
                     }
-                    else if((e.getY() > 300 * e.getComponent().getHeight()/406) && ((e.getX() > 125 * e.getComponent().getWidth()/240) && (e.getX() < (125+105) * e.getComponent().getWidth()/240))){
-                        mapGui.weaponChosen(choose +","+ 2);
-                    }
-                    dispose();
                 }
 
                 @Override
@@ -75,6 +83,14 @@ public class WeaponChooseGui extends JFrame {
 
                 }
             });
+
+            this.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    mapGui.weaponChosen(weaponChoose);
+                }
+            });
+
             index++;
         }
 

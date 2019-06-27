@@ -24,6 +24,7 @@ public class MapGui extends JFrame{
     private int[] damagePosition = {110, 172, 240, 302, 364, 432, 494, 556, 618, 680, 748, 810};
     private int[] marksPosition = {535, 575, 615, 655, 695, 735, 775, 815};
 
+    private int[] ammos = new int[3];
     private JPanel playerBoards;
     private JLabel map;
     private Colors myColor;
@@ -46,7 +47,7 @@ public class MapGui extends JFrame{
     private HashMap<String, String[]> spawnSquareWeapon;
     private boolean myTurn;
     private ArrayList<Colors> marks;
-    private ArrayList<CardWeapon> cardsWeapon;
+    private ArrayList<String> cardsWeapon;
     private ArrayList<String> powerUps;
 
     public MapGui(Colors myColor, Client client){
@@ -110,12 +111,6 @@ public class MapGui extends JFrame{
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, chatPane, text);
         splitPane.setDividerLocation(0.5);
-
-        JPanel buttons = new JPanel(new BorderLayout());
-        JButton powerUps = new JButton("Use power up");
-        JButton info = new JButton("Player info");
-        buttons.add(powerUps);
-        buttons.add(info);
 
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -207,6 +202,11 @@ public class MapGui extends JFrame{
         powerUps.add(powerUp);
     }
 
+    public void substituteWeapon(int position){
+        //TODO send grabWeaponResponse
+        System.out.println(position);
+    }
+
     public void usePowerUp(int position, boolean granade){
         //client.send(new UsePowerUp(client.getToken(), position, ));
     }
@@ -246,63 +246,6 @@ public class MapGui extends JFrame{
     public void weaponChosen(String choose){
         //client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0), Character.getNumericValue(choose.charAt(2)))));
         System.out.println(choose);
-    }
-
-    private void addButtonListener(JButton info, JButton powerUp){
-        MapGui self = this;
-        info.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                new PlayerInformationGui(cardsWeapon);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
-        powerUp.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                new UsePowerUpGui(powerUps, self, false);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
     }
 
     private void addComponentListeners(){
@@ -432,7 +375,13 @@ public class MapGui extends JFrame{
                         System.out.println("pass");
                 }
                 else if (e.getX() > 890 * player.getWidth()/1120){
-                    new PlayerInformationGui(cardsWeapon);
+                    ammos[0] = 0;
+                    ammos[1] = 0;
+                    ammos[2] = 1;
+                    cardsWeapon.add("cyberblade");
+                    cardsWeapon.add("electroscyte");
+                    new PlayerInformationGui(cardsWeapon, ammos);
+                    new SubstituteWeaponGui(cardsWeapon, self);
                     System.out.println("info");
                 }
                 else if ( ((e.getX() > 615 * player.getWidth()/1120) && (e.getX() < (615+75) * player.getWidth()/1120)) && (e.getY() > 185 * player.getHeight()/274)) {
@@ -477,6 +426,10 @@ public class MapGui extends JFrame{
                 text.setText("");
             }
         });
+    }
+
+    public void setAmmo(int value, int position){
+
     }
 
     private void openWeaponDetail(int x, int y, boolean grab){
@@ -525,7 +478,9 @@ public class MapGui extends JFrame{
     }
 
     public void setCardsWeapon(ArrayList<CardWeapon> cards){
-        this.cardsWeapon = cards;
+        for (CardWeapon c: cards) {
+            this.cardsWeapon.add(c.getName());
+        }
     }
 
     public void setActionType(String actionType) {

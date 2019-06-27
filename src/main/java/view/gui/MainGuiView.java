@@ -33,7 +33,7 @@ public class MainGuiView extends View {
     private final String RULESWEBSITE = "https://czechgames.com/files/rules/adrenaline-rules-en.pdf";
 
     public MainGuiView(){
-        super();//TODO super(client);
+        super();
 
         int panelWidth = new Double(INITIALWINDOWHEIGHT *GOLDENRATIO).intValue();
 
@@ -152,6 +152,21 @@ public class MainGuiView extends View {
     @Override
     public void payment(Payment message) {
         mapGui.payment(message);
+    }
+
+    @Override
+    public void setBlueAmmo(int blueAmmo) {
+        mapGui.setAmmo(blueAmmo, 2);
+    }
+
+    @Override
+    public void setRedAmmo(int redAmmo) {
+        mapGui.setAmmo(redAmmo, 0);
+    }
+
+    @Override
+    public void setYellowAmmo(int yellowAmmo) {
+        mapGui.setAmmo(yellowAmmo, 1);
     }
 
     @Override
