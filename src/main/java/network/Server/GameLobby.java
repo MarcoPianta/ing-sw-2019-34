@@ -28,7 +28,7 @@ public class GameLobby {
         this.actionPerformed = new HashMap<>();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
-            this.gameHandler = new GameHandler(skullNumber, this.clients, map);
+            this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
             for(Player p: gameHandler.getGame().getPlayers()){
                 players.put(p.getPlayerID(), p);
             }

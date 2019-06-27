@@ -240,12 +240,12 @@ public class GameHandler {
                 massimo=winnerList.get(0).getPlayerBoard().getPoints(); //if winnerList is a new list
             }
         }
-        for(Player p:game.getPlayers()){
+        /*for(Player p:game.getPlayers()){
             if(winnerList.contains(p))
                 gameLobby.send(new WinnerMessage(p.getPlayerID(),true));
             else
                 gameLobby.send(new WinnerMessage(p.getPlayerID(),false));
-        }
+        }*/
     }
 
     /**
