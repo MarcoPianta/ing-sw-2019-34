@@ -18,7 +18,7 @@ public class FinalTurnHandlerTest {
         ArrayList<Integer> players=new ArrayList<>();
         players.add(32413);
         players.add(4324525);
-        GameHandler gameHandler=new GameHandler(5,players,"map1");
+        GameHandler gameHandler=new GameHandler(5,players,"map1",null);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getFirstPlayer());
         gameHandler.getGame().incrementCurrentPlayer();
         gameHandler.getFinalTurnHandler().getEndFinalTurnChecks().isFirstPlayer();
@@ -34,7 +34,7 @@ public class FinalTurnHandlerTest {
         ArrayList<Integer> players=new ArrayList<>();
         players.add(32413);
         players.add(4324525);
-        GameHandler gameHandler=new GameHandler(5,players,"map1");
+        GameHandler gameHandler=new GameHandler(5,players,"map1",null);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getFirstPlayer());
 
         gameHandler.getFinalTurnHandler().setFirstFinalTurnPlayer(gameHandler.getGame().getFirstPlayer());
@@ -49,7 +49,7 @@ public class FinalTurnHandlerTest {
 
         players.add(32413);
         players.add(4324525);
-        GameHandler gameHandler=new GameHandler(5,players,"map1");
+        GameHandler gameHandler=new GameHandler(5,players,"map1",null);
         PossibleMove possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),4);
         gameHandler.getGame().getDeadRoute().setFinalTurn(true);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getPlayers().get(0));
@@ -76,8 +76,8 @@ public class FinalTurnHandlerTest {
 
         playersTarget=gameHandler.receiveTarget(shotMessage);
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).setCharge(true);
-
-        Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),0);
+        //errror effetto è dato a pezzi
+        //Shot shot=new Shot(playersTarget,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).getEffects().get(0),0);
         //assertTrue(gameHandler.getTurnHandler().actionState(shot));
 
         //test Grab firstPlayer

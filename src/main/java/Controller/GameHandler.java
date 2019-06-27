@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.*;
+import network.Server.GameLobby;
 import network.messages.*;
 
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ public class GameHandler {
     private Player playerValid;// save player's position for action shot's valid
     private ActionValidController actionValidController;
     private PaymentController paymentController;
+    private GameLobby gameLobby;
 
 
     /**
@@ -23,7 +25,7 @@ public class GameHandler {
      * @param file  the map's file
      * @throws FileNotFoundException
      */
-    public GameHandler(int n, List<Integer> players, String file) throws FileNotFoundException {
+    public GameHandler(int n, List<Integer> players, String file, GameLobby gameLobby) throws FileNotFoundException {
         this.game = new Game(n,file);
         Colors[] colors=Colors.values();
         int i=0;
@@ -38,10 +40,15 @@ public class GameHandler {
         playerValid=game.getCurrentPlayer();
         getTurnHandler().start();
         this.actionValidController = new ActionValidController(this);
+        this.gameLobby=gameLobby;
     }
 
     public PaymentController getPaymentController() {
         return paymentController;
+    }
+
+    public GameLobby getGameLobby() {
+        return gameLobby;
     }
 
     public void setPlayerValid (Player playerValid) {
@@ -105,7 +112,7 @@ public class GameHandler {
         for(Player p:getGame().getPlayers())
             p.getPlayerBoard().getHealthPlayer().death();
         getGame().calculatePoints(getGame().getDeadRoute().getMurders(),true,null);
-        //messaggio server partita finita
+        winner();
     }
 
     /**
@@ -168,9 +175,10 @@ public class GameHandler {
         //verified if there is sight power up
         boolean isFind=false;
         for(int i=0;i<3 && !isFind;i++){
-            if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")){
+            if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
+                    && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWepon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
                 isFind=true;
-                //canUseScope(game.getCurrentPlayer());
+                getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
             }
         }
         return messageReturn;
@@ -215,9 +223,8 @@ public class GameHandler {
 
     /**
      * this method values who are/is win the game
-     * @return the list of the winner
      */
-    public List<Player> winner(){
+    public void winner(){
         int massimo=0;
         ArrayList<Player> winnerList=new ArrayList<>();
         for(Player player:getGame().getPlayers()){
@@ -233,7 +240,12 @@ public class GameHandler {
                 massimo=winnerList.get(0).getPlayerBoard().getPoints(); //if winnerList is a new list
             }
         }
-        return winnerList;
+        for(Player p:game.getPlayers()){
+            if(winnerList.contains(p))
+                gameLobby.send(new WinnerMessage(p.getPlayerID(),true));
+            else
+                gameLobby.send(new WinnerMessage(p.getPlayerID(),false));
+        }
     }
 
     /**

@@ -1,8 +1,10 @@
 package view.gui;
 
+import Model.CardWeapon;
 import Model.Colors;
 import network.Client.Client;
-import view.View;
+import network.messages.ChatMessage;
+import network.messages.Payment;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +15,6 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.*;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class MapGui extends JFrame{
     private Client client;
     private String actionType = "move"; //can assume values move indicating a move action. For shot action it assumes values: room, square. Or "null" if no action is monitored right now
     private int[] damagePosition = {110, 172, 240, 302, 364, 432, 494, 556, 618, 680, 748, 810};
+    private int[] marksPosition = {535, 575, 615, 655, 695, 735, 775, 815};
 
     private JPanel playerBoards;
     private JLabel map;
@@ -43,6 +45,10 @@ public class MapGui extends JFrame{
     private List<String> redCrosses;
     private String[] othersPosition = new String[4];
     private HashMap<String, String[]> spawnSquareWeapon;
+    private boolean myTurn;
+    private ArrayList<Colors> marks;
+    private ArrayList<CardWeapon> cardsWeapon;
+    private ArrayList<String> powerUps;
 
     public MapGui(Colors myColor, Client client){
         super("Adrenaline");
@@ -52,6 +58,9 @@ public class MapGui extends JFrame{
         this.setLayout(new GridBagLayout());
         this.client = client;
         this.redCrosses = new ArrayList<>();
+        this.marks = new ArrayList<>();
+        this.cardsWeapon = new ArrayList<>();
+        this.powerUps = new ArrayList<>();
         initializeSpawnWeapon();
 
         playerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + ".png");
@@ -103,6 +112,11 @@ public class MapGui extends JFrame{
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, chatPane, text);
         splitPane.setDividerLocation(0.5);
 
+        JPanel buttons = new JPanel(new BorderLayout());
+        JButton powerUps = new JButton("Use power up");
+        JButton info = new JButton("Player info");
+        buttons.add(powerUps);
+        buttons.add(info);
 
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -170,10 +184,40 @@ public class MapGui extends JFrame{
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             g.drawImage(imageColor, damagePosition[i] * currentPlayerBoard.getWidth() / 1120, 120 * currentPlayerBoard.getHeight() / 274, null);
             g.dispose();
-            Image playerBoaedResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
-            player.setIcon(new ImageIcon(playerBoaedResized));
+            Image playerBoardResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+            player.setIcon(new ImageIcon(playerBoardResized));
             i++;
         }
+    }
+
+    public void addMarks(Colors mark){
+        marks.add(mark);
+        int i = 0;
+        Image imageColor = createColorMarker(mark, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
+
+        Graphics2D g = currentPlayerBoard.createGraphics();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+        g.drawImage(imageColor, marksPosition[i] * currentPlayerBoard.getWidth() / 1120, 1, null);
+        g.dispose();
+        Image playerBoardResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+        player.setIcon(new ImageIcon(playerBoardResized));
+        i++;
+    }
+
+    public void addPowerUp(String powerUp){
+        powerUps.add(powerUp);
+    }
+
+    public void usePowerUp(int position, boolean granade){
+        //client.send(new UsePowerUp(client.getToken(), position, ));
+    }
+
+    public void canUseVenom(){
+        new UsePowerUpGUI(powerUps, this, true);
+    }
+
+    public void myTurn(boolean turn){
+        myTurn = turn;
     }
 
     public void updateOthersBar(ArrayList<Colors> damageBar, Colors player){
@@ -181,9 +225,9 @@ public class MapGui extends JFrame{
         for (Colors c: damageBar){
             Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            Image mark = createColorMarker(c, currentOtherPlayerBoards[enemies.get(player)].getWidth(), currentOtherPlayerBoards[enemies.get(player)].getHeight());
+            Image damage = createColorMarker(c, currentOtherPlayerBoards[enemies.get(player)].getWidth(), currentOtherPlayerBoards[enemies.get(player)].getHeight());
 
-            g.drawImage(mark, damagePosition[i] * currentOtherPlayerBoards[enemies.get(player)].getWidth() / 1120, 120 * currentOtherPlayerBoards[enemies.get(player)].getHeight() / 274, null);
+            g.drawImage(damage, damagePosition[i] * currentOtherPlayerBoards[enemies.get(player)].getWidth() / 1120, 120 * currentOtherPlayerBoards[enemies.get(player)].getHeight() / 274, null);
             g.dispose();
             i++;
         }
@@ -203,6 +247,63 @@ public class MapGui extends JFrame{
     public void weaponChosen(String choose){
         //client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0), Character.getNumericValue(choose.charAt(2)))));
         System.out.println(choose);
+    }
+
+    private void addButtonListener(JButton info, JButton powerUp){
+        MapGui self = this;
+        info.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new PlayerInformationGui(cardsWeapon);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        powerUp.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new UsePowerUpGUI(powerUps, self, false);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
     }
 
     private void addComponentListeners(){
@@ -248,7 +349,10 @@ public class MapGui extends JFrame{
                     }
                 }
                 else if (actionType.equals("room")){
-
+                    //client.send(new ShotResponse());
+                }
+                else if (actionType.equals("square")){
+                    //client.send(new ShotResponse());
                 }
                 updateEnemyPosition(Colors.BLUE, "0,0");
                 addWeaponToMap("1,0", 0, "cyberblade");
@@ -286,6 +390,7 @@ public class MapGui extends JFrame{
                     damagesList.add(Colors.BLUE);
                     damagesList.add(Colors.GREEN);
                     addDamage(damagesList);
+                    addMarks(Colors.BLUE);
                     //till here
                     int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
                     if (response == 0)
@@ -327,6 +432,14 @@ public class MapGui extends JFrame{
                     if (response == 0)
                         System.out.println("pass");
                 }
+                else if (e.getX() > 890 * player.getWidth()/1120){
+                    new PlayerInformationGui(cardsWeapon);
+                    System.out.println("info");
+                }
+                else if ( ((e.getX() > 615 * player.getWidth()/1120) && (e.getX() < (615+75) * player.getWidth()/1120)) && (e.getY() > 185 * player.getHeight()/274)) {
+                    new UsePowerUpGUI(powerUps, self, false);
+                    System.out.println("powerup");
+                }
             }
 
             @Override
@@ -360,6 +473,7 @@ public class MapGui extends JFrame{
                     chatLabel.setOpaque(false);
                     chatArea.add(chatLabel);
                     chatArea.revalidate();
+                    //client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
                 }
                 text.setText("");
             }
@@ -411,8 +525,16 @@ public class MapGui extends JFrame{
 
     }
 
+    public void setCardsWeapon(ArrayList<CardWeapon> cards){
+        this.cardsWeapon = cards;
+    }
+
     public void setActionType(String actionType) {
         this.actionType = actionType;
+    }
+
+    public void payment(Payment payment){
+        new PaymentGui(payment);
     }
 
     public void updateEnemyPosition(Colors player, String id){
@@ -476,6 +598,15 @@ public class MapGui extends JFrame{
 
     public static int getPlayerPosition(Colors color){
         return enemies.get(color);
+    }
+
+    public void updateChat(String message){
+        JLabel chatLabel = new JLabel(message);
+        chatLabel.setHorizontalTextPosition(JLabel.LEFT);
+        chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        chatLabel.setOpaque(false);
+        chatArea.add(chatLabel);
+        chatArea.revalidate();
     }
 
     public static void main(String[] args) {

@@ -128,7 +128,7 @@ public class TurnHandler {
             for(Player p:message.getTargets()) {
                 for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
                     if (powerUp.getWhen().equals("get")) {
-                        //canUseTagback(p.getPlayerID());
+                        gameHandler.getGameLobby().canUseTagBack(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getColor());
                     }
                 }
             }
@@ -152,6 +152,7 @@ public class TurnHandler {
                 if(valueReturn)
                     endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
             }
+            gameHandler.getGameLobby().send(new UpdateClient())
         }
         else if(message.getActionType()==ActionType.GRABAMMO){
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
@@ -165,7 +166,7 @@ public class TurnHandler {
         }
 
         if(valueReturn && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()==4)
-            {//substituteWeapons(gameHandler.getGame().getCurrentPlayer());
+            {gameHandler.getGameLobby().send(new SubstituteWeapon(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()));
             }
         return valueReturn;
     }
@@ -176,7 +177,9 @@ public class TurnHandler {
             UsePowerUp newMessage=(UsePowerUp)message;
             if((gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("during")
                     &&(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer())
-                    &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.WAIT)) ||
+                    &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.WAIT)&&(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getOtherMove()!=0
+                    && new Move(newMessage.getTarget(),newMessage.getSquare(),2).isValid()))
+                    ||
                     (gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("dealing")
                             &&(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer())))
                 valueReturn=true;
@@ -225,7 +228,7 @@ public class TurnHandler {
     }
 
     public void endTurn(){
-        //TODO messaggio che è finito turno
+
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
         gameHandler.getGame().incrementCurrentPlayer();
         setNextState(StateMachineEnumerationTurn.START);
