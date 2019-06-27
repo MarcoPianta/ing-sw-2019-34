@@ -3,7 +3,10 @@ package view.gui;
 import Model.CardWeapon;
 import Model.Colors;
 import network.Client.Client;
+<<<<<<< HEAD
 import network.messages.ChatMessage;
+=======
+>>>>>>> aeeff06194c641e6c818301bf72b780054ac60fe
 import network.messages.Payment;
 
 import javax.imageio.ImageIO;
@@ -213,7 +216,11 @@ public class MapGui extends JFrame{
     }
 
     public void canUseVenom(){
+<<<<<<< HEAD
         new UsePowerUpGUI(powerUps, this, true);
+=======
+        new UsePowerUpGui(powerUps, this, true);
+>>>>>>> aeeff06194c641e6c818301bf72b780054ac60fe
     }
 
     public void myTurn(boolean turn){
@@ -281,7 +288,11 @@ public class MapGui extends JFrame{
         powerUp.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+<<<<<<< HEAD
                 new UsePowerUpGUI(powerUps, self, false);
+=======
+                new UsePowerUpGui(powerUps, self, false);
+>>>>>>> aeeff06194c641e6c818301bf72b780054ac60fe
             }
 
             @Override
@@ -437,7 +448,11 @@ public class MapGui extends JFrame{
                     System.out.println("info");
                 }
                 else if ( ((e.getX() > 615 * player.getWidth()/1120) && (e.getX() < (615+75) * player.getWidth()/1120)) && (e.getY() > 185 * player.getHeight()/274)) {
+<<<<<<< HEAD
                     new UsePowerUpGUI(powerUps, self, false);
+=======
+                    new UsePowerUpGui(powerUps, self, false);
+>>>>>>> aeeff06194c641e6c818301bf72b780054ac60fe
                     System.out.println("powerup");
                 }
             }
@@ -485,7 +500,7 @@ public class MapGui extends JFrame{
             for (int a = 0; a < 3; a++){
                 if(!spawnSquareWeapon.get(s)[a].equals("")){
                     if (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
-                    && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928))){
+                            && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928))){
                         new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, grab);
                     }
                 }
@@ -496,9 +511,9 @@ public class MapGui extends JFrame{
     private String getSquareId(int x, int y){
         for (int i = 0; i < 12; i++){
             if ( ((x > ViewMap.getXCoordinates(ViewMap.getIds()[i]) * map.getWidth()/2545) &&
-                  (x < (ViewMap.getXCoordinates(ViewMap.getIds()[i])+350) * map.getWidth()/2545)) &&
-                  ((y > (ViewMap.getYCoordinates(ViewMap.getIds()[i])) * map.getHeight()/1928) &&
-                   (y < ((ViewMap.getYCoordinates(ViewMap.getIds()[i])+340) * map.getHeight()/1928))) ) {
+                    (x < (ViewMap.getXCoordinates(ViewMap.getIds()[i])+350) * map.getWidth()/2545)) &&
+                    ((y > (ViewMap.getYCoordinates(ViewMap.getIds()[i])) * map.getHeight()/1928) &&
+                            (y < ((ViewMap.getYCoordinates(ViewMap.getIds()[i])+340) * map.getHeight()/1928))) ) {
                 return ViewMap.getIds()[i];
             }
         }

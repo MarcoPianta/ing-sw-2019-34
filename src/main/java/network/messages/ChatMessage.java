@@ -1,3 +1,4 @@
+
 package network.messages;
 
 public class ChatMessage extends Message{
@@ -13,3 +14,4 @@ public class ChatMessage extends Message{
         return message;
     }
 }
+

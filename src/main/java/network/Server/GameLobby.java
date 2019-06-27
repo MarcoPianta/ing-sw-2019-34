@@ -5,9 +5,7 @@ import Model.*;
 import network.messages.*;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class GameLobby {
     private HashMap<Integer, Player> players;
@@ -17,6 +15,7 @@ public class GameLobby {
     private Integer currentPlayer; //token of the current player
     private ArrayList<Message> historyMessage;
     private boolean useScoop;
+    private HashMap<Integer, Boolean> actionPerformed;
 
     private String currentSquare;
 
@@ -26,6 +25,8 @@ public class GameLobby {
         this.currentPlayer = null;
         this.players = new HashMap<>();
         this.historyMessage = new ArrayList<>();
+        this.actionPerformed = new HashMap<>();
+        this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map,this);
             for(Player p: gameHandler.getGame().getPlayers()){
@@ -39,10 +40,29 @@ public class GameLobby {
     }
 
     public void startTurn(Integer token){
+        actionPerformed.replace(token, false);
         if (currentPlayer != null)
             server.send(new EndMessage(currentPlayer));
         server.send(new StartMessage(token, "turn", 0, ""));
         currentPlayer = token;
+        startTimer();
+    }
+
+    private void startTimer(){
+        int player = currentPlayer;
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (actionPerformed.get(player)){
+                    startTimer();
+                }
+                else {
+                    server.send(new TimeOut(player));
+                    //TODO tell controller to pass turn
+                }
+            }
+        }, 30000);
     }
 
     public ArrayList<Integer> getClients() {
@@ -94,7 +114,7 @@ public class GameLobby {
                 historyMessage=new ArrayList<>();
             }
             else{
-                int[] cost = new int[3];
+                Integer[] cost = new Integer[3];
                 cost[0]=gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getBlueCost();
                 cost[1]=gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getYellowCost();
                 cost[2]=gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getRedCost();
@@ -114,7 +134,7 @@ public class GameLobby {
         else if(message.getActionType().getAbbreviation().equals(ActionType.RELOAD.getAbbreviation())){
             ReloadMessage reloadMessage=(ReloadMessage) message;
             if(gameHandler.getActionValidController().actionValid(reloadMessage.getWeapon())){
-                int[] cost = new int[3];
+                Integer[] cost = new Integer[3];
                 cost[0]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getBlueCost();
                 cost[1]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getYellowCost();
                 cost[2]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getRedCost();
@@ -145,6 +165,10 @@ public class GameLobby {
         else if(message.getActionType().getAbbreviation().equals(ActionType.PAYMENTRESPONSE.getAbbreviation())) {
             PaymentResponse paymentResponse = (PaymentResponse) message;
             paymentServer(paymentResponse);
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())) {
+            ChatMessage chatMessage = (ChatMessage) message;
+            clients.forEach(x -> server.send(new ChatMessage(x, chatMessage.getMessage())));
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPONRESPONSE.getAbbreviation())){
             SubstituteWeaponResponse substituteWeaponResponse=(SubstituteWeaponResponse) message;

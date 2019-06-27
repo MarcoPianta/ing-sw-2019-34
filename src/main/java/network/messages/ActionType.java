@@ -39,7 +39,8 @@ public enum ActionType {
     GRABWEAPONREQUEST("Grab weapon request"),
     DISCONNECT("Disconnect"),
     PAYMENT("payment"),
-    PAYMENTRESPONSE("Payment Response");
+    PAYMENTRESPONSE("Payment Response"),
+    MESSAGE("Message");
 
 
     private String abbreviation;

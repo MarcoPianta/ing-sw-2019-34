@@ -6,7 +6,9 @@ import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
 import network.Client.Client;
 import network.messages.Payment;
+
 import network.messages.UsePowerUp;
+
 import view.View;
 import view.gui.actionHandler.CreateNewGame;
 
@@ -155,6 +157,7 @@ public class MainGuiView extends View {
     public void addPowerup(CardPowerUp powerUp) {
         mapGui.addPowerUp(powerUp.getName());
     }
+
 
     @Override
     public void chatMessage(String message) {
