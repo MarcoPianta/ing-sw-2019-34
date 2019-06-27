@@ -3,17 +3,17 @@ package network.messages;
 import java.util.ArrayList;
 
 public class Payment extends Message {
-    private int[] cost;
+    private Integer[] cost;
     private boolean powerUp;
 
-    public  Payment(Integer token,int[] cost, boolean powerUp){
+    public  Payment(Integer token,Integer[] cost, boolean powerUp){
         actionType=ActionType.PAYMENT;
         this.token=token;
         this.cost=cost;
         this.powerUp=powerUp;
     }
 
-    public int[] getCost() {
+    public Integer[] getCost() {
         return cost;
     }
 

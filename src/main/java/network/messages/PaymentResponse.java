@@ -7,11 +7,11 @@ public class PaymentResponse extends Message{
     private boolean usePowerUp;
     private boolean scoop;
     private List<Integer> powerUp;
-    private int [] cost;
+    private Integer [] cost;
     private Integer powerUpScoop;
     private String  colorScoop;
 
-    public  PaymentResponse(Integer token,List<Integer> powerUp,boolean usePowerUp, int[] cost,boolean scoop){
+    public  PaymentResponse(Integer token,List<Integer> powerUp,boolean usePowerUp, Integer[] cost,boolean scoop){
         actionType=ActionType.PAYMENTRESPONSE;
         this.token=token;
         this.powerUp=powerUp;
@@ -21,7 +21,7 @@ public class PaymentResponse extends Message{
         this.powerUpScoop=null;
         this.colorScoop=null;
     }
-    public  PaymentResponse(Integer token,List<Integer> powerUp,boolean usePowerUp, int[] cost,boolean scoop,String  colorScoop){
+    public  PaymentResponse(Integer token,List<Integer> powerUp,boolean usePowerUp, Integer[] cost,boolean scoop,String  colorScoop){
         actionType=ActionType.PAYMENTRESPONSE;
         this.token=token;
         this.powerUp=powerUp;
@@ -31,7 +31,7 @@ public class PaymentResponse extends Message{
         this.powerUpScoop=null;
         this.colorScoop=colorScoop;
     }
-    public  PaymentResponse(Integer token, List<Integer> powerUp, boolean usePowerUp, int[] cost, boolean scoop, Integer powerUpScoop){
+    public  PaymentResponse(Integer token, List<Integer> powerUp, boolean usePowerUp, Integer[] cost, boolean scoop, Integer powerUpScoop){
         actionType=ActionType.PAYMENTRESPONSE;
         this.token=token;
         this.powerUp=powerUp;
@@ -42,7 +42,7 @@ public class PaymentResponse extends Message{
         this.colorScoop=null;
     }
 
-    public int[] getCost() {
+    public Integer[] getCost() {
         return cost;
     }
 

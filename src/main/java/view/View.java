@@ -2,6 +2,7 @@ package view;
 
 import Model.*;
 import network.Client.Client;
+import network.messages.Payment;
 import network.messages.RespawnMessage;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public abstract class View {
     protected Integer posEffect;
     protected HashMap<Colors,Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
+    private boolean myTurn;
 
     public View(){
         this.weapons = new ArrayList<>(4);
@@ -62,7 +64,7 @@ public abstract class View {
 
     public abstract void showTargetMove(List<Colors> targets); //When need to be shown target which have to be moved for a weapon effect
 
-    public abstract void payment();
+    public abstract void payment(Payment message);
 
     public abstract void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player);
 
@@ -79,6 +81,8 @@ public abstract class View {
     public abstract void startGame();
 
     public abstract void startTurn();
+
+    public abstract void chatMessage(String message);
 
     public abstract void endGame(boolean winner);
 
@@ -129,5 +133,9 @@ public abstract class View {
 
     public void setOtherPosition(int player, String position){
         otherPlayersPosition[player] = position;
+    }
+
+    public void setMyTurn(boolean myTurn){
+        this.myTurn = myTurn;
     }
 }
