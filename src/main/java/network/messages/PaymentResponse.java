@@ -8,9 +8,16 @@ public class PaymentResponse extends Message{
     private boolean scoop;
     private List<Integer> powerUp;
     private int [] cost;
-    private Integer powerUpScoop;
-    private String  colorScoop;
+    private Integer powerUpScoop;//the position of powerUp to pay powerUp
+    private String  colorScoop;//r,y,b the ammo to pay powerUp
 
+    /**
+6     * constructor Payment response
+     * @param token
+     * @param powerUp list of powerUp to pay cost
+     * @param usePowerUp true indicate the payment with powerUp
+     * @param scoop true indicate the use of scoop powerup
+     */
     public  PaymentResponse(Integer token,List<Integer> powerUp,boolean usePowerUp, int[] cost,boolean scoop){
         actionType=ActionType.PAYMENTRESPONSE;
         this.token=token;

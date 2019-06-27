@@ -222,7 +222,7 @@ public class ViewCLI extends View {
                 corrected=true;
             }
             else if(i==5){
-                actionCLI.actionReload();
+                //actionCLI.actionReload();
                 corrected=true;
             }
             else if(i==6){
