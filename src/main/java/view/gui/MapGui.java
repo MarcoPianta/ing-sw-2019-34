@@ -3,7 +3,6 @@ package view.gui;
 import Model.CardWeapon;
 import Model.Colors;
 import network.Client.Client;
-import network.messages.ChatMessage;
 import network.messages.Payment;
 
 import javax.imageio.ImageIO;

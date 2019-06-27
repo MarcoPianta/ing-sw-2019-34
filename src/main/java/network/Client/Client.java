@@ -44,12 +44,19 @@ public abstract class Client {
             if (reloadedMessage.getStatus()){}
 
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.PAYMENT.getAbbreviation())) {
+            view.payment((Payment) message);
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.PAYMENT.getAbbreviation())){
+            view.payment((Payment) message);
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONRESPONSE.getAbbreviation())){
-            GrabWeaponResponse grabWeaponResponse = (GrabWeaponResponse) message;
+            GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
             //view.addWeapon();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
-            view.showVenomRequest();
+            CanUseTagBack canUseTagBack = (CanUseTagBack) message;
+            //view.showVenomRequest(canUseTagBack.getPlayerShooter());
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.START.getAbbreviation())){
             StartMessage startMessage = (StartMessage) message;
@@ -58,8 +65,15 @@ public abstract class Client {
             else if (startMessage.getType().equals("turn"))
                 view.startTurn();
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
+            ChatMessage chatMessage = (ChatMessage) message;
+            view.chatMessage(chatMessage.getMessage());
+        }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
             view.showGameSettingsRequest();
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.TIMEOUT.getAbbreviation())){
+            view.setMyTurn(false);
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.WINNER.getAbbreviation())){
             WinnerMessage winnerMessage = (WinnerMessage) message;
@@ -92,8 +106,9 @@ public abstract class Client {
         else if (message.getUpdateType().equals(UpdateClient.POSSIBLESQUARES))
             view.showReachableSquares(message.getReachableSquares());
 
-        else if (message.getUpdateType().equals(UpdateClient.POSSIBLETARGET))
-            view.showPossibleTarget(message.getReachableTarget());
+        else if (message.getUpdateType().equals(UpdateClient.POSSIBLETARGET)){
+            //view.showPossibleTarget(message.getReachableTarget());
+        }
 
         else if (message.getUpdateType().equals(UpdateClient.RESPAWN)) {
             view.addPowerup(message.getPowerUp());

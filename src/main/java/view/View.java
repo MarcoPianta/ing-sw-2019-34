@@ -2,6 +2,7 @@ package view;
 
 import Model.*;
 import network.Client.Client;
+import network.messages.Payment;
 import network.messages.RespawnMessage;
 
 import java.util.ArrayList;
@@ -14,35 +15,63 @@ import java.util.List;
 public abstract class View {
     protected Client client;
 
-    protected ArrayList<CardWeapon> weapons; /**The weapons owned from hte player*/
-    protected int blueAmmo; /**Number of blue ammo*/
-    protected int redAmmo; /**Number of red ammo*/
-    protected int yellowAmmo; /**Number of yellow ammo*/
-    protected ArrayList<Colors> damageBar; /**The player damage bar, is an array*/
+    protected ArrayList<CardWeapon> weapons;
+    /**
+     * The weapons owned from hte player
+     */
+    protected int blueAmmo;
+    /**
+     * Number of blue ammo
+     */
+    protected int redAmmo;
+    /**
+     * Number of red ammo
+     */
+    protected int yellowAmmo;
+    /**
+     * Number of yellow ammo
+     */
+    protected ArrayList<Colors> damageBar;
+    /**
+     * The player damage bar, is an array
+     */
     protected ArrayList<Colors> marks;
-    protected ArrayList<CardPowerUp> powerUps; /**The powerUps owned from the player*/
+    protected ArrayList<CardPowerUp> powerUps;
+    /**
+     * The powerUps owned from the player
+     */
     protected GameBoard map;
-    protected int maxReward; /**The max reward gained from other players when player die*/
-    protected String myPositionID; /**This variable contains the ID of player's current square */
-    protected String[] otherPlayersPosition = new String[4]; /**This ArrayList contains the IDs of the square where other players are on*/
+    protected int maxReward;
+    /**
+     * The max reward gained from other players when player die
+     */
+    protected String myPositionID;
+    /**
+     * This variable contains the ID of player's current square
+     */
+    protected String[] otherPlayersPosition = new String[4];
+    /**
+     * This ArrayList contains the IDs of the square where other players are on
+     */
     protected HashMap<String, Boolean> charge;
     protected Integer posWeapon;
     protected Integer posEffect;
-    protected HashMap<Colors,Integer> players;//bisogna inizializzare
+    protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
+    private boolean myTurn;
 
-    public View(){
+    public View() {
         this.weapons = new ArrayList<>(4);
         while (weapons.size() < 4)
             weapons.add(null);
 
         this.blueAmmo = this.redAmmo = this.yellowAmmo = 1;
         this.damageBar = new ArrayList<>();
-        while (damageBar.size()<12)
+        while (damageBar.size() < 12)
             damageBar.add(Colors.NULL);
 
         this.marks = new ArrayList<>();
-        while (marks.size()<12)
+        while (marks.size() < 12)
             marks.add(Colors.NULL);
 
         this.powerUps = new ArrayList<>();
@@ -62,7 +91,7 @@ public abstract class View {
 
     public abstract void showTargetMove(List<Colors> targets); //When need to be shown target which have to be moved for a weapon effect
 
-    public abstract void payment();
+    public abstract void payment(Payment message);
 
     public abstract void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player);
 
@@ -80,19 +109,23 @@ public abstract class View {
 
     public abstract void startTurn();
 
+    public abstract void chatMessage(String message);
+
     public abstract void endGame(boolean winner);
 
     /**
      * This method add a weapon to the player hand
+     *
      * @param cardWeapon the weapon
-     * @param position the arrayList position
+     * @param position   the arrayList position
      */
-    public void addWeapon(CardWeapon cardWeapon, int position){
+    public void addWeapon(CardWeapon cardWeapon, int position) {
         weapons.set(position, cardWeapon);
     }
 
     /**
      * This method is used to set the new damageBar received from server.
+     *
      * @param damageBar an ArrayList conayining the new damageBar
      */
     public void setDamageBar(List<Colors> damageBar) {
@@ -103,7 +136,7 @@ public abstract class View {
         this.myPositionID = myPositionID;
     }
 
-    public void addPowerup(CardPowerUp powerUp){
+    public void addPowerup(CardPowerUp powerUp) {
         powerUps.add(powerUp);
     }
 
@@ -123,11 +156,15 @@ public abstract class View {
         this.yellowAmmo = yellowAmmo;
     }
 
-    public void respawnResponse(Integer powerUp){
+    public void respawnResponse(Integer powerUp) {
         client.send(new RespawnMessage(client.getToken(), powerUp));
     }
 
-    public void setOtherPosition(int player, String position){
+    public void setOtherPosition(int player, String position) {
         otherPlayersPosition[player] = position;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
     }
 }
