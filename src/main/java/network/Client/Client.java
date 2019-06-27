@@ -1,10 +1,10 @@
 package network.Client;
 
-import Model.Colors;
-import Model.NormalSquare;
-import Model.Player;
+import Model.*;
 import network.messages.*;
 import view.View;
+
+import java.util.ArrayList;
 
 /**
  * This Class represents the client, it is extended from the Socket or RMI client.
@@ -114,7 +114,16 @@ public abstract class Client {
             view.addPowerup(message.getPowerUp());
             view.showPowerUpChooseRespawn();
         }
-
+        else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
+            view.setBlueAmmo(message.getHandPlayer().getAmmoRYB()[2]);
+            view.setRedAmmo(message.getHandPlayer().getAmmoRYB()[0]);
+            view.setYellowAmmo(message.getHandPlayer().getAmmoRYB()[1]);
+            view.setPowerUps((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
+            view.setWeapons((ArrayList<CardWeapon>) message.getHandPlayer().getPlayerWeapons());
+        }
+        else if(message.getUpdateType().equals(UpdateClient.MAP)){
+            view.setMap(message.getMap());
+        }
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());
     }

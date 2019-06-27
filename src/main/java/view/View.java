@@ -140,6 +140,18 @@ public abstract class View {
         powerUps.add(powerUp);
     }
 
+    public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
+        this.powerUps = powerUps;
+    }
+
+    public void setWeapons(ArrayList<CardWeapon> weapons) {
+        this.weapons = weapons;
+    }
+
+    public void setMap(GameBoard map) {
+        this.map = map;
+    }
+
     public ArrayList<CardPowerUp> getPowerUps() {
         return powerUps;
     }
@@ -167,6 +179,7 @@ public abstract class View {
     public void setMyTurn(boolean myTurn){
         this.myTurn = myTurn;
     }
+
 }
 
 

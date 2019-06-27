@@ -1,9 +1,6 @@
 package network.messages;
 
-import Model.CardPowerUp;
-import Model.Colors;
-import Model.NormalSquare;
-import Model.Player;
+import Model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,8 @@ public class UpdateClient extends Message {
     private ArrayList<String> reachableTarget; //ArrayList of possible target Players' square ID
     private String type; //Type of update (position, damageBar, etc.)
     private CardPowerUp powerUp;
+    private Hand handPlayer;
+    private GameBoard map;
     private String textMessage;
 
     private void setMessageInfo(Integer token, String type){
@@ -70,6 +69,17 @@ public class UpdateClient extends Message {
             this.reachableTarget.add(p.getPosition().getId());
     }
 
+    public UpdateClient(Integer token, Hand handPlayer){
+        setMessageInfo(token, HANDPLAYER);
+        this.handPlayer = handPlayer;
+    }
+
+    public UpdateClient(Integer token, GameBoard map){
+        setMessageInfo(token, HANDPLAYER);
+        this.map = map;
+    }
+
+
     public UpdateClient(Integer token, CardPowerUp powerUp){
         setMessageInfo(token, RESPAWN);
         this.powerUp = powerUp;
@@ -98,6 +108,11 @@ public class UpdateClient extends Message {
     public static final String POSITION = "POSITION";
     public static final String RESPAWN = "RESPAWN";
     public static final String MESSAGE = "MESSAGE";
+    public static final String HANDPLAYER = "HANDPLAYER";
+    public static final String MAP= "MAP";
+
+
+
 
 
     public ArrayList<String> getReachableTarget() {
@@ -122,5 +137,14 @@ public class UpdateClient extends Message {
 
     public String getMessage() {
         return textMessage;
+    }
+
+
+    public Hand getHandPlayer() {
+        return handPlayer;
+    }
+
+    public GameBoard getMap() {
+        return map;
     }
 }
