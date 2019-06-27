@@ -58,8 +58,9 @@ public class HandTest {
         newPlayerWeapons.add(cardWeapon2);
         newPlayerWeapons.add(cardWeapon4);
 
-        player.getPlayerBoard().getHandPlayer().substituteWeapons(newPlayerWeapons);
-        assertEquals(newPlayerWeapons,player.getPlayerBoard().getHandPlayer().getPlayerWeapons());
+        player.getPlayerBoard().getHandPlayer().substituteWeapons(1);
+        assertEquals(3,player.getPlayerBoard().getHandPlayer().getPlayerWeapons().size());
+        assertEquals(cardWeapon2,player.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
     }
 
     /**
@@ -141,7 +142,7 @@ public class HandTest {
         ArrayList<Integer> tokens=new ArrayList<>();
         tokens.add(1322);
         tokens.add(32525);
-        GameHandler gameHandler=new GameHandler(5,tokens,"map1");
+        GameHandler gameHandler=new GameHandler(5,tokens,"map1",null);
         CardPowerUp cardPowerUp = new CardPowerUp(PowerUpEnum.NEWTON_B.getAbbreviation());
         gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().addPowerUp(cardPowerUp);
         gameHandler.getGame().getPlayers().get(1).spawn(2);
