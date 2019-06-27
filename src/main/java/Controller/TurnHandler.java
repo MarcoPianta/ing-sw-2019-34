@@ -42,6 +42,7 @@ public class TurnHandler {
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8){
             gameHandler.getGame().getCurrentPlayer().spawn(2);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1,1,1);
+            gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
         }
         setNextState(StateMachineEnumerationTurn.ACTION1);
         gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());
@@ -67,7 +68,10 @@ public class TurnHandler {
         boolean valueReturn;
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
-            valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 3).execute();}
+            valueReturn= new Move(newMessage.getPlayerTarget(),newMessage.getNewSquare(), 3).execute();
+            if(valueReturn)
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(),newMessage.getPlayerTarget().getPosition()))
+        }
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
             if(newMessage.getPowerUp()!=null){
@@ -149,20 +153,31 @@ public class TurnHandler {
             cost.add(gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getRedCost());
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(cost,false)){
                 valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon())).execute();
-                if(valueReturn)
+                if(valueReturn){
                     endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
+                    //weapon charge and update
+                    gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()-1).setCharge(true);
+                    gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
+
+                }
             }
-            gameHandler.getGameLobby().send(new UpdateClient())
+
         }
         else if(message.getActionType()==ActionType.GRABAMMO){
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
-            if(valueReturn)
+            if(valueReturn){
                 endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
+                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
+
+            }
         }
         else{
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardNotOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
-            if(valueReturn)
+            if(valueReturn){
                 endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
+                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
+            }
+
         }
 
         if(valueReturn && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()==4)
@@ -224,6 +239,9 @@ public class TurnHandler {
         valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
 
         setNextState(StateMachineEnumerationTurn.ENDTURN);
+        if(valueReturn)
+            gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
+
         return valueReturn;
     }
 
@@ -278,6 +296,9 @@ public class TurnHandler {
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardAmmoDrawer().draw());
                 emptySquares.remove(i);
                 i--;
+            }
+            for(Player p: game.getPlayers()){
+                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),game.getMap()));
             }
         }
 

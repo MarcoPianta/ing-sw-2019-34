@@ -14,7 +14,7 @@ public class PaymentController {
         this.gameHandler=gameHandler;
     }
 
-    public boolean payment(int[] cost, List<Integer> powerUps){
+    public boolean payment(Integer[] cost, List<Integer> powerUps){
         if(isValidPayment(cost, powerUps))
             return false;
         boolean x;
@@ -44,7 +44,7 @@ public class PaymentController {
      * this method serves to pay the effect o reload,
      * @param cost is the cost to pay
      */
-    public boolean payment(int[] cost){
+    public boolean payment(Integer[] cost){
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost[0], cost[1], cost[2]);
         return true;
     }
@@ -88,7 +88,7 @@ public class PaymentController {
         return valueReturn;
     }
 
-    private boolean isValidPayment(int[] cost, List<Integer> powerUps){
+    private boolean isValidPayment(Integer[] cost, List<Integer> powerUps){
         for(Integer i:powerUps){
             if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0)
                 cost[0]--;

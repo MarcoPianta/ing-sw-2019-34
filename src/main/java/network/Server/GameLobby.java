@@ -92,7 +92,7 @@ public class GameLobby {
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
             if (receiveTargetSquare.getType().equals("grab")){
                 if (!gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).isSpawn()) {
-                    gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                    gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
                     gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()));
                     historyMessage = new ArrayList<>();
                 }
@@ -101,7 +101,7 @@ public class GameLobby {
                 }
             }
             else if (receiveTargetSquare.getType().equals("move")){
-                gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                gameHandler.receiveServerMessage(new MoveMessage(message.getToken(),gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
                 historyMessage= new ArrayList<>();
             }
         }

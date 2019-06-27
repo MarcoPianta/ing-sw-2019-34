@@ -12,7 +12,7 @@ public class GameHandler {
     private Game game;
     private FinalTurnHandler finalTurnHandler;
     private TurnHandler turnHandler;
-    private Player playerValid;// save player's position for action shot's valid
+    private Player playerValid;// save player's position for action shot's valid ????
     private ActionValidController actionValidController;
     private PaymentController paymentController;
     private GameLobby gameLobby;
