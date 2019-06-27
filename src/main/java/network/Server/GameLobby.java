@@ -169,6 +169,7 @@ public class GameLobby {
         else if(message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())) {
             ChatMessage chatMessage = (ChatMessage) message;
             clients.forEach(x -> server.send(new ChatMessage(x, chatMessage.getMessage())));
+        }
         else if(message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPONRESPONSE.getAbbreviation())){
             SubstituteWeaponResponse substituteWeaponResponse=(SubstituteWeaponResponse) message;
             players.get(substituteWeaponResponse.getToken()).getPlayerBoard().getHandPlayer().substituteWeapons(substituteWeaponResponse.getWeapon());
