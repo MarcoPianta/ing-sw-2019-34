@@ -1,15 +1,18 @@
 package network.messages;
 
-public class CanUseTagBack extends Message{
-    private Integer index;
+import Model.Colors;
 
-    public CanUseTagBack(Integer token){
+public class CanUseTagBack extends Message{
+    private Colors playerShooter;
+
+
+    public CanUseTagBack(Integer token, Colors playerShooter){
         this.token = token;
         this.actionType = ActionType.CANUSEVENOM;
-        this.index = index;
+        this.playerShooter = playerShooter;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Colors getPlayerShooter() {
+        return playerShooter;
     }
 }

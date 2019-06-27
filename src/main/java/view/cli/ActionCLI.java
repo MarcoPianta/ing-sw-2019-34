@@ -29,7 +29,7 @@ public class ActionCLI extends ViewCLI {
             while (!corrected) {
                 i = in.nextInt();
                 if (i >= 1 && i <= powerUps.size()) {
-                    //if(powerUps.get(i-1).getMyMove().)
+                    if(powerUps.get(i-1).getMyMove().)
                     for ( i = 1; i <= players.size(); i++)
                         out.println(i + ":" +playersColor.get(i-1)+ "\t");
 
@@ -37,7 +37,7 @@ public class ActionCLI extends ViewCLI {
                     while (!corrected) {
                         int player= in.nextInt();
                         if (player >= 1 && i <= playersColor.size()) {
-                            //client.send(new UsePowerUp(client.getToken(),i-1,client,playersColor.get(player-1),));
+                            client.send(new UsePowerUp(client.getToken(),i-1,client,playersColor.get(player-1),));
                             corrected = true;
                         }
                         else if(i==9) {
@@ -53,7 +53,7 @@ public class ActionCLI extends ViewCLI {
                             out.println("choose a number from 1 to " + playersColor.size() + "\n");
                         }
                     }
-                    //client.send(new UsePowerUp(client.getToken(),i-1,e,3));
+                    client.send(new UsePowerUp(client.getToken(),i-1,e,3));
                     corrected = true;
                 }
                 else if(i==9){

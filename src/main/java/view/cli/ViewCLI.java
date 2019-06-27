@@ -255,7 +255,7 @@ public class ViewCLI extends View {
                 corrected=true;
             }
             else if(i==5){
-                //TODO actionCLI.actionReload();
+                //actionCLI.actionReload();
                 corrected=true;
             }
             else if(i==6){

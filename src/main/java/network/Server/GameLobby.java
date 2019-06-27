@@ -28,7 +28,7 @@ public class GameLobby {
         this.actionPerformed = new HashMap<>();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
-            this.gameHandler = new GameHandler(skullNumber, this.clients, map);
+            this.gameHandler = new GameHandler(skullNumber, this.clients, map,this);
             for(Player p: gameHandler.getGame().getPlayers()){
                 players.put(p.getPlayerID(), p);
             }
@@ -127,7 +127,7 @@ public class GameLobby {
         else if (message.getActionType().getAbbreviation().equals(ActionType.RESPAWN.getAbbreviation())) {
             RespawnMessage respawnMessage = (RespawnMessage) message;
             //HASH table per repawn message
-            //players.get(respawnMessage.getToken()).calculateNewPosition(respawnMessage.getPowerUp());
+            players.get(respawnMessage.getToken()).calculateNewPosition(players.get(respawnMessage.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(respawnMessage.getPowerUp()));
             server.send(new UpdateClient(respawnMessage.getToken(), players.get(respawnMessage.getToken()).getPosition()));
             historyMessage=new ArrayList<>();
         }
@@ -144,8 +144,10 @@ public class GameLobby {
             else
                 server.send( new UpdateClient(reloadMessage.getToken(),"you can't recharge the weapon"));
         }
-        else if(message.getActionType().getAbbreviation().equals(ActionType.USEPOWERUP.getAbbreviation())){
-            if(gameHandler.receiveServerMessage(message)){
+        //players.get(players.getId) in ingresso il token
+        else if(message.getActionType().getAbbreviation().equals(ActionType.USEPOWERUPRESPONSE.getAbbreviation())){
+            UsePowerUpResponse usePowerUpResponse=(UsePowerUpResponse) message;
+            if(gameHandler.receiveServerMessage(new UsePowerUp(message.getToken(),usePowerUpResponse.getPowerUp(),players.get(usePowerUpResponse.getUser()),players.get(usePowerUpResponse.getUser()),usePowerUpResponse.getSquare()))){
                 server.send( new UpdateClient(message.getToken(),"The use of the power up was successful"));
                 historyMessage=new ArrayList<>();
             }
@@ -167,6 +169,9 @@ public class GameLobby {
         else if(message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())) {
             ChatMessage chatMessage = (ChatMessage) message;
             clients.forEach(x -> server.send(new ChatMessage(x, chatMessage.getMessage())));
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPONRESPONSE.getAbbreviation())){
+            SubstituteWeaponResponse substituteWeaponResponse=(SubstituteWeaponResponse) message;
+            players.get(substituteWeaponResponse.getToken()).getPlayerBoard().getHandPlayer().substituteWeapons(substituteWeaponResponse.getWeapon());
         }
     }
 
@@ -255,12 +260,12 @@ public class GameLobby {
         server.send(new UpdateClient(token, powerUp));
     }
 
-    public void canuseScoop(Integer player){
-        useScoop = true;
+    public void canUseScoop(Integer player){
+        server.send(new CanUseScoop(player));
     }
 
-    public void canUseTagBack(Integer player){
-        server.send(new CanUseTagBack(player));
+    public void canUseTagBack(Integer player,Colors playerShooter){
+        server.send(new CanUseTagBack(player,playerShooter));
     }
 
     public void endGame(Integer winner){

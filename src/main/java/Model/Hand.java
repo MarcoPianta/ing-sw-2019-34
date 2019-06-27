@@ -67,10 +67,9 @@ public class Hand {
     /**
      *this method substitute weapons when the player has three weapons and wants a new weapon
      * */
-    public void substituteWeapons(List<CardWeapon> newPlayerWeapons){
-        for(int i=0; i<3 ;i++){
-            playerWeapons.set(i,newPlayerWeapons.get(i));
-        }
+    public void substituteWeapons(int weaponPosition){
+        playerWeapons.remove(weaponPosition);
+
     }
 
     /**

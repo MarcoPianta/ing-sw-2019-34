@@ -1,12 +1,9 @@
 package view.gui;
 
-import Model.CardPowerUp;
 import Model.Colors;
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
 import network.Client.Client;
-import network.messages.Payment;
-import network.messages.UsePowerUp;
 import view.View;
 import view.gui.actionHandler.CreateNewGame;
 
@@ -152,22 +149,6 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void addPowerup(CardPowerUp powerUp) {
-        mapGui.addPowerUp(powerUp.getName());
-    }
-
-    @Override
-    public void chatMessage(String message) {
-        mapGui.updateChat(message);
-    }
-
-    @Override
-    public void setMyTurn(boolean myTurn) {
-        super.setMyTurn(myTurn);
-        mapGui.myTurn(myTurn);
-    }
-
-    @Override
     public void showReachableSquares(List<String> squares) {
         mapGui.setActionType("move");
         List<String> ids = Arrays.asList(ViewMap.getIds());
@@ -192,9 +173,9 @@ public class MainGuiView extends View {
 
     @Override
     public void showVenomRequest(Colors playerColor) {
-        int value = JOptionPane.showConfirmDialog(mapGui, playerColor + "Hurt you, do you want to use tag back granade?");
-        if (value == 0)
-            mapGui.canUseVenom();
+        int value = JOptionPane.showConfirmDialog(mapGui, "");
+        //if (value == 1)
+        //client.send(new UsePowerUp(client.getToken(), ));
     }
 
     @Override
@@ -254,10 +235,7 @@ public class MainGuiView extends View {
         mapGui.updateEnemyPosition(player, position);
     }
 
-    @Override
-    public void payment(Payment message){
-        mapGui.payment(message);
-    }
+    public void payment(){}
 
     public static void setUIManager() {
         try {
