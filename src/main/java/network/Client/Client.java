@@ -97,8 +97,10 @@ public abstract class Client {
     public abstract void send(Message message);
 
     public void handleUpdate(UpdateClient message){
-        if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE))
+        if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE)){
             view.setDamageBar(message.getDamageBar());
+            view.setMarks(message.getMarks());
+        }
 
         else if (message.getUpdateType().equals(UpdateClient.POSITION))
             view.setMyPositionID(message.getSquareID());

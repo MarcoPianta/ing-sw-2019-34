@@ -13,7 +13,9 @@ public class UpdateClient extends Message {
     private String type; //Type of update (position, damageBar, etc.)
     private CardPowerUp powerUp;
     private Hand handPlayer;
-    private GameBoard map;
+    private CardWeapon weapon;
+    private CardAmmo ammo;
+    private ArrayList<Colors> marks;
     private String textMessage;
 
     private void setMessageInfo(Integer token, String type){
@@ -27,12 +29,17 @@ public class UpdateClient extends Message {
      * @param token token of the clients who need to be updated
      * @param damageBar the array which contains the new damageBar to send to the client
      */
-    public UpdateClient(Integer token, Player[] damageBar){
+    public UpdateClient(Integer token, List<Player> damageBar,List<Player> marks){
         setMessageInfo(token, DAMAGEBARUPDATE);
         this.damageBar = new ArrayList<>();
         for (Player p: damageBar){
             this.damageBar.add(p.getColor());
         }
+        this.marks = new ArrayList<>();
+        for (Player p: marks){
+            this.marks.add(p.getColor());
+        }
+
     }
 
     /**
@@ -74,15 +81,19 @@ public class UpdateClient extends Message {
         this.handPlayer = handPlayer;
     }
 
-    public UpdateClient(Integer token, GameBoard map){
-        setMessageInfo(token, HANDPLAYER);
-        this.map = map;
-    }
-
-
     public UpdateClient(Integer token, CardPowerUp powerUp){
         setMessageInfo(token, RESPAWN);
         this.powerUp = powerUp;
+    }
+    public UpdateClient(Integer token, String squareId,CardWeapon weapon){
+        setMessageInfo(token, RESPAWN);
+        this.squareID=squareId;
+        this.weapon=weapon;
+    }
+    public UpdateClient(Integer token, String squareId,CardAmmo ammo){
+        setMessageInfo(token, RESPAWN);
+        this.squareID=squareId;
+        this.ammo=ammo;
     }
 
     /**
@@ -109,11 +120,8 @@ public class UpdateClient extends Message {
     public static final String RESPAWN = "RESPAWN";
     public static final String MESSAGE = "MESSAGE";
     public static final String HANDPLAYER = "HANDPLAYER";
-    public static final String MAP= "MAP";
-
-
-
-
+    public static final String FILLSPAWN = " FILL SPAWN";
+    public static final String FILLSQUARE= " FILL SQUARE";
 
     public ArrayList<String> getReachableTarget() {
         return reachableTarget;
@@ -139,12 +147,19 @@ public class UpdateClient extends Message {
         return textMessage;
     }
 
+    public CardAmmo getAmmo() {
+        return ammo;
+    }
 
     public Hand getHandPlayer() {
         return handPlayer;
     }
 
-    public GameBoard getMap() {
-        return map;
+    public CardWeapon getWeapon() {
+        return weapon;
+    }
+
+    public ArrayList<Colors> getMarks() {
+        return marks;
     }
 }

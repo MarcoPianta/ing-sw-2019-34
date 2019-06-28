@@ -148,6 +148,10 @@ public abstract class View {
         this.weapons = weapons;
     }
 
+    public void setMarks(ArrayList<Colors> marks) {
+        this.marks = marks;
+    }
+
     public void setMap(GameBoard map) {
         this.map = map;
     }
