@@ -228,9 +228,35 @@ public class Shoot implements Action{
         }
     }
 
-    /**
-     * @return the list of Player that can be targeted by the actorPlayer
-     */
+
+    public List<NormalSquare> reachableRoom() {
+        ArrayList<Colors> roomList = new ArrayList<>();
+        List<NormalSquare> squareList = new ArrayList<>();
+        if(roomList.contains(shooterPlayer.getPosition().getN()) && shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor()) {
+            roomList.add(shooterPlayer.getPosition().getN().getColor());
+        }
+        if(roomList.contains(shooterPlayer.getPosition().getE()) && shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor()) {
+            roomList.add(shooterPlayer.getPosition().getE().getColor());
+        }
+        if(roomList.contains(shooterPlayer.getPosition().getS()) && shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor()) {
+            roomList.add(shooterPlayer.getPosition().getS().getColor());
+        }
+        if(roomList.contains(shooterPlayer.getPosition().getW()) && shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor()) {
+            roomList.add(shooterPlayer.getPosition().getW().getColor());
+        }
+        for (int i = 0; i < shooterPlayer.getGameId().getMap().getRooms().size(); i++) {
+            if(roomList.contains(shooterPlayer.getGameId().getMap().getRooms().get(i).getColor())){
+                squareList.addAll(shooterPlayer.getGameId().getMap().getRooms().get(i).getNormalSquares());
+            }
+        }
+
+        return squareList;
+    }
+
+
+        /**
+         * @return the list of Player that can be targeted by the actorPlayer
+         */
     public List<Player> targetablePlayer(){
         ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
         reachablePlayer.remove(shooterPlayer);
@@ -259,7 +285,7 @@ public class Shoot implements Action{
      * This method damage the target
      */
     private void injureTarget(Player targetPlayer, int damage){
-        targetPlayer.getPlayerBoard().getHealthPlayer().addMark(shooterPlayer, damage);
+        targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
     }
 
     private void execP(){

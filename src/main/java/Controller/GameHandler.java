@@ -142,83 +142,104 @@ public class GameHandler {
     /**
      * this method  verified the first action that the player can do, in basic adrenaline action and final turn
      * @param message  indicates the type of action that the player want do
-     * @return a updateClient message with a list of possible target or possible move
      */
-    public UpdateClient firstPartAction(ReceiveTargetSquare message){
+    public void firstPartAction(ReceiveTargetSquare message){
         UpdateClient messageReturn;
         if(message.getType().equals("shoot"))
-            messageReturn=receiveShoot(message);
+            receiveShoot(message);
         else if(message.getType().equals("grab"))
-            messageReturn=receiveGrab(message);
+            receiveGrab(message);
         else
-            messageReturn=receiveMove(message);
-        return messageReturn;
+            receiveMove(message);
     }
 
     /**
      * this method  verified the first action shoot that the player can do, in basic adrenaline action and final turn
      * @param message  indicates only the token for updateClient
-     * @return a updateClient message with a list of possible target or possible move
      */
-    private UpdateClient receiveShoot(ReceiveTargetSquare message){
-        UpdateClient messageReturn=new UpdateClient(null,(ArrayList<NormalSquare>)null);
+    private void receiveShoot(ReceiveTargetSquare message){
         if(getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
                 &&!getGame().getDeadRoute().isFinalTurn())
-            messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
-                ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 ) &&!getGame().getDeadRoute().isFinalTurn())
-            messageReturn= new UpdateClient(message.getToken(),(ArrayList<Player>)new  Shoot(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWepon()).getEffects().get(message.getPosEffect()),getGame().getCurrentPlayer(), null, null, false).targetablePlayer());
+                ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 ) &&!getGame().getDeadRoute().isFinalTurn()) {
+
+            Effect effect = game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect());
+            String actionSequence = effect.getActionSequence();
+            if (actionSequence.charAt(0) == 'p') {
+                ArrayList<Integer> targetToken = new ArrayList<>();
+                for (Player target: new Shoot(effect, game.getCurrentPlayer(), null).targetablePlayer()) {
+                    targetToken.add(target.getPlayerID());
+                }
+                gameLobby.send(new ShootRequestp(message.getToken(), effect.getTargetNumber(), targetToken));
+
+            } else if (actionSequence.charAt(0) == 's') {
+                ArrayList<String> targetID = new ArrayList<>();
+                for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
+                    targetID.add(target.getId());
+                }
+                gameLobby.send(new ShootRequests(message.getToken(), effect.getSquareNumber(), targetID));
+
+            } else if (actionSequence.charAt(0) == 'r') {
+                ArrayList<String> targetID = new ArrayList<>();
+                for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableRoom()) {
+                    targetID.add(target.getId());
+                }
+                gameLobby.send(new ShootRequestr(message.getToken(), targetID));
+
+            }else if (actionSequence.charAt(0) == 'M') {
+                ArrayList<String> targetID = new ArrayList<>();
+                for (NormalSquare target: new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()) {
+                    targetID.add(target.getId());
+                }
+                gameLobby.send(new UpdateClient(message.getToken(), targetID));
+
+            }
+        }
         else if (getGame().getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
-            messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare()));
         else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
-            messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         //verified if there is sight power up
         boolean isFind=false;
         for(int i=0;i<3 && !isFind;i++){
             if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
-                    && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWepon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
+                    && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
                 isFind=true;
                 getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
             }
         }
-        return messageReturn;
     }
 
     /**
      * this method  verified the first action grab that the player can do, in basic adrenaline action and final turn
      * @param   message  indicates only the token for updateClient
-     * @return a updateClient message with possible move
      */
-    private UpdateClient receiveGrab(ReceiveTargetSquare message){
-        UpdateClient messageReturn=new UpdateClient(getGame().getCurrentPlayer().getPlayerID(),(ArrayList<NormalSquare>) null);
+    private void receiveGrab(ReceiveTargetSquare message){
         if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
                 &&!game.getDeadRoute().isFinalTurn())
-            messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
                 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ) &&!game.getDeadRoute().isFinalTurn())
-            messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
-            messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,3).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,3).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
-            messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare());
-        return  messageReturn;
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare()));
     }
 
     /**
      * this method  verified the first action move that the player can do, in basic adrenaline action and final turn
      * @param   message  indicates only the token for updateClient
-     * @return a updateClient message with possible move
      */
-    private UpdateClient receiveMove(ReceiveTargetSquare message){
+    private void receiveMove(ReceiveTargetSquare message){
         //case  final turn e Already firstPlayer
-        UpdateClient messageReturn=new UpdateClient(getGame().getCurrentPlayer().getPlayerID(),(ArrayList<NormalSquare>)null);
         if((game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
                 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0)
                 &&!game.getDeadRoute().isFinalTurn())
-            messageReturn= new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare());
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
-            messageReturn=new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,4).reachableSquare());
-        return  messageReturn;
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,4).reachableSquare()));
     }
 
     /**
@@ -281,11 +302,6 @@ public class GameHandler {
         return actionValidController;
     }
 
-    /**
-     * this method serves to pay the effect o reload, with powerUp
-     * @param cost    is the cost to pay
-     * @param powerUp the list of powerUp with which to pay
-     */
 
 }
 

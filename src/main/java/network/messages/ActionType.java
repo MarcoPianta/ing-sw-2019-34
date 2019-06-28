@@ -40,7 +40,15 @@ public enum ActionType {
     DISCONNECT("Disconnect"),
     PAYMENT("payment"),
     PAYMENTRESPONSE("Payment Response"),
-    MESSAGE("Message");
+    MESSAGE("Message"),
+    SHOOTREQUESTP("Shoot request p"),
+    SHOOTREQUESTS("Shoot request s"),
+    SHOOTREQUESTR("Shoot request r"),
+    TARGETMOVEREQUEST("Target move request"),
+    SHOOTRESPONSEP("Shoot response p"),
+    SHOOTRESPONSES("Shoot response s"),
+    SHOOTRESPONSER("Shoot response r"),
+    TARGETMOVERESPONSE("Target move response");
 
 
     private String abbreviation;

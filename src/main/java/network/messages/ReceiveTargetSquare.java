@@ -31,7 +31,7 @@ public class ReceiveTargetSquare extends Message {
         return posEffect;
     }
 
-    public Integer getPosWepon() {
+    public Integer getPosWeapon() {
         return posWeapon;
     }
 }
