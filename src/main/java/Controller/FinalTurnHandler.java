@@ -46,15 +46,7 @@ public class FinalTurnHandler extends TurnHandler {
     }
 
     public boolean actionFinalTurn(Message message){
-        boolean valueReturn=false;
-        if (gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.START){
-            gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
-            setNextState(StateMachineEnumerationTurn.ACTION2);
-        }
-        else{
-            gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION2);
-            setNextState(StateMachineEnumerationTurn.ENDTURN);
-        }
+        boolean valueReturn;
 
         if(alreadyFirstPlayer)
             valueReturn=actionAfterFirstPlayer(message);

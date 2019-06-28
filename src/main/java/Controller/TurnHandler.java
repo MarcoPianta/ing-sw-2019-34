@@ -37,17 +37,32 @@ public class TurnHandler {
     }
 
     public void start(){
+
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
-        //TODO messaggio che inizia turno
+        for(Player p:gameHandler.getGame().getDeadPlayer())
+            gameHandler.getGame().getDeadPlayer().remove(p);
+        gameHandler.getGameLobby().startTurn(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8){
             gameHandler.getGame().getCurrentPlayer().spawn(2);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1,1,1);
             gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
         }
-        setNextState(StateMachineEnumerationTurn.ACTION1);
-        gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());
+       /* setNextState(StateMachineEnumerationTurn.ACTION1);
+        // remove playerValid??
+        gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());*/
+       gameHandler.getGameLobby().send(gameHandler.getGame().getCurrentPlayer().getPlayerID(),"you can choose the action");
+        gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
+
     }
-    public boolean actionState(Message message){
+
+    public void endAction(){
+        if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
+            gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION2);
+        else if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION2)
+            gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.RELOAD);
+    }
+
+    /*public boolean actionState(Message message){
         boolean valueReturn;
         if (gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.START){
             gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
@@ -57,14 +72,12 @@ public class TurnHandler {
             gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION2);
             setNextState(StateMachineEnumerationTurn.RELOAD);
         }
+
         valueReturn=actionAdrenaline012(message);
-        if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
-            setNextState(StateMachineEnumerationTurn.ACTION2);
-        else
-            setNextState(StateMachineEnumerationTurn.RELOAD);
         return  valueReturn;
-    }
-    private boolean actionAdrenaline012(Message message){
+
+    }*/
+    public boolean actionAdrenaline012(Message message){
         boolean valueReturn;
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
@@ -118,12 +131,44 @@ public class TurnHandler {
     }*/
     protected boolean actionShot(Shot message){
         boolean valueReturn;
-        if(message.getSquare()==null && message.getRoom()==null)
-            valueReturn=new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()),gameHandler.getGame().getCurrentPlayer(),convertedPlayer(message.getTargets()), null, false).execute();
-        else if(message.getSquare()==null && message.getTargets()==null)
-            valueReturn=new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()),gameHandler.getGame().getCurrentPlayer(),message.getRoom().getColor()).execute();
-        else
-            valueReturn=new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()),gameHandler.getGame().getCurrentPlayer(), null, null /*message.getSquare()*/, true).execute();
+        if(message.getSquare()==null && message.getRoom()==null) {
+            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
+            if(valueReturn){
+                for(Player p:message.getTargets()){
+                    gameHandler.getGameLobby().send(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark());
+                    gameHandler.getGameLobby().send(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor());
+                }
+            }
+        }
+        else if(message.getSquare()==null && message.getTargets()==null) {
+            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), message.getRoom().getColor()).execute();
+            ArrayList<Player> players=new ArrayList<>();
+            if (valueReturn){
+                for(Player p:gameHandler.getGame().getPlayers()) {
+                    if (p != gameHandler.getGame().getCurrentPlayer() && p.getPosition().getColor().getAbbreviation().equals(message.getRoom().getColor()))
+                        players.add(p);
+                }
+                for(Player p:players){
+                    gameHandler.getGameLobby().send(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark());
+                    gameHandler.getGameLobby().send(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor());
+                }
+            }
+        }
+        else {
+            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), null, message.getSquare(), true).execute();
+            if (valueReturn){
+                ArrayList<Player> players=new ArrayList<>();
+                for(Player p:gameHandler.getGame().getPlayers()){
+                    if(p!=gameHandler.getGame().getCurrentPlayer() &&(p.getPosition()==message.getSquare().get(0)||p.getPosition()==message.getSquare().get(1)))
+                        players.add(p);
+                }
+                for(Player p:players){
+                    gameHandler.getGameLobby().send(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark());
+                    gameHandler.getGameLobby().send(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor());
+                }
+
+            }
+        }
         //use venom
         if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
             usePowerUp(message);
@@ -137,6 +182,7 @@ public class TurnHandler {
                 }
             }
         }
+        //viene scaricata larma a ogni shot??
         if(valueReturn)
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).setCharge(false);
         return valueReturn;
@@ -217,12 +263,25 @@ public class TurnHandler {
         if(message.getActionType()==ActionType.SHOT && powerUpIsValid(message)){
             Shot newMessage=(Shot) message;
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),newMessage.getTargetPowerUp(),null);
+            gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTargetPowerUp().getPlayerID(),newMessage.getTargetPowerUp().getPlayerBoard().getHealthPlayer().getDamageBar(),newMessage.getTargetPowerUp().getPlayerBoard().getHealthPlayer().getMark()));
             valueReturn=true;
         }
         else if(powerUpIsValid(message)){
             UsePowerUp newMessage=(UsePowerUp) message;
             convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().usePowerUp(convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()),convertedPlayer(newMessage.getTarget()),newMessage.getSquare());
             valueReturn=true;
+            //update of powerUp
+            if(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer()) {
+                //size corretta??
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getTarget().getPlayerBoard().getHealthPlayer().getDamageBar(), newMessage.getTarget().getPlayerBoard().getHealthPlayer().getMark()));
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getUser().getColor()+"used grenade tag back"));
+            }
+            else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
+                    gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getOtherMove()==0){
+                gameHandler.getGameLobby().send( new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPosition()));
+            }
+            else
+                gameHandler.getGameLobby().send( new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getTarget().getPosition()));
         }
         return valueReturn;
 
@@ -274,9 +333,6 @@ public class TurnHandler {
             }
         }
         return playerConverted;
-
-
-
     }
 
 
@@ -290,15 +346,20 @@ public class TurnHandler {
         public void fillSquare(Game game) {
             int i = emptySquares.size() - 1;
             while (!emptySquares.isEmpty()) {
-                if (emptySquares.get(i).isSpawn())
+                if (emptySquares.get(i).isSpawn()){
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
-                else
+                    for(Player p: game.getPlayers()){
+                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),((SpawnSquare)emptySquares.get(i)).getWeapons().get(2)));
+                    }
+                }
+                else{
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardAmmoDrawer().draw());
+                    for(Player p: game.getPlayers()){
+                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),emptySquares.get(i).getItem()));
+                    }
+                }
                 emptySquares.remove(i);
                 i--;
-            }
-            for(Player p: game.getPlayers()){
-                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),game.getMap()));
             }
         }
 
@@ -306,9 +367,14 @@ public class TurnHandler {
             int i=game.getDeadPlayer().size()-1;
             while(i>=0) {
                 game.getDeadPlayer().get(i).spawn(1);//extract powerUp
+                //update player
+                gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID(),game.getDeadPlayer().get(i).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(game.getDeadPlayer().get(i).getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()-1)));
                 game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
+                gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID(),game.getDeadPlayer().get(i).getPlayerBoard().getHandPlayer()));
                 i--;
+
             }
+
         }
 
         public void isFinalTurn(Game game){
@@ -317,6 +383,9 @@ public class TurnHandler {
             getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
             if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())
                 getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
+
+            for(Player p:game.getPlayers())
+                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"))
         }
     }
 }
