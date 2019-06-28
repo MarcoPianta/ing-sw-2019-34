@@ -1,10 +1,11 @@
 package network.messages;
 
-import Model.NormalSquare;
-import Model.Player;
-
 import java.util.List;
 
+/**
+ * This message is sended by GameLobby to the Client when a Shoot Action contain a 's' element in its actionSequence
+ * with this message send the List of ID related to the square that should be selected as target
+ */
 public class ShootRequests extends Message{
 
     private Integer squareNumber;

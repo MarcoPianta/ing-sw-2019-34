@@ -1,9 +1,11 @@
 package network.messages;
 
-import Model.Player;
-
 import java.util.List;
 
+/**
+ * This message is sended by GameLobby to the Client when a Shoot Action contain a 'p' element in its actionSequence
+ * with this message send the List of Token related to the player that should be selected as target
+ */
 public class ShootRequestp extends Message{
 
     private Integer targetNumber;

@@ -1,7 +1,9 @@
 package network.messages;
 
-import java.util.List;
-
+/**
+ * This message is sended by Client to Server as a response of ShootRequestr
+ * with this message send the List of Token player selected as target for a RoomShoot
+ */
 public class ShootResponser extends Message{
 
     private String targetRoom;

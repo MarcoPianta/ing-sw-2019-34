@@ -2,6 +2,10 @@ package network.messages;
 
 import java.util.List;
 
+/**
+ * This message is sended by Client to Server as a response of ShootRequests
+ * with this message send the List of Token player selected as target
+ */
 public class ShootResponses extends Message{
 
     private List<String> targetSquare;

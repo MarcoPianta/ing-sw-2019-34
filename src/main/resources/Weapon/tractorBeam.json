@@ -20,7 +20,7 @@
       ],
       "targetNumber": 1,
       "squareNumber": 0,
-      "actionSequence": "mp",
+      "actionSequence": "pm",
       "pDamage": [
         1
       ],
@@ -61,7 +61,7 @@
       ],
       "targetNumber": 1,
       "squareNumber": 0,
-      "actionSequence": "mp",
+      "actionSequence": "pm",
       "pDamage": [
         3
       ],
