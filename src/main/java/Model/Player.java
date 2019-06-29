@@ -143,22 +143,22 @@ public class Player {
     }
 
 
-    public boolean isValidCost(List<Integer> cost, boolean set){
+    public boolean isValidCost(Integer[] cost, boolean set){
         boolean valueReturn=true;
         if(!set) {
             Integer[] ammoRyb = calculateMaxAmmo(false);
             for (int i = 0; i < 3; i++) {
-                if (ammoRyb[i] < cost.get(i))
+                if (ammoRyb[i] < cost[i])
                     valueReturn = false;
             }
         }
         else{
             Integer[] ammoRyb=calculateMaxAmmo(true);
             for(int i=0;i<3;i++){
-                if(ammoRyb[i]< cost.get(i))
+                if(ammoRyb[i]< cost[i])
                     valueReturn=false;
             }
-            if(valueReturn && (ammoRyb[0]+ammoRyb[1]+ammoRyb[2] - (cost.get(0)+cost.get(1)+cost.get(2))==0))
+            if(valueReturn && (ammoRyb[0]+ammoRyb[1]+ammoRyb[2] - (cost[0]+cost[1]+cost[2])==0))
                 valueReturn=false;
         }
         return valueReturn;

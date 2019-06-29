@@ -110,10 +110,7 @@ public class ActionValidController {
      * @return true if the action is valid
      */
     public boolean actionValid(SpawnSquare square, int i){
-        ArrayList<Integer> cost=new ArrayList<>();
-        cost.add(square.getWeapons().get(i).getBlueCost());
-        cost.add(square.getWeapons().get(i).getYellowCost());
-        cost.add(square.getWeapons().get(i).getRedCost());
+        Integer[] cost = {square.getWeapons().get(i).getRedCost(), square.getWeapons().get(i).getYellowCost(), square.getWeapons().get(i).getBlueCost()};
         return gameHandler.getGame().getCurrentPlayer().isValidCost(cost,false);
     }
 
@@ -123,10 +120,7 @@ public class ActionValidController {
      * @return true if the action is valid
      */
     public boolean actionValid(int i){
-        ArrayList<Integer> cost = new ArrayList<>();
-        cost.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getBlueCost());
-        cost.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getYellowCost());
-        cost.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getRedCost());
+        Integer[] cost = {gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getRedCost(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getYellowCost(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(i).getBlueCost()};
         return gameHandler.getGame().getCurrentPlayer().isValidCost(cost,false);
     }
 }
