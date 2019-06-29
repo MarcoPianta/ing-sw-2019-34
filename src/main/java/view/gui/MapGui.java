@@ -1,7 +1,6 @@
 package view.gui;
 
 import Model.CardAmmo;
-import Model.CardPowerUp;
 import Model.CardWeapon;
 import Model.Colors;
 import network.Client.Client;
@@ -305,14 +304,14 @@ public class MapGui extends JFrame{
      * This method is called to display to the player the tag back use request
      * */
     public void canUseVenom(){
-        new UsePowerUpGUI(powerUps, this, true, false);
+        new UsePowerUpGui(powerUps, this, true, false);
     }
 
     /**
      * This method is called to display to the player the scoop use request
      * */
     public void canUseScoop(){
-        new UsePowerUpGUI(powerUps, this, false, true);
+        new UsePowerUpGui(powerUps, this, false, true);
     }
 
     /**
@@ -503,7 +502,7 @@ public class MapGui extends JFrame{
                         if (response == 0)
                             System.out.println("pass");
                     } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
-                        new UsePowerUpGUI(powerUps, self, false, false);
+                        new UsePowerUpGui(powerUps, self, false, false);
                         System.out.println("powerup");
                     }
                 }
