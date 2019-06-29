@@ -59,6 +59,7 @@ public abstract class View {
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
     private boolean myTurn;
+    private Integer numberAction=1;
 
     public View() {
         this.weapons = new ArrayList<>(4);
@@ -80,6 +81,10 @@ public abstract class View {
     }
 
     public abstract void showToken();
+
+    public abstract void fillSpawn(String squareID, String weaponName);
+
+    public abstract void fillSquare(String squareID, CardAmmo ammo);
 
     public abstract void showReachableSquares(List<String> squares);// for move
 
@@ -146,6 +151,14 @@ public abstract class View {
 
     public void setWeapons(ArrayList<CardWeapon> weapons) {
         this.weapons = weapons;
+    }
+
+    public void setNumberAction(int numberAction) {
+        this.numberAction = numberAction;
+    }
+
+    public Integer getNumberAction() {
+        return numberAction;
     }
 
     public void setMarks(ArrayList<Colors> marks) {

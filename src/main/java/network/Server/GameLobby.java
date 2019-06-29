@@ -256,7 +256,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(m);
                     if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                         gameHandler.getTurnHandler().endAction();
-                        //increment  numerAction in view
+                        server.send(new FinalAction(paymentResponse.getToken()));
                     }
                     historyMessage=new ArrayList<>();//reset hystoryMessage fare update
 
@@ -278,7 +278,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(historyMessage.get(0));
                         if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                             gameHandler.getTurnHandler().endAction();
-                            //increment  numerAction in view
+                            server.send(new FinalAction(paymentResponse.getToken()));
                         }
                         historyMessage=new ArrayList<>();
                     }
@@ -307,6 +307,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(historyMessage.get(0));
                         if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                             gameHandler.getTurnHandler().endAction();
+                            server.send(new FinalAction(paymentResponse.getToken()));
                             //increment  numerAction in view
                         }
                         historyMessage=new ArrayList<>();
@@ -332,7 +333,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(m);
                     if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                         gameHandler.getTurnHandler().endAction();
-                        //increment  numerAction in view
+                        server.send(new FinalAction(paymentResponse.getToken()));
                     }
                     historyMessage=new ArrayList<>(); //reset hystoryMessage fare update
                 }
