@@ -41,10 +41,6 @@ public class TurnHandler {
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
         for(Player p:gameHandler.getGame().getDeadPlayer())
             gameHandler.getGame().getDeadPlayer().remove(p);
-        System.out.println(gameHandler.getGameLobby());
-        System.out.println(gameHandler.getGame());
-        System.out.println(gameHandler.getGame().getCurrentPlayer());
-        System.out.println(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         gameHandler.getGameLobby().startTurn(gameHandler.getGame().getCurrentPlayer().getPlayerID());
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8) {
             gameHandler.getGame().getCurrentPlayer().spawn(1);//first spawn
