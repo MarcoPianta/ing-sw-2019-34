@@ -1,5 +1,7 @@
 package Model;
 
-public interface Card {
-    String getName();
+import java.io.Serializable;
+
+public abstract class Card implements Serializable {
+    abstract String getName();
 }

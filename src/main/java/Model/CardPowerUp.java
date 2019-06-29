@@ -3,7 +3,7 @@ package Model;
 import javax.json.JsonObject;
 import java.io.FileNotFoundException;
 
-public class CardPowerUp implements Card {
+public class CardPowerUp extends Card {
     private String name;
     private int cost;
     private AmmoColors color;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.json.JsonObject;
 
-public class CardWeapon implements Card {
+public class CardWeapon extends Card {
     private String name;
     private AmmoColors color;
     private int redCost;
