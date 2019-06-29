@@ -269,7 +269,7 @@ public class MainGuiView extends View {
 
     @Override
     public void startTurn() {
-
+        setMyTurn(true);
     }
 
     @Override
