@@ -215,7 +215,7 @@ public class ViewCLI extends View {
     }
 
     @Override
-    public void startGame() {
+    public void startGame(String map) {
         out.println("The game started, GOOD LUCK!!\n");
     }
 

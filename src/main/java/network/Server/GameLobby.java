@@ -40,13 +40,15 @@ public class GameLobby {
             }
         }
         this.actionValidController = gameHandler.getActionValidController();
+        clients.parallelStream()
+                .forEach(x -> send(new StartMessage(x, "game", skullNumber, ("map"+map), players.get(x).getColor())));
     }
 
     public void startTurn(Integer token){
         actionPerformed.replace(token, false);
         if (currentPlayer != null)
             server.send(new EndMessage(currentPlayer));
-        server.send(new StartMessage(token, "turn", 0, ""));
+        server.send(new StartMessage(token, "turn", 0, "", null));
         currentPlayer = token;
         startTimer();
     }
