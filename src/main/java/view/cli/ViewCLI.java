@@ -4,7 +4,6 @@ import Model.*;
 import network.messages.*;
 import view.View;
 
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class ViewCLI extends View {
     }
     //aggiunngere show possible square e room
     @Override
-    public void showPossibleTarget(List<Colors> targets) {
+    public void showPossibleTarget(List<Colors> targets,int i) {
         out.println("you can shot these targets: \n");
         for(Colors c:targets){
             out.println(c +"\t");
@@ -82,12 +81,12 @@ public class ViewCLI extends View {
     }
 
     @Override
-    public void showPossibleSquares(List<Colors> targets) {
+    public void showPossibleSquares(List<String> targets) {
 
     }
 
     @Override
-    public void showTargetMove(List<Colors> targets) {
+    public void showTargetMove(List<String> targets) {
 
     }
 

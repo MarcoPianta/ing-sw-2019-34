@@ -7,9 +7,9 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
-public class UsePowerUpGUI extends JFrame {
+public class UsePowerUpGui extends JFrame {
 
-    public UsePowerUpGUI(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack, boolean scoop){
+    public UsePowerUpGui(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack, boolean scoop){
         this.setLayout(new FlowLayout());
         int i = 0;
         for (String s: powerUps){

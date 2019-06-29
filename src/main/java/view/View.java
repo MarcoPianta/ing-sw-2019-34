@@ -198,5 +198,3 @@ public abstract class View {
     }
 
 }
-
-
