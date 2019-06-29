@@ -40,7 +40,6 @@ public class GameHandler {
         playerValid=game.getCurrentPlayer();
         this.actionValidController = new ActionValidController(this);
         this.gameLobby=gameLobby;
-        fillSquare();
         getTurnHandler().start();
 
     }

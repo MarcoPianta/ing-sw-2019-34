@@ -42,6 +42,7 @@ public class GameLobby {
         this.actionValidController = gameHandler.getActionValidController();
         clients.parallelStream()
                 .forEach(x -> send(new StartMessage(x, "game", skullNumber, ("map"+map), players.get(x).getColor())));
+        gameHandler.fillSquare();
     }
 
     public void startTurn(Integer token){

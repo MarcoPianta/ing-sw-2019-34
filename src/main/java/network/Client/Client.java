@@ -77,8 +77,8 @@ public abstract class Client {
         else if (message.getActionType().getAbbreviation().equals(ActionType.START.getAbbreviation())){
             StartMessage startMessage = (StartMessage) message;
             if (startMessage.getType().equals("game")) {
-                view.startGame(startMessage.getMap());
                 this.playerColor = startMessage.getMyColor();
+                view.startGame(startMessage.getMap());
             }
             else if (startMessage.getType().equals("turn")){
                 view.startTurn();
