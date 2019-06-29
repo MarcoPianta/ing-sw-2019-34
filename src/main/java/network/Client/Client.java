@@ -50,6 +50,22 @@ public abstract class Client {
         else if (message.getActionType().getAbbreviation().equals(ActionType.PAYMENT.getAbbreviation())){
             view.payment((Payment) message);
         }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTP.getAbbreviation())){
+            ShootRequestp shootRequestp = (ShootRequestp) message;
+            //view.showPossibleTarget(shootRequestp.getTargetablePlayer(), shootRequestp.getTargetNumber());
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTR.getAbbreviation())){
+            ShootRequestr shootRequestr = (ShootRequestr) message;
+            view.showPossibleRooms(shootRequestr.getRoomTargetable());
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTS.getAbbreviation())){
+            ShootRequests shootRequests = (ShootRequests) message;
+            //view.showPossibleSquares(shootRequests.getTargetableSquare(), shootRequests.getSquareNumber());
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.TARGETMOVEREQUEST.getAbbreviation())){
+            TargetMoveRequest targetMoveRequest = (TargetMoveRequest) message;
+            view.showTargetMove(targetMoveRequest.getTargetableSquare());
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONRESPONSE.getAbbreviation())){
             GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
             //view.addWeapon();

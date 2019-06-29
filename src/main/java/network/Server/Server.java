@@ -67,6 +67,7 @@ public class Server {
     public void onReceive(Message message){
         if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
             GameSettingsResponse m = (GameSettingsResponse) message;
+            this.send(new UpdateClient(message.getToken(), "Waiting for others players to connect"));
             playersQueue.setPreferences(m);
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.RECONNECTIONRESPONSE.getAbbreviation())) {
