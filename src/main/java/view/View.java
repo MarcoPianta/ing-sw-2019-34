@@ -110,7 +110,7 @@ public abstract class View {
 
     public abstract void showGameSettingsRequest();
 
-    public abstract void startGame();
+    public abstract void startGame(String map);
 
     public abstract void startTurn();
 

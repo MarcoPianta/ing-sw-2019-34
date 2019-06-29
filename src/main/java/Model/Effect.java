@@ -2,13 +2,14 @@ package Model;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This Class contains the possible effect of a CardWeapon
  * */
-public class Effect {
+public class Effect implements Serializable {
     Integer[] bonusCost = {0, 0, 0};
     private int targetNumber;
     private int squareNumber;

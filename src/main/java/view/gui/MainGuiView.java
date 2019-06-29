@@ -260,10 +260,10 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void startGame() {
+    public void startGame(String map) {
         frame.setVisible(false);
         frame = null;
-        mapGui = new MapGui(client.getPlayerColor(), client);
+        mapGui = new MapGui(client.getPlayerColor(), client, map);
         gameStarted = true;
     }
 

@@ -14,7 +14,7 @@ public abstract class Client {
     protected boolean rmi;
     protected Integer token;
     protected View view;
-    protected Colors playerColor = Colors.GREEN; //TODO delete assignment used only for testing
+    protected Colors playerColor;
 
     public Client(View view){
         this.view = view;
@@ -76,8 +76,10 @@ public abstract class Client {
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.START.getAbbreviation())){
             StartMessage startMessage = (StartMessage) message;
-            if (startMessage.getType().equals("game"))
-                view.startGame();
+            if (startMessage.getType().equals("game")) {
+                view.startGame(startMessage.getMap());
+                this.playerColor = startMessage.getMyColor();
+            }
             else if (startMessage.getType().equals("turn")){
                 view.startTurn();
                 view.setNumberAction(1);

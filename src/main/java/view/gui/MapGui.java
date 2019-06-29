@@ -58,7 +58,7 @@ public class MapGui extends JFrame{
     /**
      * This constructor creates the new windows
      * */
-    public MapGui(Colors myColor, Client client){
+    public MapGui(Colors myColor, Client client, String mapImageFile){
         super("Adrenaline");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.myColor = myColor;
@@ -74,7 +74,7 @@ public class MapGui extends JFrame{
 
         playerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + ".png");
         redCross = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "redCross.png");
-        mapImage = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "mappe" + File.separatorChar + "map1.png");
+        mapImage = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "mappe" + File.separatorChar + mapImageFile +".png");
         try{
             currentPlayerBoard = ImageIO.read(playerBoard);
             currentRedCross = ImageIO.read(redCross);
@@ -720,6 +720,6 @@ public class MapGui extends JFrame{
     public static void main(String[] args) {
         MainGuiView.setUIManager();
 
-        new MapGui(Colors.GREEN, null);
+        //new MapGui(Colors.GREEN, null);
     }
 }
