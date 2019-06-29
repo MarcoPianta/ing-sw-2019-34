@@ -24,7 +24,7 @@ import java.util.List;
 public class MapGui extends JFrame{
     private static final double RATIO = 1.320020;
     private Client client;
-    private String actionType = "move"; //can assume values move indicating a move action. For shot action it assumes values: room, square. For move other players it assumes value: movep. Or "null" if no action is monitored right now
+    private String actionType = ""; //can assume values move indicating a move action. For shot action it assumes values: room, square. For move other players it assumes value: movep. Or "null" if no action is monitored right now
     private int[] damagePosition = {110, 172, 240, 302, 364, 432, 494, 556, 618, 680, 748, 810};
     private int[] marksPosition = {535, 575, 615, 655, 695, 735, 775, 815};
 
@@ -50,7 +50,7 @@ public class MapGui extends JFrame{
     private String[] othersPosition = new String[4];
     private HashMap<String, String[]> spawnSquareWeapon;
     private HashMap<String, CardAmmo> ammosOnMap;
-    private boolean myTurn = true;
+    private boolean myTurn;
     private ArrayList<Colors> marks;
     private ArrayList<String> cardsWeapon;
     private ArrayList<String> powerUps;
@@ -419,16 +419,18 @@ public class MapGui extends JFrame{
                         actionType = "";
                     }
                     else if (actionType.equals("square")) {
-                        //client.send(new ShootResponses(client.getToken(), getSquareId(e.getX(), e.getY())));
+                        client.send(new ShootResponses(client.getToken(), getSquareId(e.getX(), e.getY())));
                         actionType = "";
                     } else if (actionType.equals("movep")) {
-                        //client.send(new TargetMoveResponse(client.getToken(), getSquareId(e.getX(), e.getY())));
+                        client.send(new TargetMoveResponse(client.getToken(), getSquareId(e.getX(), e.getY())));
                         actionType = "";
                     }
-                    updateEnemyPosition(Colors.BLUE, "0,0");
+                    /*updateEnemyPosition(Colors.BLUE, "0,0");
                     addWeaponToMap("1,0", 0, "cyberblade");
-                    addWeaponToMap("1,0", 1, "granadeLauncher");
+                    addWeaponToMap("1,0", 1, "granadeLauncher");*/
                 }
+                else
+                    JOptionPane.showMessageDialog(self, "Not your turn !!");
             }
 
             @Override
@@ -512,6 +514,9 @@ public class MapGui extends JFrame{
                         System.out.println("powerup");
                     }
                 }
+                else
+                    JOptionPane.showMessageDialog(self, "Not your turn !!");
+                
                 if (e.getX() > 890 * player.getWidth()/1120){
                     /*ammos[0] = 0;
                     ammos[1] = 0;

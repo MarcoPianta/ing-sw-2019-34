@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlayerBoard {
+public class PlayerBoard implements Serializable {
     private int maxReward;// indicates the maximum reward obtainable
     private int points;
     private Health healthPlayer;
