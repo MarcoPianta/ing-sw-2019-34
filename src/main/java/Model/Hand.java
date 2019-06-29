@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hand {
+public class Hand implements Serializable {
     private ArrayList<CardWeapon> playerWeapons;
     private ArrayList<CardPowerUp> playerPowerUps;
     private int[] ammoRYB;
