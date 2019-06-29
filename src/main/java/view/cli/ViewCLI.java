@@ -58,7 +58,7 @@ public class ViewCLI extends View {
         //modificare perchè possono essere scelti più target
     }
     @Override
-    public void fillSpawn(String squareID, String weaponName){
+    public void fillSpawn(String squareID, int position, String weaponName){
     }
 
     @Override

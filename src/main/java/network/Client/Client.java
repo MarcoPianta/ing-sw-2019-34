@@ -153,7 +153,7 @@ public abstract class Client {
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());
         else if(message.getUpdateType().equals(UpdateClient.FILLSPAWN))
-            view.fillSpawn(message.getSquareID(),message.getWeapon().getName());
+            view.fillSpawn(message.getSquareID(), message.getPosWeapon(), message.getWeapon().getName());
 
         else if(message.getUpdateType().equals(UpdateClient.FILLSQUARE))
             view.fillSquare(message.getSquareID(),message.getAmmo());

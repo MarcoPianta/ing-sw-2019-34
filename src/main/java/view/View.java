@@ -82,7 +82,7 @@ public abstract class View {
 
     public abstract void showToken();
 
-    public abstract void fillSpawn(String squareID, String weaponName);
+    public abstract void fillSpawn(String squareID, int position, String weaponName);
 
     public abstract void fillSquare(String squareID, CardAmmo ammo);
 

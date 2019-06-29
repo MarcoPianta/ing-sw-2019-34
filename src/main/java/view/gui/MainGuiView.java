@@ -173,8 +173,8 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void fillSpawn(String squareID, String weaponName) {
-        //mapGui.addWeaponToMap(squareID, ,weaponName);
+    public void fillSpawn(String squareID, int position, String weaponName) {
+        mapGui.addWeaponToMap(squareID, position,weaponName);
     }
 
     @Override
