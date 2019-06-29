@@ -193,10 +193,7 @@ public class TurnHandler {
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.GRABWEAPON ){
             GrabWeapon newMessage=(GrabWeapon) message;
-            ArrayList<Integer> cost=new ArrayList<>();
-            cost.add(gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getBlueCost());
-            cost.add(gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getYellowCost());
-            cost.add(gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getRedCost());
+            Integer[] cost = {gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getRedCost(), gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getYellowCost(), gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon()).getBlueCost()};
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(cost,false)){
                 valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon())).execute();
                 if(valueReturn){

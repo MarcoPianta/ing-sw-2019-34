@@ -88,10 +88,7 @@ public class PlayerTest {
         Player player=new Player(2832, Colors.GREEN);
         game.addPlayer(player);
 
-        ArrayList<Integer> cost=new ArrayList<>();
-        cost.add(1);
-        cost.add(2);
-        cost.add(1);
+        Integer[] cost = {1, 2, 1};
         assertFalse(game.getPlayers().get(0).isValidCost(1));
         assertFalse(game.getPlayers().get(0).isValidCost(cost,false));
         game.getPlayers().get(0).getPlayerBoard().getHandPlayer().addAmmo(1,2,1);

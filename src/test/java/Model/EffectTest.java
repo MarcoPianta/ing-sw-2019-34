@@ -28,7 +28,7 @@ public class EffectTest {
         reader.close();
 
         Effect effect = new Effect(jsonValues, 1);
-        assertEquals(0, effect.getBonusCost().get(0));
+        assertEquals(0, effect.getBonusCost()[0]);
         assertEquals(1, effect.getTargetNumber());
         assertEquals(0, effect.getSquareNumber());
         assertEquals("pM", effect.getActionSequence());
