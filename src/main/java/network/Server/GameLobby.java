@@ -16,7 +16,7 @@ public class GameLobby {
     private Integer currentPlayer; //token of the current player
     private ArrayList<Message> historyMessage;
     private ArrayList<Message> shootHistoryMessage;
-    private boolean useScoop;
+    private boolean useScoop=false;
     private HashMap<Integer, Boolean> actionPerformed;
     private ActionValidController actionValidController;
     private String currentSquare;
@@ -83,6 +83,9 @@ public class GameLobby {
         if (message.getActionType().equals(ActionType.RECEIVETARGETSQUARE)) {
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) message;
             gameHandler.firstPartAction(receiveTargetSquare);
+        }
+        else if(message.getActionType().equals(ActionType.CANUSESCOOPRESPONSE)){
+            useScoop=true;
         }
 
         else if (message.getActionType().equals(ActionType.SHOOTRESPONSEP)){
@@ -257,7 +260,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(m);
                     if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                         gameHandler.getTurnHandler().endAction();
-                        //increment  numerAction in view
+                        server.send(new FinalAction(paymentResponse.getToken()));
                     }
                     historyMessage=new ArrayList<>();//reset hystoryMessage fare update
 
@@ -279,7 +282,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(historyMessage.get(0));
                         if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                             gameHandler.getTurnHandler().endAction();
-                            //increment  numerAction in view
+                            server.send(new FinalAction(paymentResponse.getToken()));
                         }
                         historyMessage=new ArrayList<>();
                     }
@@ -308,6 +311,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(historyMessage.get(0));
                         if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                             gameHandler.getTurnHandler().endAction();
+                            server.send(new FinalAction(paymentResponse.getToken()));
                             //increment  numerAction in view
                         }
                         historyMessage=new ArrayList<>();
@@ -333,7 +337,7 @@ public class GameLobby {
                         gameHandler.receiveServerMessage(m);
                     if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                         gameHandler.getTurnHandler().endAction();
-                        //increment  numerAction in view
+                        server.send(new FinalAction(paymentResponse.getToken()));
                     }
                     historyMessage=new ArrayList<>(); //reset hystoryMessage fare update
                 }

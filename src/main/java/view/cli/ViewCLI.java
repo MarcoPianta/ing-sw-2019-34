@@ -1,9 +1,6 @@
 package view.cli;
 
-import Model.CardPowerUp;
-import Model.Colors;
-import Model.NormalSquare;
-import Model.Player;
+import Model.*;
 import network.messages.*;
 import view.View;
 
@@ -16,14 +13,10 @@ import java.util.Scanner;
 public class ViewCLI extends View {
     private static PrintWriter out=new PrintWriter(System.out,true);
     private static Scanner in=new Scanner(System.in);
-    private int numberAction;
+
     private ActionCLI actionCLI;
 
-    public int getNumberAction() {
-        return numberAction;
-    }
     public ViewCLI(){
-        this.numberAction=1;
         actionCLI=new ActionCLI();
     }
 
@@ -64,6 +57,14 @@ public class ViewCLI extends View {
         }
         out.println("\n choose a number from 0 to "+ targets.size() +"or z to cancel \n");
         //modificare perchè possono essere scelti più target
+    }
+    @Override
+    public void fillSpawn(String squareID, String weaponName){
+    }
+
+    @Override
+    public void fillSquare(String squareID, CardAmmo ammo){
+
     }
 
     @Override
@@ -221,7 +222,6 @@ public class ViewCLI extends View {
 
     @Override
     public void startTurn() {
-        numberAction=1;
         out.println("it's officially your turn \n");
         startActions();
     }
@@ -232,7 +232,7 @@ public class ViewCLI extends View {
     }
 
     public void startActions(){
-        out.println("Is the action number" +numberAction+"\n you can choose:\n");
+        out.println("Is the action number" +getNumberAction()+"\n you can choose:\n");
         out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass \n type a number from 1 to 6 \n");
         boolean corrected=false;
         while(!corrected){

@@ -11,11 +11,13 @@ public class CardNotOnlyAmmo extends CardAmmo{
         JsonObject jsonValues = Utils.JsonFileHandler.openFile("NotOnlyAmmo", file); /* this variable contains the JsonObject created from JSON file*/
         item2 = AmmoColors.valueOf(jsonValues.getString("item2"));
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
+        withPowerUp = true;
     }
 
     private CardNotOnlyAmmo(){
         item2 = null;
         item3 = null;
+        withPowerUp = true;
     }
 
     @Override

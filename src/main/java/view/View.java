@@ -58,7 +58,8 @@ public abstract class View {
     protected Integer posEffect;
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
-    private boolean myTurn;
+    protected boolean myTurn;
+    protected Integer numberAction=1;
 
     public View() {
         this.weapons = new ArrayList<>(4);
@@ -81,15 +82,19 @@ public abstract class View {
 
     public abstract void showToken();
 
+    public abstract void fillSpawn(String squareID, String weaponName);
+
+    public abstract void fillSquare(String squareID, CardAmmo ammo);
+
     public abstract void showReachableSquares(List<String> squares);// for move
 
-    public abstract void showPossibleTarget(List<Colors> targets);
+    public abstract void showPossibleTarget(List<Colors> targets, int max);
 
     public abstract void showPossibleRooms(List<String> ids); //For shot action
 
-    public abstract void showPossibleSquares(List<Colors> targets); // For shot action
+    public abstract void showPossibleSquares(List<String> targets); // For shot action
 
-    public abstract void showTargetMove(List<Colors> targets); //When need to be shown target which have to be moved for a weapon effect
+    public abstract void showTargetMove(List<String> targets); //When need to be shown target which have to be moved for a weapon effect
 
     public abstract void payment(Payment message);
 
@@ -146,6 +151,14 @@ public abstract class View {
 
     public void setWeapons(ArrayList<CardWeapon> weapons) {
         this.weapons = weapons;
+    }
+
+    public void setNumberAction(int numberAction) {
+        this.numberAction = numberAction;
+    }
+
+    public Integer getNumberAction() {
+        return numberAction;
     }
 
     public void setMarks(ArrayList<Colors> marks) {

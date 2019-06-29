@@ -86,12 +86,12 @@ public class UpdateClient extends Message {
         this.powerUp = powerUp;
     }
     public UpdateClient(Integer token, String squareId,CardWeapon weapon){
-        setMessageInfo(token, RESPAWN);
+        setMessageInfo(token, FILLSPAWN);
         this.squareID=squareId;
         this.weapon=weapon;
     }
     public UpdateClient(Integer token, String squareId,CardAmmo ammo){
-        setMessageInfo(token, RESPAWN);
+        setMessageInfo(token, FILLSQUARE);
         this.squareID=squareId;
         this.ammo=ammo;
     }

@@ -8,9 +8,6 @@ public abstract class ViewMap {
     private static final int[][] xCoord = {{490, 905, 1335, 1770},{490, 905, 1335, 1770}, {490, 905, 1335, 1770}};
     private static final int[][] yCoord = {{470, 470, 470, 470} ,{900 ,900 ,900 ,900},  {1350, 1350, 1350, 1350}};
 
-    private static final int[] xSquareCoord = {0, 220, 110, 0, 220};
-    private static final int[] ySquareCoord = {0, 0, 85, 170, 170};
-
     private static final int[][] xWeapon = {{1350, 1625, 1905},{10, 10, 10}, {2198, 2198, 2198, 2198}};
     private static final int[][] yWeapon = {{1,1,1},{702, 981, 1258}, {1096, 1373, 1652}};
     private static final int[] xWeaponIncrement = {240, 350, 350};
@@ -22,14 +19,6 @@ public abstract class ViewMap {
 
     public static int getYCoordinates(String id){
         return yCoord[Character.getNumericValue(id.charAt(0))][Character.getNumericValue(id.charAt(2))];
-    }
-
-    public static int getxSquareCoord(int i) {
-        return xSquareCoord[i];
-    }
-
-    public static int getySquareCoord(int i) {
-        return ySquareCoord[i];
     }
 
     public static String[] getIds() {

@@ -41,14 +41,14 @@ public class PaymentControllerTest {
         }
 
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(3,3,3);
-        gameHandler.getPaymentController().payment(cost, powerUps);
+        //gameHandler.getPaymentController().payment(cost, powerUps);
 
         assertEquals(3, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
         assertEquals(1, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
         assertEquals(3, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
 
         gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().addAmmo(3,3,3);
-        gameHandler.getPaymentController().payment(cost);
+        //gameHandler.getPaymentController().payment(cost);
         assertEquals((3 - cost[0]), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
         assertEquals((3 - cost[1]), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
         assertEquals((3 - cost[2]), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);

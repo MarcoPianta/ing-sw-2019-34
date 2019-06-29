@@ -50,7 +50,7 @@ public class TurnHandler {
        /* setNextState(StateMachineEnumerationTurn.ACTION1);
         // remove playerValid??
         gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());*/
-       gameHandler.getGameLobby().send(gameHandler.getGame().getCurrentPlayer().getPlayerID(),"you can choose the action");
+       gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),"you can choose the action"));
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
 
     }
@@ -83,7 +83,7 @@ public class TurnHandler {
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(newMessage.getPlayerTarget(),newMessage.getNewSquare(), 3).execute();
             if(valueReturn)
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(),newMessage.getPlayerTarget().getPosition()))
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(),newMessage.getPlayerTarget().getPosition()));
         }
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
@@ -135,8 +135,8 @@ public class TurnHandler {
             valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
-                    gameHandler.getGameLobby().send(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark());
-                    gameHandler.getGameLobby().send(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor());
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
             }
         }
@@ -149,8 +149,8 @@ public class TurnHandler {
                         players.add(p);
                 }
                 for(Player p:players){
-                    gameHandler.getGameLobby().send(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark());
-                    gameHandler.getGameLobby().send(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor());
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
             }
         }
@@ -163,8 +163,8 @@ public class TurnHandler {
                         players.add(p);
                 }
                 for(Player p:players){
-                    gameHandler.getGameLobby().send(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark());
-                    gameHandler.getGameLobby().send(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor());
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
 
             }
@@ -385,7 +385,7 @@ public class TurnHandler {
                 getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
 
             for(Player p:game.getPlayers())
-                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"))
+                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"));
         }
     }
 }

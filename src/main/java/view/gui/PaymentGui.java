@@ -26,8 +26,14 @@ public class PaymentGui extends JFrame {
         if (payment.isPowerUp()){
             String[] paymentString = {"R", "Y", "B"};
             JComboBox<String> paymentBox = new JComboBox<>(paymentString);
-
         }
+
+        this.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        Integer[] costs = {0, 1, 1};
+        new PaymentGui(new Payment(000, costs, true));
     }
 
 }
