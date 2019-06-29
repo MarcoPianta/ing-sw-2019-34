@@ -45,7 +45,7 @@ public class SpawnSquare extends NormalSquare{
         if (this.getWeapons().isEmpty())
             return null;
         CardWeapon card = weapons.get(position);
-        this.weapons.remove(position);
+        this.weapons.set(position, null);
         return card;
     }
 

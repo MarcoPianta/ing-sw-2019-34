@@ -33,7 +33,7 @@ public class Deck<T extends Card> {
     public T getCard(int index) {
         T returned = null;
             if(!cardDeck.isEmpty()) {
-                if (index >= cardDeck.size())
+                if (index > cardDeck.size())
                     throw new IndexOutOfBoundsException();
                 else{
                     returned = remove(index);
@@ -42,7 +42,7 @@ public class Deck<T extends Card> {
             else{
                 if (mix) {
                     cardDeck = getTrashDeck(); //Refill cardDeck
-                    if (index >= cardDeck.size())
+                    if (index > cardDeck.size())
                         throw new IndexOutOfBoundsException();
                     else {
                         returned = remove(index);
