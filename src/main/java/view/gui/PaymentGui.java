@@ -15,7 +15,7 @@ public class PaymentGui extends JFrame {
         String message = "You have to pay";
         int a = 0;
         for (Integer i: Arrays.asList(payment.getCost())){
-            message = message + " " + color[i] + " " + i;
+            message = message + " " + color[a] + " " + i;
             a++;
         }
         c.gridx = 0;
@@ -27,6 +27,17 @@ public class PaymentGui extends JFrame {
             String[] paymentString = {"R", "Y", "B"};
             JComboBox<String> paymentBox = new JComboBox<>(paymentString);
         }
+
+        c.gridx = 0;
+        c.gridy = 1;
+        JLabel label = new JLabel("What you want to use to pay");
+        this.add(label, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        JButton button = new JButton("Confirm");
+
+        this.add(button, c);
 
         this.setVisible(true);
     }
