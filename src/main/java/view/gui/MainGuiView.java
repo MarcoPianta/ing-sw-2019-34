@@ -204,7 +204,6 @@ public class MainGuiView extends View {
 
     @Override
     public void setMyTurn(boolean myTurn) {
-        super.setMyTurn(myTurn);
         mapGui.myTurn(myTurn);
     }
 
