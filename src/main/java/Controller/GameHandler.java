@@ -73,11 +73,12 @@ public class GameHandler {
 
     public void  fillSquare(){
         int i=0;
+        int j;
         while((i<game.getMap().getRooms().size())){
-            int j=0;
+            j=0;
             while((j<game.getMap().getRooms().get(i).getNormalSquares().size())){
                 if(game.getMap().getRooms().get(i).getNormalSquares().get(j).isSpawn()){
-                    for(i=0;i<3;i++){
+                    for(int w=0;w<3;w++){
                         game.getMap().getRooms().get(i).getNormalSquares().get(j).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                         for(Player p: game.getPlayers()){
                             gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getWeapons().get(i)));
@@ -90,6 +91,7 @@ public class GameHandler {
                     gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getItem()));
                     }
                 }
+                j++;
             }
             i++;
         }

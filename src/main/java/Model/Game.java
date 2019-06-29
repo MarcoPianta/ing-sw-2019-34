@@ -61,7 +61,7 @@ public class Game {
      * this method calculates who received points after kill
      * */
     public void calculatePoints(List<Player> damagedBar, boolean deadRoute, Player playerDead){
-        int counter=0;
+        int counter;
         int i=0;
         ArrayList<UtilPlayer> bestMurder=new ArrayList<>();
         while(bestMurder.size()<5)
