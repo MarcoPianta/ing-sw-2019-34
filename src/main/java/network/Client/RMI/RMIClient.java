@@ -45,7 +45,7 @@ public class RMIClient extends Client{
             Registry registry = LocateRegistry.getRegistry(hostname, PORT);
             server = (RMIServerInterface) registry.lookup("Server");
 
-            token = server.generateToken();
+            this.token = server.generateToken();
             server.acceptConnection(new RMIClientImplementation(this), token);
         }catch (Exception e){
             System.out.println("Client Exception: " + e.getMessage());

@@ -28,7 +28,6 @@ public class GameLobby {
         this.players = new HashMap<>();
         this.historyMessage = new ArrayList<>();
         this.actionPerformed = new HashMap<>();
-        this.actionValidController = gameHandler.getActionValidController();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
@@ -40,6 +39,7 @@ public class GameLobby {
                 server.send(new UpdateClient(i, "Server internal error, unable to create a new game"));
             }
         }
+        this.actionValidController = gameHandler.getActionValidController();
     }
 
     public void startTurn(Integer token){
