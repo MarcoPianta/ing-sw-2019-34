@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class UsePowerUpGui extends JFrame {
 
-    public UsePowerUpGui(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack){
+    public UsePowerUpGui(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack, boolean scoop){
         this.setLayout(new FlowLayout());
         int i = 0;
         for (String s: powerUps){
