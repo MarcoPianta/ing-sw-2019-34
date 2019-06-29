@@ -22,6 +22,7 @@ public enum ActionType {
     UPDATECLIENTS("Update clients"),
     PASS("Pass"),
     TIMEOUT("Time out"),
+    FINALACTION("Final action"),
     GAMESETTINGSREQUEST("Game settings request"),
     GAMESETTINGSRESPONSE("Game settings response"),
     STARTTURNMESSAGE("Start turn message"),

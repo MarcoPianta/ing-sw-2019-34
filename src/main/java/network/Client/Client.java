@@ -62,8 +62,10 @@ public abstract class Client {
             StartMessage startMessage = (StartMessage) message;
             if (startMessage.getType().equals("game"))
                 view.startGame();
-            else if (startMessage.getType().equals("turn"))
+            else if (startMessage.getType().equals("turn")){
                 view.startTurn();
+                view.setNumberAction(1);
+            }
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
             ChatMessage chatMessage = (ChatMessage) message;
@@ -79,6 +81,13 @@ public abstract class Client {
             WinnerMessage winnerMessage = (WinnerMessage) message;
             view.endGame(winnerMessage.isWinner());
         }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.FINALACTION.getAbbreviation())){
+            if(view.getNumberAction()==1)
+                view.setNumberAction(2);
+            else
+                view.setNumberAction(3);
+        }
+
     }
 
     /**
@@ -123,11 +132,13 @@ public abstract class Client {
             view.setPowerUps((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
             view.setWeapons((ArrayList<CardWeapon>) message.getHandPlayer().getPlayerWeapons());
         }
-        else if(message.getUpdateType().equals(UpdateClient.MAP)){
-            view.setMap(message.getMap());
-        }
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());
+        else if(message.getUpdateType().equals(UpdateClient.FILLSPAWN))
+            view.fillSpawn(message.getSquareID(),message.getWeapon().getName());
+
+        else if(message.getUpdateType().equals(UpdateClient.FILLSQUARE))
+            view.fillSquare(message.getSquareID(),message.getAmmo());
     }
 
     public Integer getToken() {
