@@ -15,7 +15,7 @@ public class GameLobby {
     private Integer currentPlayer; //token of the current player
     private ArrayList<Message> historyMessage;
     private ArrayList<Message> shootHistoryMessage;
-    private boolean useScoop;
+    private boolean useScoop=false;
     private HashMap<Integer, Boolean> actionPerformed;
 
     private String currentSquare;
@@ -81,6 +81,9 @@ public class GameLobby {
         if (message.getActionType().equals(ActionType.RECEIVETARGETSQUARE)) {
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) message;
             gameHandler.firstPartAction(receiveTargetSquare);
+        }
+        else if(message.getActionType().equals(ActionType.CANUSESCOOPRESPONSE)){
+            useScoop=true;
         }
 
         else if (message.getActionType().equals(ActionType.SHOOTRESPONSEP)){

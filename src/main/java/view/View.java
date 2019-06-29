@@ -58,8 +58,8 @@ public abstract class View {
     protected Integer posEffect;
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
-    private boolean myTurn;
-    private Integer numberAction=1;
+    protected boolean myTurn;
+    protected Integer numberAction=1;
 
     public View() {
         this.weapons = new ArrayList<>(4);

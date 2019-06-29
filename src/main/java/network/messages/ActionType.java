@@ -41,6 +41,7 @@ public enum ActionType {
     DISCONNECT("Disconnect"),
     PAYMENT("payment"),
     PAYMENTRESPONSE("Payment Response"),
+    CANUSESCOOPRESPONSE("Can use scoop response"),
     MESSAGE("Message"),
     SHOOTREQUESTP("Shoot request p"),
     SHOOTREQUESTS("Shoot request s"),
