@@ -225,8 +225,13 @@ public class GameHandler {
         //verified if there is sight power up
         boolean isFind=false;
         for(int i=0;i<3 && !isFind;i++){
+            List<Integer>cost=new ArrayList<>();
+            cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost()[0]);
+            cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost()[1]);
+            cost.add(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost()[2]);
+
             if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
-                    && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
+                    && game.getCurrentPlayer().isValidCost(cost,true)){
                 isFind=true;
                 getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
             }

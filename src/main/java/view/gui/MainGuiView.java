@@ -174,6 +174,15 @@ public class MainGuiView extends View {
         mapGui.addPowerUp(powerUp.getName());
     }
 
+    @Override
+    public void fillSpawn(String squareID, String weaponName) {
+
+    }
+
+    @Override
+    public void fillSquare(String squareID, CardAmmo ammo) {
+
+    }
 
     @Override
     public void setBlueAmmo(int blueAmmo) {
