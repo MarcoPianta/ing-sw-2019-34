@@ -69,6 +69,7 @@ public class MapGui extends JFrame{
         this.marks = new ArrayList<>();
         this.cardsWeapon = new ArrayList<>();
         this.powerUps = new ArrayList<>();
+        this.ammosOnMap = new HashMap<>();
         initializeSpawnWeapon();
 
         playerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + ".png");
