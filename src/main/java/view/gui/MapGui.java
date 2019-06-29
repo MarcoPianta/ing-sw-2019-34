@@ -81,6 +81,7 @@ public class MapGui extends JFrame{
             currentMapImage = ImageIO.read(mapImage);
         }catch (IOException e){}
 
+        System.out.println(mapImageFile);
 
         try {map = new JLabel(new ImageIcon(ImageIO.read(mapImage)));} catch (IOException e){}
 

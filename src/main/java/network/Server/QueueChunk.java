@@ -15,7 +15,7 @@ public class QueueChunk {
     private ArrayList<ArrayList<Integer>> chunks;
     private int maxChunkIndex;
     private HashMap<Integer, Boolean> startedCheck; //This variable is used to know if a Thread to create a new Game is yet started
-    public static final int QUEUEWAITTIME = 30000; //Time to wait when the player number is reached in millis
+    public static final int QUEUEWAITTIME = 5000; //Time to wait when the player number is reached in millis
 
     public QueueChunk(Server server){
         playersID = new LinkedHashMap<>();

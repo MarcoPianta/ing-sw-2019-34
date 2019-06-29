@@ -115,7 +115,7 @@ public class Effect implements Serializable {
     /**
      * This inner class is used to contains the pre condition read from Weapon json file
      * */
-    class PreCondition{
+    class PreCondition implements Serializable{
         private boolean vision;
         private boolean blind;
         private boolean melee;

@@ -140,7 +140,7 @@ public class Server {
     }
 
     public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
-        GameLobby gameLobby = new GameLobby(players, skullNumber, "Map"+map, this);
+        GameLobby gameLobby = new GameLobby(players, skullNumber, "map"+map, this);
         for (Integer i: players){
             lobbyHashMap.put(i, gameLobby);
         }
