@@ -57,8 +57,8 @@ public class FinalTurnHandlerTest {
         //move test no firstPlayer
         squares=gameHandler.receiveSquare(possibleMove);
         NormalSquare newSquare= squares.get(squares.size()-1);
-        MoveMessage message=new MoveMessage(gameHandler.getGame().getPlayers().get(0).getPlayerID(),newSquare);
-        assertTrue(gameHandler.receiveServerMessage(message));
+        //MoveMessage message=new MoveMessage(gameHandler.getGame().getPlayers().get(0).getPlayerID(),newSquare);
+        //assertTrue(gameHandler.receiveServerMessage(message));
         assertEquals(StateMachineEnumerationTurn.ACTION1,gameHandler.getGame().getCurrentPlayer().getState());
         assertEquals(StateMachineEnumerationTurn.ACTION2,gameHandler.getTurnHandler().getNextState());
 

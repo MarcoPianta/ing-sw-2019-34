@@ -6,19 +6,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TargetChooseGui extends JFrame {
+    private int maxMove;
+    private ArrayList<Colors> chosen;
+    private Colors currentColor;
 
-    public TargetChooseGui(List<Colors> players){
+    public TargetChooseGui(List<Colors> players, int max, MapGui mapGui){
         super("Choose a target");
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
+        this.maxMove = max;
+        this.chosen = new ArrayList<>();
 
         int i = 0;
         for (Colors color: players) {
+            this.currentColor = color;
+
             c.gridx = i;
             c.gridy = 0;
             c.insets = new Insets(5,5,5,5);
@@ -32,11 +41,14 @@ public class TargetChooseGui extends JFrame {
             int currentChoose = i;
             JLabel player = new JLabel(new ImageIcon(target.getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
             player.addMouseListener(new MouseListener() {
-                int playerChoose = currentChoose;
+                Colors playerChoose = currentColor;
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println(playerChoose);
-                    //TODO send the choose playerChoose
+                    if (maxMove > 0) {
+                        chosen.add(playerChoose);
+                        maxMove--;
+                    }
                 }
 
                 @Override
@@ -63,16 +75,14 @@ public class TargetChooseGui extends JFrame {
             i++;
         }
 
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                mapGui.targetChosen(chosen);
+            }
+        });
+
         this.pack();
         this.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        ArrayList<Colors> targetsList = new ArrayList<>();
-        targetsList.add(Colors.BLUE);
-        targetsList.add(Colors.GREEN);
-        targetsList.add(Colors.YELLOW);
-
-        new TargetChooseGui(targetsList);
     }
 }

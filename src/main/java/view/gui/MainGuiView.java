@@ -1,6 +1,8 @@
 package view.gui;
 
+import Model.CardAmmo;
 import Model.CardPowerUp;
+import Model.CardWeapon;
 import Model.Colors;
 import network.Client.RMI.RMIClient;
 import network.Client.Socket.SocketClient;
@@ -154,6 +156,20 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void setWeapons(ArrayList<CardWeapon> weapons) {
+        mapGui.setCardsWeapon(weapons);
+    }
+
+    @Override
+    public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
+        ArrayList<String> powerUpsName = new ArrayList<>();
+        for (CardPowerUp p: powerUps){
+            powerUpsName.add(p.getName());
+        }
+        mapGui.setPowerUps(powerUpsName);
+    }
+
+    @Override
     public void addPowerup(CardPowerUp powerUp) {
         mapGui.addPowerUp(powerUp.getName());
     }
@@ -194,8 +210,8 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void showPossibleTarget(List<Colors> targets) {
-        new TargetChooseGui(targets);
+    public void showPossibleTarget(List<Colors> targets, int max) {
+        mapGui.showTargetblePlayer(targets, max);
     }
 
     @Override
@@ -205,12 +221,26 @@ public class MainGuiView extends View {
 
     @Override
     public void showMessage(String message) {
-        JOptionPane.showMessageDialog(frame, message);
+        if (frame != null)
+            JOptionPane.showMessageDialog(frame, message);
+        else
+            JOptionPane.showMessageDialog(mapGui, message);
+    }
+
+    public void addAmmoToMap(String id, CardAmmo card){
+        mapGui.addAmmoToMap(id, card);
     }
 
     @Override
     public void showVenomRequest(Colors playerColor) {
         int value = JOptionPane.showConfirmDialog(mapGui, playerColor + "Hurt you, do you want to use tag back granade?");
+        if (value == 0)
+            mapGui.canUseVenom();
+    }
+
+    //TODO probably the name will be modified
+    public void showScoopRequest(){
+        int value = JOptionPane.showConfirmDialog(mapGui, "Do you want to use scoop power up?");
         if (value == 0)
             mapGui.canUseVenom();
     }
@@ -259,12 +289,18 @@ public class MainGuiView extends View {
         mapGui.addRedCross(ids);
     } //For shot action
 
-    public void showPossibleSquares(List<Colors> targets){
+    public void showPossibleSquares(List<String> targets){
+        mapGui.setActionType("square");
+        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ids.removeAll(targets);
+        mapGui.addRedCross(ids);
+    }
 
-    } // For shot action
-
-    public void showTargetMove(List<Colors> targets){
-
+    public void showTargetMove(List<String> targets){
+        mapGui.setActionType("movep");
+        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ids.removeAll(targets);
+        mapGui.addRedCross(ids);
     } //When need to be shown target which have to be moved for a weapon effect
 
     @Override

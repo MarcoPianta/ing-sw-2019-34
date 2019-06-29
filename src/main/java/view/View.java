@@ -83,13 +83,13 @@ public abstract class View {
 
     public abstract void showReachableSquares(List<String> squares);// for move
 
-    public abstract void showPossibleTarget(List<Colors> targets);
+    public abstract void showPossibleTarget(List<Colors> targets, int max);
 
     public abstract void showPossibleRooms(List<String> ids); //For shot action
 
-    public abstract void showPossibleSquares(List<Colors> targets); // For shot action
+    public abstract void showPossibleSquares(List<String> targets); // For shot action
 
-    public abstract void showTargetMove(List<Colors> targets); //When need to be shown target which have to be moved for a weapon effect
+    public abstract void showTargetMove(List<String> targets); //When need to be shown target which have to be moved for a weapon effect
 
     public abstract void payment(Payment message);
 

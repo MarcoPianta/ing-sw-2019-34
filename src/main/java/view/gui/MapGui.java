@@ -1,9 +1,11 @@
 package view.gui;
 
+import Model.CardAmmo;
+import Model.CardPowerUp;
 import Model.CardWeapon;
 import Model.Colors;
 import network.Client.Client;
-import network.messages.Payment;
+import network.messages.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,10 +19,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+/**
+ * This is the main window, it contains the map, the player's boards and the chat.
+ * */
 public class MapGui extends JFrame{
     private static final double RATIO = 1.320020;
     private Client client;
-    private String actionType = "move"; //can assume values move indicating a move action. For shot action it assumes values: room, square. Or "null" if no action is monitored right now
+    private String actionType = "move"; //can assume values move indicating a move action. For shot action it assumes values: room, square. For move other players it assumes value: movep. Or "null" if no action is monitored right now
     private int[] damagePosition = {110, 172, 240, 302, 364, 432, 494, 556, 618, 680, 748, 810};
     private int[] marksPosition = {535, 575, 615, 655, 695, 735, 775, 815};
 
@@ -45,11 +50,15 @@ public class MapGui extends JFrame{
     private List<String> redCrosses;
     private String[] othersPosition = new String[4];
     private HashMap<String, String[]> spawnSquareWeapon;
-    private boolean myTurn;
+    private HashMap<String, CardAmmo> ammosOnMap;
+    private boolean myTurn = true;
     private ArrayList<Colors> marks;
     private ArrayList<String> cardsWeapon;
     private ArrayList<String> powerUps;
 
+    /**
+     * This constructor creates the new windows
+     * */
     public MapGui(Colors myColor, Client client){
         super("Adrenaline");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -154,21 +163,89 @@ public class MapGui extends JFrame{
         this.setMinimumSize(new Dimension(frameWidth, 600));
     }
 
+    /**
+     * This method add red crosses in unreachable squares
+     * */
     public void addRedCross(List<String> id){
         redCrosses = id;
         for (String s: id){
-            Graphics2D g = currentMapImage.createGraphics();
+            BufferedImage currentMapWithCross = currentMapImage.getSubimage(0, 0, currentMapImage.getWidth(), currentMapImage.getHeight());
+            Graphics2D g = currentMapWithCross.createGraphics();
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             BufferedImage cross = currentRedCross;
-            Image crosResized = cross.getScaledInstance(350 * currentMapImage.getWidth() / 2545, 340 * currentMapImage.getHeight() / 1928, Image.SCALE_DEFAULT);
-            g.drawImage(crosResized, ViewMap.getXCoordinates(s) * currentMapImage.getWidth() / 2545, (ViewMap.getYCoordinates(s) * currentMapImage.getHeight() / 1928), null);
+            Image crosResized = cross.getScaledInstance(350 * currentMapWithCross.getWidth() / 2545, 340 * currentMapWithCross.getHeight() / 1928, Image.SCALE_DEFAULT);
+            g.drawImage(crosResized, ViewMap.getXCoordinates(s) * currentMapWithCross.getWidth() / 2545, (ViewMap.getYCoordinates(s) * currentMapWithCross.getHeight() / 1928), null);
             g.dispose();
 
-            Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+            Image mapResized = currentMapWithCross.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
             map.setIcon(new ImageIcon(mapResized));
         }
     }
 
+    /**
+     * This method add ammos on the squares
+     * */
+    public void addAmmoToMap(String id, CardAmmo card){
+        if (ammosOnMap.containsKey(id)) ammosOnMap.replace(id, card);
+        else ammosOnMap.put(id, card);
+        String path;
+        if (card.isWithPowerUp()) path = "cardnotonlyammo";
+        else  path = "cardonlyammo";
+
+        File file = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
+        try {
+            BufferedImage ammo = ImageIO.read(file);
+            Graphics2D g = currentMapImage.createGraphics();
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            Image ammoScaledInstance = ammo.getScaledInstance(150 * currentMapImage.getWidth() / 2545, 150 * currentMapImage.getHeight() / 1928, Image.SCALE_DEFAULT);
+            g.drawImage(ammoScaledInstance, ViewMap.getXCoordinates(id), ViewMap.getYCoordinates(id)+175, null);
+            g.dispose();
+
+            Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+            map.setIcon(new ImageIcon(mapResized));
+        }catch (IOException e){}
+    }
+
+    /**
+     * This method add a weapon to the specified spawn square at the specified position
+     * */
+    public void addWeaponToMap(String id, int position, String weapon){
+        double rotationRequired;
+        int xOffset;
+        int yOffset;
+        spawnSquareWeapon.get(id)[position] = weapon;
+        if (Character.getNumericValue(id.charAt(0)) == 0){
+            rotationRequired = 1.0472; //60 degree in radiant
+            xOffset = 90; yOffset = 150;
+        }
+        else {
+            rotationRequired = 0.5236; //30 degree in radiant
+            xOffset = 65; yOffset = 100;
+        }
+
+        BufferedImage text = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = text.createGraphics();
+        g2d.setPaint(Color.WHITE);
+        Font font = new Font("Arial", Font.PLAIN, 50);
+        g2d.setFont(font);
+        g2d.drawString(weapon, 0, text.getHeight()/2);
+        g2d.dispose();
+        double locationX = 0;
+        double locationY = text.getHeight();
+        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+
+        Graphics2D g = currentMapImage.createGraphics();
+        g.drawImage(op.filter(text, null), ViewMap.getxWeapon(id, position)-xOffset, ViewMap.getyWeapon(id, position)-yOffset, null);
+        g.dispose();
+
+        Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+        map.setIcon(new ImageIcon(mapResized));
+    }
+
+    /**
+     * This method add damage marks in player's playerboard
+     * */
     public void addDamage(List<Colors> damageBar){
         int i = 0;
         for (Colors c: damageBar){
@@ -184,6 +261,9 @@ public class MapGui extends JFrame{
         }
     }
 
+    /**
+     * This method add marks in player's playerboard
+     * */
     public void addMarks(Colors mark){
         marks.add(mark);
         int i = 0;
@@ -198,27 +278,53 @@ public class MapGui extends JFrame{
         i++;
     }
 
+    /**
+     * This method add a power up to the player's powerup
+     * */
     public void addPowerUp(String powerUp){
         powerUps.add(powerUp);
     }
 
+    /**
+     * This method is called when the player had chosen which weapon want to discard
+     * */
     public void substituteWeapon(int position){
         //TODO send grabWeaponResponse
+        cardsWeapon.remove(position);
         System.out.println(position);
     }
 
+    /**
+     * This method is called when the player wants to use a powerup
+     * */
     public void usePowerUp(int position, boolean granade){
         //client.send(new UsePowerUp(client.getToken(), position, ));
     }
 
+    /**
+     * This method is called to display to the player the tag back use request
+     * */
     public void canUseVenom(){
-        new UsePowerUpGUI(powerUps, this, true);
+        new UsePowerUpGUI(powerUps, this, true, false);
     }
 
+    /**
+     * This method is called to display to the player the scoop use request
+     * */
+    public void canUseScoop(){
+        new UsePowerUpGUI(powerUps, this, false, true);
+    }
+
+    /**
+     * This method is used to set myTurn flag when the turn of the player begin
+     * */
     public void myTurn(boolean turn){
         myTurn = turn;
     }
 
+    /**
+     * This method is used to update damage marks of the other players
+     * */
     public void updateOthersBar(ArrayList<Colors> damageBar, Colors player){
         int i = 0;
         for (Colors c: damageBar){
@@ -234,6 +340,9 @@ public class MapGui extends JFrame{
         players[enemies.get(player)].setIcon(new ImageIcon(markResized));
     }
 
+    /**
+     * This method is used to create a colored image used as mark for damage and marks in player board
+     * */
     private Image createColorMarker(Colors c, int scaleX, int scaleY){
         BufferedImage damage = new BufferedImage(32, 40, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = damage.createGraphics();
@@ -243,11 +352,27 @@ public class MapGui extends JFrame{
         return damage.getScaledInstance(32 * scaleX/1120, 40 * scaleY/274, Image.SCALE_DEFAULT);
     }
 
+    /**
+     * This method is used to send the chosen weapon for a shot action
+     * */
     public void weaponChosen(String choose){
         //client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0), Character.getNumericValue(choose.charAt(2)))));
         System.out.println(choose);
     }
 
+    /**
+     * This method is used to send the chosen weapon for a shot action
+     * */
+    public void targetChosen(ArrayList<Colors> chosen){
+        ArrayList<Integer> players = new ArrayList<>();
+        for (Colors color: chosen)
+            players.add(enemies.get(color));
+        client.send(new ShootResponsep(client.getToken(), players));
+    }
+
+    /**
+     * This method add the component listeners to the component of the window
+     * */
     private void addComponentListeners(){
         MapGui self = this;
 
@@ -281,24 +406,30 @@ public class MapGui extends JFrame{
         map.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //System.out.println(e.getX() + " u " + e.getY());
-                openWeaponDetail(e.getX(), e.getY(), true);
-                if (actionType.equals("move")){
-                    String id = getSquareId(e.getX(), e.getY());
-                    if (!id.equals("") && !redCrosses.contains(id)) {
-                        //client.send(new MoveResponse(client.getToken(), id));
-                        System.out.println("move to: " + id);
+                if(myTurn) {
+                    //System.out.println(e.getX() + " u " + e.getY());
+                    openWeaponDetail(e.getX(), e.getY(), true);
+                    if (actionType.equals("move")) {
+                        String id = getSquareId(e.getX(), e.getY());
+                        if (!id.equals("") && !redCrosses.contains(id)) {
+                            client.send(new MoveResponse(client.getToken(), id));
+                            System.out.println("move to: " + id);
+                        }
+                    } else if (actionType.equals("room")) {
+                        client.send(new ShootResponser(client.getToken(), getSquareId(e.getX(), e.getY())));
+                        actionType = "";
                     }
+                    else if (actionType.equals("square")) {
+                        //client.send(new ShootResponses(client.getToken(), getSquareId(e.getX(), e.getY())));
+                        actionType = "";
+                    } else if (actionType.equals("movep")) {
+                        //client.send(new TargetMoveResponse(client.getToken(), getSquareId(e.getX(), e.getY())));
+                        actionType = "";
+                    }
+                    updateEnemyPosition(Colors.BLUE, "0,0");
+                    addWeaponToMap("1,0", 0, "cyberblade");
+                    addWeaponToMap("1,0", 1, "granadeLauncher");
                 }
-                else if (actionType.equals("room")){
-                    //client.send(new ShotResponse());
-                }
-                else if (actionType.equals("square")){
-                    //client.send(new ShotResponse());
-                }
-                updateEnemyPosition(Colors.BLUE, "0,0");
-                addWeaponToMap("1,0", 0, "cyberblade");
-                addWeaponToMap("1,0", 1, "granadeLauncher");
             }
 
             @Override
@@ -325,56 +456,58 @@ public class MapGui extends JFrame{
         player.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 60 * player.getHeight()/274) && (e.getY() < (60+32) * player.getHeight()/274))){
-                    //client.send(new ReceiveTargetSquare(client.getToken(), "move"));
-                    //TODO delete following code
-                    ArrayList<Colors> damagesList = new ArrayList<>();
-                    damagesList.add(Colors.BLUE);
-                    damagesList.add(Colors.GREEN);
-                    addDamage(damagesList);
-                    addMarks(Colors.BLUE);
-                    //till here
-                    int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
-                    if (response == 0)
-                        System.out.println("move");
-                }
-                else if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 104 * player.getHeight()/274) && (e.getY() < (104+32) * player.getHeight()/274))){
-                    //client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
-                    //TODO delete following code
-                    ArrayList<Colors> damagesList = new ArrayList<>();
-                    damagesList.add(Colors.BLUE);
-                    damagesList.add(Colors.GREEN);
-                    updateOthersBar(damagesList, Colors.BLUE);
-                    ArrayList<String> ids = new ArrayList<>();
-                    ids.add("0,0");
-                    ids.add("0,2");
-                    ids.add("1,3");
-                    ids.add("2,1");
-                    addRedCross(ids);
-                    //till here
-                    int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
-                    if (response == 0)
-                        System.out.println("grab");
-                }
-                else if ( (e.getX() < 67 * player.getWidth()/1120) && ((e.getY() > 147 * player.getHeight()/274) && (e.getY() < (147+32) * player.getHeight()/274))){
-                    int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
-                    if (response == 0) {
-                        System.out.println("shot");
+                if (myTurn) {
+                    if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
+                        //client.send(new ReceiveTargetSquare(client.getToken(), "move"));
                         //TODO delete following code
-                        ArrayList<String> weaponsName = new ArrayList<>();
-                        weaponsName.add("cyberblade");
-                        weaponsName.add("electroscyte");
+                        ArrayList<Colors> damagesList = new ArrayList<>();
+                        damagesList.add(Colors.BLUE);
+                        damagesList.add(Colors.GREEN);
+                        addDamage(damagesList);
+                        addMarks(Colors.BLUE);
                         //till here
-                        new WeaponChooseGui(weaponsName, self);
+                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
+                        if (response == 0)
+                            System.out.println("move");
+                    } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
+                        //client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                        //TODO delete following code
+                        ArrayList<Colors> damagesList = new ArrayList<>();
+                        damagesList.add(Colors.BLUE);
+                        damagesList.add(Colors.GREEN);
+                        updateOthersBar(damagesList, Colors.BLUE);
+                        ArrayList<String> ids = new ArrayList<>();
+                        ids.add("0,0");
+                        ids.add("0,2");
+                        ids.add("1,3");
+                        ids.add("2,1");
+                        addRedCross(ids);
+                        //till here
+                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
+                        if (response == 0)
+                            System.out.println("grab");
+                    } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
+                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
+                        if (response == 0) {
+                            System.out.println("shot");
+                            //TODO delete following code
+                            ArrayList<String> weaponsName = new ArrayList<>();
+                            weaponsName.add("cyberblade");
+                            weaponsName.add("electroscyte");
+                            //till here
+                            new WeaponChooseGui(weaponsName, self);
+                        }
+                    } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
+                        //TODO send pass message
+                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
+                        if (response == 0)
+                            System.out.println("pass");
+                    } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
+                        new UsePowerUpGUI(powerUps, self, false, false);
+                        System.out.println("powerup");
                     }
                 }
-                else if ( ((e.getX() > 20 * player.getWidth()/1120) && (e.getX() < (20+40) * player.getWidth()/1120)) && ((e.getY() > 195 * player.getHeight()/274) && (e.getY() < (195+55) * player.getHeight()/274))){
-                    //TODO send pass message
-                    int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
-                    if (response == 0)
-                        System.out.println("pass");
-                }
-                else if (e.getX() > 890 * player.getWidth()/1120){
+                if (e.getX() > 890 * player.getWidth()/1120){
                     ammos[0] = 0;
                     ammos[1] = 0;
                     ammos[2] = 1;
@@ -384,10 +517,7 @@ public class MapGui extends JFrame{
                     new SubstituteWeaponGui(cardsWeapon, self);
                     System.out.println("info");
                 }
-                else if ( ((e.getX() > 615 * player.getWidth()/1120) && (e.getX() < (615+75) * player.getWidth()/1120)) && (e.getY() > 185 * player.getHeight()/274)) {
-                    new UsePowerUpGUI(powerUps, self, false);
-                    System.out.println("powerup");
-                }
+
             }
 
             @Override
@@ -428,10 +558,16 @@ public class MapGui extends JFrame{
         });
     }
 
+    /**
+     * This methos is used to set the ammo number of the player
+     * */
     public void setAmmo(int value, int position){
-
+        ammos[position] = value;
     }
 
+    /**
+     * This method is used to display the weapon detail when the user press on its name on the map
+     * */
     private void openWeaponDetail(int x, int y, boolean grab){
         for (String s: spawnSquareWeapon.keySet()){
             for (int a = 0; a < 3; a++){
@@ -445,6 +581,9 @@ public class MapGui extends JFrame{
         }
     }
 
+    /**
+     * This metohd returns the square id string from the x and y coordinates
+     * */
     private String getSquareId(int x, int y){
         for (int i = 0; i < 12; i++){
             if ( ((x > ViewMap.getXCoordinates(ViewMap.getIds()[i]) * map.getWidth()/2545) &&
@@ -457,12 +596,18 @@ public class MapGui extends JFrame{
         return "";
     }
 
+    /**
+     * This method is used to resize the image to fit the current window size
+     * */
     private void resizeImage(JLabel label, ImageIcon imageIcon){
         Dimension size = label.getSize();
         Image resized = imageIcon.getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT);
         label.setIcon(new ImageIcon(resized));
     }
 
+    /**
+     * This method returns a Color from a Colors value class
+     * */
     public static Color getPaintingColor(Colors myColor){
         if (myColor.getAbbreviation().equals("blue"))
             return Color.BLUE;
@@ -477,20 +622,39 @@ public class MapGui extends JFrame{
 
     }
 
+    /**
+     * This method set cards owned by the user
+     * */
     public void setCardsWeapon(ArrayList<CardWeapon> cards){
         for (CardWeapon c: cards) {
             this.cardsWeapon.add(c.getName());
         }
     }
 
+    /**
+     * This method set powerups owned by the user
+     * */
+    public void setPowerUps(ArrayList<String> powerUps){
+        this.powerUps = powerUps;
+    }
+
+    /**
+     * This method is used to set the action type used to determine what type of message send to the server
+     * */
     public void setActionType(String actionType) {
         this.actionType = actionType;
     }
 
+    /**
+     * This method creates a window for the payment of something
+     * */
     public void payment(Payment payment){
         new PaymentGui(payment);
     }
 
+    /**
+     * This method updates the enemy position
+     * */
     public void updateEnemyPosition(Colors player, String id){
         othersPosition[enemies.get(player)] = id;
         Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
@@ -503,40 +667,9 @@ public class MapGui extends JFrame{
         players[enemies.get(player)].setIcon(new ImageIcon(playerResized));
     }
 
-    public void addWeaponToMap(String id, int position, String weapon){
-        double rotationRequired;
-        int xOffset;
-        int yOffset;
-        spawnSquareWeapon.get(id)[position] = weapon;
-        if (Character.getNumericValue(id.charAt(0)) == 0){
-            rotationRequired = 1.0472; //60 degree in radiant
-            xOffset = 90; yOffset = 150;
-        }
-        else {
-            rotationRequired = 0.5236; //30 degree in radiant
-            xOffset = 65; yOffset = 100;
-        }
-
-        BufferedImage text = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = text.createGraphics();
-        g2d.setPaint(Color.WHITE);
-        Font font = new Font("Arial", Font.PLAIN, 50);
-        g2d.setFont(font);
-        g2d.drawString(weapon, 0, text.getHeight()/2);
-        g2d.dispose();
-        double locationX = 0;
-        double locationY = text.getHeight();
-        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-
-        Graphics2D g = currentMapImage.createGraphics();
-        g.drawImage(op.filter(text, null), ViewMap.getxWeapon(id, position)-xOffset, ViewMap.getyWeapon(id, position)-yOffset, null);
-        g.dispose();
-
-        Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
-        map.setIcon(new ImageIcon(mapResized));
-    }
-
+    /**
+     * This method is used only for initialization purpose
+     * */
     private void initializeSpawnWeapon(){
         this.spawnSquareWeapon = new HashMap<>();
         spawnSquareWeapon.put("0,2", new String[3]);
@@ -554,6 +687,16 @@ public class MapGui extends JFrame{
         return enemies.get(color);
     }
 
+    /**
+     * This method open a window which show the targetble players
+     * */
+    public void showTargetblePlayer(List<Colors> players, int max){
+        new TargetChooseGui(players, max, this); //TODO add max target
+    }
+
+    /**
+     * This method is used to update the chat displayed messages
+     * */
     public void updateChat(String message){
         JLabel chatLabel = new JLabel(message);
         chatLabel.setHorizontalTextPosition(JLabel.LEFT);

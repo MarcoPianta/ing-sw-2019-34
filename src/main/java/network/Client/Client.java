@@ -50,6 +50,22 @@ public abstract class Client {
         else if (message.getActionType().getAbbreviation().equals(ActionType.PAYMENT.getAbbreviation())){
             view.payment((Payment) message);
         }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTP.getAbbreviation())){
+            ShootRequestp shootRequestp = (ShootRequestp) message;
+            //view.showPossibleTarget(shootRequestp.getTargetablePlayer(), shootRequestp.getTargetNumber());
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTR.getAbbreviation())){
+            ShootRequestr shootRequestr = (ShootRequestr) message;
+            view.showPossibleRooms(shootRequestr.getRoomTargetable());
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTS.getAbbreviation())){
+            ShootRequests shootRequests = (ShootRequests) message;
+            //view.showPossibleSquares(shootRequests.getTargetableSquare(), shootRequests.getSquareNumber());
+        }
+        else if(message.getActionType().getAbbreviation().equals(ActionType.TARGETMOVEREQUEST.getAbbreviation())){
+            TargetMoveRequest targetMoveRequest = (TargetMoveRequest) message;
+            view.showTargetMove(targetMoveRequest.getTargetableSquare());
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONRESPONSE.getAbbreviation())){
             GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
             //view.addWeapon();
@@ -122,9 +138,6 @@ public abstract class Client {
             view.setYellowAmmo(message.getHandPlayer().getAmmoRYB()[1]);
             view.setPowerUps((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
             view.setWeapons((ArrayList<CardWeapon>) message.getHandPlayer().getPlayerWeapons());
-        }
-        else if(message.getUpdateType().equals(UpdateClient.MAP)){
-            view.setMap(message.getMap());
         }
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());

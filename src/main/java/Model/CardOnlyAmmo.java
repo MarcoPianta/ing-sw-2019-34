@@ -14,12 +14,14 @@ public class CardOnlyAmmo extends CardAmmo {
         item1 = AmmoColors.valueOf(jsonValues.getString("item1"));
         item2 = AmmoColors.valueOf(jsonValues.getString("item2"));
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
+        withPowerUp = false;
     }
 
     public CardOnlyAmmo() {
         item1 = null;
         item2 = null;
         item3 = null;
+        withPowerUp = false;
     }
     @Override
     public CardOnlyAmmo copyCardAmmo (){
