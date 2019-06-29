@@ -36,6 +36,9 @@ public class TurnHandler {
         return endTurnChecks;
     }
 
+    /**
+     * this method is the start of turn, and there is the first action of the player's current
+     */
     public void start(){
 
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
@@ -57,6 +60,9 @@ public class TurnHandler {
 
     }
 
+    /**
+     * this method set the state after a action
+     */
     public void endAction(){
         if(gameHandler.getGame().getCurrentPlayer().getState()==StateMachineEnumerationTurn.ACTION1)
             gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION2);
@@ -79,6 +85,12 @@ public class TurnHandler {
         return  valueReturn;
 
     }*/
+
+    /**
+     *
+     * @param message
+     * @return true if the action is doe
+     */
     public boolean actionAdrenaline012(Message message){
         boolean valueReturn;
         if(message.getActionType()==ActionType.MOVE){
@@ -348,7 +360,10 @@ public class TurnHandler {
                 if (emptySquares.get(i).isSpawn()){
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                     for(Player p: game.getPlayers()){
-                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),((SpawnSquare)emptySquares.get(i)).getWeapons().get(2)));
+                        for(int count=0;count <3;count++){
+                            if(emptySquares.get(i).getWeapons().get(count)==null)
+                                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),((SpawnSquare)emptySquares.get(i)).getWeapons().get(2),count));
+                        }
                     }
                 }
                 else{

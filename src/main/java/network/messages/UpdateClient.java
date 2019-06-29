@@ -14,6 +14,7 @@ public class UpdateClient extends Message {
     private CardPowerUp powerUp;
     private Hand handPlayer;
     private CardWeapon weapon;
+    private int posWeapon;
     private CardAmmo ammo;
     private ArrayList<Colors> marks;
     private String textMessage;
@@ -85,10 +86,11 @@ public class UpdateClient extends Message {
         setMessageInfo(token, RESPAWN);
         this.powerUp = powerUp;
     }
-    public UpdateClient(Integer token, String squareId,CardWeapon weapon){
+    public UpdateClient(Integer token, String squareId,CardWeapon weapon,int posWeapon){
         setMessageInfo(token, FILLSPAWN);
         this.squareID=squareId;
         this.weapon=weapon;
+        this.posWeapon=posWeapon;
     }
     public UpdateClient(Integer token, String squareId,CardAmmo ammo){
         setMessageInfo(token, FILLSQUARE);
@@ -157,6 +159,10 @@ public class UpdateClient extends Message {
 
     public CardWeapon getWeapon() {
         return weapon;
+    }
+
+    public int getPosWeapon() {
+        return posWeapon;
     }
 
     public ArrayList<Colors> getMarks() {

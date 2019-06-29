@@ -71,6 +71,9 @@ public class GameHandler {
         return game;
     }
 
+    /**
+     * this method fill the spawn square and normal square at the start of the game
+     */
     public void  fillSquare(){
         int i=0;
         int j;
@@ -81,7 +84,7 @@ public class GameHandler {
                     for(int w=0;w<3;w++){
                         game.getMap().getRooms().get(i).getNormalSquares().get(j).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                         for(Player p: game.getPlayers()){
-                            gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getWeapons().get(w)));
+                            gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getWeapons().get(w),w));
                         }
                     }
                 }
@@ -307,7 +310,7 @@ public class GameHandler {
     }
 
     /**
-     *
+     * this method modified the winner list
      * @param player
      * @param winnerList
      */
