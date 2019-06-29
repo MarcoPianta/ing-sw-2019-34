@@ -1,6 +1,5 @@
 package network.messages;
 
-
 import java.util.List;
 
 /**

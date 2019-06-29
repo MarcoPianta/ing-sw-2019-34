@@ -1,5 +1,6 @@
 package network.Server;
 
+import Controller.ActionValidController;
 import Controller.GameHandler;
 import Model.*;
 import network.messages.*;
@@ -17,7 +18,7 @@ public class GameLobby {
     private ArrayList<Message> shootHistoryMessage;
     private boolean useScoop;
     private HashMap<Integer, Boolean> actionPerformed;
-
+    private ActionValidController actionValidController;
     private String currentSquare;
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
@@ -27,6 +28,7 @@ public class GameLobby {
         this.players = new HashMap<>();
         this.historyMessage = new ArrayList<>();
         this.actionPerformed = new HashMap<>();
+        this.actionValidController = gameHandler.getActionValidController();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
@@ -92,7 +94,7 @@ public class GameLobby {
                 targetPlayer.add(players.get(token));
             }
             if(new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), targetPlayer, null, false).isValid()){
-                shootHistoryMessage.add(new Shot(targetPlayer, effect, receiveTargetSquare.getPosWeapon()));
+                shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
             //TODO else --> dico che non è valida
@@ -107,11 +109,9 @@ public class GameLobby {
             ShootResponses shootResponses = (ShootResponses) message;
             ArrayList<NormalSquare> targetSquare = new ArrayList<>();
             Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
-            for (String id : shootResponses.getTargetSquare()) {
-                targetSquare.add(gameHandler.getGame().getMap().getSquareFromId(id));
-            }
+            targetSquare.add(gameHandler.getGame().getMap().getSquareFromId(shootResponses.getTargetSquare()));
             if (new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null, targetSquare, false).isValid()){
-                shootHistoryMessage.add(new Shot(targetSquare, effect, receiveTargetSquare.getPosWeapon()));
+                shootHistoryMessage.add(new Shot(targetSquare, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
             //TODO else --> dico che non è valida
@@ -131,13 +131,14 @@ public class GameLobby {
             }
             Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
             if (new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), targetRoom.getColor()).isValid()){
-                shootHistoryMessage.add(new Shot(targetRoom, effect, receiveTargetSquare.getPosWeapon()));
+                shootHistoryMessage.add(new Shot(targetRoom, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
             //TODO else --> dico che non è valida
             if(gameHandler.getGame().getPlayers().get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = null;
+                server.send(new Payment(currentPlayer, effect.getBonusCost(), false)); //TODO gestire PowerUp
             }
         }
 
@@ -370,9 +371,9 @@ public class GameLobby {
         String actionSequence = effect.getActionSequence();
         int i = shootHistoryMessage.size() + 1;
         if (actionSequence.charAt(i) == 'p') {
-            ArrayList<Integer> targetToken = new ArrayList<>();
+            ArrayList<Colors> targetToken = new ArrayList<>();
             for (Player target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).targetablePlayer()) {
-                targetToken.add(target.getPlayerID());
+                targetToken.add(target.getColor());
             }
             server.send(new ShootRequestp(receiveTargetSquare.getToken(), effect.getTargetNumber(), targetToken));
 
@@ -381,7 +382,7 @@ public class GameLobby {
             for (NormalSquare target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).reachableSquare()) {
                 targetID.add(target.getId());
             }
-            server.send(new ShootRequests(receiveTargetSquare.getToken(), effect.getSquareNumber(), targetID));
+            server.send(new ShootRequests(receiveTargetSquare.getToken(), targetID));
 
         } else if (actionSequence.charAt(i) == 'r') {
             ArrayList<String> targetID = new ArrayList<>();
@@ -400,11 +401,7 @@ public class GameLobby {
             server.send(new TargetMoveRequest(receiveTargetSquare.getToken(), squareList));
 
         } else if (actionSequence.charAt(i) == 'M') {
-            ArrayList<String> targetID = new ArrayList<>();
-            for (NormalSquare target: new Move(gameHandler.getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()) {
-                targetID.add(target.getId());
-            }
-            server.send(new UpdateClient(receiveTargetSquare.getToken(), targetID));
+            server.send(new UpdateClient(receiveTargetSquare.getToken(), new Move(gameHandler.getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
 
         }
     }

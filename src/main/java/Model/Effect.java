@@ -9,7 +9,7 @@ import java.util.List;
  * This Class contains the possible effect of a CardWeapon
  * */
 public class Effect {
-    ArrayList<Integer> bonusCost = new ArrayList<>();
+    Integer[] bonusCost = {0, 0, 0};
     private int targetNumber;
     private int squareNumber;
     private String actionSequence;
@@ -32,7 +32,7 @@ public class Effect {
         JsonArray sMarkArray;
         actionSequence = jsonValues.getJsonArray(jsonString).getJsonObject(0).getString("actionSequence");
         for (int i = 0; i < cost.size(); i++)
-            this.bonusCost.add(cost.getInt(i));
+            this.bonusCost[i] = cost.getInt(i);
         targetNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("targetNumber");
         squareNumber = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("squareNumber");
         pDamageArray = jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("pDamage");
@@ -58,7 +58,7 @@ public class Effect {
         preCondition = new PreCondition(jsonValues.getJsonArray(jsonString).getJsonObject(0).getJsonArray("preCondition").getJsonObject(0));
     }
 
-    public ArrayList<Integer> getBonusCost(){
+    public Integer[] getBonusCost(){
         return bonusCost;
     }
 

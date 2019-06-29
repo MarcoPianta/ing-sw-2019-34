@@ -1,5 +1,7 @@
 package network.messages;
 
+import Model.Colors;
+
 import java.util.List;
 
 /**
@@ -9,9 +11,9 @@ import java.util.List;
 public class ShootRequestp extends Message{
 
     private Integer targetNumber;
-    private List<Integer> targetablePlayer;
+    private List<Colors> targetablePlayer;
 
-    public ShootRequestp(Integer token, Integer targetNumber, List<Integer> targetablePlayer){
+    public ShootRequestp(Integer token, Integer targetNumber, List<Colors> targetablePlayer){
         this.token = token;
         this.actionType = ActionType.SHOOTREQUESTP;
         this.targetNumber = targetNumber;
@@ -22,7 +24,7 @@ public class ShootRequestp extends Message{
         return targetNumber;
     }
 
-    public List<Integer> getTargetalePlayer() {
+    public List<Colors> getTargetablePlayer() {
         return targetablePlayer;
     }
 

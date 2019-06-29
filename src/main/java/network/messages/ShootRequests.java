@@ -11,15 +11,10 @@ public class ShootRequests extends Message{
     private Integer squareNumber;
     private List<String> targetableSquare;
 
-    public ShootRequests(Integer token, Integer squareNumber, List<String> targetableSquare){
+    public ShootRequests(Integer token, List<String> targetableSquare){
         this.token = token;
         this.actionType = ActionType.SHOOTREQUESTS;
-        this.squareNumber = squareNumber;
         this.targetableSquare = targetableSquare;
-    }
-
-    public Integer getSquareNumber() {
-        return squareNumber;
     }
 
     public List<String> getTargetableSquare() {
