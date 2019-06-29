@@ -30,7 +30,7 @@ public class GameHandler {
         Colors[] colors=Colors.values();
         int i=0;
         while(i<players.size()){
-            game.addPlayer(new Player(players.get(0),colors[i]));
+            game.addPlayer(new Player(players.get(i),colors[i]));
             i++;
         }
         finalTurnHandler=new FinalTurnHandler(this);
