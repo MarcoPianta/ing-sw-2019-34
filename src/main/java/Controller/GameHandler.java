@@ -171,7 +171,6 @@ public class GameHandler {
      * @param message  indicates the type of action that the player want do
      */
     public void firstPartAction(ReceiveTargetSquare message){
-        UpdateClient messageReturn;
         if(message.getType().equals("shoot"))
             receiveShoot(message);
         else if(message.getType().equals("grab"))
@@ -185,7 +184,7 @@ public class GameHandler {
      * @param message  indicates only the token for updateClient
      */
     private void receiveShoot(ReceiveTargetSquare message){
-        if(getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
+        if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
                 &&!getGame().getDeadRoute().isFinalTurn())
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
@@ -194,9 +193,9 @@ public class GameHandler {
             Effect effect = game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect());
             String actionSequence = effect.getActionSequence();
             if (actionSequence.charAt(0) == 'p') {
-                ArrayList<Integer> targetToken = new ArrayList<>();
+                ArrayList<Colors> targetToken = new ArrayList<>();
                 for (Player target: new Shoot(effect, game.getCurrentPlayer(), null).targetablePlayer()) {
-                    targetToken.add(target.getPlayerID());
+                    targetToken.add(target.getColor());
                 }
                 gameLobby.send(new ShootRequestp(message.getToken(), effect.getTargetNumber(), targetToken));
 
@@ -205,7 +204,7 @@ public class GameHandler {
                 for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
                     targetID.add(target.getId());
                 }
-                gameLobby.send(new ShootRequests(message.getToken(), effect.getSquareNumber(), targetID));
+                gameLobby.send(new ShootRequests(message.getToken(), targetID));
 
             } else if (actionSequence.charAt(0) == 'r') {
                 ArrayList<String> targetID = new ArrayList<>();
@@ -215,11 +214,7 @@ public class GameHandler {
                 gameLobby.send(new ShootRequestr(message.getToken(), targetID));
 
             }else if (actionSequence.charAt(0) == 'M') {
-                ArrayList<String> targetID = new ArrayList<>();
-                for (NormalSquare target: new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()) {
-                    targetID.add(target.getId());
-                }
-                gameLobby.send(new UpdateClient(message.getToken(), targetID));
+                gameLobby.send(new UpdateClient(message.getToken(), new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
 
             }
         }

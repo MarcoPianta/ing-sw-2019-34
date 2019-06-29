@@ -2,7 +2,7 @@ package network.messages;
 
 /**
  * This message is sended by Client to Server as a response of ShootRequestr
- * with this message send the List of Token player selected as target for a RoomShoot
+ * with this message send the ID related to a square of the selected Room for  a RoomShoot
  */
 public class ShootResponser extends Message{
 
