@@ -81,7 +81,7 @@ public class GameHandler {
                     for(int w=0;w<3;w++){
                         game.getMap().getRooms().get(i).getNormalSquares().get(j).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                         for(Player p: game.getPlayers()){
-                            gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getWeapons().get(i)));
+                            gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getWeapons().get(w)));
                         }
                     }
                 }

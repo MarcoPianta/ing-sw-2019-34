@@ -516,7 +516,7 @@ public class MapGui extends JFrame{
                 }
                 else
                     JOptionPane.showMessageDialog(self, "Not your turn !!");
-                
+
                 if (e.getX() > 890 * player.getWidth()/1120){
                     /*ammos[0] = 0;
                     ammos[1] = 0;

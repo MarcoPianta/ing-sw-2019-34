@@ -140,12 +140,14 @@ public class Server {
     }
 
     public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
+        players.parallelStream()
+                .forEach(x -> send(new StartMessage(x, "game", skullNumber, ("map"+map))));
+
         GameLobby gameLobby = new GameLobby(players, skullNumber, "Map"+map, this);
         for (Integer i: players){
             lobbyHashMap.put(i, gameLobby);
         }
-        players.parallelStream()
-                .forEach(x -> send(new StartMessage(x, "game", skullNumber, ("map"+map))));
+
     }
 
     public static void main(String[] args) {
