@@ -38,7 +38,6 @@ public class GameHandler {
         paymentController=new PaymentController(this);
         getGame().chooseFirstPlayer();
         playerValid=game.getCurrentPlayer();
-        getTurnHandler().start();
         this.actionValidController = new ActionValidController(this);
         this.gameLobby=gameLobby;
         fillSquare();
