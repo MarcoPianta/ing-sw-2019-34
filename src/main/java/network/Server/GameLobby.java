@@ -16,7 +16,7 @@ public class GameLobby {
     private Integer currentPlayer; //token of the current player
     private ArrayList<Message> historyMessage;
     private ArrayList<Message> shootHistoryMessage;
-    private boolean useScoop=false;
+    private boolean useScoop = false;
     private HashMap<Integer, Boolean> actionPerformed;
     private ActionValidController actionValidController;
     private String currentSquare;
@@ -28,7 +28,6 @@ public class GameLobby {
         this.players = new HashMap<>();
         this.historyMessage = new ArrayList<>();
         this.actionPerformed = new HashMap<>();
-        this.actionValidController = gameHandler.getActionValidController();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
@@ -40,6 +39,7 @@ public class GameLobby {
                 server.send(new UpdateClient(i, "Server internal error, unable to create a new game"));
             }
         }
+        this.actionValidController = gameHandler.getActionValidController();
     }
 
     public void startTurn(Integer token){
@@ -96,7 +96,7 @@ public class GameLobby {
             for (Integer token: shootResponsep.getTargetPlayer()) {
                 targetPlayer.add(players.get(token));
             }
-            if(new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), targetPlayer, null, false).isValid()){
+            if(actionValidController.actionValid(targetPlayer, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
@@ -113,7 +113,7 @@ public class GameLobby {
             ArrayList<NormalSquare> targetSquare = new ArrayList<>();
             Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
             targetSquare.add(gameHandler.getGame().getMap().getSquareFromId(shootResponses.getTargetSquare()));
-            if (new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null, targetSquare, false).isValid()){
+            if (actionValidController.actionValid(targetSquare, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetSquare, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
@@ -133,7 +133,7 @@ public class GameLobby {
                     targetRoom = room;
             }
             Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
-            if (new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), targetRoom.getColor()).isValid()){
+            if (actionValidController.actionValid(targetRoom, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetRoom, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
