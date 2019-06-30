@@ -23,6 +23,7 @@ public class SpawnGui extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     mapGui.sendSpawnMessage(pos);
+                    System.out.println(pos);
                     dispose();
                 }
 
@@ -49,6 +50,7 @@ public class SpawnGui extends JFrame {
             position++;
             this.add(label);
         }
+        this.pack();
         this.setVisible(true);
     }
 }

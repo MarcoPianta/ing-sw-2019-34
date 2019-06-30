@@ -47,6 +47,7 @@ public class MapGui extends JFrame{
     private BufferedImage[] currentOtherPlayerBoards = new BufferedImage[4];
     private static HashMap<Colors, Integer> enemies; //The string is the color name of the player
     private List<String> redCrosses;
+    private String myPosition;
     private String[] othersPosition = new String[4];
     private HashMap<String, String[]> spawnSquareWeapon;
     private HashMap<String, CardAmmo> ammosOnMap;
@@ -689,6 +690,18 @@ public class MapGui extends JFrame{
 
         Image playerResized = currentOtherPlayerBoards[enemies.get(player)].getScaledInstance(players[enemies.get(player)].getWidth(), players[enemies.get(player)].getHeight(), Image.SCALE_DEFAULT);
         players[enemies.get(player)].setIcon(new ImageIcon(playerResized));
+    }
+
+    public void setMyPosition(String id){
+        myPosition = id;
+        Graphics2D g = currentPlayerBoard.createGraphics();
+        Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
+
+        g.drawImage(number, 1050 * currentPlayerBoard.getWidth() / 1120, 0, null);
+        g.dispose();
+
+        Image playerResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+        player.setIcon(new ImageIcon(playerResized));
     }
 
     /**
