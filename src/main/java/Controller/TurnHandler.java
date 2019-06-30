@@ -64,6 +64,7 @@ public class TurnHandler {
     }
 
     /**
+     *
      * this method set the state after a action
      */
     public void endAction(){
