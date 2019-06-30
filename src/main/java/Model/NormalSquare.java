@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NormalSquare {
+public class NormalSquare implements Serializable {
     private CardAmmo ammo;
     NormalSquare n;
     NormalSquare e;

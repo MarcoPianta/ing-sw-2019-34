@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * This class implements Action
  */
-public class Reload implements Action {
+public class Reload implements Action, Serializable {
     private CardWeapon selectedWeapon;
     private Player actorPlayer;
     private int r;
