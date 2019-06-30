@@ -1,10 +1,14 @@
 package Model;
 
+import com.sun.source.doctree.SerialDataTree;
+
+import java.io.Serializable;
+
 /**
  * This class is used to collect all the decks used in a game.
  * It creates decks and the relative drawers.
  * */
-public class DeckCollector {
+public class DeckCollector implements Serializable {
     private Deck<CardWeapon> cardWeaponDeck;
     private Deck<CardPowerUp> cardPowerUpDeck;
     private Deck<CardAmmo> cardAmmoDeck;

@@ -1,12 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class is a collection of card, cards are collected in a deterministic order, the Drawer class then will randomly
  * extract card from cardDeck
  * */
-public class Deck<T extends Card> {
+public class Deck<T extends Card> implements Serializable {
     private ArrayList<T> cardDeck;
     private ArrayList<T> trashDeck;
     private boolean mix;

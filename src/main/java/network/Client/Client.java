@@ -143,10 +143,12 @@ public abstract class Client {
         }
 
         else if (message.getUpdateType().equals(UpdateClient.RESPAWN)) {
+            System.out.println("Respawn");
             view.addPowerup(message.getPowerUp());
             view.showPowerUpChooseRespawn();
         }
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
+            System.out.println("handupdate");
             view.setBlueAmmo(message.getHandPlayer().getAmmoRYB()[2]);
             view.setRedAmmo(message.getHandPlayer().getAmmoRYB()[0]);
             view.setYellowAmmo(message.getHandPlayer().getAmmoRYB()[1]);

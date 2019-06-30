@@ -1,11 +1,12 @@
 package Model;
 
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 /**
  * This class is the Factory class for decks. Using createDeck method it's returned a deck
  * */
-public class DeckCreator {
+public class DeckCreator implements Serializable {
     /**
      * Method to create a deck of card, it takes a parameter which indicates the deck type
      * */
