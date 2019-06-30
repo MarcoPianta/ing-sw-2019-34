@@ -207,6 +207,7 @@ public class GameLobby {
             //HASH table per repawn message
             players.get(respawnMessage.getToken()).calculateNewPosition(players.get(respawnMessage.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(respawnMessage.getPowerUp()));
             server.send(new UpdateClient(respawnMessage.getToken(), players.get(respawnMessage.getToken()).getPosition()));
+            clients.parallelStream().forEach(x -> send(new UpdateClient(x, players.get(respawnMessage.getToken()).getColor(), players.get(respawnMessage.getToken()).getPosition())));
             historyMessage=new ArrayList<>();
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.RELOAD.getAbbreviation())){

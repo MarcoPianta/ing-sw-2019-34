@@ -76,6 +76,11 @@ public class ViewCLI extends View {
     }
 
     @Override
+    public void setOtherPosition(Colors player, String position) {
+
+    }
+
+    @Override
     public void showPossibleRooms(List<String> ids) {
 
     }

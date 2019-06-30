@@ -147,6 +147,8 @@ public abstract class Client {
             view.addPowerup(message.getPowerUp());
             view.showPowerUpChooseRespawn();
         }
+        else if (message.getUpdateType().equals(UpdateClient.OTHERPOSITION))
+            view.setOtherPosition(message.getOtherColor(), message.getSquareID());
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
             System.out.println("handupdate");
             view.setBlueAmmo(message.getHandPlayer().getAmmoRYB()[2]);

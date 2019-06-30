@@ -48,11 +48,13 @@ public class TurnHandler {
 
 
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8) {
+            System.out.println("sono nel if magico");
             gameHandler.getGame().getCurrentPlayer().spawn(1);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1, 1, 1);
             gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
             gameHandler.getGame().getCurrentPlayer().spawn(1);
             gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(1)));
+            System.out.println("colore del player " + gameHandler.getGame().getCurrentPlayer().getColor());
         }
        /* setNextState(StateMachineEnumerationTurn.ACTION1);
         // remove playerValid??
@@ -100,8 +102,12 @@ public class TurnHandler {
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(newMessage.getPlayerTarget(),newMessage.getNewSquare(), 3).execute();
-            if(valueReturn)
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(),newMessage.getPlayerTarget().getPosition()));
+            if(valueReturn) {
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
+            }
         }
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
@@ -236,7 +242,10 @@ public class TurnHandler {
 
         }
         else if(message.getActionType()==ActionType.GRABAMMO){
-            valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
+            if(gameHandler.getGame().getCurrentPlayer().getPosition().getItem().isWithPowerUp())
+                valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardNotOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
+            else
+                valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
             if(valueReturn){
                 endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
@@ -309,9 +318,16 @@ public class TurnHandler {
             else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
                     gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getOtherMove()==0){
                 gameHandler.getGameLobby().send( new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getUser().getColor(), newMessage.getUser().getPosition())));
             }
-            else
-                gameHandler.getGameLobby().send( new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getTarget().getPosition()));
+            else {
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(), newMessage.getTarget().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getTarget().getColor(), newMessage.getTarget().getPosition())));
+            }
         }
         return valueReturn;
 

@@ -189,9 +189,7 @@ public abstract class View {
         client.send(new RespawnMessage(client.getToken(), powerUp));
     }
 
-    public void setOtherPosition(int player, String position) {
-        otherPlayersPosition[player] = position;
-    }
+    public abstract void setOtherPosition(Colors player, String position);
 
     public void setMyTurn(boolean myTurn){
         this.myTurn = myTurn;
