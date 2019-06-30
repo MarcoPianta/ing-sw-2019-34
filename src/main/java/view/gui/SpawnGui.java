@@ -16,6 +16,7 @@ public class SpawnGui extends JFrame {
 
         position = 0;
         for (String s: powerUps){
+            System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
             JLabel label = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
             label.addMouseListener(new MouseListener() {
                 int pos = position;
@@ -46,6 +47,7 @@ public class SpawnGui extends JFrame {
                 }
             });
             position++;
+            this.add(label);
         }
         this.setVisible(true);
     }
