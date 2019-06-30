@@ -22,6 +22,7 @@ public class SpawnGui extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     mapGui.sendSpawnMessage(pos);
+                    dispose();
                 }
 
                 @Override
