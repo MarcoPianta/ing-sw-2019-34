@@ -9,6 +9,7 @@ public class CardNotOnlyAmmo extends CardAmmo{
 
     public CardNotOnlyAmmo(String file) throws FileNotFoundException {
         JsonObject jsonValues = Utils.JsonFileHandler.openFile("NotOnlyAmmo", file); /* this variable contains the JsonObject created from JSON file*/
+        name = jsonValues.getString("name");
         item2 = AmmoColors.valueOf(jsonValues.getString("item2"));
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));
         withPowerUp = true;

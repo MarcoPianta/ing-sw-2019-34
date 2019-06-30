@@ -682,6 +682,8 @@ public class MapGui extends JFrame{
      * This method updates the enemy position
      * */
     public void updateEnemyPosition(Colors player, String id){
+        System.out.println(player);
+        System.out.println(enemies);
         othersPosition[enemies.get(player)] = id;
         Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
         Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
