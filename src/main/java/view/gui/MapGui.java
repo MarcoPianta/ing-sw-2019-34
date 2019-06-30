@@ -48,7 +48,7 @@ public class MapGui extends JFrame{
     private static HashMap<Colors, Integer> enemies; //The string is the color name of the player
     private List<String> redCrosses;
     private String myPosition;
-    private String[] othersPosition = new String[4];
+    private String[] othersPosition = {"","","",""};
     private HashMap<String, String[]> spawnSquareWeapon;
     private HashMap<String, CardAmmo> ammosOnMap;
     private boolean myTurn;
