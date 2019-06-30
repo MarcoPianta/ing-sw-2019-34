@@ -295,6 +295,14 @@ public class MapGui extends JFrame{
         System.out.println(position);
     }
 
+    public void spawn(){
+        new SpawnGui(powerUps, this);
+    }
+
+    public void sendSpawnMessage(int position){
+        client.send(new RespawnMessage(client.getToken(), position));
+    }
+
     /**
      * This method is called when the player wants to use a powerup
      * */

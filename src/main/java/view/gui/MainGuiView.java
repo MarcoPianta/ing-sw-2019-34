@@ -226,7 +226,7 @@ public class MainGuiView extends View {
 
     @Override
     public void showPowerUpChooseRespawn() {
-
+        mapGui.spawn();
     }
 
     @Override
