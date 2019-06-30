@@ -2,11 +2,12 @@ package Model;
 
 import javax.json.*;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public final class GameBoard {
+public final class GameBoard implements Serializable {
     private String name;
     private ArrayList<Room> rooms;
 

@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeadRoute {
+public class DeadRoute implements Serializable{
     private int skulls;
     private ArrayList<Player> murders;
     private Game gameId;
@@ -13,6 +14,7 @@ public class DeadRoute {
         skulls=n;
         murders=new ArrayList<>();
         this.gameId=gameId;
+        finalTurn=false;
     }
 
     public Game getGameId() {

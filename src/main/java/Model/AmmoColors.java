@@ -1,6 +1,8 @@
 package Model;
 
-public enum AmmoColors{
+import java.io.Serializable;
+
+public enum AmmoColors implements Serializable {
     BLUE("BLUE"),
     YELLOW("YELLOW"),
     RED("RED");

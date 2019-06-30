@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * This enumeration is used to list the name that other classes use to refer to ammo cards
  * */
-public enum AmmoEnum {
+public enum AmmoEnum implements Serializable {
     AMMO1("A1"),
     AMMO2("A2"),
     AMMO3("A3"),

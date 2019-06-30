@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * This enumeration lists the color used in the game (for example for players or squares)
  */
-public enum Colors {
+public enum Colors implements Serializable {
     BLUE("blue"),
     GREEN("green"),
     WHITE("white"),
