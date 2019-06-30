@@ -195,6 +195,7 @@ public class MapGui extends JFrame{
         else  path = "cardonlyammo";
 
         File file = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "cardammo" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
+        System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "cardammo" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();
@@ -574,7 +575,7 @@ public class MapGui extends JFrame{
                     chatLabel.setOpaque(false);
                     chatArea.add(chatLabel);
                     chatArea.revalidate();
-                    //client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
+                    client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
                 }
                 text.setText("");
             }

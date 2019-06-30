@@ -18,6 +18,7 @@ public class UpdateClient extends Message {
     private CardAmmo ammo;
     private ArrayList<Colors> marks;
     private String textMessage;
+    private Colors otherColor;
 
     private void setMessageInfo(Integer token, String type){
         this.actionType = ActionType.UPDATECLIENTS;
@@ -51,6 +52,17 @@ public class UpdateClient extends Message {
     public UpdateClient(Integer token, NormalSquare square){
         setMessageInfo(token, POSITION);
         this.squareID = square.getId();
+    }
+
+    /**
+     * This constructor is used to build messages to update the position of a player
+     * @param token token of the clients who need to be updated
+     * @param square the square which indicates the new position of the player
+     */
+    public UpdateClient(Integer token, Colors otherPlayer, NormalSquare square){
+        setMessageInfo(token, OTHERPOSITION);
+        this.squareID = square.getId();
+        this.otherColor = otherPlayer;
     }
 
     /**
@@ -119,11 +131,12 @@ public class UpdateClient extends Message {
     public static final String DAMAGEBARUPDATE ="DAMAGEBAR";
     public static final String POSSIBLESQUARES = "POSSIBLESQUARES";
     public static final String POSITION = "POSITION";
+    public static final String OTHERPOSITION = "OTHERPOSITION";
     public static final String RESPAWN = "RESPAWN";
     public static final String MESSAGE = "MESSAGE";
     public static final String HANDPLAYER = "HANDPLAYER";
-    public static final String FILLSPAWN = " FILL SPAWN";
-    public static final String FILLSQUARE= " FILL SQUARE";
+    public static final String FILLSPAWN = "FILLSPAWN";
+    public static final String FILLSQUARE= "FILLSQUARE";
 
     public ArrayList<String> getReachableTarget() {
         return reachableTarget;
@@ -163,6 +176,10 @@ public class UpdateClient extends Message {
 
     public int getPosWeapon() {
         return posWeapon;
+    }
+
+    public Colors getOtherColor() {
+        return otherColor;
     }
 
     public ArrayList<Colors> getMarks() {

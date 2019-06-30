@@ -100,8 +100,12 @@ public class TurnHandler {
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(newMessage.getPlayerTarget(),newMessage.getNewSquare(), 3).execute();
-            if(valueReturn)
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(),newMessage.getPlayerTarget().getPosition()));
+            if(valueReturn) {
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
+            }
         }
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
@@ -309,9 +313,16 @@ public class TurnHandler {
             else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
                     gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getOtherMove()==0){
                 gameHandler.getGameLobby().send( new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getUser().getColor(), newMessage.getUser().getPosition())));
             }
-            else
-                gameHandler.getGameLobby().send( new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getTarget().getPosition()));
+            else {
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(), newMessage.getTarget().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getTarget().getColor(), newMessage.getTarget().getPosition())));
+            }
         }
         return valueReturn;
 
