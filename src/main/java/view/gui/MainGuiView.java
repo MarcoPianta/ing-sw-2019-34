@@ -184,6 +184,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void grabWeapon() {
+
+    }
+
+    @Override
     public void setBlueAmmo(int blueAmmo) {
         mapGui.setAmmo(blueAmmo, 2);
     }

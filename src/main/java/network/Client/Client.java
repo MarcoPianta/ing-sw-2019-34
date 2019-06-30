@@ -70,6 +70,10 @@ public abstract class Client {
             GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
             //view.addWeapon();
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONREQUEST.getAbbreviation())){
+            GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
+            //view.addWeapon();
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
             CanUseTagBack canUseTagBack = (CanUseTagBack) message;
             //view.showVenomRequest(canUseTagBack.getPlayerShooter());
