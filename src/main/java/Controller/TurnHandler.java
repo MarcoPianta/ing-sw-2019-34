@@ -106,6 +106,7 @@ public class TurnHandler {
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
                 gameHandler.getGameLobby().getClients()
                         .parallelStream().
+                        filter(x -> (!x.equals(newMessage.getPlayerTarget().getPlayerID()))).
                         forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
             }
         }
@@ -320,12 +321,14 @@ public class TurnHandler {
                 gameHandler.getGameLobby().send( new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPosition()));
                 gameHandler.getGameLobby().getClients()
                         .parallelStream().
+                        filter(x -> (!x.equals(newMessage.getUser().getPlayerID()))).
                         forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getUser().getColor(), newMessage.getUser().getPosition())));
             }
             else {
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(), newMessage.getTarget().getPosition()));
                 gameHandler.getGameLobby().getClients()
                         .parallelStream().
+                        filter(x -> (!x.equals(newMessage.getTarget().getPlayerID()))).
                         forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getTarget().getColor(), newMessage.getTarget().getPosition())));
             }
         }
@@ -409,7 +412,7 @@ public class TurnHandler {
                 else{
                     emptySquares.get(i).setItems(game.getDeckCollector().getCardAmmoDrawer().draw());
                     for(Player p: game.getPlayers()){
-                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),emptySquares.get(i).getItem()));
+                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),game.getDeckCollector().getCardAmmoDrawer().draw()));
                     }
                 }
                 emptySquares.remove(i);

@@ -88,7 +88,7 @@ public class GameHandler {
                 else{
                     game.getMap().getRooms().get(i).getNormalSquares().get(j).setItems(game.getDeckCollector().getCardAmmoDrawer().draw());
                     for(Player p: game.getPlayers()){
-                    gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getItem()));
+                        gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(), game.getDeckCollector().getCardAmmoDrawer().draw()));
                     }
                 }
                 j++;
@@ -260,7 +260,7 @@ public class GameHandler {
         if((game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
                 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0)
                 &&!game.getDeadRoute().isFinalTurn())
-            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,3).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,4).reachableSquare()));
     }
