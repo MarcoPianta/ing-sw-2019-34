@@ -170,7 +170,7 @@ public class GameLobby {
             if (receiveTargetSquare.getType().equals("grab")){
                 if (!gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).isSpawn()) {
                     gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
-                    gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()));
+                    if (gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()))) server.send(new UpdateClient(message.getToken(), "You grab ammos"));
                     historyMessage = new ArrayList<>();
                 }
                 else{

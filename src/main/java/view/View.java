@@ -165,6 +165,8 @@ public abstract class View {
         this.marks = marks;
     }
 
+    public abstract void grabWeapon();
+
     public void setMap(GameBoard map) {
         this.map = map;
     }

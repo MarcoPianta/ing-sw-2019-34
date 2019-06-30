@@ -199,7 +199,7 @@ public class MapGui extends JFrame{
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            //g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             Image ammoScaledInstance = ammo.getScaledInstance(150 * currentMapImage.getWidth() / 2545, 150 * currentMapImage.getHeight() / 1928, Image.SCALE_DEFAULT);
             g.drawImage(ammoScaledInstance, ViewMap.getXCoordinates(id), ViewMap.getYCoordinates(id)+175, null);
             g.dispose();
@@ -598,13 +598,17 @@ public class MapGui extends JFrame{
                 if(!spawnSquareWeapon.get(s)[a].equals("")){
                     if (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
                             && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928))){
-                        new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, grab);
+                        new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, grab, this);
                         return true;
                     }
                 }
             }
         }
         return false;
+    }
+
+    public void sendGrabWeapon(int position){
+        client.send(new GrabWeapon(client.getToken(), position));
     }
 
     /**
