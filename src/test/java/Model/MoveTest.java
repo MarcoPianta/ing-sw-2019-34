@@ -67,6 +67,11 @@ public class MoveTest {
         CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
         Effect testEffect = testWeapon.getEffects().get(1);
         Move action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), testEffect.getMyMove());
-        assertEquals(2, action.reachableSquare().size());
+        assertEquals(3, action.reachableSquare().size());
+
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        testTargetPlayer.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(0));
+        action = new Move(testTargetPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(1), 3);
+        assertEquals(9, action.reachableSquare().size());
     }
 }

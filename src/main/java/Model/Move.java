@@ -56,6 +56,7 @@ public class Move implements Action, Serializable {
         ArrayList<NormalSquare> reachableSquare = new ArrayList<>();
         ArrayList<NormalSquare> reachable = new ArrayList<>();
         reachableSquare.add(startSquare);
+        reachable.add(startSquare);
         int thisStep;
         for(int i = 0, j; i < movePass; i++) {
             thisStep = reachableSquare.size();
