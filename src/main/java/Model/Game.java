@@ -3,11 +3,12 @@ package Model;
 import Controller.StateMachineEnumerationTurn;
 
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class Game implements Serializable {
     private ArrayList<Player> players;
     private Player firstPlayer;
     private Player currentPlayer;

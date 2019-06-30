@@ -85,6 +85,9 @@ public abstract class Client {
                 view.setNumberAction(1);
             }
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.END.getAbbreviation())){
+            view.setMyTurn(false);
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
             ChatMessage chatMessage = (ChatMessage) message;
             view.chatMessage(chatMessage.getMessage());

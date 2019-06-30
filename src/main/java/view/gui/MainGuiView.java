@@ -205,6 +205,10 @@ public class MainGuiView extends View {
     @Override
     public void setMyTurn(boolean myTurn) {
         mapGui.myTurn(myTurn);
+        if (myTurn)
+            JOptionPane.showMessageDialog(mapGui, "It's your turn");
+        else
+            JOptionPane.showMessageDialog(mapGui, "Your turn is ended");
     }
 
     @Override

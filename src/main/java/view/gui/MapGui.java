@@ -407,6 +407,7 @@ public class MapGui extends JFrame{
         map.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                openWeaponDetail(e.getX(), e.getY(), false);
                 if(myTurn) {
                     //System.out.println(e.getX() + " u " + e.getY());
                     openWeaponDetail(e.getX(), e.getY(), true);
@@ -459,66 +460,6 @@ public class MapGui extends JFrame{
         player.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (myTurn) {
-                    if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
-                        //client.send(new ReceiveTargetSquare(client.getToken(), "move"));
-                        //TODO delete following code
-                        /*ArrayList<Colors> damagesList = new ArrayList<>();
-                        damagesList.add(Colors.BLUE);
-                        damagesList.add(Colors.GREEN);
-                        addDamage(damagesList);
-                        addMarks(Colors.BLUE);*/
-                        //till here
-                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
-                        if (response == 0) {
-                            client.send(new ReceiveTargetSquare(client.getToken(), "move"));
-                            System.out.println("move");
-                        }
-                    } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
-                        //client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
-                        //TODO delete following code
-                        /*ArrayList<Colors> damagesList = new ArrayList<>();
-                        damagesList.add(Colors.BLUE);
-                        damagesList.add(Colors.GREEN);
-                        updateOthersBar(damagesList, Colors.BLUE);
-                        ArrayList<String> ids = new ArrayList<>();
-                        ids.add("0,0");
-                        ids.add("0,2");
-                        ids.add("1,3");
-                        ids.add("2,1");
-                        addRedCross(ids);*/
-                        //till here
-                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
-                        if (response == 0) {
-                            client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
-                            System.out.println("grab");
-                        }
-                    } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
-                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
-                        if (response == 0) {
-                            System.out.println("shot");
-                            //TODO delete following code
-                            /*ArrayList<String> weaponsName = new ArrayList<>();
-                            weaponsName.add("cyberblade");
-                            weaponsName.add("electroscyte");*/
-                            //till here
-                            new WeaponChooseGui(cardsWeapon, self);
-                        }
-                    } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
-                        //TODO send pass message
-                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
-                        if (response == 0) {
-                            client.send(new Pass(client.getToken()));
-                            System.out.println("pass");
-                        }
-                    } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
-                        new UsePowerUpGui(powerUps, self, false, false);
-                        System.out.println("powerup");
-                    }
-                }
-                else
-                    JOptionPane.showMessageDialog(self, "Not your turn !!");
-
                 if (e.getX() > 890 * player.getWidth()/1120){
                     /*ammos[0] = 0;
                     ammos[1] = 0;
@@ -529,6 +470,66 @@ public class MapGui extends JFrame{
                     //new SubstituteWeaponGui(cardsWeapon, self);
                     System.out.println("info");
                 }
+                else
+                    if (myTurn) {
+                        if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
+                            //client.send(new ReceiveTargetSquare(client.getToken(), "move"));
+                            //TODO delete following code
+                            /*ArrayList<Colors> damagesList = new ArrayList<>();
+                            damagesList.add(Colors.BLUE);
+                            damagesList.add(Colors.GREEN);
+                            addDamage(damagesList);
+                            addMarks(Colors.BLUE);*/
+                            //till here
+                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
+                            if (response == 0) {
+                                client.send(new ReceiveTargetSquare(client.getToken(), "move"));
+                                System.out.println("move");
+                            }
+                        } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
+                            //client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                            //TODO delete following code
+                            /*ArrayList<Colors> damagesList = new ArrayList<>();
+                            damagesList.add(Colors.BLUE);
+                            damagesList.add(Colors.GREEN);
+                            updateOthersBar(damagesList, Colors.BLUE);
+                            ArrayList<String> ids = new ArrayList<>();
+                            ids.add("0,0");
+                            ids.add("0,2");
+                            ids.add("1,3");
+                            ids.add("2,1");
+                            addRedCross(ids);*/
+                            //till here
+                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
+                            if (response == 0) {
+                                client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                                System.out.println("grab");
+                            }
+                        } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
+                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
+                            if (response == 0) {
+                                System.out.println("shot");
+                                //TODO delete following code
+                                /*ArrayList<String> weaponsName = new ArrayList<>();
+                                weaponsName.add("cyberblade");
+                                weaponsName.add("electroscyte");*/
+                                //till here
+                                new WeaponChooseGui(cardsWeapon, self);
+                            }
+                        } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
+                            //TODO send pass message
+                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
+                            if (response == 0) {
+                                client.send(new Pass(client.getToken()));
+                                System.out.println("pass");
+                            }
+                        } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
+                            new UsePowerUpGui(powerUps, self, false, false);
+                            System.out.println("powerup");
+                        }
+                    }
+                    else
+                        JOptionPane.showMessageDialog(self, "Not your turn !!");
 
             }
 
@@ -580,17 +581,19 @@ public class MapGui extends JFrame{
     /**
      * This method is used to display the weapon detail when the user press on its name on the map
      * */
-    private void openWeaponDetail(int x, int y, boolean grab){
+    private boolean openWeaponDetail(int x, int y, boolean grab){
         for (String s: spawnSquareWeapon.keySet()){
             for (int a = 0; a < 3; a++){
                 if(!spawnSquareWeapon.get(s)[a].equals("")){
                     if (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
                             && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928))){
                         new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, grab);
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     /**

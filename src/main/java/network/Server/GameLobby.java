@@ -50,8 +50,8 @@ public class GameLobby {
         actionPerformed.replace(token, false);
         if (currentPlayer != null)
             server.send(new EndMessage(currentPlayer));
-        server.send(new StartMessage(token, "turn", 0, "", null));
         currentPlayer = token;
+        server.send(new StartMessage(token, "turn", 0, "", null));
         startTimer();
     }
 

@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Health {
+public class Health implements Serializable {
     private ArrayList<Player> damageBar;
     private int adrenalineAction;
     private ArrayList<Player> mark;
