@@ -1,12 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 
 /**
  * This class is an iterator used to randomly extract cards.
  * Drawer is created by deck.
  * */
-public class Drawer<E> {
+public class Drawer<E> implements Serializable {
     private Deck deck;
 
     public Drawer(Deck deck){

@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * This enumeration contains the name's list of all weapon cards
  * */
-public enum PowerUpEnum {
+public enum PowerUpEnum implements Serializable {
     NEWTON_B            ("newton_B"),
     NEWTON_R            ("newton_R"),
     NEWTON_Y            ("newton_Y"),

@@ -1,14 +1,16 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * This enumeration contains the name's list of all weapon cards
  * */
-public enum WeaponDictionary {
+public enum WeaponDictionary implements Serializable {
     CYBERBLADE("cyberblade"),
     ELECTROSCYTE("electroscyte"),
     FLAMETHROWER("flamethrower"),
     FURNACE("furnace"),
-    GRENADELAUNCHER("grenadeLauncher"),
+    GRENADELAUNCHER("granadeLauncher"),
     HEATSEEKER("heatseeker"),
     HELLION("hellion"),
     LOCKRIFLE("lockRifle"),
