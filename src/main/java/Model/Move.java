@@ -1,11 +1,12 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class implements Action
  */
-public class Move implements Action {
+public class Move implements Action, Serializable {
     private Player targetPlayer;
     private NormalSquare startSquare;
     private NormalSquare selectedSquare;

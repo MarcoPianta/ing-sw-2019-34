@@ -1,8 +1,11 @@
 package Model;
+
+import java.io.Serializable;
+
 /**
  * This class implements Action
  */
-public class Grab implements Action {
+public class Grab implements Action, Serializable {
     private Player actorPlayer;
     private Card grabbedItem;
     private int execution;

@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shoot implements Action{
+public class Shoot implements Action, Serializable {
     private Effect shootEffect;
     private Player shooterPlayer;
     private List<Player> targets;
@@ -116,7 +117,6 @@ public class Shoot implements Action{
         return false;
     }
 
-
     /**
      * Control the Pre-condition of the Shoot Action
      * This method invoke isValidP, isValidS and isValidR methods
@@ -139,6 +139,10 @@ public class Shoot implements Action{
         }
     }
 
+    /**
+     * When it's called by the 'p' case of the Shoot action this method returns True if the players in the List of selected targets belong to cardinals square, otherwise return false
+     * When it's called by the 's' case of the Shoot action this method returns True if the squares in the List of selected targets belong to cardinals square, otherwise return false
+     */
     private boolean cardinalControl(List<NormalSquare> square) {
         int i;
         int j;
@@ -153,6 +157,9 @@ public class Shoot implements Action{
         return (x == 0 || y == 0);
     }
 
+    /**
+     *
+     * */
     private boolean conditionControll(Player target, List<Player> visibleTarget, ArrayList<NormalSquare> targetListSquare){
         if (shootEffect.getPreCondition().isMelee() && shooterPlayer.getPosition() != target.getPosition())
             return false;
@@ -228,7 +235,9 @@ public class Shoot implements Action{
         }
     }
 
-
+    /**
+     * This method return a List of all the square that compose the rooms reachables with the selected effect
+     */
     public List<NormalSquare> reachableRoom() {
         ArrayList<Colors> roomList = new ArrayList<>();
         List<NormalSquare> squareList = new ArrayList<>();
@@ -288,6 +297,10 @@ public class Shoot implements Action{
         targetPlayer.getPlayerBoard().getHealthPlayer().addDamage(shooterPlayer, damage);
     }
 
+    /**
+     * This method is called by execute
+     * This method execute the Shoot Action only in 'p' case
+     */
     private void execP(){
         for (int i = 0; i < targets.size(); i++) {
             injureTarget(targets.get(i), shootEffect.getpDamage().get(i));
@@ -295,10 +308,48 @@ public class Shoot implements Action{
         }
     }
 
+    /**
+     * This method is called by execute
+     * This method execute the Shoot Action only in 's' case
+     */
     private void execS(){
-        for (int i = 0; i < targetSquare.size(); i++) {
+        if(shootEffect.getSquareNumber() == 4)
+            shootShockWave();
+        else if(shootEffect.getSquareNumber() == 2)
+            shootFlameThrower();
+        else{
             for (Player target : gamePlayers) {
-                if (target.getPosition() == targetSquare.get(i)) {
+                if (target.getPosition() == targetSquare.get(0)) {
+                    injureTarget(target, shootEffect.getsDamage().get(0));
+                    markTarget(target, shootEffect.getsMark().get(0));
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is called by execS
+     * This method execute the Shoot Action only for FlameThrower Weapon
+     */
+    private void shootFlameThrower() {
+        ArrayList<NormalSquare> flameSquares = new ArrayList<>(targetSquare);
+        int x = 0;
+        int y = 0;
+        NormalSquare newTargetSquare = null;
+        if (shooterPlayer.getPosition().getId().charAt(0) == flameSquares.get(0).getId().charAt(0)) {
+            x = shooterPlayer.getPosition().getId().charAt(0);
+            y = flameSquares.get(0).getId().charAt(2) + (flameSquares.get(0).getId().charAt(2) - shooterPlayer.getPosition().getId().charAt(2));
+            newTargetSquare = shooterPlayer.getGameId().getMap().getSquareFromId(x + "," + y);
+        } else if (shooterPlayer.getPosition().getId().charAt(2) == flameSquares.get(0).getId().charAt(2)) {
+            x = flameSquares.get(0).getId().charAt(0) + (flameSquares.get(0).getId().charAt(0) - shooterPlayer.getPosition().getId().charAt(0));
+            y = shooterPlayer.getPosition().getId().charAt(2);
+            newTargetSquare = shooterPlayer.getGameId().getMap().getSquareFromId(x + "," + y);
+        }
+        if(flameSquares.get(0).getN() == newTargetSquare || flameSquares.get(0).getE() == newTargetSquare || flameSquares.get(0).getS() == newTargetSquare || flameSquares.get(0).getW() == newTargetSquare)
+            flameSquares.add(newTargetSquare);
+        for (int i = 0; i < flameSquares.size(); i++) {
+            for (Player target : gamePlayers) {
+                if (target.getPosition() == flameSquares.get(i)) {
                     injureTarget(target, shootEffect.getsDamage().get(i));
                     markTarget(target, shootEffect.getsMark().get(i));
                 }
@@ -306,6 +357,34 @@ public class Shoot implements Action{
         }
     }
 
+    /**
+     * This method is called by execS
+     * This method execute the Shoot Action only for ShockWave Weapon
+     */
+    private void shootShockWave() {
+        ArrayList<NormalSquare> shockSquares = new ArrayList<>();
+        if (shooterPlayer.getPosition().getN() != shooterPlayer.getPosition())
+            shockSquares.add(shooterPlayer.getPosition().getN());
+        if (shooterPlayer.getPosition().getE() != shooterPlayer.getPosition())
+            shockSquares.add(shooterPlayer.getPosition().getE());
+        if (shooterPlayer.getPosition().getS() != shooterPlayer.getPosition())
+            shockSquares.add(shooterPlayer.getPosition().getS());
+        if (shooterPlayer.getPosition().getW() != shooterPlayer.getPosition())
+            shockSquares.add(shooterPlayer.getPosition().getW());
+        for (int i = 0; i < shockSquares.size(); i++) {
+            for (Player target : gamePlayers) {
+                if (target.getPosition() == shockSquares.get(i)) {
+                    injureTarget(target, shootEffect.getsDamage().get(i));
+                    markTarget(target, shootEffect.getsMark().get(i));
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is called by execute
+     * This method execute the Shoot Action only in 'r' case
+     */
     private void execR(){
         for (Player target: gamePlayers) {
             if (target.getPosition().getColor() == roomColor){

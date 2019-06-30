@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room{
+public class Room implements Serializable {
 
     private ArrayList<NormalSquare> normalSquares;
     private Colors color;
