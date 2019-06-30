@@ -296,6 +296,7 @@ public class MapGui extends JFrame{
     }
 
     public void spawn(){
+        System.out.println(powerUps);
         new SpawnGui(powerUps, this);
     }
 

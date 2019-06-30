@@ -154,6 +154,7 @@ public abstract class Client {
             view.setYellowAmmo(message.getHandPlayer().getAmmoRYB()[1]);
             view.setPowerUps((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
             view.setWeapons((ArrayList<CardWeapon>) message.getHandPlayer().getPlayerWeapons());
+            System.out.println((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
         }
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());

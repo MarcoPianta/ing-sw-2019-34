@@ -11,6 +11,7 @@ public class SpawnGui extends JFrame {
     private int position;
 
     public SpawnGui(ArrayList<String> powerUps, MapGui mapGui){
+        super("Spawn");
         this.setLayout(new FlowLayout());
 
         position = 0;
