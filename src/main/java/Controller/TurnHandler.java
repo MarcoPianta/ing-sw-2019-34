@@ -45,6 +45,8 @@ public class TurnHandler {
         for(Player p:gameHandler.getGame().getDeadPlayer())
             gameHandler.getGame().getDeadPlayer().remove(p);
         gameHandler.getGameLobby().startTurn(gameHandler.getGame().getCurrentPlayer().getPlayerID());
+
+
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8) {
             gameHandler.getGame().getCurrentPlayer().spawn(1);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1, 1, 1);
@@ -55,7 +57,8 @@ public class TurnHandler {
        /* setNextState(StateMachineEnumerationTurn.ACTION1);
         // remove playerValid??
         gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());*/
-       gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),"you can choose the action"));
+        //gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPosition()));
+        gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),"you can choose the action"));
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
 
     }
@@ -87,9 +90,9 @@ public class TurnHandler {
     }*/
 
     /**
-     *
-     * @param message
-     * @return true if the action is doe
+     * this method is a switch of the three principal action, and execute the move action
+     * @param message indicate the type of actiom
+     * @return true if the action has been execute
      */
     public boolean actionAdrenaline012(Message message){
         boolean valueReturn;
@@ -143,6 +146,12 @@ public class TurnHandler {
             valueReturn=actionGrab(message);
         return valueReturn;
     }*/
+
+    /**
+     * this method  implements action shoot
+     * @param message is the shot message
+     * @return true if the action has been execute
+     */
     protected boolean actionShot(Shot message){
         boolean valueReturn;
         if(message.getSquare()==null && message.getRoom()==null) {
@@ -203,6 +212,11 @@ public class TurnHandler {
     }
 
     //creare messaggio diverso per weapon =3, stesso messaggio ma costruttore diverso, se ho 3 armi grabbo normalmente  e elimino lintero per rimuovere
+    /**
+     * this method  implements action grab
+     * @param message is the shot message
+     * @return true if the action has been execute
+     */
     protected boolean actionGrab(Message message){
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.GRABWEAPON ){
@@ -268,7 +282,11 @@ public class TurnHandler {
         }
         return valueReturn;
     }
-
+    /**
+     * this method  implements  the use of power up
+     * @param message is the use powerUp message
+     * @return true if the action has been execute
+     */
     public boolean usePowerUp(Message message){
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.SHOT && powerUpIsValid(message)){
@@ -297,7 +315,11 @@ public class TurnHandler {
         return valueReturn;
 
     }
-
+    /**
+     * this method  implements action reload
+     * @param message is the reload message
+     * @return true if the action has been execute
+     */
     public boolean actionReload(ReloadMessage message){
         boolean valueReturn;
 
@@ -316,7 +338,7 @@ public class TurnHandler {
     }
 
     public void endTurn(){
-
+        System.out.println("end turn");
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.WAIT);
         gameHandler.getGame().incrementCurrentPlayer();
         setNextState(StateMachineEnumerationTurn.START);
@@ -324,6 +346,7 @@ public class TurnHandler {
         endTurnChecks.isFinalTurn(gameHandler.getGame());
         endTurnChecks.playerIsDead(gameHandler.getGame());
         start();
+
     }
 
     private Player convertedPlayer(Player player){
@@ -392,14 +415,14 @@ public class TurnHandler {
         }
 
         public void isFinalTurn(Game game){
-            if(game.getDeadRoute().isFinalTurn())
+            if(game.getDeadRoute().isFinalTurn()){
                 game.getDeadRoute().setFinalTurnPlayer();
-            getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
-            if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())
-                getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
-
-            for(Player p:game.getPlayers())
-                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"));
+                for(Player p:game.getPlayers())
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"));
+                getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
+                if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())
+                    getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
+            }
         }
     }
 }

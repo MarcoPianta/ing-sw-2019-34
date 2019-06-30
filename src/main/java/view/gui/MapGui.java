@@ -193,7 +193,7 @@ public class MapGui extends JFrame{
         if (card.isWithPowerUp()) path = "cardnotonlyammo";
         else  path = "cardonlyammo";
 
-        File file = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
+        File file = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "cardammo" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();

@@ -17,7 +17,7 @@ public class TurnHandlerTest {
         players.add(67625);
         GameHandler gameHandler=new GameHandler(5,players,"map1",null);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getPlayers().get(0));
-
+        gameHandler.getTurnHandler().start();
         assertEquals(2,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());
         assertEquals(1,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
         assertEquals(1,gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
