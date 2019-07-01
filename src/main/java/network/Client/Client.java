@@ -66,13 +66,8 @@ public abstract class Client {
             TargetMoveRequest targetMoveRequest = (TargetMoveRequest) message;
             view.showTargetMove(targetMoveRequest.getTargetableSquare());
         }
-        else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONRESPONSE.getAbbreviation())){
-            GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
-            //view.addWeapon();
-        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONREQUEST.getAbbreviation())){
-            GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
-            //view.addWeapon();
+            view.grabWeaponRequest();
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
             CanUseTagBack canUseTagBack = (CanUseTagBack) message;

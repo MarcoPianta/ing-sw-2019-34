@@ -369,7 +369,7 @@ public class MapGui extends JFrame{
      * This method is used to send the chosen weapon for a shot action
      * */
     public void weaponChosen(String choose){
-        //client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0), Character.getNumericValue(choose.charAt(2)))));
+        client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0)), Character.getNumericValue(choose.charAt(2))));
         System.out.println(choose);
     }
 
@@ -419,7 +419,7 @@ public class MapGui extends JFrame{
                 openWeaponDetail(e.getX(), e.getY(), false);
                 if(myTurn) {
                     //System.out.println(e.getX() + " u " + e.getY());
-                    openWeaponDetail(e.getX(), e.getY(), true);
+                    openWeaponDetail(e.getX(), e.getY(), false);
                     if (actionType.equals("move")) {
                         String id = getSquareId(e.getX(), e.getY());
                         if (!id.equals("") && !redCrosses.contains(id)) {
@@ -523,7 +523,7 @@ public class MapGui extends JFrame{
                                 weaponsName.add("cyberblade");
                                 weaponsName.add("electroscyte");*/
                                 //till here
-                                new WeaponChooseGui(cardsWeapon, self);
+                                new WeaponChooseGui(cardsWeapon, self, true);
                             }
                         } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
                             //TODO send pass message
@@ -603,6 +603,10 @@ public class MapGui extends JFrame{
             }
         }
         return false;
+    }
+
+    public void grabWeaponRequest(){
+        new WeaponChooseGui(Arrays.asList(spawnSquareWeapon.get(myPosition)), this, false);
     }
 
     public void sendGrabWeapon(int position){
