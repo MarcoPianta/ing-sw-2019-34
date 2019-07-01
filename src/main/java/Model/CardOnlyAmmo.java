@@ -8,9 +8,9 @@ public class CardOnlyAmmo extends CardAmmo {
     private AmmoColors item2;
     private AmmoColors item3;
 
-
     public CardOnlyAmmo(String file) throws FileNotFoundException {
         JsonObject jsonValues = Utils.JsonFileHandler.openFile("OnlyAmmo", file); /* this variable contains the JsonObject created from JSON file*/
+        name = jsonValues.getString("name");
         item1 = AmmoColors.valueOf(jsonValues.getString("item1"));
         item2 = AmmoColors.valueOf(jsonValues.getString("item2"));
         item3 = AmmoColors.valueOf(jsonValues.getString("item3"));

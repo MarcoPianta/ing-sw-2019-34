@@ -70,6 +70,10 @@ public abstract class Client {
             GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
             //view.addWeapon();
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPONREQUEST.getAbbreviation())){
+            GrabWeaponRequest grabWeaponResponse = (GrabWeaponRequest) message;
+            //view.addWeapon();
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
             CanUseTagBack canUseTagBack = (CanUseTagBack) message;
             //view.showVenomRequest(canUseTagBack.getPlayerShooter());
@@ -147,6 +151,8 @@ public abstract class Client {
             view.addPowerup(message.getPowerUp());
             view.showPowerUpChooseRespawn();
         }
+        else if (message.getUpdateType().equals(UpdateClient.OTHERPOSITION))
+            view.setOtherPosition(message.getOtherColor(), message.getSquareID());
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
             System.out.println("handupdate");
             view.setBlueAmmo(message.getHandPlayer().getAmmoRYB()[2]);
@@ -154,7 +160,7 @@ public abstract class Client {
             view.setYellowAmmo(message.getHandPlayer().getAmmoRYB()[1]);
             view.setPowerUps((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
             view.setWeapons((ArrayList<CardWeapon>) message.getHandPlayer().getPlayerWeapons());
-            System.out.println((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
+            System.out.println(message.getHandPlayer().getPlayerPowerUps());
         }
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());

@@ -6,15 +6,56 @@
     0
   ],
   "color": "YELLOW",
-  "effectNumber": 5,
+  "effectNumber": 6,
   "actionSequences": [
+    1,
     12,
     21,
     123,
     132,
     213
   ],
-"Effect1": [
+  "Effect1": [
+    {
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "p",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
+      "myMove": 0,
+      "targetMove": 0,
+      "preCondition": [
+        {
+          "vision": true,
+          "blind": false,
+          "melee": true,
+          "minRange": 0,
+          "maxRange": 0,
+          "cardinal": false,
+          "enemiesDifferentSquare": false,
+          "sameSquare": false
+        }
+      ]
+    }
+  ],
+  "Effect2": [
     {
       "bonusCost":[
         0,
@@ -54,7 +95,7 @@
       ]
     }
   ],
-  "Effect2": [
+  "Effect3": [
     {
       "bonusCost": [
         0,
@@ -94,7 +135,7 @@
       ]
     }
   ],
-  "Effect3": [
+  "Effect4": [
     {
       "bonusCost": [
         0,
@@ -134,7 +175,7 @@
       ]
     }
   ],
-  "Effect4": [
+  "Effect5": [
     {
       "bonusCost": [
         0,
@@ -176,7 +217,7 @@
       ]
     }
   ],
-  "Effect5": [
+  "Effect6": [
     {
       "bonusCost": [
         0,

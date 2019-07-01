@@ -55,7 +55,7 @@ public class GameLobby {
             server.send(new EndMessage(currentPlayer));
         currentPlayer = token;
         server.send(new StartMessage(token, "turn", 0, "", null));
-        startTimer();
+        //startTimer();
     }
 
     private void startTimer(){
@@ -86,8 +86,13 @@ public class GameLobby {
 
     public void receiveMessage(Message message){
         historyMessage.add(message);
-
-        if (message.getActionType().equals(ActionType.RECEIVETARGETSQUARE)) {
+        System.out.println("Ho ricevuto un messaggio " + historyMessage.get(0).getActionType().getAbbreviation());
+        if(message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())) {
+            ChatMessage chatMessage = (ChatMessage) message;
+            clients.forEach(x -> server.send(new ChatMessage(x, chatMessage.getMessage())));
+            historyMessage.remove(historyMessage.size()-1);
+        }
+        else if (message.getActionType().equals(ActionType.RECEIVETARGETSQUARE)) {
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) message;
             gameHandler.firstPartAction(receiveTargetSquare);
         }
@@ -168,7 +173,7 @@ public class GameLobby {
             if (receiveTargetSquare.getType().equals("grab")){
                 if (!gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).isSpawn()) {
                     gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
-                    gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()));
+                    if (gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()))) server.send(new UpdateClient(message.getToken(), "You grab ammos"));
                     historyMessage = new ArrayList<>();
                 }
                 else{
@@ -210,6 +215,7 @@ public class GameLobby {
             //HASH table per repawn message
             players.get(respawnMessage.getToken()).calculateNewPosition(players.get(respawnMessage.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(respawnMessage.getPowerUp()));
             server.send(new UpdateClient(respawnMessage.getToken(), players.get(respawnMessage.getToken()).getPosition()));
+            clients.parallelStream().filter(x -> (!x.equals(respawnMessage.getToken()))).forEach(x -> send(new UpdateClient(x, players.get(respawnMessage.getToken()).getColor(), players.get(respawnMessage.getToken()).getPosition())));
             historyMessage=new ArrayList<>();
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.RELOAD.getAbbreviation())){
@@ -247,10 +253,7 @@ public class GameLobby {
             PaymentResponse paymentResponse = (PaymentResponse) message;
             paymentServer(paymentResponse);
         }
-        else if(message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())) {
-            ChatMessage chatMessage = (ChatMessage) message;
-            clients.forEach(x -> server.send(new ChatMessage(x, chatMessage.getMessage())));
-        }
+
         else if(message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPONRESPONSE.getAbbreviation())){
             SubstituteWeaponResponse substituteWeaponResponse=(SubstituteWeaponResponse) message;
             players.get(substituteWeaponResponse.getToken()).getPlayerBoard().getHandPlayer().substituteWeapons(substituteWeaponResponse.getWeapon());

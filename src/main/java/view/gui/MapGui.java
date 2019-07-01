@@ -13,6 +13,8 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -48,7 +50,7 @@ public class MapGui extends JFrame{
     private static HashMap<Colors, Integer> enemies; //The string is the color name of the player
     private List<String> redCrosses;
     private String myPosition;
-    private String[] othersPosition = new String[4];
+    private String[] othersPosition = {"","","",""};
     private HashMap<String, String[]> spawnSquareWeapon;
     private HashMap<String, CardAmmo> ammosOnMap;
     private boolean myTurn;
@@ -170,10 +172,10 @@ public class MapGui extends JFrame{
      * */
     public void addRedCross(List<String> id){
         redCrosses = id;
+        BufferedImage currentMapWithCross = cloneImage(currentMapImage);
         for (String s: id){
-            BufferedImage currentMapWithCross = currentMapImage.getSubimage(0, 0, currentMapImage.getWidth(), currentMapImage.getHeight());
             Graphics2D g = currentMapWithCross.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            //g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             BufferedImage cross = currentRedCross;
             Image crosResized = cross.getScaledInstance(350 * currentMapWithCross.getWidth() / 2545, 340 * currentMapWithCross.getHeight() / 1928, Image.SCALE_DEFAULT);
             g.drawImage(crosResized, ViewMap.getXCoordinates(s) * currentMapWithCross.getWidth() / 2545, (ViewMap.getYCoordinates(s) * currentMapWithCross.getHeight() / 1928), null);
@@ -198,7 +200,7 @@ public class MapGui extends JFrame{
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            //g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             Image ammoScaledInstance = ammo.getScaledInstance(150 * currentMapImage.getWidth() / 2545, 150 * currentMapImage.getHeight() / 1928, Image.SCALE_DEFAULT);
             g.drawImage(ammoScaledInstance, ViewMap.getXCoordinates(id), ViewMap.getYCoordinates(id)+175, null);
             g.dispose();
@@ -565,13 +567,13 @@ public class MapGui extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!text.getText().equals("")) {
-                    JLabel chatLabel = new JLabel("@"+myColor+": "+text.getText());
+                    /*JLabel chatLabel = new JLabel("@"+myColor+": "+text.getText());
                     chatLabel.setHorizontalTextPosition(JLabel.LEFT);
                     chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
                     chatLabel.setOpaque(false);
                     chatArea.add(chatLabel);
-                    chatArea.revalidate();
-                    //client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
+                    chatArea.revalidate();*/
+                    client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
                 }
                 text.setText("");
             }
@@ -594,13 +596,17 @@ public class MapGui extends JFrame{
                 if(!spawnSquareWeapon.get(s)[a].equals("")){
                     if (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
                             && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928))){
-                        new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, grab);
+                        new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, grab, this);
                         return true;
                     }
                 }
             }
         }
         return false;
+    }
+
+    public void sendGrabWeapon(int position){
+        client.send(new GrabWeapon(client.getToken(), position));
     }
 
     /**
@@ -678,6 +684,8 @@ public class MapGui extends JFrame{
      * This method updates the enemy position
      * */
     public void updateEnemyPosition(Colors player, String id){
+        System.out.println(player);
+        System.out.println(enemies);
         othersPosition[enemies.get(player)] = id;
         Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
         Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
@@ -738,6 +746,13 @@ public class MapGui extends JFrame{
         chatLabel.setOpaque(false);
         chatArea.add(chatLabel);
         chatArea.revalidate();
+    }
+
+    private BufferedImage cloneImage(BufferedImage bi){
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
     public static void main(String[] args) {

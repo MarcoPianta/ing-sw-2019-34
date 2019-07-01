@@ -11,7 +11,7 @@ import java.io.File;
 public class WeaponDetailGui extends JFrame {
     ImageIcon card;
 
-    public WeaponDetailGui(String weapon, String squareId, int postion, boolean grab){
+    public WeaponDetailGui(String weapon, String squareId, int postion, boolean grab, MapGui mapGui){
         super("Weapon detail");
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -28,7 +28,7 @@ public class WeaponDetailGui extends JFrame {
             grabButton.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //TODO send message with choosen weapon with squareId and position
+                    mapGui.sendGrabWeapon(postion);
                 }
 
                 @Override
