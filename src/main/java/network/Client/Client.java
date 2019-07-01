@@ -44,9 +44,6 @@ public abstract class Client {
             if (reloadedMessage.getStatus()){}
 
         }
-        else if (message.getActionType().getAbbreviation().equals(ActionType.PAYMENT.getAbbreviation())) {
-            view.payment((Payment) message);
-        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.PAYMENT.getAbbreviation())){
             view.payment((Payment) message);
         }
@@ -149,13 +146,11 @@ public abstract class Client {
         else if (message.getUpdateType().equals(UpdateClient.OTHERPOSITION))
             view.setOtherPosition(message.getOtherColor(), message.getSquareID());
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
-            System.out.println("handupdate");
-            view.setBlueAmmo(message.getHandPlayer().getAmmoRYB()[2]);
-            view.setRedAmmo(message.getHandPlayer().getAmmoRYB()[0]);
-            view.setYellowAmmo(message.getHandPlayer().getAmmoRYB()[1]);
-            view.setPowerUps((ArrayList<CardPowerUp>) message.getHandPlayer().getPlayerPowerUps());
-            view.setWeapons((ArrayList<CardWeapon>) message.getHandPlayer().getPlayerWeapons());
-            System.out.println(message.getHandPlayer().getPlayerPowerUps());
+            view.setBlueAmmo(message.getBlue());
+            view.setRedAmmo(message.getRed());
+            view.setYellowAmmo(message.getYellow());
+            view.setPowerUps((ArrayList<CardPowerUp>) message.getPowerUps());
+            view.setWeapons((ArrayList<CardWeapon>) message.getWeapons());
         }
         else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
             view.showMessage(message.getMessage());

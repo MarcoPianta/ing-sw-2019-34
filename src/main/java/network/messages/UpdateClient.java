@@ -19,6 +19,11 @@ public class UpdateClient extends Message {
     private ArrayList<Colors> marks;
     private String textMessage;
     private Colors otherColor;
+    private List<CardWeapon> weapons;
+    private List<CardPowerUp> powerUps;
+    private int red;
+    private int yellow;
+    private int blue;
 
     private void setMessageInfo(Integer token, String type){
         this.actionType = ActionType.UPDATECLIENTS;
@@ -88,12 +93,19 @@ public class UpdateClient extends Message {
         for (Player p: players)
             this.reachableTarget.add(p.getPosition().getId());
     }
-
+    /*
     public UpdateClient(Integer token, Hand handPlayer){
         setMessageInfo(token, HANDPLAYER);
         this.handPlayer = handPlayer;
+    }*/
+    public UpdateClient(Integer token, int red,int yellow, int blue, List<CardWeapon> weapons, List<CardPowerUp> powerUps){
+        setMessageInfo(token, HANDPLAYER);
+        this.red=red;
+        this.yellow=yellow;
+        this.blue=blue;
+        this.weapons=weapons;
+        this.powerUps=powerUps;
     }
-
     public UpdateClient(Integer token, CardPowerUp powerUp){
         setMessageInfo(token, RESPAWN);
         this.powerUp = powerUp;
@@ -184,5 +196,26 @@ public class UpdateClient extends Message {
 
     public ArrayList<Colors> getMarks() {
         return marks;
+    }
+
+
+    public int getBlue() {
+        return blue;
+    }
+
+    public int getRed() {
+        return red;
+    }
+
+    public int getYellow() {
+        return yellow;
+    }
+
+    public List<CardPowerUp> getPowerUps() {
+        return powerUps;
+    }
+
+    public List<CardWeapon> getWeapons() {
+        return weapons;
     }
 }

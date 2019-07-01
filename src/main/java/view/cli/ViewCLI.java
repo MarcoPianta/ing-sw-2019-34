@@ -18,21 +18,57 @@ public class ViewCLI extends View {
 
     public ViewCLI(){
         actionCLI=new ActionCLI();
-        players=new HashMap<>();//inizializzare
     }
 
     public static void main(String[] args) {
         ViewCLI viewCLI=new ViewCLI();
         viewCLI.showPowerUpChooseRespawn();
     }
-
+    //mostrare spawn weapomnd
     @Override
     public void grabWeaponRequest() {
-
+        out.println("you can choose one of this weapon to grab\n");
+        int i=1;
+        for(CardWeapon weapon:weapons){
+            out.println(1+ "="+weapon.getName() +"\t");
+            i++;
+        }
+        out.println("choose a number from 1 to "+ 3 +"\n");
+        boolean corrected=false;
+        while(!corrected) {
+            i=in.nextInt();
+            if(i>=1 && i<=3){
+                client.send(new GrabWeapon(client.getToken(),i-1));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to "+ 3+"\n" );
+            }
+        }
     }
 
     @Override
     public void substituteWeaponRequest() {
+        out.println("you have a four weapon, choose the weapon that you want to eliminate\n");
+        int i=1;
+        for(CardWeapon weapon:weapons){
+            out.println(1+ "="+weapon.getName() +"\t");
+            i++;
+        }
+        out.println("choose a number from 1 to "+ weapons.size() +"\n");
+        boolean corrected=false;
+        while(!corrected) {
+            i=in.nextInt();
+            if(i>=1 && i<=weapons.size()){
+                client.send(new SubstituteWeaponResponse(client.getToken(),i-1));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to "+ weapons.size() +"\n" );
+            }
+        }
 
     }
 
@@ -207,11 +243,12 @@ public class ViewCLI extends View {
     public void showMessage(String message) {
         out.println(message);
     }
-
+    //modificarfe mettendo solo che accetta l'uso del powerup
     public void showScopeRequest(ArrayList<Colors> playersId){
         out.println("\nYou can use Scope's powerUp\n press 1 to use scope or any key to cancel.\n");
         if(in.nextInt()==1){
-            int i;
+            client.send(new CanUseScoopResponse(client.getToken()));
+            /*int i;
             if(playersId.size()==1){
 
             }
@@ -230,7 +267,7 @@ public class ViewCLI extends View {
                         out.println("choose a number from 1 to " + playersId.size() + "\n");
                     }
                 }
-            }
+            }*/
         }
     }
 
@@ -246,7 +283,7 @@ public class ViewCLI extends View {
                 }
             }
             if(powerUp.size()==1){
-                //client.send(new UsePowerUp(client.getToken(),powerUp.get(0),,player));
+                client.send(new UsePowerUpResponse(client.getToken(),powerUp.get(0),client.getToken(),player,null));
                 }
             else{
                 for(i=1;i<=powerUp.size();i++){
@@ -256,16 +293,8 @@ public class ViewCLI extends View {
                 boolean corrected=false;
                 i=in.nextInt();
                 while(!corrected){
-                    if(i==1){
-                        //client.send(new UsePowerUp(client.getToken(),powerUp.get(0),,player));
-                        corrected=true;
-                    }
-                    else if(i==2){
-                        //client.send(new UsePowerUp(client.getToken(),powerUp.get(1),,player));
-                        corrected=true;
-                    }
-                    else if(i==3 && powerUp.size()==3){
-                        //client.send(new UsePowerUp(client.getToken(),powerUp.get(1),,player));
+                    if(i==1 || (i==2 && powerUp.size()==2)||(i==3 && powerUp.size()==3)){
+                        client.send(new UsePowerUpResponse(client.getToken(),powerUp.get(i-1),client.getToken(),player,null));
                         corrected=true;
                     }
                     else if(i==9){
