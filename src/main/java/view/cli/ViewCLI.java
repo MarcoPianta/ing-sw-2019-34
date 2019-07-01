@@ -25,6 +25,16 @@ public class ViewCLI extends View {
     }
 
     @Override
+    public void substituteWeaponRequest() {
+
+    }
+
+    @Override
+    public void addMarks() {
+
+    }
+
+    @Override
     public void showReachableSquares(List<String> squares) {
         out.println("you can reach these squares: \n");
         int i=1;

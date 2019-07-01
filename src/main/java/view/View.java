@@ -80,6 +80,10 @@ public abstract class View {
 
     }
 
+    public abstract void substituteWeaponRequest();
+
+    public abstract void addMarks();
+
     public abstract void showToken();
 
     public abstract void fillSpawn(String squareID, int position, String weaponName);
@@ -164,8 +168,6 @@ public abstract class View {
     public void setMarks(ArrayList<Colors> marks) {
         this.marks = marks;
     }
-
-    public abstract void grabWeapon();
 
     public void setMap(GameBoard map) {
         this.map = map;
