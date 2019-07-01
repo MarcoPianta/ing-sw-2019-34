@@ -171,9 +171,18 @@ public class GameLobby {
             MoveResponse moveResponse = (MoveResponse) message;
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
             if (receiveTargetSquare.getType().equals("grab")){
+                System.out.println("--------------PRIMA DI RACCOGLIERE-----------------");
+                System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps() + "\n");
+                System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
                 if (!gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).isSpawn()) {
                     gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
-                    if (gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()))) server.send(new UpdateClient(message.getToken(), "You grab ammos"));
+                    if (gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()))) {
+                        server.send(new UpdateClient(message.getToken(), "You grab ammos"));
+                        System.out.println("--------------DOPO AVER RACCOLTO-----------------");
+                        System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps() + "\n");
+                        System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
+                        server.send(new UpdateClient(message.getToken(), players.get(message.getToken()).getPlayerBoard().getHandPlayer()));
+                    }
                     historyMessage = new ArrayList<>();
                 }
                 else{
@@ -192,18 +201,27 @@ public class GameLobby {
         }
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPON.getAbbreviation())){
-            MoveResponse receiveTargetSquare = (MoveResponse) historyMessage.get(1);
+            MoveResponse moveResponse = (MoveResponse) historyMessage.get(1);
             GrabWeapon grabWeapon = (GrabWeapon) message;
-            boolean ex = gameHandler.getActionValidController().actionValid((SpawnSquare) gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()) , ((GrabWeapon) message).getPositionWeapon());
+            boolean ex = gameHandler.getActionValidController().actionValid((SpawnSquare) gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()) , ((GrabWeapon) message).getPositionWeapon());
             if (!ex){
                 server.send(new UpdateClient(message.getToken(), "Action not done"));
                 historyMessage=new ArrayList<>();
             }
             else{
                 Integer[] cost = new Integer[3];
-                cost[0]=gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getBlueCost();
-                cost[1]=gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getYellowCost();
-                cost[2]=gameHandler.getGame().getMap().getSquareFromId(receiveTargetSquare.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getRedCost();
+                cost[0]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getBlueCost();
+                cost[1]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getYellowCost();
+                cost[2]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getRedCost();
+                if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation() == "RED" && cost[0] > 0){
+                    cost[0]--;
+                }
+                else if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation() == "YELLOW" && cost[1] > 0){
+                    cost[1]--;
+                }
+                else if(cost[2] > 0){
+                    cost[2]--;
+                }
                 server.send(new Payment(grabWeapon.getToken(),cost,false));
                 historyMessage=new ArrayList<>();
                 historyMessage.add(grabWeapon);
