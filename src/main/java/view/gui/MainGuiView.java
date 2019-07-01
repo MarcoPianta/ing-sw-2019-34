@@ -159,7 +159,7 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void addMarks() {
+    public void addMarks(ArrayList<Colors> marks, Colors player) {
 
     }
 

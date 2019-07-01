@@ -1,15 +1,17 @@
 package network.messages;
 
+import Model.Card;
+import Model.Colors;
 import Model.NormalSquare;
 import Model.Player;
 
 public class UsePowerUpResponse extends Message {
     private Integer powerUp;
-    private Integer target;
+    private Colors target;
     private Integer user;
     private NormalSquare square;
 
-    public  UsePowerUpResponse(Integer token,Integer cardPowerUp,Integer user,Integer target,NormalSquare square){
+    public  UsePowerUpResponse(Integer token, Integer cardPowerUp, Integer user, Colors target, NormalSquare square){
         actionType=ActionType.USEPOWERUP;
         this.token=token;
         this.powerUp=cardPowerUp;
@@ -26,7 +28,7 @@ public class UsePowerUpResponse extends Message {
         return square;
     }
 
-    public Integer getTarget() {
+    public Colors getTarget() {
         return target;
     }
 
