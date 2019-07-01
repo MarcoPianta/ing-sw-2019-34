@@ -54,8 +54,6 @@ public abstract class View {
      * This ArrayList contains the IDs of the square where other players are on
      */
     protected HashMap<String, Boolean> charge;
-    protected Integer posWeapon;
-    protected Integer posEffect;
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
     protected boolean myTurn;

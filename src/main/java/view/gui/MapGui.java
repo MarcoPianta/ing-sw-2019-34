@@ -375,10 +375,7 @@ public class MapGui extends JFrame{
      * This method is used to send the chosen weapon for a shot action
      * */
     public void targetChosen(ArrayList<Colors> chosen){
-        ArrayList<Integer> players = new ArrayList<>();
-        for (Colors color: chosen)
-            players.add(enemies.get(color));
-        client.send(new ShootResponsep(client.getToken(), players));
+        client.send(new ShootResponsep(client.getToken(), chosen));
     }
 
     /**
