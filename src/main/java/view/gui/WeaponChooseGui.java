@@ -85,21 +85,9 @@ public class WeaponChooseGui extends JFrame {
                 }
             });
 
-            this.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    int choose = currentChoose;
-                    if (shot)
-                        mapGui.weaponChosen(weaponChoose);
-                    else
-                        mapGui.sendGrabWeapon(choose);
-                }
-            });
-
             index++;
         }
 
-        System.out.println(index);
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0.0;
@@ -108,6 +96,44 @@ public class WeaponChooseGui extends JFrame {
         constraints.insets = new Insets(5, 5, 5, 5);
         JLabel info = new JLabel("Choose one weapon");
         this.add(info, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.weightx = 0.0;
+        constraints.weighty = 0.0;
+        constraints.gridwidth = index;
+        constraints.insets = new Insets(5, 5, 5, 5);
+        JButton choose = new JButton("Choose");
+        this.add(info, constraints);
+        choose.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (shot)
+                    mapGui.weaponChosen(weaponChoose);
+                else
+                    mapGui.sendGrabWeapon(Character.getNumericValue(weaponChoose.charAt(0)));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
