@@ -51,9 +51,9 @@ public class TurnHandler {
             System.out.println("sono nel if magico");
             gameHandler.getGame().getCurrentPlayer().spawn(1);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1, 1, 1);
-            gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
             gameHandler.getGame().getCurrentPlayer().spawn(1);
-            gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(1)));
+            gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
+            gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID()));
             System.out.println("colore del player " + gameHandler.getGame().getCurrentPlayer().getColor());
         }
        /* setNextState(StateMachineEnumerationTurn.ACTION1);
@@ -247,6 +247,7 @@ public class TurnHandler {
             if(valueReturn){
                 endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().stream().forEach(x -> System.out.println(x.getName() + " " + x.getColor()));
 
             }
         }/*
@@ -423,9 +424,11 @@ public class TurnHandler {
             while(i>=0) {
                 game.getDeadPlayer().get(i).spawn(1);//extract powerUp
                 //update player
-                gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID(),game.getDeadPlayer().get(i).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(game.getDeadPlayer().get(i).getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()-1)));
-                game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
+                gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID()));
+                game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
+                //TODO problema !!!!!!!!!!!!!!!!!!-----------------!!!!!!!!!!!!!!!!!!!
+                //gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
                 i--;
 
             }

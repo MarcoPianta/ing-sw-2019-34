@@ -46,6 +46,7 @@ public class UsePowerUpGui extends JFrame {
 
             i++;
         }
+        this.pack();
         this.setVisible(true);
     }
 }

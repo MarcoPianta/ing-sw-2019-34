@@ -34,11 +34,12 @@ public class PaymentGui extends JFrame {
         this.add(label, c);
 
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         JButton button = new JButton("Confirm");
 
         this.add(button, c);
 
+        this.pack();
         this.setVisible(true);
     }
 

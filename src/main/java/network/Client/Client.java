@@ -140,12 +140,13 @@ public abstract class Client {
 
         else if (message.getUpdateType().equals(UpdateClient.RESPAWN)) {
             System.out.println("Respawn");
-            view.addPowerup(message.getPowerUp());
             view.showPowerUpChooseRespawn();
         }
         else if (message.getUpdateType().equals(UpdateClient.OTHERPOSITION))
             view.setOtherPosition(message.getOtherColor(), message.getSquareID());
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
+            System.out.println("Bellaaaa");
+            message.getPowerUps().stream().forEach(x -> System.out.println(x.getName()));
             view.setBlueAmmo(message.getBlue());
             view.setRedAmmo(message.getRed());
             view.setYellowAmmo(message.getYellow());
