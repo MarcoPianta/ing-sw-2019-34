@@ -6,6 +6,7 @@ import view.View;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,6 +18,7 @@ public class ViewCLI extends View {
 
     public ViewCLI(){
         actionCLI=new ActionCLI();
+        players=new HashMap<>();//inizializzare
     }
 
     public static void main(String[] args) {
@@ -29,7 +31,7 @@ public class ViewCLI extends View {
         out.println("you can reach these squares: \n");
         int i=1;
         for(String  s:squares){
-            out.println(i+ "="+s +"t");
+            out.println(i+ "="+s +"\t");
             i++;
         }
         out.println("choose a number from 1 to "+ squares.size() +"\n");
@@ -47,7 +49,53 @@ public class ViewCLI extends View {
         }
 
     }
-    //aggiunngere show possible square e room
+    @Override
+    public void showPossibleRooms(List<String> ids) {
+            out.println("you can a shoot a one room, choose a square with color of room: \n");
+            int i=1;
+            for(String  id:ids){
+                out.println(i+ "="+id +"\t");
+                i++;
+            }
+            out.println("choose a number from 1 to "+ ids.size() +"\n");
+            boolean corrected=false;
+            while(!corrected) {
+                i=in.nextInt();
+                if(i>=1 && i<=ids.size()){
+                    client.send(new ShootResponser(client.getToken(),ids.get(i-1)));
+                    corrected=true;
+                }
+                else{
+                    out.println("it's not difficult, you can do it \n");
+                    out.println("choose a number from 1 to "+ ids.size() +"\n" );
+                }
+            }
+    }
+
+    @Override
+    public void showPossibleSquares(List<String> targets) {
+        out.println("you can a shoot a one of this square: \n");
+        int i=1;
+        for(String  s:targets){
+            out.println(i+ "="+s+"\t");
+            i++;
+        }
+        out.println("choose a number from 1 to "+ targets.size() +"\n");
+        boolean corrected=false;
+        while(!corrected) {
+            i=in.nextInt();
+            if(i>=1 && i<=targets.size()){
+                client.send(new ShootResponses(client.getToken(),targets.get(i-1)));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to "+ targets.size() +"\n" );
+            }
+        }
+
+    }
+
     @Override
     public void showPossibleTarget(List<Colors> targets,int i) {
         out.println("you can shot these targets: \n");
@@ -55,15 +103,31 @@ public class ViewCLI extends View {
             out.println(c +"\t");
         }
         out.println("\n choose a number from 0 to "+ targets.size() +"or z to cancel \n");
-        //modificare perchè possono essere scelti più target
+        int count=0;
+        List<Colors> targetChoose=new ArrayList();
+        while(count<i) {
+            i=in.nextInt();
+            if(i>=1 && i<=targets.size()){
+                targetChoose.add(targets.get(i-1));
+                count++;
+            }
+            else{
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to "+ targets.size() +"\n" );
+            }
+        }
+        client.send(new ShootResponsep(client.getToken(),targetChoose));
     }
     @Override
     public void fillSpawn(String squareID, int position, String weaponName){
+        out.println(squareID+":"+"position" +position+weaponName+"\n" );
     }
+
+
 
     @Override
     public void fillSquare(String squareID, CardAmmo ammo){
-
+        out.println(squareID+":"+ammo.getName()+"\n");
     }
 
     @Override
@@ -75,15 +139,7 @@ public class ViewCLI extends View {
 
     }
 
-    @Override
-    public void showPossibleRooms(List<String> ids) {
 
-    }
-
-    @Override
-    public void showPossibleSquares(List<String> targets) {
-
-    }
 
     @Override
     public void showTargetMove(List<String> targets) {
@@ -92,12 +148,13 @@ public class ViewCLI extends View {
 
     @Override
     public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
+        out.println(player );
 
     }
 
     @Override
     public void updateEnemyPosition(Colors player, String position) {
-
+        out.println(player +"has moved in"+position +"\n" );
     }
 
     @Override
@@ -211,7 +268,7 @@ public class ViewCLI extends View {
         if(winner)
             out.println("The game is over.\nCongratulation, you won!");
         else
-            out.println("The game is over.\nCongratulation, you didn't win!");
+            out.println("The game is over.\nYou didn't win!");
     }
 
     @Override
