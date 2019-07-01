@@ -82,6 +82,8 @@ public abstract class View {
 
     public abstract void addMarks();
 
+    public abstract void grabWeaponRequest();
+
     public abstract void showToken();
 
     public abstract void fillSpawn(String squareID, int position, String weaponName);

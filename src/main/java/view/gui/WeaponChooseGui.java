@@ -3,6 +3,7 @@ package view.gui;
 import Model.CardWeapon;
 import Model.Colors;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +17,7 @@ public class WeaponChooseGui extends JFrame {
     String weaponChoose;
     boolean choosed = false;
 
-    public WeaponChooseGui(ArrayList<String> cards, MapGui mapGui){
+    public WeaponChooseGui(List<String> cards, MapGui mapGui, boolean shot){
         super("Weapon choose");
         this.setLayout(new GridBagLayout());
 
@@ -87,7 +88,11 @@ public class WeaponChooseGui extends JFrame {
             this.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    mapGui.weaponChosen(weaponChoose);
+                    int choose = currentChoose;
+                    if (shot)
+                        mapGui.weaponChosen(weaponChoose);
+                    else
+                        mapGui.sendGrabWeapon(choose);
                 }
             });
 

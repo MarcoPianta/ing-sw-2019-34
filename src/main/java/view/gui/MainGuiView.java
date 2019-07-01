@@ -169,6 +169,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void grabWeaponRequest() {
+        mapGui.grabWeaponRequest();
+    }
+
+    @Override
     public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
         ArrayList<String> powerUpsName = new ArrayList<>();
         for (CardPowerUp p: powerUps){

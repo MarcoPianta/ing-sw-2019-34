@@ -60,7 +60,6 @@ public class TurnHandler {
         // remove playerValid??
         gameHandler.setPlayerValid(gameHandler.getGame().getCurrentPlayer());*/
         //gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPosition()));
-        gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),"you can choose the action"));
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.ACTION1);
 
     }

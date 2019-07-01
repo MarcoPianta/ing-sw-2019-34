@@ -27,6 +27,11 @@ public class ViewCLI extends View {
     }
 
     @Override
+    public void grabWeaponRequest() {
+
+    }
+
+    @Override
     public void substituteWeaponRequest() {
 
     }
