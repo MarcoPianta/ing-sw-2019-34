@@ -71,7 +71,7 @@ public abstract class Client {
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSEVENOM.getAbbreviation())){
             CanUseTagBack canUseTagBack = (CanUseTagBack) message;
-            //view.showVenomRequest(canUseTagBack.getPlayerShooter());
+            view.showVenomRequest(canUseTagBack.getPlayerShooter());
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.START.getAbbreviation())){
             StartMessage startMessage = (StartMessage) message;
