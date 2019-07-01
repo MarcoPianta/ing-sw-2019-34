@@ -91,6 +91,7 @@ public class Player implements Serializable {
             }
             i++;
         }
+
         newPosition(getGameId().getMap().getRooms().get(i-1).getNormalSquares().get(j));
 
         getPlayerBoard().getHandPlayer().removePowerUp(getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(powerUp));

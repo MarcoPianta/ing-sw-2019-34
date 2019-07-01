@@ -13,6 +13,8 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -170,10 +172,10 @@ public class MapGui extends JFrame{
      * */
     public void addRedCross(List<String> id){
         redCrosses = id;
+        BufferedImage currentMapWithCross = cloneImage(currentMapImage);
         for (String s: id){
-            BufferedImage currentMapWithCross = currentMapImage.getSubimage(0, 0, currentMapImage.getWidth(), currentMapImage.getHeight());
             Graphics2D g = currentMapWithCross.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            //g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             BufferedImage cross = currentRedCross;
             Image crosResized = cross.getScaledInstance(350 * currentMapWithCross.getWidth() / 2545, 340 * currentMapWithCross.getHeight() / 1928, Image.SCALE_DEFAULT);
             g.drawImage(crosResized, ViewMap.getXCoordinates(s) * currentMapWithCross.getWidth() / 2545, (ViewMap.getYCoordinates(s) * currentMapWithCross.getHeight() / 1928), null);
@@ -195,7 +197,6 @@ public class MapGui extends JFrame{
         else  path = "cardonlyammo";
 
         File file = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "cardammo" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
-        System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "cardammo" + File.separatorChar + path + File.separatorChar + card.getName() + ".png");
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();
@@ -376,10 +377,7 @@ public class MapGui extends JFrame{
      * This method is used to send the chosen weapon for a shot action
      * */
     public void targetChosen(ArrayList<Colors> chosen){
-        ArrayList<Integer> players = new ArrayList<>();
-        for (Colors color: chosen)
-            players.add(enemies.get(color));
-        client.send(new ShootResponsep(client.getToken(), players));
+        client.send(new ShootResponsep(client.getToken(), chosen));
     }
 
     /**
@@ -569,12 +567,12 @@ public class MapGui extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!text.getText().equals("")) {
-                    JLabel chatLabel = new JLabel("@"+myColor+": "+text.getText());
+                    /*JLabel chatLabel = new JLabel("@"+myColor+": "+text.getText());
                     chatLabel.setHorizontalTextPosition(JLabel.LEFT);
                     chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
                     chatLabel.setOpaque(false);
                     chatArea.add(chatLabel);
-                    chatArea.revalidate();
+                    chatArea.revalidate();*/
                     client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
                 }
                 text.setText("");
@@ -748,6 +746,13 @@ public class MapGui extends JFrame{
         chatLabel.setOpaque(false);
         chatArea.add(chatLabel);
         chatArea.revalidate();
+    }
+
+    private BufferedImage cloneImage(BufferedImage bi){
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(bi.getRaster().createCompatibleWritableRaster());
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
     public static void main(String[] args) {

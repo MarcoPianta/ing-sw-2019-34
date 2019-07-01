@@ -54,8 +54,6 @@ public abstract class View {
      * This ArrayList contains the IDs of the square where other players are on
      */
     protected HashMap<String, Boolean> charge;
-    protected Integer posWeapon;
-    protected Integer posEffect;
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
     protected boolean myTurn;
@@ -79,6 +77,10 @@ public abstract class View {
         this.maxReward = 0;
 
     }
+
+    public abstract void substituteWeaponRequest();
+
+    public abstract void addMarks();
 
     public abstract void showToken();
 
@@ -164,8 +166,6 @@ public abstract class View {
     public void setMarks(ArrayList<Colors> marks) {
         this.marks = marks;
     }
-
-    public abstract void grabWeapon();
 
     public void setMap(GameBoard map) {
         this.map = map;

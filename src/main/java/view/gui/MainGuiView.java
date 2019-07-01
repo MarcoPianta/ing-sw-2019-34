@@ -91,9 +91,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("192.168.1.29", 10000, self);
+                    client = new SocketClient("192.168.0.2", 10000, self);
                 else
-                    client = new RMIClient("192.168.1.29",10001, self);
+                    client = new RMIClient("192.168.0.2",10001, self);
                 //showGameSettingsRequest();
                 //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -159,6 +159,16 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void addMarks() {
+
+    }
+
+    @Override
+    public void substituteWeaponRequest() {
+
+    }
+
+    @Override
     public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
         ArrayList<String> powerUpsName = new ArrayList<>();
         for (CardPowerUp p: powerUps){
@@ -181,11 +191,6 @@ public class MainGuiView extends View {
     public void fillSquare(String squareID, CardAmmo ammo) {
         System.out.println(ammo.getName());
         mapGui.addAmmoToMap(squareID, ammo);
-    }
-
-    @Override
-    public void grabWeapon() {
-
     }
 
     @Override

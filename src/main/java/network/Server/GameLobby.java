@@ -10,6 +10,7 @@ import java.util.*;
 
 public class GameLobby {
     private HashMap<Integer, Player> players;
+    private HashMap<Colors, Integer> playersColor;
     private ArrayList<Integer> clients;
     private Server server;
     private GameHandler gameHandler;
@@ -26,6 +27,7 @@ public class GameLobby {
         this.server = server;
         this.currentPlayer = null;
         this.players = new HashMap<>();
+        this.playersColor=new HashMap<>();
         this.historyMessage = new ArrayList<>();
         this.actionPerformed = new HashMap<>();
         this.clients.forEach(x -> actionPerformed.put(x, false));
@@ -33,6 +35,7 @@ public class GameLobby {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
             for(Player p: gameHandler.getGame().getPlayers()){
                 players.put(p.getPlayerID(), p);
+                playersColor.put(p.getColor(),p.getPlayerID());
             }
         }catch (FileNotFoundException e){
             for (Integer i: clients){
@@ -102,8 +105,8 @@ public class GameLobby {
             ShootResponsep shootResponsep = (ShootResponsep) message;
             ArrayList<Player> targetPlayer = new ArrayList<>();
             Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
-            for (Integer token: shootResponsep.getTargetPlayer()) {
-                targetPlayer.add(players.get(token));
+            for (Colors color: shootResponsep.getTargetPlayer()) {
+                targetPlayer.add(players.get(playersColor.get(color)));
             }
             if(actionValidController.actionValid(targetPlayer, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
@@ -373,6 +376,8 @@ public class GameLobby {
             }
 
     }
+
+
 
     public void respawn(Integer token, CardPowerUp powerUp){
         server.send(new UpdateClient(token, powerUp));
