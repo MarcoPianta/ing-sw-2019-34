@@ -93,11 +93,6 @@ public class UpdateClient extends Message {
         for (Player p: players)
             this.reachableTarget.add(p.getPosition().getId());
     }
-    /*
-    public UpdateClient(Integer token, Hand handPlayer){
-        setMessageInfo(token, HANDPLAYER);
-        this.handPlayer = handPlayer;
-    }*/
     public UpdateClient(Integer token, int red,int yellow, int blue, List<CardWeapon> weapons, List<CardPowerUp> powerUps){
         setMessageInfo(token, HANDPLAYER);
         this.red=red;
@@ -106,9 +101,8 @@ public class UpdateClient extends Message {
         this.weapons=weapons;
         this.powerUps=powerUps;
     }
-    public UpdateClient(Integer token, CardPowerUp powerUp){
+    public UpdateClient(Integer token){
         setMessageInfo(token, RESPAWN);
-        this.powerUp = powerUp;
     }
     public UpdateClient(Integer token, String squareId,CardWeapon weapon,int posWeapon){
         setMessageInfo(token, FILLSPAWN);

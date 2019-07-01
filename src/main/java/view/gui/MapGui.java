@@ -84,8 +84,6 @@ public class MapGui extends JFrame{
             currentMapImage = ImageIO.read(mapImage);
         }catch (IOException e){}
 
-        System.out.println(mapImageFile);
-
         try {map = new JLabel(new ImageIcon(ImageIO.read(mapImage)));} catch (IOException e){}
 
         playerBoards = new JPanel(new GridLayout(4, 1));
@@ -299,7 +297,6 @@ public class MapGui extends JFrame{
     }
 
     public void spawn(){
-        System.out.println(powerUps);
         new SpawnGui(powerUps, this);
     }
 
@@ -667,6 +664,7 @@ public class MapGui extends JFrame{
      * This method set powerups owned by the user
      * */
     public void setPowerUps(ArrayList<String> powerUps){
+        powerUps.stream().forEach(x -> System.out.println("MapGui " + x));
         this.powerUps = powerUps;
     }
 
@@ -688,8 +686,6 @@ public class MapGui extends JFrame{
      * This method updates the enemy position
      * */
     public void updateEnemyPosition(Colors player, String id){
-        System.out.println(player);
-        System.out.println(enemies);
         othersPosition[enemies.get(player)] = id;
         Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
         Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();

@@ -229,13 +229,15 @@ public class GameLobby {
 
         else if (message.getActionType().getAbbreviation().equals(ActionType.RESPAWN.getAbbreviation())) {
             RespawnMessage respawnMessage = (RespawnMessage) message;
-            //HASH table per repawn message
+            players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().stream().forEach(x -> System.out.println(x.getName()));
+            System.out.println("Dopo ");
             players.get(respawnMessage.getToken()).calculateNewPosition(players.get(respawnMessage.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(respawnMessage.getPowerUp()));
             server.send(new UpdateClient(respawnMessage.getToken(), players.get(respawnMessage.getToken()).getPosition()));
             clients.parallelStream()
                     .filter(x -> (!x.equals(respawnMessage.getToken())))
                     .forEach(x -> send(new UpdateClient(x, players.get(respawnMessage.getToken())
                             .getColor(), players.get(respawnMessage.getToken()).getPosition())));
+            players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().stream().forEach(x -> System.out.println(x.getName()));
             server.send(new UpdateClient(message.getToken(), players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons(), players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
 
             historyMessage=new ArrayList<>();
@@ -379,12 +381,6 @@ public class GameLobby {
                 }
             }
 
-    }
-
-
-
-    public void respawn(Integer token, CardPowerUp powerUp){
-        server.send(new UpdateClient(token, powerUp));
     }
 
     public void canUseScoop(Integer player){

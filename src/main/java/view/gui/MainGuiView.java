@@ -91,9 +91,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("192.168.0.2", 10000, self);
+                    client = new SocketClient("192.168.0.4", 10000, self);
                 else
-                    client = new RMIClient("192.168.0.2",10001, self);
+                    client = new RMIClient("192.168.0.4",10001, self);
                 //showGameSettingsRequest();
                 //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -177,6 +177,7 @@ public class MainGuiView extends View {
     public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
         ArrayList<String> powerUpsName = new ArrayList<>();
         for (CardPowerUp p: powerUps){
+            System.out.println("MainGui  " + p.getName());
             powerUpsName.add(p.getName());
         }
         mapGui.setPowerUps(powerUpsName);
