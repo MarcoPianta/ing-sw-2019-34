@@ -32,7 +32,7 @@ public class PlayerInformationGui extends JFrame {
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = cards.size();
-        this.add(new JLabel("You have: " + ammos[0] + " red ammos, " + ammos[2] + " yellow ammos, " + +ammos[2] + " blue ammos"), c);
+        this.add(new JLabel("You have: " + ammos[0] + " red ammos, " + ammos[1] + " yellow ammos, " + +ammos[2] + " blue ammos"), c);
 
         this.pack();
         this.setVisible(true);

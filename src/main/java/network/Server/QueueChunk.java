@@ -38,7 +38,7 @@ public class QueueChunk {
         synchronized (this) {
             if (chunks.get(maxChunkIndex).size() < 5) {
                 chunks.get(maxChunkIndex).add(player);
-                if (chunks.get(maxChunkIndex).size() >= 3 && !startedCheck.get(maxChunkIndex)) {
+                if (chunks.get(maxChunkIndex).size() >= 1 && !startedCheck.get(maxChunkIndex)) {
                     startedCheck.put(maxChunkIndex, true);
 
                     timer.schedule((new TimerTask() { //Start a timer and Wait for 30 seconds for other players to connect, then create new Game

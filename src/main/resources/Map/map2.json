@@ -25,7 +25,7 @@
           {
             "SideN": "",
             "SideE": "4,0",
-            "SideS": "",
+            "SideS": "1,2",
             "SideW": "0,1",
             "spawn": true,
             "ID": "0,2"

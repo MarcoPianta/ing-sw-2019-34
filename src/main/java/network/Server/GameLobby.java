@@ -86,7 +86,7 @@ public class GameLobby {
 
     public void receiveMessage(Message message){
         historyMessage.add(message);
-        System.out.println("Ho ricevuto un messaggio " + historyMessage.get(0).getActionType().getAbbreviation());
+        System.out.println("Ho ricevuto un messaggio " + message.getActionType().getAbbreviation());
         if(message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())) {
             ChatMessage chatMessage = (ChatMessage) message;
             clients.forEach(x -> server.send(new ChatMessage(x, chatMessage.getMessage())));
@@ -190,6 +190,7 @@ public class GameLobby {
             else if (receiveTargetSquare.getType().equals("move")){
                 gameHandler.receiveServerMessage(new MoveMessage(message.getToken(),gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
                 historyMessage= new ArrayList<>();
+                System.out.println("Ho azzerato la HISTORY");
             }
             else if (receiveTargetSquare.getType().equals("shoot")){
                 gameHandler.receiveServerMessage(new MoveMessage(message.getToken(),gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
@@ -231,7 +232,12 @@ public class GameLobby {
             //HASH table per repawn message
             players.get(respawnMessage.getToken()).calculateNewPosition(players.get(respawnMessage.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(respawnMessage.getPowerUp()));
             server.send(new UpdateClient(respawnMessage.getToken(), players.get(respawnMessage.getToken()).getPosition()));
-            clients.parallelStream().filter(x -> (!x.equals(respawnMessage.getToken()))).forEach(x -> send(new UpdateClient(x, players.get(respawnMessage.getToken()).getColor(), players.get(respawnMessage.getToken()).getPosition())));
+            clients.parallelStream()
+                    .filter(x -> (!x.equals(respawnMessage.getToken())))
+                    .forEach(x -> send(new UpdateClient(x, players.get(respawnMessage.getToken())
+                            .getColor(), players.get(respawnMessage.getToken()).getPosition())));
+            server.send(new UpdateClient(message.getToken(), players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons(), players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
+
             historyMessage=new ArrayList<>();
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.RELOAD.getAbbreviation())){

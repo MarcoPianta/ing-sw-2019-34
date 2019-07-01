@@ -194,7 +194,6 @@ public class MainGuiView extends View {
 
     @Override
     public void fillSquare(String squareID, CardAmmo ammo) {
-        System.out.println(ammo.getName());
         mapGui.addAmmoToMap(squareID, ammo);
     }
 

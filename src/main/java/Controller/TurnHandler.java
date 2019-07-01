@@ -48,13 +48,11 @@ public class TurnHandler {
 
 
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8) {
-            System.out.println("sono nel if magico");
             gameHandler.getGame().getCurrentPlayer().spawn(1);//first spawn
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1, 1, 1);
             gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
             gameHandler.getGame().getCurrentPlayer().spawn(1);
             gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(1)));
-            System.out.println("colore del player " + gameHandler.getGame().getCurrentPlayer().getColor());
         }
        /* setNextState(StateMachineEnumerationTurn.ACTION1);
         // remove playerValid??
