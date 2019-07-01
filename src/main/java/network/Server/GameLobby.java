@@ -171,22 +171,20 @@ public class GameLobby {
             MoveResponse moveResponse = (MoveResponse) message;
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
             if (receiveTargetSquare.getType().equals("grab")){
-                System.out.println("--------------PRIMA DI RACCOGLIERE-----------------");
-                System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps() + "\n");
-                System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
-                if (!gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).isSpawn()) {
+               if (!gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).isSpawn()) {
                     gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
                     if (gameHandler.receiveServerMessage(new GrabAmmo(message.getToken()))) {
                         server.send(new UpdateClient(message.getToken(), "You grab ammos"));
-                        System.out.println("--------------DOPO AVER RACCOLTO-----------------");
-                        System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps() + "\n");
-                        System.out.println(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " + players.get(message.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
-                        server.send(new UpdateClient(message.getToken(), players.get(message.getToken()).getPlayerBoard().getHandPlayer()));
                     }
                     historyMessage = new ArrayList<>();
                 }
                 else{
-                    server.send(new GrabWeaponRequest(message.getToken()));
+                   server.send(new UpdateClient(message.getToken(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                   clients.parallelStream().
+                           filter(x -> (!x.equals(message.getToken()))).
+                           forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, players.get(moveResponse.getToken()).getColor(), players.get(moveResponse.getToken()).getPosition())));
+
+                   server.send(new GrabWeaponRequest(message.getToken()));
                 }
             }
             else if (receiveTargetSquare.getType().equals("move")){
@@ -210,13 +208,13 @@ public class GameLobby {
             }
             else{
                 Integer[] cost = new Integer[3];
-                cost[0]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getBlueCost();
+                cost[0]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getRedCost();
                 cost[1]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getYellowCost();
-                cost[2]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getRedCost();
-                if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation() == "RED" && cost[0] > 0){
+                cost[2]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getBlueCost();
+                if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation().equals("red") && cost[0] > 0){
                     cost[0]--;
                 }
-                else if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation() == "YELLOW" && cost[1] > 0){
+                else if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation().equals("yellow") && cost[1] > 0){
                     cost[1]--;
                 }
                 else if(cost[2] > 0){
@@ -240,9 +238,9 @@ public class GameLobby {
             ReloadMessage reloadMessage=(ReloadMessage) message;
             if(gameHandler.getActionValidController().actionValid(reloadMessage.getWeapon())){
                 Integer[] cost = new Integer[3];
-                cost[0]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getBlueCost();
+                cost[0]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getRedCost();
                 cost[1]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getYellowCost();
-                cost[2]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getRedCost();
+                cost[2]=gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getBlueCost();
                 server.send(new Payment(reloadMessage.getToken(), cost,false));
                 //there is only reload's message in history
             }

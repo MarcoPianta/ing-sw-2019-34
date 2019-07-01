@@ -17,6 +17,7 @@ public class CardOnlyAmmoTest {
         assertEquals(AmmoColors.YELLOW, cardOnlyAmmo.getItem1());
         assertEquals(AmmoColors.BLUE, cardOnlyAmmo.getItem2());
         assertEquals(AmmoColors.BLUE, cardOnlyAmmo.getItem3());
+        assertEquals("A1", cardOnlyAmmo.getName());
 
         //Test of default constructor only to get 100% coverage
         cardOnlyAmmo = new CardOnlyAmmo();

@@ -4,9 +4,7 @@ public abstract class CardAmmo extends Card {
     protected boolean withPowerUp;
     protected String name;
 
-    public CardAmmo copyCardAmmo() {
-        return null;
-    }
+    public abstract CardAmmo copyCardAmmo();
 
     @Override
     public String getName(){

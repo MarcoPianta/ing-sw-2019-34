@@ -104,7 +104,7 @@ public class WeaponChooseGui extends JFrame {
         constraints.gridwidth = index;
         constraints.insets = new Insets(5, 5, 5, 5);
         JButton choose = new JButton("Choose");
-        this.add(info, constraints);
+        this.add(choose, constraints);
         choose.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

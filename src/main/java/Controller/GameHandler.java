@@ -86,9 +86,10 @@ public class GameHandler {
                     }
                 }
                 else{
-                    game.getMap().getRooms().get(i).getNormalSquares().get(j).setItems(game.getDeckCollector().getCardAmmoDrawer().draw());
+                    CardAmmo ammo = game.getDeckCollector().getCardAmmoDrawer().draw();
+                    game.getMap().getRooms().get(i).getNormalSquares().get(j).setItems(ammo);
                     for(Player p: game.getPlayers()){
-                        gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(), game.getDeckCollector().getCardAmmoDrawer().draw()));
+                        gameLobby.send(new UpdateClient(p.getPlayerID(),game.getMap().getRooms().get(i).getNormalSquares().get(j).getId(), ammo));
                     }
                 }
                 j++;

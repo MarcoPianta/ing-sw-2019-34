@@ -26,6 +26,7 @@ public class CardNotOnlyAmmo extends CardAmmo{
         CardNotOnlyAmmo copy = new CardNotOnlyAmmo();
         copy.item2 = this.getItem2();
         copy.item3 = this.getItem3();
+        copy.name = this.getName();
         return copy;
     }
 

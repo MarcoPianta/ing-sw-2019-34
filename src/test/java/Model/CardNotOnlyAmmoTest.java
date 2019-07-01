@@ -20,7 +20,7 @@ public class CardNotOnlyAmmoTest {
         deck = deckCreator.createDeck("POWERUP");
         drawer = deck.createDrawer();
         deckCopy = deck.copy();
-
+        assertEquals("A1", cardNotOnlyAmmo.getName());
         assertEquals(AmmoColors.BLUE, cardNotOnlyAmmo.getItem2());
         assertEquals(AmmoColors.BLUE, cardNotOnlyAmmo.getItem3());
         cardNotOnlyAmmo.getItem1(drawer);

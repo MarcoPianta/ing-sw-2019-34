@@ -29,6 +29,7 @@ public class CardOnlyAmmo extends CardAmmo {
         copy.item1 = this.getItem1();
         copy.item2 = this.getItem2();
         copy.item3 = this.getItem3();
+        copy.name = this.getName();
         return copy;
     }
 

@@ -241,7 +241,7 @@ public class TurnHandler {
             }
 
         }
-        else if(message.getActionType()==ActionType.GRABAMMO){
+        else /*if(message.getActionType()==ActionType.GRABAMMO)*/{
             if(gameHandler.getGame().getCurrentPlayer().getPosition().getItem().isWithPowerUp())
                 valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardNotOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
             else
@@ -251,7 +251,7 @@ public class TurnHandler {
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer()));
 
             }
-        }
+        }/*
         else{
             valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardNotOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
             if(valueReturn){
@@ -260,7 +260,7 @@ public class TurnHandler {
             }
 
         }
-
+*/
         if(valueReturn && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()==4)
             {gameHandler.getGameLobby().send(new SubstituteWeapon(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()));
             }
@@ -409,9 +409,10 @@ public class TurnHandler {
                     }
                 }
                 else{
-                    emptySquares.get(i).setItems(game.getDeckCollector().getCardAmmoDrawer().draw());
+                    CardAmmo ammo = game.getDeckCollector().getCardAmmoDrawer().draw();
+                    emptySquares.get(i).setItems(ammo);
                     for(Player p: game.getPlayers()){
-                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),game.getDeckCollector().getCardAmmoDrawer().draw()));
+                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(), ammo));
                     }
                 }
                 emptySquares.remove(i);

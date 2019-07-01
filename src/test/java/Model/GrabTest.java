@@ -64,16 +64,16 @@ public class GrabTest {
         assertTrue(action.execute());
         assertEquals(testWeapon,testPlayer.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
         //Test grab NotOnlyAmmo
-        CardNotOnlyAmmo testNotOnlyAmmo = new CardNotOnlyAmmo (AmmoEnum.AMMO1.getAbbreviation()); // (P, Blue, Blue)
+        CardNotOnlyAmmo testNotOnlyAmmo = new CardNotOnlyAmmo (AmmoEnum.AMMO11.getAbbreviation()); // (P, Yellow, Red)
         action = new Grab(testPlayer, testNotOnlyAmmo);
         System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " +testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
         System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps());
         assertTrue(action.execute());
         System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " +testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
         System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps());
-        assertEquals(0 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
-        assertEquals(0 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
-        assertEquals(2 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
+        assertEquals(1 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
+        assertEquals(1 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
+        assertEquals(0 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
         assertEquals(1 ,testPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());
     }
 }
