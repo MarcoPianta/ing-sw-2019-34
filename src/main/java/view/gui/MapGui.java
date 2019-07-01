@@ -679,7 +679,11 @@ public class MapGui extends JFrame{
      * This method creates a window for the payment of something
      * */
     public void payment(Payment payment){
-        new PaymentGui(payment);
+        new PaymentGui(payment, powerUps, this, client.getToken());
+    }
+
+    public void pay(PaymentResponse paymentResponse){
+        client.send(paymentResponse);
     }
 
     /**

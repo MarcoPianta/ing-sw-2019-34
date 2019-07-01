@@ -63,7 +63,7 @@
       "dimension": 4,
       "Square": [
         {
-          "SideN": "",
+          "SideN": "0,2",
           "SideE": "2,1",
           "SideS": "2,2",
           "SideW": "",
