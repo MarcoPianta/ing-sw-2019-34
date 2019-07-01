@@ -80,7 +80,7 @@ public abstract class View {
 
     public abstract void substituteWeaponRequest();
 
-    public abstract void addMarks();
+    public abstract void addMarks(ArrayList<Colors> marks, Colors player);
 
     public abstract void showToken();
 

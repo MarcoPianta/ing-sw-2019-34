@@ -32,11 +32,6 @@ public class ViewCLI extends View {
     }
 
     @Override
-    public void addMarks() {
-
-    }
-
-    @Override
     public void showReachableSquares(List<String> squares) {
         out.println("you can reach these squares: \n");
         int i=1;
@@ -146,10 +141,8 @@ public class ViewCLI extends View {
     }
 
     public void chatMessage(String message) {
-
     }
-
-
+    //eliminiamo
     @Override
     public void setOtherPosition(Colors player, String position) {
 
@@ -163,8 +156,18 @@ public class ViewCLI extends View {
 
     @Override
     public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
-        out.println(player );
+        out.println(player+"was attacked and his damagedBar was changed:\n" );
+        for(Colors color:damageBar)
+            out.println(color+",");
+        out.println("\n");
+    }
 
+    @Override
+    public void addMarks(ArrayList<Colors> marks, Colors player) {
+        out.println(player+"was attacked and his mark list was changed:\n" );
+        for(Colors color:damageBar)
+            out.println(color+",");
+        out.println("\n");
     }
 
     @Override
