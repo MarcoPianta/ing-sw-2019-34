@@ -2,6 +2,7 @@ package network.Server.RMI;
 
 import network.Client.RMI.RMIClientInterface;
 import network.Server.Server;
+import network.messages.ConnectionResponse;
 import network.messages.GameSettingsRequest;
 import network.messages.Message;
 
@@ -76,6 +77,7 @@ public class RMIServer {
         clients.add(client);
         */
         this.rmiHashMap.put(token, client);
+        client.onReceive(new ConnectionResponse(token));
         client.onReceive(new GameSettingsRequest(token));
     }
 }
