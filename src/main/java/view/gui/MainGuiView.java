@@ -165,7 +165,7 @@ public class MainGuiView extends View {
 
     @Override
     public void substituteWeaponRequest() {
-        mapGui.grabWeaponRequest();
+        mapGui.substituteWeaponRequest();
     }
 
     @Override

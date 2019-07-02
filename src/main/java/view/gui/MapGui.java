@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * This is the main window, it contains the map, the player's boards and the chat.
  * */
@@ -55,7 +57,7 @@ public class MapGui extends JFrame{
     private HashMap<String, CardAmmo> ammosOnMap;
     private boolean myTurn;
     private ArrayList<Colors> marks;
-    private ArrayList<String> cardsWeapon;
+    private ArrayList<CardWeapon> cardsWeapon;
     private ArrayList<String> powerUps;
 
     /**
@@ -313,7 +315,11 @@ public class MapGui extends JFrame{
         powerUps.add(powerUp);
     }
 
-    public void substituteWeaponRequest(int position){
+    public void sendReload(int position){
+        client.send(new ReloadMessage(client.getToken(), position));
+    }
+
+    public void substituteWeaponRequest(){
         new SubstituteWeaponGui(cardsWeapon, this);
     }
 
@@ -444,6 +450,14 @@ public class MapGui extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 openWeaponDetail(e.getX(), e.getY(), false);
                 if(myTurn) {
+                    if ((e.getX() < 285) && (e.getY() > 1810)){
+                        //TODO send pass message
+                        int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
+                        if (response == 0) {
+                            client.send(new Pass(client.getToken()));
+                            System.out.println("pass");
+                        }
+                    }
                     //System.out.println(e.getX() + " u " + e.getY());
                     openWeaponDetail(e.getX(), e.getY(), false);
                     if (actionType.equals("move")) {
@@ -549,14 +563,14 @@ public class MapGui extends JFrame{
                                 weaponsName.add("cyberblade");
                                 weaponsName.add("electroscyte");*/
                                 //till here
-                                new WeaponChooseGui(cardsWeapon, self, true);
+                                List<String> cardsName = cardsWeapon.stream().map(x -> x.getName()).collect(toList());
+                                new WeaponChooseGui(cardsName, self, true);
                             }
                         } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
-                            //TODO send pass message
-                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
+                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to reload?");
                             if (response == 0) {
-                                client.send(new Pass(client.getToken()));
-                                System.out.println("pass");
+                                new ReloadGui(cardsWeapon ,self);
+                                System.out.println("reload");
                             }
                         } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
                             new UsePowerUpGui(powerUps, self, false, false);
@@ -684,10 +698,7 @@ public class MapGui extends JFrame{
      * This method set cards owned by the user
      * */
     public void setCardsWeapon(ArrayList<CardWeapon> cards){
-        this.cardsWeapon = new ArrayList<>();
-        for (CardWeapon c: cards) {
-            this.cardsWeapon.add(c.getName());
-        }
+        this.cardsWeapon = cards;
     }
 
     /**
