@@ -349,7 +349,7 @@ public class GameLobby {
             }
             //si powerUp, si Scoop
             else if(paymentResponse.isUsePowerUp()&& paymentResponse.isScoop()){
-                valueReturn=gameHandler.getPaymentController().payment(paymentResponse.getCost(),paymentResponse.getPowerUp());
+                valueReturn=gameHandler.getPaymentController().payment( Arrays.copyOf(paymentResponse.getCost(),3),paymentResponse.getPowerUp());
                 if(valueReturn){
                     if(paymentResponse.getColorScoop()==null)
                         valueReturn=gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getPowerUpScoop());
@@ -381,7 +381,7 @@ public class GameLobby {
             }
             //si powerUp no scoop
             else if((paymentResponse.isUsePowerUp()&& !paymentResponse.isScoop())){
-                valueReturn=gameHandler.getPaymentController().payment(paymentResponse.getCost(),paymentResponse.getPowerUp());
+                valueReturn=gameHandler.getPaymentController().payment( Arrays.copyOf(paymentResponse.getCost(),3),paymentResponse.getPowerUp());
                 if(valueReturn){
                     for(Message m:historyMessage)
                         gameHandler.receiveServerMessage(m);
