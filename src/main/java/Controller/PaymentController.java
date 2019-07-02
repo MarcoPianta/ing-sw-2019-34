@@ -89,7 +89,9 @@ public class PaymentController {
     }
 
     private boolean isValidPayment(Integer[] cost, List<Integer> powerUps){
+        System.out.println(powerUps.size());
         for(Integer i:powerUps){
+            System.out.println(i);
             if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0)
                 cost[0]--;
             else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0)
