@@ -65,19 +65,23 @@ public class Server {
     }
 
     public void onReceive(Message message){
-        if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
-            GameSettingsResponse m = (GameSettingsResponse) message;
-            this.send(new UpdateClient(message.getToken(), "Waiting for others players to connect"));
-            playersQueue.setPreferences(m);
-        }
-        else if(message.getActionType().getAbbreviation().equals(ActionType.RECONNECTIONRESPONSE.getAbbreviation())) {
+        try {
+            if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
+                GameSettingsResponse m = (GameSettingsResponse) message;
+                this.send(new UpdateClient(message.getToken(), "Waiting for others players to connect"));
+                playersQueue.setPreferences(m);
+            }
+            else if(message.getActionType().getAbbreviation().equals(ActionType.RECONNECTIONRESPONSE.getAbbreviation())) {
 
+            }
+            else if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT.getAbbreviation())) {
+                //TODO delete token from clients
+            }
+            else
+                lobbyHashMap.get(message.getToken()).receiveMessage(message);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        else if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT.getAbbreviation())) {
-            //TODO delete token from clients
-        }
-        else
-            lobbyHashMap.get(message.getToken()).receiveMessage(message);
     }
 
     /**

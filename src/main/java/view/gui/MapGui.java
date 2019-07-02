@@ -215,36 +215,60 @@ public class MapGui extends JFrame{
      * */
     public void addWeaponToMap(String id, int position, String weapon){
         double rotationRequired;
+        double rotationBack;
+        int backWidth;
+        int backHeight;
+        int backX;
+        int backY;
         int xOffset;
         int yOffset;
         spawnSquareWeapon.get(id)[position] = weapon;
         if (Character.getNumericValue(id.charAt(0)) == 0){
             rotationRequired = 1.0472; //60 degree in radiant
+            backWidth = 237;
+            backHeight = 358;
+            backX = ViewMap.getxWeapon(id, position);
+            backY = ViewMap.getyWeapon(id, position);
+            rotationBack = 0.0;
             xOffset = 90; yOffset = 150;
         }
         else {
             rotationRequired = 0.5236; //30 degree in radiant
+            backWidth = 358;
+            backHeight = 237 * 2 + 100;
+            backX = ViewMap.getxWeapon(id, position) - 9;
+            backY = ViewMap.getyWeapon(id, position) - 350;
+            rotationBack = 1.5707;
             xOffset = 65; yOffset = 100;
         }
 
-        BufferedImage text = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = text.createGraphics();
-        g2d.setPaint(Color.WHITE);
-        Font font = new Font("Arial", Font.PLAIN, 50);
-        g2d.setFont(font);
-        g2d.drawString(weapon, 0, text.getHeight()/2);
-        g2d.dispose();
-        double locationX = 0;
-        double locationY = text.getHeight();
-        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        try {
+            BufferedImage back = ImageIO.read(new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + "back.png"));
+            double locationXBack = 0;
+            double locationYBack = back.getHeight(null);
+            AffineTransform txBack = AffineTransform.getRotateInstance(rotationBack, locationXBack, locationYBack);
+            AffineTransformOp opBack = new AffineTransformOp(txBack, AffineTransformOp.TYPE_BILINEAR);
 
-        Graphics2D g = currentMapImage.createGraphics();
-        g.drawImage(op.filter(text, null), ViewMap.getxWeapon(id, position)-xOffset, ViewMap.getyWeapon(id, position)-yOffset, null);
-        g.dispose();
+            BufferedImage text = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = text.createGraphics();
+            g2d.setPaint(Color.WHITE);
+            Font font = new Font("Arial", Font.BOLD, 50);
+            g2d.setFont(font);
+            g2d.drawString(weapon, 0, text.getHeight() / 2);
+            g2d.dispose();
+            double locationX = 0;
+            double locationY = text.getHeight();
+            AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 
-        Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
-        map.setIcon(new ImageIcon(mapResized));
+            Graphics2D g = currentMapImage.createGraphics();
+            g.drawImage(opBack.filter(back, null), backX, backY, backWidth, backHeight, null);
+            g.drawImage(op.filter(text, null), ViewMap.getxWeapon(id, position) - xOffset, ViewMap.getyWeapon(id, position) - yOffset, null);
+            g.dispose();
+
+            Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+            map.setIcon(new ImageIcon(mapResized));
+        }catch (IOException e){}
     }
 
     /**
