@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class WeaponChooseGui extends JFrame {
     private ArrayList<JButton> weaponButtons;
     private int choose;
-    String weaponChoose;
+    String weaponChoose = "";
     boolean choosed = false;
 
     public WeaponChooseGui(List<String> cards, MapGui mapGui, boolean shot){
@@ -108,10 +108,16 @@ public class WeaponChooseGui extends JFrame {
         choose.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (shot)
-                    mapGui.weaponChosen(weaponChoose);
+                if (!weaponChoose.equals("")) {
+                    if (shot)
+                        mapGui.weaponChosen(weaponChoose);
+                    else
+                        mapGui.sendGrabWeapon(Character.getNumericValue(weaponChoose.charAt(0)));
+                    dispose();
+                }
                 else
-                    mapGui.sendGrabWeapon(Character.getNumericValue(weaponChoose.charAt(0)));
+                    JOptionPane.showMessageDialog(choose, "You choose nothing!");
+
             }
 
             @Override

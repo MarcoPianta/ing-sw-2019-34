@@ -16,6 +16,7 @@ public class PaymentGui extends JFrame {
     ArrayList<Integer> selected = new ArrayList<>();
     private String scopeSelected;
     private Integer token;
+    private boolean showPowerUps = false;
 
     public PaymentGui(Payment payment, List<String> powerUps, MapGui mapGui, Integer token){
         this.token = token;
@@ -83,6 +84,48 @@ public class PaymentGui extends JFrame {
         c.gridx = 0;
         c.gridy = 3;
         JCheckBox powerup = new JCheckBox("Use powerups to pay, otherwise ammos are used");
+        addListener(powerup, this, powerUps);
+        this.add(powerup, c);
+
+        int i = 1;
+        for (String s: powerUps){
+            c.gridx = i;
+            c.gridy = 3;
+            JLabel labelPo = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
+            System.out.println("Qui");
+            System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
+            int choose = i;
+            labelPo.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    selected.add(choose-1);
+                    JOptionPane.showMessageDialog(labelPo, "You select "+ powerUps.get(choose-1)+" to pay");
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+            i++;
+            this.add(labelPo, c);
+        }
+
 
         c.gridx = 0;
         c.gridy = 4;
@@ -115,7 +158,6 @@ public class PaymentGui extends JFrame {
             }
         });
 
-
         this.add(button, c);
 
         this.pack();
@@ -126,45 +168,12 @@ public class PaymentGui extends JFrame {
         jCheckBox.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (jCheckBox.isSelected()){
-                    int i = 1;
-                    GridBagConstraints c = new GridBagConstraints();
-                    for (String s: powerUps){
-                        c.gridx = i;
-                        c.gridy = 3;
-                        JLabel label = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
-                        paymentGui.add(label, c);
-                        int choose = i;
-                        label.addMouseListener(new MouseListener() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                selected.add(choose);
-                                JOptionPane.showMessageDialog(paymentGui, "You select "+ powerUps.get(choose-1)+" to pay");
-                            }
+                if (!showPowerUps){
+                    showPowerUps = true;
 
-                            @Override
-                            public void mousePressed(MouseEvent e) {
-
-                            }
-
-                            @Override
-                            public void mouseReleased(MouseEvent e) {
-
-                            }
-
-                            @Override
-                            public void mouseEntered(MouseEvent e) {
-
-                            }
-
-                            @Override
-                            public void mouseExited(MouseEvent e) {
-
-                            }
-                        });
-                        i++;
-                    }
                 }
+                else
+                    showPowerUps = false;
 
             }
 

@@ -146,7 +146,7 @@ public abstract class Client {
             view.setOtherPosition(message.getOtherColor(), message.getSquareID());
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
             System.out.println("Bellaaaa");
-            message.getPowerUps().stream().forEach(x -> System.out.println(x.getName()));
+            message.getWeapons().forEach(x -> System.out.println(x.getName()));
             view.setBlueAmmo(message.getBlue());
             view.setRedAmmo(message.getRed());
             view.setYellowAmmo(message.getYellow());
