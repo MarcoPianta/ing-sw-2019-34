@@ -50,7 +50,8 @@ public enum ActionType {
     SHOOTRESPONSEP("Shoot response p"),
     SHOOTRESPONSES("Shoot response s"),
     SHOOTRESPONSER("Shoot response r"),
-    TARGETMOVERESPONSE("Target move response");
+    TARGETMOVERESPONSE("Target move response"),
+    PING("Ping");
 
 
     private String abbreviation;

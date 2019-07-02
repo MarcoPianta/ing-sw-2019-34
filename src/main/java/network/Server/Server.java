@@ -77,8 +77,11 @@ public class Server {
             else if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT.getAbbreviation())) {
                 //TODO delete token from clients
             }
-            else
+            else {
+                System.out.println(message.getToken());
+                System.out.println(lobbyHashMap.get(message.getToken()));
                 lobbyHashMap.get(message.getToken()).receiveMessage(message);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

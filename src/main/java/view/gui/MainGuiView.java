@@ -264,7 +264,7 @@ public class MainGuiView extends View {
     public void showScoopRequest(){
         int value = JOptionPane.showConfirmDialog(mapGui, "Do you want to use scoop power up?");
         if (value == 0)
-            mapGui.canUseVenom();
+            mapGui.canUseScoop();
     }
 
     @Override

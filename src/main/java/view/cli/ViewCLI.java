@@ -247,7 +247,7 @@ public class ViewCLI extends View {
     public void showScopeRequest(ArrayList<Colors> playersId){
         out.println("\nYou can use Scope's powerUp\n press 1 to use scope or any key to cancel.\n");
         if(in.nextInt()==1){
-            client.send(new CanUseScoopResponse(client.getToken()));
+            client.send(new CanUseScoopResponse(client.getToken(), true));
             /*int i;
             if(playersId.size()==1){
 
@@ -268,6 +268,9 @@ public class ViewCLI extends View {
                     }
                 }
             }*/
+        }
+        else{
+            client.send(new CanUseScoopResponse(client.getToken(), false));
         }
     }
 

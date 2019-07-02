@@ -17,7 +17,7 @@ public class TargetChooseGui extends JFrame {
     private ArrayList<Colors> chosen;
     private Colors currentColor;
 
-    public TargetChooseGui(List<Colors> players, int max, MapGui mapGui){
+    public TargetChooseGui(List<Colors> players, int max, MapGui mapGui, boolean shoot){
         super("Choose a target");
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -78,7 +78,8 @@ public class TargetChooseGui extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                mapGui.targetChosen(chosen);
+                if (shoot)mapGui.targetChosen(chosen);
+                else mapGui.setTargetPowerUp(chosen.get(0));
             }
         });
 

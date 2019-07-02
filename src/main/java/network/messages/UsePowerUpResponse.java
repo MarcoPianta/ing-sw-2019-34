@@ -9,10 +9,10 @@ public class UsePowerUpResponse extends Message {
     private Integer powerUp;
     private Colors target;
     private Integer user;
-    private NormalSquare square;
+    private String square;
 
-    public  UsePowerUpResponse(Integer token, Integer cardPowerUp, Integer user, Colors target, NormalSquare square){
-        actionType=ActionType.USEPOWERUP;
+    public  UsePowerUpResponse(Integer token, Integer cardPowerUp, Integer user, Colors target, String square){
+        actionType=ActionType.USEPOWERUPRESPONSE;
         this.token=token;
         this.powerUp=cardPowerUp;
         this.target=target;
@@ -24,7 +24,7 @@ public class UsePowerUpResponse extends Message {
         return powerUp;
     }
 
-    public NormalSquare getSquare() {
+    public String getSquare() {
         return square;
     }
 

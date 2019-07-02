@@ -20,6 +20,7 @@ public class UsePowerUpGui extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     mapGui.usePowerUp(choose, tagBack);
+                    dispose();
                 }
 
                 @Override

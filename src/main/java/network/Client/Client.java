@@ -29,7 +29,10 @@ public abstract class Client {
      * @param message is the message received from the server
      * */
     public void onReceive(Message message) {
-        if (message.getActionType().getAbbreviation().equals(ActionType.CONNECTIONRESPONSE.getAbbreviation())) {
+        if (message.getActionType().getAbbreviation().equals(ActionType.PING.getAbbreviation())){
+            send(new Ping(token));
+        }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.CONNECTIONRESPONSE.getAbbreviation())) {
             //If the message is a ConnectionResponse it contains the token, so it is saved
             ConnectionResponse response = (ConnectionResponse) message;
             this.token = response.getToken();

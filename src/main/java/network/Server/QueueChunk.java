@@ -36,7 +36,7 @@ public class QueueChunk {
     public void addPlayer(Integer player){
         Timer timer = new Timer();
         synchronized (this) {
-            if (chunks.get(maxChunkIndex).size() < 5) {
+            if (chunks.get(maxChunkIndex).size() < 2) {
                 chunks.get(maxChunkIndex).add(player);
                 if (chunks.get(maxChunkIndex).size() >= 1 && !startedCheck.get(maxChunkIndex)) {
                     startedCheck.put(maxChunkIndex, true);
@@ -44,7 +44,7 @@ public class QueueChunk {
                     timer.schedule((new TimerTask() { //Start a timer and Wait for 30 seconds for other players to connect, then create new Game
                                 @Override
                                 public void run() {
-                                    notifyServer(chunks.get(maxChunkIndex));
+                                    notifyServer(chunks.get(maxChunkIndex), maxChunkIndex);
                                 }
                             })
                             , QUEUEWAITTIME);
@@ -68,7 +68,7 @@ public class QueueChunk {
      * If none of the player has available game settings those are randomly chosen.
      * @param players the ArrayList of the players that will take part of the new Game
      */
-    private void notifyServer(ArrayList<Integer> players){
+    private void notifyServer(ArrayList<Integer> players, int position){
         int skullNumber = 0;
         int map = 0;
         synchronized (this) {
@@ -86,13 +86,14 @@ public class QueueChunk {
         }
         server.notifyFromQueue(players,skullNumber, map);
         synchronized (this){
-            chunks.remove(players);
+            chunks.remove(position);
             for (Integer i: players)
                 playersID.remove(i);
             if (maxChunkIndex > 0)
                 maxChunkIndex--;
             else
                 chunks.add(new ArrayList<>());
+            startedCheck.put(maxChunkIndex, false);
         }
     }
 

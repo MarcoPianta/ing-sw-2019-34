@@ -59,6 +59,8 @@ public class MapGui extends JFrame{
     private ArrayList<Colors> marks;
     private ArrayList<CardWeapon> cardsWeapon;
     private ArrayList<String> powerUps;
+    private int selectedPowerUp;
+    private Colors targetPowerup;
 
     /**
      * This constructor creates the new windows
@@ -344,7 +346,16 @@ public class MapGui extends JFrame{
      * This method is called when the player wants to use a powerup
      * */
     public void usePowerUp(int position, boolean granade){
-        //client.send(new UsePowerUp(client.getToken(), position, ));
+        System.out.println(powerUps.get(position).substring(0, powerUps.get(position).length()-2));
+        if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("teleporter")){
+            actionType = "teleporter";
+            JOptionPane.showMessageDialog(this, "Choose a square to teleport");
+            selectedPowerUp = position;
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-1).equals("newton")){
+            new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false);
+            JOptionPane.showMessageDialog(this, "Choose a target to move him");
+            selectedPowerUp = position;
+        }
     }
 
     /**
@@ -413,6 +424,12 @@ public class MapGui extends JFrame{
         client.send(new ShootResponsep(client.getToken(), chosen));
     }
 
+    public void setTargetPowerUp(Colors color){
+        targetPowerup = color;
+        actionType = "newton";
+        JOptionPane.showMessageDialog(this, "Choose a square to move the selected player");
+    }
+
     /**
      * This method add the component listeners to the component of the window
      * */
@@ -451,7 +468,7 @@ public class MapGui extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 openWeaponDetail(e.getX(), e.getY(), false);
                 if(myTurn) {
-                    if ((e.getX() < 285) && (e.getY() > 1810)){
+                    if ((e.getX() < 285 * map.getWidth()/2545) && (e.getY() > 1810 * map.getHeight()/1928)){
                         //TODO send pass message
                         int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
                         if (response == 0) {
@@ -466,6 +483,7 @@ public class MapGui extends JFrame{
                         if (!id.equals("") && !redCrosses.contains(id)) {
                             client.send(new MoveResponse(client.getToken(), id));
                             System.out.println("move to: " + id);
+                            actionType = "";
                         }
                     } else if (actionType.equals("room")) {
                         client.send(new ShootResponser(client.getToken(), getSquareId(e.getX(), e.getY())));
@@ -476,6 +494,15 @@ public class MapGui extends JFrame{
                         actionType = "";
                     } else if (actionType.equals("movep")) {
                         client.send(new TargetMoveResponse(client.getToken(), getSquareId(e.getX(), e.getY())));
+                        actionType = "";
+                    } else if (actionType.equals("teleporter")) {
+                        if (selectedPowerUp < 4) {
+                            client.send(new UsePowerUpResponse(client.getToken(), selectedPowerUp, client.getToken(), myColor, getSquareId(e.getX(), e.getY())));
+                            selectedPowerUp = 4;
+                            actionType = "";
+                        }
+                    }else if(actionType.equals("teleporter")){
+                        client.send(new UsePowerUpResponse(client.getToken(), selectedPowerUp, client.getToken(), targetPowerup, getSquareId(e.getX(), e.getY())));
                         actionType = "";
                     }
                     /*updateEnemyPosition(Colors.BLUE, "0,0");
@@ -779,7 +806,7 @@ public class MapGui extends JFrame{
      * This method open a window which show the targetble players
      * */
     public void showTargetblePlayer(List<Colors> players, int max){
-        new TargetChooseGui(players, max, this); //TODO add max target
+        new TargetChooseGui(players, max, this, true);
     }
 
     /**
