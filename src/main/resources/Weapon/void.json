@@ -1,0 +1,12 @@
+{
+  "name": "Void",
+  "cost": [
+    0,
+    0,
+    0
+  ],
+  "color": "BLUE",
+  "effectNumber": 0,
+  "actionSequences": [
+  ]
+}

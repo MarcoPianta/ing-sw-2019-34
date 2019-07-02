@@ -12,7 +12,6 @@ public class UpdateClient extends Message {
     private ArrayList<String> reachableTarget; //ArrayList of possible target Players' square ID
     private String type; //Type of update (position, damageBar, etc.)
     private CardPowerUp powerUp;
-    private Hand handPlayer;
     private CardWeapon weapon;
     private int posWeapon;
     private CardAmmo ammo;
@@ -104,6 +103,7 @@ public class UpdateClient extends Message {
     public UpdateClient(Integer token){
         setMessageInfo(token, RESPAWN);
     }
+
     public UpdateClient(Integer token, String squareId,CardWeapon weapon,int posWeapon){
         setMessageInfo(token, FILLSPAWN);
         this.squareID=squareId;
@@ -170,10 +170,6 @@ public class UpdateClient extends Message {
 
     public CardAmmo getAmmo() {
         return ammo;
-    }
-
-    public Hand getHandPlayer() {
-        return handPlayer;
     }
 
     public CardWeapon getWeapon() {

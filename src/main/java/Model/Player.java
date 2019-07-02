@@ -172,6 +172,20 @@ public class Player implements Serializable {
 
         return  valueReturn;
     }
+    public boolean isValidCostWeapon(Integer[] cost){
+        if (cost[0] <= playerBoard.getHandPlayer().getAmmoRYB()[0]) {
+            if (cost[1] <= playerBoard.getHandPlayer().getAmmoRYB()[1]){
+                if (cost[0] > playerBoard.getHandPlayer().getAmmoRYB()[2])
+                    return false;
+            }
+            else
+                return  false;
+        }
+        else
+            return false;
+        return  true;
+
+    }
 
 }
 

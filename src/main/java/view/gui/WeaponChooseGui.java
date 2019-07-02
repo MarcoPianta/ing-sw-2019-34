@@ -14,8 +14,8 @@ import java.util.Arrays;
 public class WeaponChooseGui extends JFrame {
     private ArrayList<JButton> weaponButtons;
     private int choose;
-    String weaponChoose = "";
-    boolean choosed = false;
+    private String weaponChoose = "";
+    private boolean choosed = false;
 
     public WeaponChooseGui(List<String> cards, MapGui mapGui, boolean shot){
         super("Weapon choose");
@@ -26,6 +26,8 @@ public class WeaponChooseGui extends JFrame {
 
         int index = 0;
         for (String c: cards) {
+            System.out.println(c);
+
             constraints.gridx = index;
             constraints.gridy = 1;
             constraints.weightx = 0.5;
@@ -38,52 +40,60 @@ public class WeaponChooseGui extends JFrame {
             button.setName(c);
 
             int currentChoose = index;
-            button.addMouseListener(new MouseListener() {
-                int buttonChoose = currentChoose;
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    choose = buttonChoose;
-                    if (!choosed) {
-                        if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
-                            weaponChoose = choose + "," + (0+1);
-                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 10 * e.getComponent().getWidth() / 240) && (e.getX() < (10 + 105) * e.getComponent().getWidth() / 240))) {
-                            weaponChoose = choose + "," + (1+1);
-                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
-                            weaponChoose = choose + "," + (2+1);
+            if (!c.equals("back")) {
+                button.addMouseListener(new MouseListener() {
+                    int buttonChoose = currentChoose;
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        choose = buttonChoose;
+                        if (!choosed) {
+                            if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
+                                weaponChoose = choose + "," + (0 + 1);
+                            } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 10 * e.getComponent().getWidth() / 240) && (e.getX() < (10 + 105) * e.getComponent().getWidth() / 240))) {
+                                weaponChoose = choose + "," + (1 + 1);
+                            } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
+                                weaponChoose = choose + "," + (2 + 1);
+                            }
+                            choosed = true;
+                            if (shot)
+                                JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0) + " effect: " + weaponChoose.charAt(2));
+                            else
+                                JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0));
+                        } else {
+                            if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
+                                weaponChoose = weaponChoose + (0 + 1);
+                            } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 10 * e.getComponent().getWidth() / 240) && (e.getX() < (10 + 105) * e.getComponent().getWidth() / 240))) {
+                                weaponChoose = weaponChoose + (1 + 1);
+                            } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
+                                weaponChoose = weaponChoose + (2 + 1);
+                            }
+                            if (shot)
+                                JOptionPane.showMessageDialog(button, "You choose effect: " + weaponChoose.charAt(2));
                         }
-                        choosed = true;
                     }
-                    else{
-                        if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
-                            weaponChoose = weaponChoose + (0+1);
-                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 10 * e.getComponent().getWidth() / 240) && (e.getX() < (10 + 105) * e.getComponent().getWidth() / 240))) {
-                            weaponChoose = weaponChoose + (1+1);
-                        } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
-                            weaponChoose = weaponChoose + (2+1);
-                        }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+
                     }
-                }
 
-                @Override
-                public void mousePressed(MouseEvent e) {
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
 
-                }
+                    }
 
-                @Override
-                public void mouseReleased(MouseEvent e) {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
 
-                }
+                    }
 
-                @Override
-                public void mouseEntered(MouseEvent e) {
+                    @Override
+                    public void mouseExited(MouseEvent e) {
 
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-
-                }
-            });
+                    }
+                });
+            }
 
             index++;
         }
