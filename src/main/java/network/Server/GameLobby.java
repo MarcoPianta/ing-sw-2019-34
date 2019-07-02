@@ -125,10 +125,12 @@ public class GameLobby {
                 shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
-            else
-                System.out.println("_________________________NON è VALIDA L'AZIONEEEEE_________________________-");
-            //TODO else --> dico che non è valida
-                //devo vuotare la history e la shoothistory e mandare il messaggio di errore
+            else {
+                historyMessage = new ArrayList<>();
+                shootHistoryMessage = new ArrayList<>();
+                server.send(new UpdateClient(message.getToken(), "Action not valid"));
+            }
+            //devo vuotare la history e la shoothistory e mandare il messaggio di errore
             /*if(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = new ArrayList<>();
@@ -145,7 +147,11 @@ public class GameLobby {
                 shootHistoryMessage.add(new Shot(targetSquare, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
-            //TODO else --> dico che non è valida
+            else {
+                historyMessage = new ArrayList<>();
+                shootHistoryMessage = new ArrayList<>();
+                server.send(new UpdateClient(message.getToken(), "Action not valid"));
+            }
             /*if(players.get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = new ArrayList<>();
@@ -165,7 +171,11 @@ public class GameLobby {
                 shootHistoryMessage.add(new Shot(targetRoom, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
-            //TODO else --> dico che non è valida
+            else {
+                historyMessage = new ArrayList<>();
+                shootHistoryMessage = new ArrayList<>();
+                server.send(new UpdateClient(message.getToken(), "Action not valid"));
+            }
             /*if(players.get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = new ArrayList<>();
@@ -287,7 +297,6 @@ public class GameLobby {
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.PASS.getAbbreviation())){
             gameHandler.receiveServerMessage(message);
-            server.send( new UpdateClient(message.getToken(),"your turn is finish"));
             historyMessage=new ArrayList<>();
 
         }
