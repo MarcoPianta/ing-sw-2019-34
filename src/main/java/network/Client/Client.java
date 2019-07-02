@@ -49,7 +49,7 @@ public abstract class Client {
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTP.getAbbreviation())){
             ShootRequestp shootRequestp = (ShootRequestp) message;
-            //view.showPossibleTarget(shootRequestp.getTargetablePlayer(), shootRequestp.getTargetNumber());
+            view.showPossibleTarget(shootRequestp.getTargetablePlayer(), shootRequestp.getTargetNumber());
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTR.getAbbreviation())){
             ShootRequestr shootRequestr = (ShootRequestr) message;
@@ -57,7 +57,7 @@ public abstract class Client {
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.SHOOTREQUESTS.getAbbreviation())){
             ShootRequests shootRequests = (ShootRequests) message;
-            //view.showPossibleSquares(shootRequests.getTargetableSquare(), shootRequests.getSquareNumber());
+            view.showPossibleSquares(shootRequests.getTargetableSquare());
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.TARGETMOVEREQUEST.getAbbreviation())){
             TargetMoveRequest targetMoveRequest = (TargetMoveRequest) message;
@@ -133,10 +133,6 @@ public abstract class Client {
 
         else if (message.getUpdateType().equals(UpdateClient.POSSIBLESQUARES))
             view.showReachableSquares(message.getReachableSquares());
-
-        else if (message.getUpdateType().equals(UpdateClient.POSSIBLETARGET)){
-            //view.showPossibleTarget(message.getReachableTarget());
-        }
 
         else if (message.getUpdateType().equals(UpdateClient.RESPAWN)) {
             System.out.println("Respawn");

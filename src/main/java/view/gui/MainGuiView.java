@@ -313,7 +313,7 @@ public class MainGuiView extends View {
 
     public void showPossibleSquares(List<String> targets){
         mapGui.setActionType("square");
-        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ArrayList<String> ids = new ArrayList<>(Arrays.asList(ViewMap.getIds()));
         ids.removeAll(targets);
         mapGui.addRedCross(ids);
     }

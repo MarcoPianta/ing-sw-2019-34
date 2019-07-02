@@ -218,7 +218,10 @@ public class MapGui extends JFrame{
         double rotationBack;
         int xOffset;
         int yOffset;
-        spawnSquareWeapon.get(id)[position] = weapon;
+        if (weapon.equals("null"))
+            spawnSquareWeapon.get(id)[position] = "back";
+        else
+            spawnSquareWeapon.get(id)[position] = weapon;
 
         if (Character.getNumericValue(id.charAt(0)) == 0) {
             rotationRequired = 1.0472; //60 degree in radiant
@@ -242,21 +245,21 @@ public class MapGui extends JFrame{
         AffineTransform txBack = AffineTransform.getRotateInstance(rotationBack, locationXBack, locationYBack);
         AffineTransformOp opBack = new AffineTransformOp(txBack, AffineTransformOp.TYPE_BILINEAR);
 
-        BufferedImage text = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = text.createGraphics();
+        BufferedImage textImage = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = textImage.createGraphics();
         g2d.setPaint(Color.WHITE);
         Font font = new Font("Arial", Font.PLAIN, 50);
         g2d.setFont(font);
         g2d.drawString(weapon, 0, text.getHeight() / 2);
         g2d.dispose();
         double locationX = 0;
-        double locationY = text.getHeight();
+        double locationY = textImage.getHeight();
         AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 
         Graphics2D g = currentMapImage.createGraphics();
         g.drawImage(opBack.filter(bimage, null), ViewMap.getxWeapon(id, position), ViewMap.getyWeapon(id, position), null);
-        g.drawImage(op.filter(text, null), ViewMap.getxWeapon(id, position) - xOffset, ViewMap.getyWeapon(id, position) - yOffset, null);
+        g.drawImage(op.filter(textImage, null), ViewMap.getxWeapon(id, position) - xOffset, ViewMap.getyWeapon(id, position) - yOffset, null);
         g.dispose();
 
         Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
@@ -384,7 +387,7 @@ public class MapGui extends JFrame{
      * This method is used to send the chosen weapon for a shot action
      * */
     public void weaponChosen(String choose){
-        client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0)), Character.getNumericValue(choose.charAt(2))));
+        client.send(new ReceiveTargetSquare(client.getToken(), "shoot", Character.getNumericValue(choose.charAt(0)), Integer.parseInt(choose.substring(2))));
         System.out.println(choose);
     }
 

@@ -52,6 +52,10 @@ public class WeaponChooseGui extends JFrame {
                             weaponChoose = choose + "," + (2+1);
                         }
                         choosed = true;
+                        if (shot)
+                            JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0) + " effect: " + weaponChoose.charAt(2));
+                        else
+                            JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0));
                     }
                     else{
                         if ((e.getY() > (180) * e.getComponent().getHeight() / 406) && (e.getY() < (180 + 100) * e.getComponent().getHeight() / 406)) {
@@ -61,6 +65,8 @@ public class WeaponChooseGui extends JFrame {
                         } else if ((e.getY() > 300 * e.getComponent().getHeight() / 406) && ((e.getX() > 125 * e.getComponent().getWidth() / 240) && (e.getX() < (125 + 105) * e.getComponent().getWidth() / 240))) {
                             weaponChoose = weaponChoose + (2+1);
                         }
+                        if (shot)
+                            JOptionPane.showMessageDialog(button, "You choose effect: " + weaponChoose.charAt(2));
                     }
                 }
 
