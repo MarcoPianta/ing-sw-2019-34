@@ -46,7 +46,6 @@ public class Grab implements Action, Serializable {
      * @return true if the action has been executed, false otherwise
      */
     public boolean execute() {
-        if(isValid()) {
             if (execution == 0) {
                 SpawnSquare actorSquare = (SpawnSquare) actorPlayer.getPosition();
                 actorPlayer.getPlayerBoard().getHandPlayer().addWeapon((CardWeapon) actorSquare.grabItem(actorPlayer.getPosition().getWeapons().indexOf(grabbedItem)));
@@ -64,8 +63,6 @@ public class Grab implements Action, Serializable {
                 //TODO prompt fullPowerUp in else
             }
             return true;
-        }
-        return false;
     }
 
     /**

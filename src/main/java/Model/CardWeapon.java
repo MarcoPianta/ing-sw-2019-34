@@ -58,6 +58,10 @@ public class CardWeapon extends Card {
         return effectsNumber;
     }
 
+    public ArrayList<Integer> getActionSequences() {
+        return actionSequences;
+    }
+
     /**
      * This method return the effects ArrayList of a weapon but to avoid exposing the data structure to an external
      * observer, who could potentially change the values in it, it returns a copy of it
