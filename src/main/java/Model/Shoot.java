@@ -70,6 +70,7 @@ public class Shoot implements Action, Serializable {
         ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
         for (Player target : targets) {
             if(!conditionControll(target, visibleTarget, targetListSquare)){
+                System.out.println("falso1");
                 return false;
             }
         }
@@ -79,8 +80,10 @@ public class Shoot implements Action, Serializable {
             for (Player target : targets) {
                 targetListSquare.add(target.getPosition());
             }
+            System.out.println("falso2");
             return cardinalControl(targetListSquare);
         }
+        System.out.println("isValidP returna " + true);
         return true;
     }
 
@@ -161,13 +164,27 @@ public class Shoot implements Action, Serializable {
      *
      * */
     private boolean conditionControll(Player target, List<Player> visibleTarget, ArrayList<NormalSquare> targetListSquare){
-        if (shootEffect.getPreCondition().isMelee() && shooterPlayer.getPosition() != target.getPosition())
+        if (shootEffect.getPreCondition().isMelee() && shooterPlayer.getPosition() != target.getPosition()){
+            System.out.println("1");
             return false;
-        if ((shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)) || (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target))))
+        }
+        if (shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)){
+            System.out.println("2");
+
             return false;
+        }
+
+        if (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target))){
+            System.out.println("3");
+
+            return false;
+        }
         if (shootEffect.getPreCondition().isEnemiesDifferentSquare()){
-            if (targetListSquare.contains(target.getPosition()))
+            if (targetListSquare.contains(target.getPosition())){
+                System.out.println("4");
+
                 return false;
+            }
             else
                 targetListSquare.add(target.getPosition());
         }
@@ -207,7 +224,7 @@ public class Shoot implements Action, Serializable {
         if (0 == preCondition.getMinRange()) {
             reachableSquares.add(shooterPlayer.getPosition());
         }
-        while((preCondition.getMaxRange() == 0 && !thisStepSquare.isEmpty()) || (range <= preCondition.getMaxRange())){
+        while((preCondition.getMaxRange() == 0 && !thisStepSquare.isEmpty()) || range <= preCondition.getMaxRange()){
             thisStep = thisStepSquare.size();
             j = 0;
             while (j < thisStep) {
@@ -271,7 +288,7 @@ public class Shoot implements Action, Serializable {
         reachablePlayer.remove(shooterPlayer);
         int i = 0;
         while(i < reachablePlayer.size()){
-            if((!reachableSquare().contains(reachablePlayer.get(i).getPosition()) || (reachablePlayer.get(i) == shooterPlayer)))
+            if(!reachableSquare().contains(reachablePlayer.get(i).getPosition()))
                 reachablePlayer.remove(i);
             else
                 i++;

@@ -30,6 +30,7 @@ public class GameLobby {
         this.playersColor=new HashMap<>();
         this.historyMessage = new ArrayList<>();
         this.actionPerformed = new HashMap<>();
+        this.shootHistoryMessage = new ArrayList<>();
         this.clients.forEach(x -> actionPerformed.put(x, false));
         try {
             this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
@@ -112,38 +113,43 @@ public class GameLobby {
 
         else if (message.getActionType().equals(ActionType.SHOOTRESPONSEP)){
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
+            System.out.println(receiveTargetSquare.getPosEffect() + " <-effect  weapon-> " + receiveTargetSquare.getPosWeapon());
             ShootResponsep shootResponsep = (ShootResponsep) message;
             ArrayList<Player> targetPlayer = new ArrayList<>();
-            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
+            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
             for (Colors color: shootResponsep.getTargetPlayer()) {
                 targetPlayer.add(players.get(playersColor.get(color)));
             }
+            System.out.println("Chiamo la action valid con effetto" + receiveTargetSquare.getPosEffect());
             if(actionValidController.actionValid(targetPlayer, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
+            else
+                System.out.println("_________________________NON è VALIDA L'AZIONEEEEE_________________________-");
             //TODO else --> dico che non è valida
-            if(gameHandler.getGame().getPlayers().get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getActionSequence().length() == shootHistoryMessage.size()){
+                //devo vuotare la history e la shoothistory e mandare il messaggio di errore
+            /*if(players.get(message.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
-                shootHistoryMessage = null;
-            }
+                shootHistoryMessage = new ArrayList<>();
+            }*/
         }
 
         else if (message.getActionType().equals(ActionType.SHOOTRESPONSES)) {
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
             ShootResponses shootResponses = (ShootResponses) message;
             ArrayList<NormalSquare> targetSquare = new ArrayList<>();
-            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
+            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
             targetSquare.add(gameHandler.getGame().getMap().getSquareFromId(shootResponses.getTargetSquare()));
             if (actionValidController.actionValid(targetSquare, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetSquare, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
             //TODO else --> dico che non è valida
-            if(gameHandler.getGame().getPlayers().get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getActionSequence().length() == shootHistoryMessage.size()){
+            /*if(players.get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
-                shootHistoryMessage = null;
-            }
+                shootHistoryMessage = new ArrayList<>();
+            }*/
         }
 
         else if (message.getActionType().equals(ActionType.SHOOTRESPONSER)) {
@@ -154,24 +160,24 @@ public class GameLobby {
                 if (room.getColor() == gameHandler.getGame().getMap().getSquareFromId(shootResponser.getTargetRoom()).getColor())
                     targetRoom = room;
             }
-            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
+            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
             if (actionValidController.actionValid(targetRoom, effect, -1)){
                 shootHistoryMessage.add(new Shot(targetRoom, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                 shootActionSequences(receiveTargetSquare);
             }
             //TODO else --> dico che non è valida
-            if(gameHandler.getGame().getPlayers().get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getActionSequence().length() == shootHistoryMessage.size()){
+            /*if(players.get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
                 historyMessage = new ArrayList<>(shootHistoryMessage);
-                shootHistoryMessage = null;
+                shootHistoryMessage = new ArrayList<>();
                 server.send(new Payment(currentPlayer, effect.getBonusCost(), false)); //TODO gestire PowerUp
-            }
+            }*/
         }
 
         else if (message.getActionType().equals(ActionType.TARGETMOVERESPONSE)){
             ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
             TargetMoveResponse targetMoveResponse = (TargetMoveResponse) message;
             Player target = players.get(targetMoveResponse.getTargetPlayer());
-            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
+            Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
             server.send(new UpdateClient(targetMoveResponse.getToken(), new Move(target, null, effect.getTargetMove()).reachableSquare()));
             shootHistoryMessage.add(new MoveMessage(target.getPlayerID(), null, null));
 
@@ -415,42 +421,54 @@ public class GameLobby {
     }
 
     public void shootActionSequences(ReceiveTargetSquare receiveTargetSquare){
-        Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect());
+        Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
         String actionSequence = effect.getActionSequence();
-        int i = shootHistoryMessage.size() + 1;
-        if (actionSequence.charAt(i) == 'p') {
-            ArrayList<Colors> targetToken = new ArrayList<>();
-            for (Player target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).targetablePlayer()) {
-                targetToken.add(target.getColor());
+        System.out.println("-----------------------\nl'arma scelta ha actionSequense -> " + actionSequence + "\nShootHistoryMessage.size = " + shootHistoryMessage.size() + "\nActionSequence.length = " + actionSequence.length() + "\n--------------------");
+        int i = shootHistoryMessage.size();
+        if(i < actionSequence.length()){
+
+            if (actionSequence.charAt(i) == 'p') {
+                System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
+                ArrayList<Colors> targetToken = new ArrayList<>();
+                for (Player target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).targetablePlayer()) {
+                    targetToken.add(target.getColor());
+                }
+                server.send(new ShootRequestp(receiveTargetSquare.getToken(), effect.getTargetNumber(), targetToken));
+
+            } else if (actionSequence.charAt(i) == 's') {
+                System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
+                ArrayList<String> targetID = new ArrayList<>();
+                for (NormalSquare target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).reachableSquare()) {
+                    targetID.add(target.getId());
+                }
+                server.send(new ShootRequests(receiveTargetSquare.getToken(), targetID));
+
+            } else if (actionSequence.charAt(i) == 'r') {
+                System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
+                ArrayList<String> targetID = new ArrayList<>();
+                for (NormalSquare target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).reachableRoom()) {
+                    targetID.add(target.getId());
+                }
+                server.send(new ShootRequestr(receiveTargetSquare.getToken(), targetID));
+
+            } else if (actionSequence.charAt(i) == 'm') {
+                System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
+                ArrayList<String> squareList = new ArrayList<>();
+                Player target = players.get(shootHistoryMessage.get(shootHistoryMessage.size()).getToken());
+                Integer move = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getTargetMove();
+                for (NormalSquare square: new Move(target, null, move).reachableSquare()) {
+                    squareList.add(square.getId());
+                }
+                server.send(new TargetMoveRequest(receiveTargetSquare.getToken(), squareList));
+
+            } else if (actionSequence.charAt(i) == 'M') {
+                System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
+                server.send(new UpdateClient(receiveTargetSquare.getToken(), new Move(gameHandler.getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
+
             }
-            server.send(new ShootRequestp(receiveTargetSquare.getToken(), effect.getTargetNumber(), targetToken));
-
-        } else if (actionSequence.charAt(i) == 's') {
-            ArrayList<String> targetID = new ArrayList<>();
-            for (NormalSquare target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).reachableSquare()) {
-                targetID.add(target.getId());
-            }
-            server.send(new ShootRequests(receiveTargetSquare.getToken(), targetID));
-
-        } else if (actionSequence.charAt(i) == 'r') {
-            ArrayList<String> targetID = new ArrayList<>();
-            for (NormalSquare target: new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null).reachableRoom()) {
-                targetID.add(target.getId());
-            }
-            server.send(new ShootRequestr(receiveTargetSquare.getToken(), targetID));
-
-        } else if (actionSequence.charAt(i) == 'm') {
-            ArrayList<String> squareList = new ArrayList<>();
-            Player target = players.get(shootHistoryMessage.get(shootHistoryMessage.size()).getToken());
-            Integer move = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getTargetMove();
-            for (NormalSquare square: new Move(target, null, move).reachableSquare()) {
-                squareList.add(square.getId());
-            }
-            server.send(new TargetMoveRequest(receiveTargetSquare.getToken(), squareList));
-
-        } else if (actionSequence.charAt(i) == 'M') {
-            server.send(new UpdateClient(receiveTargetSquare.getToken(), new Move(gameHandler.getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
-
+        }
+        else{
+            System.out.println("L'azione è finita, qui faccio le history");
         }
     }
 
