@@ -215,51 +215,32 @@ public class MapGui extends JFrame{
      * */
     public void addWeaponToMap(String id, int position, String weapon){
         double rotationRequired;
-        double rotationBack;
         int xOffset;
         int yOffset;
-        if (weapon.equals("null"))
-            spawnSquareWeapon.get(id)[position] = "back";
-        else
-            spawnSquareWeapon.get(id)[position] = weapon;
-
-        if (Character.getNumericValue(id.charAt(0)) == 0) {
+        spawnSquareWeapon.get(id)[position] = weapon;
+        if (Character.getNumericValue(id.charAt(0)) == 0){
             rotationRequired = 1.0472; //60 degree in radiant
-            rotationBack = 0.0;
-            xOffset = 90;
-            yOffset = 150;
-        } else {
+            xOffset = 90; yOffset = 150;
+        }
+        else {
             rotationRequired = 0.5236; //30 degree in radiant
-            rotationBack = 1.5707;
-            xOffset = 65;
-            yOffset = 100;
+            xOffset = 65; yOffset = 100;
         }
 
-        Image back = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + "back.png").getImage().getScaledInstance(237, 359, Image.SCALE_DEFAULT );
-        BufferedImage bimage = new BufferedImage(237, 359, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(back, 0, 0, null);
-        bGr.dispose();
-        double locationXBack = 0;
-        double locationYBack = bimage.getHeight();
-        AffineTransform txBack = AffineTransform.getRotateInstance(rotationBack, locationXBack, locationYBack);
-        AffineTransformOp opBack = new AffineTransformOp(txBack, AffineTransformOp.TYPE_BILINEAR);
-
-        BufferedImage textImage = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = textImage.createGraphics();
+        BufferedImage text = new BufferedImage(400, 240, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = text.createGraphics();
         g2d.setPaint(Color.WHITE);
         Font font = new Font("Arial", Font.PLAIN, 50);
         g2d.setFont(font);
-        g2d.drawString(weapon, 0, text.getHeight() / 2);
+        g2d.drawString(weapon, 0, text.getHeight()/2);
         g2d.dispose();
         double locationX = 0;
-        double locationY = textImage.getHeight();
+        double locationY = text.getHeight();
         AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 
         Graphics2D g = currentMapImage.createGraphics();
-        g.drawImage(opBack.filter(bimage, null), ViewMap.getxWeapon(id, position), ViewMap.getyWeapon(id, position), null);
-        g.drawImage(op.filter(textImage, null), ViewMap.getxWeapon(id, position) - xOffset, ViewMap.getyWeapon(id, position) - yOffset, null);
+        g.drawImage(op.filter(text, null), ViewMap.getxWeapon(id, position)-xOffset, ViewMap.getyWeapon(id, position)-yOffset, null);
         g.dispose();
 
         Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
