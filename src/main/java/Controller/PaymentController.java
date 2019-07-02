@@ -106,7 +106,7 @@ public class PaymentController {
         }
         if (cost[0] <= gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]) {
             if (cost[1] <= gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]){
-                if (cost[0] > gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0])
+                if (cost[0] > gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2])
                     return false;
             }
             else
