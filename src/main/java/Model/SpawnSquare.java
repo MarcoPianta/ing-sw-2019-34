@@ -22,22 +22,22 @@ public class SpawnSquare extends NormalSquare{
     public SpawnSquare(){
         super();
         this.weapons = new ArrayList<>();
+        while (this.weapons.size() < 3) this.weapons.add(null);
         spawn = true;
     }
 
     @Override
-    public void setItems(Card card) {
-        if (weapons.size() < 3)
-            if(card != null)
-                for(int i=0;i<3;i++)
-                    if(weapons.get(i) == null){
-                        weapons.set(i,(CardWeapon)card);
-                        return;
-                    }
-
-        else {
-            //TODO throws new FullWeaponSpaceException
+    public int setItems(Card card) {
+        if(card != null) {
+            for (int i = 0; i < 3; i++) {
+                if (weapons.get(i) == null) {
+                    weapons.set(i, (CardWeapon) card);
+                    return i;
+                }
+            }
         }
+        return 0;
+
     }
 
     public List<CardWeapon> getWeapons() {

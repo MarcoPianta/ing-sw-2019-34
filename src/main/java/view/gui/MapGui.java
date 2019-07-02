@@ -313,7 +313,8 @@ public class MapGui extends JFrame{
         powerUps.add(powerUp);
     }
 
-    public void substituteWeaponRequest(int position){
+    public void substituteWeaponRequest(){
+        System.out.println("devo entrare nel metodo efnwieonboiedvbourwbsobrgfwiobe");
         new SubstituteWeaponGui(cardsWeapon, this);
     }
 

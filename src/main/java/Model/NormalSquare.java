@@ -42,8 +42,9 @@ public class NormalSquare implements Serializable {
         this.color = null;
     }
 
-    public void setItems(Card card) {
+    public int setItems(Card card) {
         this.ammo = (CardAmmo) card;
+        return 0;
     }
 
     /**

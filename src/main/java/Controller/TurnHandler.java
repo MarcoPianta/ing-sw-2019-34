@@ -51,6 +51,15 @@ public class TurnHandler {
 
         if(gameHandler.getGame().getCurrentPlayer().getPosition()==null && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getMaxReward()==8) {
             gameHandler.getGame().getCurrentPlayer().spawn(1);//first spawn
+
+            //regalo armi
+            try {
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addWeapon(new CardWeapon("machineGun"));
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addWeapon(new CardWeapon("shotgun"));
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addWeapon(new CardWeapon("thor"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addAmmo(1, 1, 1);
             gameHandler.getGame().getCurrentPlayer().spawn(1);
 
@@ -269,8 +278,8 @@ public class TurnHandler {
         }
 */
         if(valueReturn && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()==4)
-            {gameHandler.getGameLobby().send(new SubstituteWeapon(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()));
-            }
+            gameHandler.getGameLobby().send(new SubstituteWeapon(gameHandler.getGame().getCurrentPlayer().getPlayerID()));
+
         return valueReturn;
     }
 
@@ -407,13 +416,10 @@ public class TurnHandler {
             int i = emptySquares.size() - 1;
             while (!emptySquares.isEmpty()) {
                 if (emptySquares.get(i).isSpawn()){
-                    emptySquares.get(i).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
+                    int pos=emptySquares.get(i).setItems(game.getDeckCollector().getCardWeaponDrawer().draw());
                     for(Player p: game.getPlayers()){
-                        for(int count=0;count <3;count++){
-                            if(emptySquares.get(i).getWeapons().get(count)==null)
-                                gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),((SpawnSquare)emptySquares.get(i)).getWeapons().get(2),count));
+                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),emptySquares.get(i).getId(),((SpawnSquare)emptySquares.get(i)).getWeapons().get(pos),pos));
                         }
-                    }
                 }
                 else{
                     CardAmmo ammo = game.getDeckCollector().getCardAmmoDrawer().draw();
