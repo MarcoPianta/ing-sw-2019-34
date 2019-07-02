@@ -205,6 +205,8 @@ public class GameLobby {
             boolean ex = gameHandler.getActionValidController().actionValid((SpawnSquare) gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()) , ((GrabWeapon) message).getPositionWeapon());
             if (!ex){
                 server.send(new UpdateClient(message.getToken(), "Action not done"));
+                server.send(new UpdateClient(message.getToken(),gameHandler.getGame().getCurrentPlayer().getPosition()));
+
                 historyMessage=new ArrayList<>();
             }
             else{
@@ -213,7 +215,7 @@ public class GameLobby {
                 cost[1]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getYellowCost();
                 cost[2]=gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getBlueCost();
                 if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation().equals("red") && cost[0] > 0){
-                    cost[0]--;
+                   cost[0]--;
                 }
                 else if(gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()).getWeapons().get(((GrabWeapon) message).getPositionWeapon()).getColor().getAbbreviation().equals("yellow") && cost[1] > 0){
                     cost[1]--;
@@ -222,7 +224,9 @@ public class GameLobby {
                     cost[2]--;
                 }
                 server.send(new Payment(grabWeapon.getToken(),cost,false));
+                MoveMessage moveMessage= new MoveMessage(message.getToken(),gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()));
                 historyMessage=new ArrayList<>();
+                historyMessage.add(moveMessage);
                 historyMessage.add(grabWeapon);
             }
         }

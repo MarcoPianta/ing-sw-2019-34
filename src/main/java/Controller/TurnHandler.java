@@ -2,6 +2,8 @@ package Controller;
 
 import Model.*;
 import network.messages.*;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -233,6 +235,7 @@ public class TurnHandler {
                 valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(),gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(newMessage.getPositionWeapon())).execute();
                 if(valueReturn){
                     endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
+                    //gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPosition().getId(),null,newMessage.getPositionWeapon()));
                     //weapon charge and update
                     gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 }
@@ -246,6 +249,10 @@ public class TurnHandler {
                 valueReturn= new Grab(gameHandler.getGame().getCurrentPlayer(), (CardOnlyAmmo) gameHandler.getGame().getCurrentPlayer().getPosition().getItem()).execute();
             if(valueReturn){
                 endTurnChecks.getEmptySquares().add(gameHandler.getGame().getCurrentPlayer().getPosition());
+                try {
+                    gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(), gameHandler.getGame().getCurrentPlayer().getPosition().getId(), new CardOnlyAmmo("back")));
+                }catch(FileNotFoundException exception){}
+
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().stream().forEach(x -> System.out.println(x.getName() + " " + x.getColor()));
 
