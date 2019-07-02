@@ -13,7 +13,9 @@ import java.util.List;
 public class SubstituteWeaponGui extends JFrame {
     int choose;
 
+
     public SubstituteWeaponGui(List<CardWeapon> cards, MapGui mapGui){
+
 
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -22,6 +24,7 @@ public class SubstituteWeaponGui extends JFrame {
         choose = 0;
         for (CardWeapon cardWeapon: cards){
             String card = cardWeapon.getName();
+
 
             c.gridx = choose;
             c.gridy = 1;

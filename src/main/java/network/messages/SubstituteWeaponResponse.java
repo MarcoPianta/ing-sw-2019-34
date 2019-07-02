@@ -8,7 +8,7 @@ public class SubstituteWeaponResponse extends Message {
     private int weapon;
 
     public SubstituteWeaponResponse(Integer token, int weapon){
-        actionType=ActionType.SUBSTITUTEWEAPON;
+        actionType=ActionType.SUBSTITUTEWEAPONRESPONSE;
         this.token=token;
         this.weapon=weapon;
     }

@@ -20,25 +20,30 @@ public class PaymentController {
         if(!isValidPayment(Arrays.copyOf(cost,3), powerUps))
             return false;
         boolean x;
+        ArrayList<CardPowerUp> powerUpsCard=new ArrayList<>();
         for(Integer i:powerUps){
+            powerUpsCard.add(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i));
+        }
+
+        for(CardPowerUp c:powerUpsCard){
             x = false;
-            if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
+            if(c.getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
                 cost[0]--;
                 System.out.println("sono dentro i rossi");
                 x = true;
             }
-            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
+            else if(c.getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
                 cost[1]--;
                 System.out.println("sono dentro pagamemnti i gialli");
                 x = true;
             }
-            else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0){
+            else if(c.getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0){
                 cost[2]--;
                 System.out.println("sono dentro pagamemnti blu");
                 x = true;
             }
             if(x)
-                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(i);
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().indexOf(c));
         }
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().decrementAmmo(cost[0], cost[1], cost[2]);
 
