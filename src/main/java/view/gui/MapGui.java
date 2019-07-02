@@ -313,12 +313,15 @@ public class MapGui extends JFrame{
         powerUps.add(powerUp);
     }
 
-    /**
-     * This method is called when the player had chosen which weapon want to discard
-     * */
+    public void substituteWeaponRequest(int position){
+        new SubstituteWeaponGui(cardsWeapon, this);
+    }
+
+        /**
+         * This method is called when the player had chosen which weapon want to discard
+         * */
     public void substituteWeapon(int position){
-        //TODO send grabWeaponResponse
-        cardsWeapon.remove(position);
+        client.send(new SubstituteWeaponResponse(client.getToken(), position));
         System.out.println(position);
     }
 
