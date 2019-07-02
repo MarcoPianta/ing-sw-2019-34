@@ -42,13 +42,13 @@ public class ActionValidController {
         boolean valueReturn;
         if(powerUp==-1){
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), targets, null, false).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), targets, null, false).isValid();
             else
                 valueReturn=false;
         }
         else{
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), targets, null, false).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), targets, null, false).isValid();
             else
                 valueReturn=false;
         }
@@ -66,13 +66,13 @@ public class ActionValidController {
         boolean valueReturn;
         if(powerUp==-1){
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), null, square, true).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null, square, true).isValid();
             else
                 valueReturn=false;
         }
         else{
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),true)&&gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect, gameHandler.getPlayerValid(), null, square, true).isValid();
+                valueReturn=new Shoot(effect, gameHandler.getGame().getCurrentPlayer(), null, square, true).isValid();
             else
                 valueReturn=false;
         }
@@ -90,13 +90,13 @@ public class ActionValidController {
         boolean valueReturn;
         if(powerUp==-1){
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),false))
-                valueReturn=new Shoot(effect,gameHandler.getPlayerValid(),room.getColor()).isValid();
+                valueReturn=new Shoot(effect,gameHandler.getGame().getCurrentPlayer(),room.getColor()).isValid();
             else
                 valueReturn=false;
         }
         else{
             if(gameHandler.getGame().getCurrentPlayer().isValidCost(effect.getBonusCost(),true) &&gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp).getWhen().equals("get"))
-                valueReturn=new Shoot(effect,gameHandler.getPlayerValid(),room.getColor()).isValid();
+                valueReturn=new Shoot(effect,gameHandler.getGame().getCurrentPlayer(),room.getColor()).isValid();
             else
                 valueReturn=false;
         }
