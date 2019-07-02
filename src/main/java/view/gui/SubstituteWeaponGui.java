@@ -1,5 +1,7 @@
 package view.gui;
 
+import Model.CardWeapon;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,14 +13,19 @@ import java.util.List;
 public class SubstituteWeaponGui extends JFrame {
     int choose;
 
-    public SubstituteWeaponGui(List<String> cards, MapGui mapGui){
-        System.out.println("dentro choose gui " + cards);
+
+    public SubstituteWeaponGui(List<CardWeapon> cards, MapGui mapGui){
+
+
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4,4,4,4);
 
         choose = 0;
-        for (String card: cards){
+        for (CardWeapon cardWeapon: cards){
+            String card = cardWeapon.getName();
+
+
             c.gridx = choose;
             c.gridy = 1;
             JLabel weapon = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + card + ".png"));
@@ -67,6 +74,6 @@ public class SubstituteWeaponGui extends JFrame {
         strings.add("cyberblade");
         strings.add("railgun");
         strings.add("shotgun");
-        new SubstituteWeaponGui(strings, null);
+        //new SubstituteWeaponGui(strings, null);
     }
 }
