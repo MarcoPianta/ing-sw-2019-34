@@ -81,6 +81,10 @@ public abstract class Client {
                 view.setNumberAction(1);
             }
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPON.getAbbreviation())){
+            view.substituteWeaponRequest();
+        }
+
         else if (message.getActionType().getAbbreviation().equals(ActionType.END.getAbbreviation())){
             view.setMyTurn(false);
         }

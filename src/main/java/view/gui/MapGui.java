@@ -320,6 +320,7 @@ public class MapGui extends JFrame{
     }
 
     public void substituteWeaponRequest(){
+        System.out.println("devo entrare nel metodo efnwieonboiedvbourwbsobrgfwiobe");
         new SubstituteWeaponGui(cardsWeapon, this);
     }
 
