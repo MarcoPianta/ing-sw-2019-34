@@ -12,14 +12,13 @@ public class SubstituteWeaponGui extends JFrame {
     int choose;
 
     public SubstituteWeaponGui(List<String> cards, MapGui mapGui){
-        System.out.println("dentro choose gui");
+        System.out.println("dentro choose gui " + cards);
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4,4,4,4);
 
         choose = 0;
         for (String card: cards){
-            System.out.println(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + card + ".png"));
             c.gridx = choose;
             c.gridy = 1;
             JLabel weapon = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + card + ".png"));
