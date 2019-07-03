@@ -78,8 +78,6 @@ public class Server {
                 //TODO delete token from clients
             }
             else {
-                System.out.println(message.getToken());
-                System.out.println(lobbyHashMap.get(message.getToken()));
                 lobbyHashMap.get(message.getToken()).receiveMessage(message);
             }
         }catch (Exception e){
@@ -95,6 +93,11 @@ public class Server {
      * */
     public void send(Message message){
         if (clients.get(message.getToken())) {
+            if (message.getActionType().equals(ActionType.UPDATECLIENTS)) {
+                UpdateClient updateClient = (UpdateClient) message;
+                if (updateClient.getUpdateType().equals(UpdateClient.MESSAGE))
+                    return;
+            }
             rmiServer.send(message);
         }
         else

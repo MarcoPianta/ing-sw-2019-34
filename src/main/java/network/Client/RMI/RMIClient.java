@@ -2,7 +2,7 @@ package network.Client.RMI;
 
 import network.Client.Client;
 import network.Server.RMI.RMIServerInterface;
-import network.messages.Message;
+import network.messages.*;
 import view.View;
 
 import java.rmi.RemoteException;
@@ -28,11 +28,7 @@ public class RMIClient extends Client{
         this.rmi = true;
         this.PORT = port;
         this.hostname = hostname;
-        try {
-            init();
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
+        init();
     }
 
     /**
@@ -40,7 +36,7 @@ public class RMIClient extends Client{
      * get the registry by the port PORT, lookup for "Server"
      * rebind "Client" for the server that can lookup for it
      * */
-    public void init() throws RemoteException{
+    public void init() {
         try {
             Registry registry = LocateRegistry.getRegistry(hostname, PORT);
             server = (RMIServerInterface) registry.lookup("Server");
@@ -51,6 +47,10 @@ public class RMIClient extends Client{
             System.out.println("Client Exception: " + e.getMessage());
             e.printStackTrace();
         }
+        new Thread(() ->{
+                onReceive(new ConnectionResponse(token));
+                onReceive(new GameSettingsRequest(token));
+        }).start();
     }
 
     /**
@@ -65,6 +65,17 @@ public class RMIClient extends Client{
             e.printStackTrace();
         }
     }
+
+    /*@Override
+    public void onReceive(Message message) {
+        if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
+            if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
+                System.out.println("Ho ricevuto "+ message.getActionType());
+            }
+            else super.onReceive(message);
+        }
+        else super.onReceive(message);
+    }*/
 
     /**
      * This method is used to close connection between the client and the server.

@@ -46,7 +46,7 @@ public class RMIServer {
     }
 
     private void init() throws RemoteException{
-        System.setProperty("java.rmi.server.hostname", "192.168.0.2");
+        System.setProperty("java.rmi.server.hostname", "192.168.0.3");
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));
@@ -77,7 +77,5 @@ public class RMIServer {
         clients.add(client);
         */
         this.rmiHashMap.put(token, client);
-        client.onReceive(new ConnectionResponse(token));
-        client.onReceive(new GameSettingsRequest(token));
     }
 }

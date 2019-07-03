@@ -35,6 +35,7 @@ public class ReloadGui extends JFrame {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         mapGui.sendReload(choose);
+                        dispose();
                     }
 
                     @Override

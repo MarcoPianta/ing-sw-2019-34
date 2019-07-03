@@ -91,9 +91,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("localhost", 10000, self);
+                    client = new SocketClient("192.168.0.3", 10000, self);
                 else
-                    client = new RMIClient("localhost",10001, self);
+                    client = new RMIClient("192.168.0.3",10001, self);
                 //showGameSettingsRequest();
                 //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -140,6 +140,11 @@ public class MainGuiView extends View {
 
     public void main() {
         this.frame.setVisible(true);
+    }
+
+    @Override
+    public void setNumberAction(int numberAction) {
+
     }
 
     @Override
@@ -284,6 +289,7 @@ public class MainGuiView extends View {
 
     @Override
     public void startTurn() {
+        mapGui.setActionNumber(1);
         setMyTurn(true);
     }
 

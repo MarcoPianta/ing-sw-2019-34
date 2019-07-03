@@ -1,6 +1,8 @@
 package Model;
 
-public abstract class CardAmmo extends Card {
+import java.io.Serializable;
+
+public abstract class CardAmmo extends Card implements Serializable {
     protected boolean withPowerUp;
     protected String name;
 
