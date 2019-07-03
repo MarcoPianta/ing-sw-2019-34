@@ -260,9 +260,9 @@ public class MainGuiView extends View {
 
     @Override
     public void showVenomRequest(Colors playerColor) {
-        int value = JOptionPane.showConfirmDialog(mapGui, playerColor + "Hurt you, do you want to use tag back granade?");
+        int value = JOptionPane.showConfirmDialog(mapGui, playerColor + " Hurt you, do you want to use tag back granade?");
         if (value == 0)
-            mapGui.canUseVenom();
+            mapGui.canUseVenom(playerColor);
     }
 
     //TODO probably the name will be modified

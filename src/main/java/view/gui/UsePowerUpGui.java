@@ -1,5 +1,7 @@
 package view.gui;
 
+import Model.Colors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 public class UsePowerUpGui extends JFrame {
 
-    public UsePowerUpGui(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack, boolean scoop){
+    public UsePowerUpGui(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack, boolean scoop, Colors colors){
         this.setLayout(new FlowLayout());
         int i = 0;
         for (String s: powerUps){
@@ -19,7 +21,7 @@ public class UsePowerUpGui extends JFrame {
                 int choose = index;
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    mapGui.usePowerUp(choose, tagBack);
+                    mapGui.usePowerUp(choose, tagBack, scoop, colors);
                     dispose();
                 }
 

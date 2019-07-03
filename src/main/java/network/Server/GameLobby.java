@@ -29,6 +29,7 @@ public class GameLobby {
 /*Qui metto gli attributi che servono per salvare i dati dello shooter mentre controllo le isValid*/
     private NormalSquare shooterPosition = null;
     private HashMap<Integer, NormalSquare> movedPlayer = new HashMap<>();
+    private int scopePosition;
 
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
@@ -151,10 +152,8 @@ public class GameLobby {
             } else if (message.getActionType().equals(ActionType.CANUSESCOOPRESPONSE)) {
                 CanUseScoopResponse canUseScoopResponse = (CanUseScoopResponse) message;
                 useScoop = canUseScoopResponse.isUse();
-            }else if(message.getActionType().equals(ActionType.CANUSESCOOPRESPONSE)){
-                useScoop=true;
+                scopePosition = canUseScoopResponse.getPosition();
             }
-
             else if (message.getActionType().equals(ActionType.SHOOTRESPONSEP)){
                 ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
                 System.out.println(receiveTargetSquare.getPosEffect() + " <-effect  weapon-> " + receiveTargetSquare.getPosWeapon());

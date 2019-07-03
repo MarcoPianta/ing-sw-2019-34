@@ -352,7 +352,7 @@ public class MapGui extends JFrame{
     /**
      * This method is called when the player wants to use a powerup
      * */
-    public void usePowerUp(int position, boolean granade){
+    public void usePowerUp(int position, boolean granade, boolean scope, Colors colors){
         System.out.println(powerUps.get(position).substring(0, powerUps.get(position).length()-2));
         if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("teleporter")){
             actionType = "teleporter";
@@ -362,21 +362,25 @@ public class MapGui extends JFrame{
             new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false);
             JOptionPane.showMessageDialog(this, "Choose a target to move him");
             selectedPowerUp = position;
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("tagBackGranade") && granade){
+            client.send(new UsePowerUpResponse(client.getToken(), position, client.getToken(), colors, ""));
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("targettingScope") && scope) {
+            client.send(new CanUseScoopResponse(client.getToken(), true, position));
         }
     }
 
     /**
      * This method is called to display to the player the tag back use request
      * */
-    public void canUseVenom(){
-        new UsePowerUpGui(powerUps, this, true, false);
+    public void canUseVenom(Colors color){
+        new UsePowerUpGui(powerUps, this, true, false, color);
     }
 
     /**
      * This method is called to display to the player the scoop use request
      * */
     public void canUseScoop(){
-        new UsePowerUpGui(powerUps, this, false, true);
+        new UsePowerUpGui(powerUps, this, false, true, null);
     }
 
     /**
@@ -576,8 +580,15 @@ public class MapGui extends JFrame{
                                     new WeaponChooseGui(cardsName, self, true);
                                 }
                             } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
-                                new UsePowerUpGui(powerUps, self, false, false);
+                                new UsePowerUpGui(powerUps, self, false, false, null);
                                 System.out.println("powerup");
+                            } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
+                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to reload?");
+                                if (response == 0) {
+                                    new ReloadGui(cardsWeapon ,self);
+                                    System.out.println("reload");
+                                    actionNumber = 3;
+                                }
                             }
                         } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
                             int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to reload?");
@@ -586,7 +597,7 @@ public class MapGui extends JFrame{
                                 System.out.println("reload");
                             }
                         } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
-                            new UsePowerUpGui(powerUps, self, false, false);
+                            new UsePowerUpGui(powerUps, self, false, false, null);
                             System.out.println("powerup");
                         }
                     }

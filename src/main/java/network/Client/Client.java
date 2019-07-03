@@ -75,6 +75,9 @@ public abstract class Client {
             CanUseTagBack canUseTagBack = (CanUseTagBack) message;
             view.showVenomRequest(canUseTagBack.getPlayerShooter());
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.CANUSESCOOP.getAbbreviation())){
+            view.showScoopRequest();
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.START.getAbbreviation())){
             StartMessage startMessage = (StartMessage) message;
             if (startMessage.getType().equals("game")) {

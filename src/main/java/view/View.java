@@ -110,7 +110,9 @@ public abstract class View {
 
     public abstract void showMessage(String message);
 
-    public abstract void showVenomRequest(Colors color);//TODO send UsePowerUp if player to use it venom
+    public abstract void showVenomRequest(Colors color);
+
+    public abstract void showScoopRequest();
 
     public abstract void showGameSettingsRequest();
 
