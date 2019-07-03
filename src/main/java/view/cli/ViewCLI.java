@@ -30,6 +30,11 @@ public class ViewCLI extends View {
 
     }
 
+    @Override
+    public void setPoints(int points) {
+
+    }
+
     //mostrare spawn weapomnd
     @Override
     public void grabWeaponRequest() {
@@ -278,6 +283,10 @@ public class ViewCLI extends View {
         else{
            // client.send(new CanUseScoopResponse(client.getToken(), false));
         }
+    }
+    @Override
+    public void chooseScopeTarget(ArrayList<Colors> targets){
+
     }
 
     @Override

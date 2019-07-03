@@ -97,6 +97,10 @@ public class Server {
                 UpdateClient updateClient = (UpdateClient) message;
                 if (updateClient.getUpdateType().equals(UpdateClient.MESSAGE))
                     return;
+            } else if (message.getActionType().equals(ActionType.START)) {
+                StartMessage startMessage = (StartMessage) message;
+                if (startMessage.getType().equals("Turn"))
+                    rmiServer.send(new ChatMessage(message.getToken(), "INFO: is your turn" + message.getToken()));
             }
             rmiServer.send(message);
         }

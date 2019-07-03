@@ -44,8 +44,10 @@ public class TurnHandler {
     public void start(){
 
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
-        for(Player p:gameHandler.getGame().getDeadPlayer())
+        ArrayList<Player> deadPlayerCopy=new ArrayList<>(gameHandler.getGame().getDeadPlayer());
+        for(Player p:deadPlayerCopy)
             gameHandler.getGame().getDeadPlayer().remove(p);
+        System.out.println("Player correnteeeeeeeeeeeeeeeee " + gameHandler.getGame().getCurrentPlayer().getPlayerID());
         gameHandler.getGameLobby().startTurn(gameHandler.getGame().getCurrentPlayer().getPlayerID());
 
 
@@ -162,7 +164,7 @@ public class TurnHandler {
      */
     protected boolean actionShot(Shot message){
         boolean valueReturn;
-        if(message.getSquare()==null && message.getRoom()==null) {
+        if(message.getSquare()==null && message.getRoom()==null&& message.getPowerUp()==-1) {
             valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
@@ -200,22 +202,10 @@ public class TurnHandler {
 
             }
         }
-        //use venom
+        //use scoop
         if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
             usePowerUp(message);
         }
-        if(valueReturn){
-            for(Player p:message.getTargets()) {
-                for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
-                    if (powerUp.getWhen().equals("get")) {
-                        gameHandler.getGameLobby().canUseTagBack(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getColor());
-                    }
-                }
-            }
-        }
-        //viene scaricata larma a ogni shot??
-        if(valueReturn)
-            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).setCharge(false);
         return valueReturn;
     }
 
@@ -236,6 +226,7 @@ public class TurnHandler {
                 }catch(FileNotFoundException exception){}
                 //weapon charge and update
                 System.out.println("devo fare update");
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().size()-1).setCharge(true);
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
             }
 
@@ -279,13 +270,13 @@ public class TurnHandler {
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.USEPOWERUP){
             UsePowerUp newMessage=(UsePowerUp)message;
-
-            if((gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("during")
+            System.out.println("dggeewwehe"+newMessage.getTarget()+"efkrggriogr");
+            if((((UsePowerUp) message).getUser().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("during")
                     &&(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer())
                     &&(gameHandler.getGame().getCurrentPlayer().getState()!=StateMachineEnumerationTurn.WAIT)&&(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getOtherMove()==0
                     &&(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getMyMove()==-1)))
                     || //teleporter
-                    (gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("dealing")
+                    (newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("deal")
                             &&(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer()))
                     ||//tagback
                     (gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()).getWhen().equals("during")
@@ -317,32 +308,38 @@ public class TurnHandler {
         boolean valueReturn=false;
         if(message.getActionType()==ActionType.SHOT && powerUpIsValid(message)){
             Shot newMessage=(Shot) message;
-            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),newMessage.getTargetPowerUp(),null);
+            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(((Shot) message).getPowerUp()),newMessage.getTargetPowerUp(),null,newMessage.getPowerUp());
             gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTargetPowerUp().getPlayerID(),newMessage.getTargetPowerUp().getPlayerBoard().getHealthPlayer().getDamageBar(),newMessage.getTargetPowerUp().getPlayerBoard().getHealthPlayer().getMark()));
             valueReturn=true;
         }
         else if(powerUpIsValid(message)){
             UsePowerUp newMessage=(UsePowerUp) message;
             CardPowerUp powerUp=convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp());
-            convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().usePowerUp(convertedPlayer(newMessage.getUser()).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(newMessage.getPowerUp()),convertedPlayer(newMessage.getTarget()),newMessage.getSquare());
             valueReturn=true;
             //update of powerUp
             if(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer()) {
-                //size corretta??
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getTarget().getPlayerBoard().getHealthPlayer().getDamageBar(), newMessage.getTarget().getPlayerBoard().getHealthPlayer().getMark()));
+
+                newMessage.getTarget().getPlayerBoard().getHealthPlayer().addMark(newMessage.getUser(),1);
+                newMessage.getUser().getPlayerBoard().getHandPlayer().removePowerUp(newMessage.getPowerUp());
+
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),new ArrayList<>(newMessage.getTarget().getPlayerBoard().getHealthPlayer().getDamageBar()), new ArrayList<>(newMessage.getTarget().getPlayerBoard().getHealthPlayer().getMark())));
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getUser().getColor()+"used grenade tag back"));
             }
             else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
                     powerUp.getOtherMove()==0)//teleporter
-                {
+            {gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(powerUp,gameHandler.getGame().getCurrentPlayer(),newMessage.getSquare(),newMessage.getPowerUp());
                 gameHandler.getGameLobby().send( new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPosition()));
+                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+
                 gameHandler.getGameLobby().getClients()
                         .parallelStream().
                         filter(x -> (!x.equals(newMessage.getUser().getPlayerID()))).
                         forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getUser().getColor(), newMessage.getUser().getPosition())));
             }
             else {//altro
-                System.out.println("fknbjoasboibnsaionbgionasbiongraoinsionrsoininproeqpoqrsngiuopbgsapouibasgpuogbusgfob");
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().usePowerUp(powerUp,convertedPlayer(newMessage.getTarget()),newMessage.getSquare(),newMessage.getPowerUp());
+                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(), newMessage.getTarget().getPosition()));
                 gameHandler.getGameLobby().getClients()
                         .parallelStream().
@@ -360,7 +357,6 @@ public class TurnHandler {
      */
     public boolean actionReload(ReloadMessage message){
         boolean valueReturn;
-
         //valueReturn = new Reload(gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()), cost[0], cost[1], cost[2]).execute();
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).setCharge(true);
         if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).isCharge())
@@ -368,7 +364,6 @@ public class TurnHandler {
         else
             valueReturn=false;
         if(valueReturn) {
-
             gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
         }
         return valueReturn;
@@ -380,12 +375,13 @@ public class TurnHandler {
         gameHandler.getGame().incrementCurrentPlayer();
         setNextState(StateMachineEnumerationTurn.START);
         endTurnChecks.fillSquare(gameHandler.getGame());
-        endTurnChecks.isFinalTurn(gameHandler.getGame());
+        System.out.println();
         endTurnChecks.playerIsDead(gameHandler.getGame());
+        endTurnChecks.isFinalTurn(gameHandler.getGame());
         start();
 
     }
-
+    //for security
     private Player convertedPlayer(Player player){
         Player playerConverted=new Player(null,null);
         for(Player p:gameHandler.getGame().getPlayers()){
@@ -438,11 +434,13 @@ public class TurnHandler {
         public void playerIsDead(Game game) {
             int i=game.getDeadPlayer().size()-1;
             while(i>=0) {
+                game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
                 game.getDeadPlayer().get(i).spawn(1);//extract powerUp
                 //update player
-                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID()));
-                game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
+
+                gameHandler.getGameLobby().getClients().forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getPoints())));
                 //TODO problema !!!!!!!!!!!!!!!!!!-----------------!!!!!!!!!!!!!!!!!!! manda 2 volte l'update della end
                 //gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
                 i--;
@@ -452,7 +450,9 @@ public class TurnHandler {
         }
 
         public void isFinalTurn(Game game){
+            System.out.println("Check final turnsssss");
             if(game.getDeadRoute().isFinalTurn()){
+                System.out.println("In final turn");
                 game.getDeadRoute().setFinalTurnPlayer();
                 for(Player p:game.getPlayers())
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"));

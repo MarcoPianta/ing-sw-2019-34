@@ -63,17 +63,18 @@ public class MapGui extends JFrame{
     private int selectedPowerUp;
     private Colors targetPowerup;
     private int actionNumber;
+    private int points = 0;
 
     /**
      * This constructor creates the new windows
      * */
     public MapGui(Colors myColor, Client client, String mapImageFile){
         super("Adrenaline");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 client.close();
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
         this.myColor = myColor;
@@ -94,6 +95,7 @@ public class MapGui extends JFrame{
             currentPlayerBoard = ImageIO.read(playerBoard);
             currentRedCross = ImageIO.read(redCross);
             currentMapImage = ImageIO.read(mapImage);
+            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         }catch (IOException e){}
 
         try {map = new JLabel(new ImageIcon(ImageIO.read(mapImage)));} catch (IOException e){}
@@ -283,41 +285,45 @@ public class MapGui extends JFrame{
         }catch (IOException e){}
     }
 
+    public void setPoints(int points){
+        this.points = points;
+    }
+
     /**
      * This method add damage marks in player's playerboard
      * */
     public void addDamage(List<Colors> damageBar){
         int i = 0;
+        currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         for (Colors c: damageBar){
-            Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
-
-            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
-            Graphics2D g = currentPlayerBoardModified.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, 120 * currentPlayerBoardModified.getHeight() / 274, null);
-            g.dispose();
-            Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
-            player.setIcon(new ImageIcon(playerBoardResized));
-            i++;
+            i = updatePlayerImage(i, c, currentPlayerBoard, damagePosition, currentPlayerBoardModified, 120 * currentPlayerBoardModified.getHeight() / 274);
         }
+    }
+
+    private int updatePlayerImage(int i, Colors c, BufferedImage currentPlayerBoard, int[] damagePosition, BufferedImage currentPlayerBoardModified, int i2) {
+        Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
+
+        Graphics2D g = currentPlayerBoardModified.createGraphics();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+        g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, i2, null);
+        g.dispose();
+        Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+        player.setIcon(new ImageIcon(playerBoardResized));
+        i++;
+        return i;
     }
 
     /**
      * This method add marks in player's playerboard
      * */
     public void addMarks(ArrayList<Colors> marks){
+        System.out.println("Marchi in gui:");
+        marks.forEach(System.out::println);
         int i = 0;
         for (Colors mark: marks) {
-            Image imageColor = createColorMarker(mark, currentPlayerBoardModified.getWidth(), currentPlayerBoardModified.getHeight());
-
-            Graphics2D g = currentPlayerBoardModified.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            g.drawImage(imageColor, marksPosition[i] * currentPlayerBoard.getWidth() / 1120, 1, null);
-            g.dispose();
-            Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
-            player.setIcon(new ImageIcon(playerBoardResized));
-            i++;
+            i = updatePlayerImage(i, mark, currentPlayerBoardModified, marksPosition, currentPlayerBoard, 1);
         }
+        setMyPosition(myPosition);
     }
 
     /**
@@ -346,6 +352,7 @@ public class MapGui extends JFrame{
 
     public void spawn(){
         new SpawnGui(powerUps, this);
+        currentPlayerBoardModified = cloneImage(currentPlayerBoard);
     }
 
     public void sendSpawnMessage(int position){
@@ -357,19 +364,30 @@ public class MapGui extends JFrame{
      * */
     public void usePowerUp(int position, boolean granade, boolean scope, Colors colors){
         System.out.println(powerUps.get(position).substring(0, powerUps.get(position).length()-2));
-        if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("teleporter")){
+        if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("teleporter") && !scope && !granade){
             actionType = "teleporter";
             JOptionPane.showMessageDialog(this, "Choose a square to teleport");
             selectedPowerUp = position;
-        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("newton")){
-            new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false);
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("newton") && !scope && !granade){
+            new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false, false);
             JOptionPane.showMessageDialog(this, "Choose a target to move him");
             selectedPowerUp = position;
-        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("tagBackGranade") && granade){
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("tagbackGranade") && granade){
             client.send(new UsePowerUpResponse(client.getToken(), position, client.getToken(), colors, ""));
         } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("targettingScope") && scope) {
             client.send(new CanUseScoopResponse(client.getToken(), true, position));
         }
+    }
+
+    public void finalTurn(){
+        File newPlayerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + "Back.png");
+        try {
+            BufferedImage newPlayerBoardImage = ImageIO.read(newPlayerBoard);
+            currentPlayerBoard = newPlayerBoardImage;
+            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
+            setMyPosition(myPosition);
+
+        }catch (IOException e){}
     }
 
     /**
@@ -384,6 +402,14 @@ public class MapGui extends JFrame{
      * */
     public void canUseScoop(){
         new UsePowerUpGui(powerUps, this, false, true, null);
+    }
+
+    public void chooseTargetScope(ArrayList<Colors> targets){
+        new TargetChooseGui(targets, 1, this, false, true);
+    }
+
+    public void sendScopeTarget(Colors target){
+        client.send(new ScopeTargetResponse(client.getToken(), target));
     }
 
     /**
@@ -472,7 +498,7 @@ public class MapGui extends JFrame{
             @Override
             public void componentResized(ComponentEvent e) {
                 JLabel label = (JLabel) e.getComponent();
-                resizeImage(label, (new ImageIcon(currentPlayerBoard)));
+                resizeImage(label, (new ImageIcon(currentPlayerBoardModified)));
             }
         });
 
@@ -487,6 +513,7 @@ public class MapGui extends JFrame{
                         int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
                         if (response == 0) {
                             client.send(new Pass(client.getToken()));
+                            //myTurn = false;
                             System.out.println("pass");
                         }
                     }
@@ -557,7 +584,7 @@ public class MapGui extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getX() > 890 * player.getWidth()/1120){
-                    new PlayerInformationGui(cardsWeapon, ammos);
+                    new PlayerInformationGui(cardsWeapon, ammos, points);
                     System.out.println("info");
                 }
                 else
@@ -771,13 +798,13 @@ public class MapGui extends JFrame{
 
     public void setMyPosition(String id){
         myPosition = id;
-        Graphics2D g = currentPlayerBoard.createGraphics();
+        Graphics2D g = currentPlayerBoardModified.createGraphics();
         Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
 
-        g.drawImage(number, 1050 * currentPlayerBoard.getWidth() / 1120, 0, null);
+        g.drawImage(number, 1050 * currentPlayerBoardModified.getWidth() / 1120, 0, null);
         g.dispose();
 
-        Image playerResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+        Image playerResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
         player.setIcon(new ImageIcon(playerResized));
     }
 
@@ -805,7 +832,7 @@ public class MapGui extends JFrame{
      * This method open a window which show the targetble players
      * */
     public void showTargetblePlayer(List<Colors> players, int max){
-        new TargetChooseGui(players, max, this, true);
+        new TargetChooseGui(players, max, this, true, false);
     }
 
     /**

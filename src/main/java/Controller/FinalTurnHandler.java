@@ -18,6 +18,7 @@ public class FinalTurnHandler extends TurnHandler {
 
     public FinalTurnHandler(GameHandler gameHandler) {
         super(gameHandler);
+        this.gameHandler = gameHandler;
         this.firstFinalTurnPlayer=null;
         endFinalTurnChecks=new EndFinalTurnChecks();
         alreadyFirstPlayer=false;

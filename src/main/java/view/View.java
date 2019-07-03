@@ -175,6 +175,12 @@ public abstract class View {
         this.map = map;
     }
 
+    public abstract void chooseScopeTarget(ArrayList<Colors> targets);
+
+    public abstract void setPoints(int points);
+
+    public abstract void finalTurn();
+
     public ArrayList<CardPowerUp> getPowerUps() {
         return powerUps;
     }

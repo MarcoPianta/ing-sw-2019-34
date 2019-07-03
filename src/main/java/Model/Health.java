@@ -93,6 +93,7 @@ public class Health implements Serializable {
         if(damageBar.size()>=11) {
             getPlayerBoard().getPlayer().getGameId().getDeadPlayer().add(getPlayerBoard().getPlayer());
             adrenalineAction=2;
+
         }
     }
 

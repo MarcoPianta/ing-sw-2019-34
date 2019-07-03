@@ -46,12 +46,6 @@ public class MainGuiView extends View {
         frame.setSize(panelWidth, INITIALWINDOWHEIGHT);
 
         frame.setMinimumSize(new Dimension(panelWidth, INITIALWINDOWHEIGHT));
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                client.close();
-            }
-        });
         mainPanel = new JPanel(new BorderLayout());
 
         ImageIcon icon = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "homeAdrenaline.png");
@@ -158,6 +152,21 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void setPoints(int points) {
+        mapGui.setPoints(points);
+    }
+
+    @Override
+    public void addMarks(ArrayList<Colors> marks, Colors player) {
+
+    }
+
+    @Override
+    public void chooseScopeTarget(ArrayList<Colors> targets) {
+        mapGui.chooseTargetScope(targets);
+    }
+
+    @Override
     public void showToken() {
         JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
         //new Thread(this::showGameSettingsRequest).start();
@@ -168,10 +177,6 @@ public class MainGuiView extends View {
         mapGui.setCardsWeapon(weapons);
     }
 
-    @Override
-    public void addMarks(ArrayList<Colors> marks, Colors player) {
-
-    }
 
     @Override
     public void substituteWeaponRequest() {
@@ -282,6 +287,11 @@ public class MainGuiView extends View {
         //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setVisible(false);
         frame = new GameSettingsChoose(client);
+    }
+
+    @Override
+    public void finalTurn() {
+        mapGui.finalTurn();
     }
 
     @Override
