@@ -153,6 +153,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void setMarks(ArrayList<Colors> marks) {
+        mapGui.addMarks(marks);
+    }
+
+    @Override
     public void showToken() {
         JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
         //new Thread(this::showGameSettingsRequest).start();

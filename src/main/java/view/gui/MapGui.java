@@ -48,6 +48,7 @@ public class MapGui extends JFrame{
     private BufferedImage currentPlayerBoard;
     private BufferedImage currentRedCross;
     private BufferedImage currentMapImage;
+    private BufferedImage currentPlayerBoardModified;
     private BufferedImage[] currentOtherPlayerBoards = new BufferedImage[4];
     private static HashMap<Colors, Integer> enemies; //The string is the color name of the player
     private List<String> redCrosses;
@@ -290,11 +291,12 @@ public class MapGui extends JFrame{
         for (Colors c: damageBar){
             Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
 
-            Graphics2D g = currentPlayerBoard.createGraphics();
+            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
+            Graphics2D g = currentPlayerBoardModified.createGraphics();
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            g.drawImage(imageColor, damagePosition[i] * currentPlayerBoard.getWidth() / 1120, 120 * currentPlayerBoard.getHeight() / 274, null);
+            g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, 120 * currentPlayerBoardModified.getHeight() / 274, null);
             g.dispose();
-            Image playerBoardResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+            Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
             player.setIcon(new ImageIcon(playerBoardResized));
             i++;
         }
@@ -303,18 +305,19 @@ public class MapGui extends JFrame{
     /**
      * This method add marks in player's playerboard
      * */
-    public void addMarks(Colors mark){
-        marks.add(mark);
+    public void addMarks(ArrayList<Colors> marks){
         int i = 0;
-        Image imageColor = createColorMarker(mark, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
+        for (Colors mark: marks) {
+            Image imageColor = createColorMarker(mark, currentPlayerBoardModified.getWidth(), currentPlayerBoardModified.getHeight());
 
-        Graphics2D g = currentPlayerBoard.createGraphics();
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-        g.drawImage(imageColor, marksPosition[i] * currentPlayerBoard.getWidth() / 1120, 1, null);
-        g.dispose();
-        Image playerBoardResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
-        player.setIcon(new ImageIcon(playerBoardResized));
-        i++;
+            Graphics2D g = currentPlayerBoardModified.createGraphics();
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            g.drawImage(imageColor, marksPosition[i] * currentPlayerBoard.getWidth() / 1120, 1, null);
+            g.dispose();
+            Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+            player.setIcon(new ImageIcon(playerBoardResized));
+            i++;
+        }
     }
 
     /**
