@@ -288,10 +288,10 @@ public class MapGui extends JFrame{
      * */
     public void addDamage(List<Colors> damageBar){
         int i = 0;
+        currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         for (Colors c: damageBar){
             Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
 
-            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
             Graphics2D g = currentPlayerBoardModified.createGraphics();
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, 120 * currentPlayerBoardModified.getHeight() / 274, null);
@@ -365,7 +365,7 @@ public class MapGui extends JFrame{
             new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false);
             JOptionPane.showMessageDialog(this, "Choose a target to move him");
             selectedPowerUp = position;
-        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("tagBackGranade") && granade){
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("tagbackGranade") && granade){
             client.send(new UsePowerUpResponse(client.getToken(), position, client.getToken(), colors, ""));
         } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("targettingScope") && scope) {
             client.send(new CanUseScoopResponse(client.getToken(), true, position));

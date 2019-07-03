@@ -279,6 +279,10 @@ public class ViewCLI extends View {
            // client.send(new CanUseScoopResponse(client.getToken(), false));
         }
     }
+    @Override
+    public void chooseScopeTarget(ArrayList<Colors> targets){
+        
+    }
 
     @Override
     public void showVenomRequest(Colors player){

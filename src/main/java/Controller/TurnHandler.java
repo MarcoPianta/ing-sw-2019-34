@@ -44,7 +44,8 @@ public class TurnHandler {
     public void start(){
 
         gameHandler.getGame().getCurrentPlayer().setState(StateMachineEnumerationTurn.START);
-        for(Player p:gameHandler.getGame().getDeadPlayer())
+        ArrayList<Player> deadPlayerCopy=new ArrayList<>(gameHandler.getGame().getDeadPlayer());
+        for(Player p:deadPlayerCopy)
             gameHandler.getGame().getDeadPlayer().remove(p);
         gameHandler.getGameLobby().startTurn(gameHandler.getGame().getCurrentPlayer().getPlayerID());
 
@@ -200,22 +201,16 @@ public class TurnHandler {
 
             }
         }
-        //use venom
+        //use scoop
         if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
             usePowerUp(message);
         }
-        if(valueReturn){
-            for(Player p:message.getTargets()) {
-                for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
-                    if (powerUp.getWhen().equals("get")) {
-                        gameHandler.getGameLobby().canUseTagBack(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getColor());
-                    }
-                }
-            }
-        }
-        //viene scaricata larma a ogni shot??
-        if(valueReturn)
+
+        /*//viene scaricata larma a ogni shot??
+        if(valueReturn) {
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).setCharge(false);
+
+        }*/
         return valueReturn;
     }
 
@@ -438,11 +433,12 @@ public class TurnHandler {
         public void playerIsDead(Game game) {
             int i=game.getDeadPlayer().size()-1;
             while(i>=0) {
+                game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
                 game.getDeadPlayer().get(i).spawn(1);//extract powerUp
                 //update player
-                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 gameHandler.getGameLobby().send(new UpdateClient(game.getDeadPlayer().get(i).getPlayerID()));
-                game.getDeadPlayer().get(i).getPlayerBoard().getHealthPlayer().death();
+
                 //TODO problema !!!!!!!!!!!!!!!!!!-----------------!!!!!!!!!!!!!!!!!!! manda 2 volte l'update della end
                 //gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps()));
                 i--;

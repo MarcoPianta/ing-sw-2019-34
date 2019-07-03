@@ -533,7 +533,19 @@ public class GameLobby {
             System.out.println("L'azione è finita, qui inverto le history e invio il payment");
             historyMessage = new ArrayList<>(shootHistoryMessage);
             shootHistoryMessage = new ArrayList<>();
-            server.send(new Payment(currentPlayer, effect.getBonusCost(), false));
+            if(useScoop){
+
+            }
+            else
+                server.send(new Payment(currentPlayer, effect.getBonusCost(), false));
+
+            for(Player p:targetList){
+                for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
+                    if (powerUp.getWhen().equals("get")) {
+                        gameHandler.getGameLobby().canUseTagBack(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getColor());
+                    }
+                }
+            }
         }
     }
 

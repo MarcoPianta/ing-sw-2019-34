@@ -188,57 +188,61 @@ public class GameHandler {
      * @param message  indicates only the token for updateClient
      */
     private void receiveShoot(ReceiveTargetSquare message){
-        if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
-                &&!getGame().getDeadRoute().isFinalTurn())
-            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
-        else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
-                ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 ) &&!getGame().getDeadRoute().isFinalTurn()) {
+        if(!getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).isCharge())
+            gameLobby.send(new UpdateClient(message.getToken(),"the weapon in not charge "));
+        else{
+            if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
+                    &&!getGame().getDeadRoute().isFinalTurn())
+                gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
+            else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
+                    ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 ) &&!getGame().getDeadRoute().isFinalTurn()) {
 
-            Effect effect = game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getActionSequences().indexOf(message.getPosEffect()));
-            String actionSequence = effect.getActionSequence();
-            if (actionSequence.charAt(0) == 'p') {
-                System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
+                Effect effect = game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getActionSequences().indexOf(message.getPosEffect()));
+                String actionSequence = effect.getActionSequence();
+                if (actionSequence.charAt(0) == 'p') {
+                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
 
-                ArrayList<Colors> targetToken = new ArrayList<>();
-                for (Player target: new Shoot(effect, game.getCurrentPlayer(), null).targetablePlayer()) {
-                    targetToken.add(target.getColor());
+                    ArrayList<Colors> targetToken = new ArrayList<>();
+                    for (Player target: new Shoot(effect, game.getCurrentPlayer(), null).targetablePlayer()) {
+                        targetToken.add(target.getColor());
+                    }
+                    gameLobby.send(new ShootRequestp(message.getToken(), effect.getTargetNumber(), targetToken));
+
+                } else if (actionSequence.charAt(0) == 's') {
+                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
+                    ArrayList<String> targetID = new ArrayList<>();
+                    for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
+                        targetID.add(target.getId());
+                    }
+                    gameLobby.send(new ShootRequests(message.getToken(), targetID));
+
+                } else if (actionSequence.charAt(0) == 'r') {
+                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
+                    ArrayList<String> targetID = new ArrayList<>();
+                    for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableRoom()) {
+                        targetID.add(target.getId());
+                    }
+                    gameLobby.send(new ShootRequestr(message.getToken(), targetID));
+
+                }else if (actionSequence.charAt(0) == 'M') {
+                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
+                    gameLobby.send(new UpdateClient(message.getToken(), new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
+
                 }
-                gameLobby.send(new ShootRequestp(message.getToken(), effect.getTargetNumber(), targetToken));
-
-            } else if (actionSequence.charAt(0) == 's') {
-                System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
-                ArrayList<String> targetID = new ArrayList<>();
-                for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
-                    targetID.add(target.getId());
-                }
-                gameLobby.send(new ShootRequests(message.getToken(), targetID));
-
-            } else if (actionSequence.charAt(0) == 'r') {
-                System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
-                ArrayList<String> targetID = new ArrayList<>();
-                for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableRoom()) {
-                    targetID.add(target.getId());
-                }
-                gameLobby.send(new ShootRequestr(message.getToken(), targetID));
-
-            }else if (actionSequence.charAt(0) == 'M') {
-                System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
-                gameLobby.send(new UpdateClient(message.getToken(), new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
-
             }
-        }
-        else if (getGame().getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
-            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare()));
-        else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
-            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
-        //verified if there is sight power up
-        boolean isFind=false;
-       for(int i=0;i<3 && !isFind;i++){
-            if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
-                    && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
-                isFind=true;
-                getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
-            }
+            else if (getGame().getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
+                gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare()));
+            else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
+                gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
+            //verified if there is sight power up
+            boolean isFind=false;
+            for(int i=0;i<3 && !isFind;i++){
+                if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
+                        && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
+                    isFind=true;
+                    getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
+                }
+           }
         }
     }
 
