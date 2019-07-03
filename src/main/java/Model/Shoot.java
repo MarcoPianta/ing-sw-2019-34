@@ -80,10 +80,9 @@ public class Shoot implements Action, Serializable {
             for (Player target : targets) {
                 targetListSquare.add(target.getPosition());
             }
-            System.out.println("falso2");
+            System.out.println(cardinalControl(targetListSquare));
             return cardinalControl(targetListSquare);
         }
-        System.out.println("isValidP returna " + true);
         return true;
     }
 
@@ -114,7 +113,7 @@ public class Shoot implements Action, Serializable {
      * */
     private boolean isValidR(){
         for (NormalSquare normalSquare : reachableSquare()){
-            if(normalSquare.getColor() == roomColor)
+            if(normalSquare.getColor() == roomColor && normalSquare.getColor() != shooterPlayer.getPosition().getColor())
                 return true;
         }
         return false;
@@ -212,14 +211,19 @@ public class Shoot implements Action, Serializable {
         }
         if (preCondition.isVision()) {
             colors.add(shooterPlayer.getPosition().getColor());
-            if (shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor())
+            if (shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor()){
                 colors.add(shooterPlayer.getPosition().getN().getColor());
-            if (shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor())
+            }
+
+            if (shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor()){
                 colors.add(shooterPlayer.getPosition().getE().getColor());
-            if (shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor())
+            }
+            if (shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor()){
                 colors.add(shooterPlayer.getPosition().getS().getColor());
-            if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor())
+            }
+            if (shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor()){
                 colors.add(shooterPlayer.getPosition().getW().getColor());
+            }
         }
         if (0 == preCondition.getMinRange()) {
             reachableSquares.add(shooterPlayer.getPosition());
@@ -247,7 +251,11 @@ public class Shoot implements Action, Serializable {
         if (!allStepSquare.contains(thisSquare)) {
             thisStepSquare.add(thisSquare);
             allStepSquare.add(thisSquare);
-            if (!reachableSquares.contains(thisSquare) && preCondition.isVision() && colors.contains((thisSquare.getColor())) && (!preCondition.isCardinal() || (thisSquare.getId().charAt(0) == shooterPlayer.getPosition().getId().charAt(0) || thisSquare.getId().charAt(2) == shooterPlayer.getPosition().getId().charAt(2))))
+            if (!reachableSquares.contains(thisSquare)
+                    && (preCondition.isVision() && colors.contains((thisSquare.getColor())))
+                    || (!preCondition.isVision()
+                        && (!preCondition.isCardinal() || (thisSquare.getId().charAt(0) == shooterPlayer.getPosition().getId().charAt(0)
+                                                            || thisSquare.getId().charAt(2) == shooterPlayer.getPosition().getId().charAt(2)))))
                 reachableSquares.add(reachableSquares.size(), thisSquare);
         }
     }
@@ -286,6 +294,7 @@ public class Shoot implements Action, Serializable {
     public List<Player> targetablePlayer(){
         ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
         reachablePlayer.remove(shooterPlayer);
+
         int i = 0;
         while(i < reachablePlayer.size()){
             if(!reachableSquare().contains(reachablePlayer.get(i).getPosition()))
@@ -293,6 +302,7 @@ public class Shoot implements Action, Serializable {
             else
                 i++;
         }
+
         return reachablePlayer;
     }
 
@@ -332,8 +342,9 @@ public class Shoot implements Action, Serializable {
     private void execS(){
         if(shootEffect.getSquareNumber() == 4)
             shootShockWave();
-        else if(shootEffect.getSquareNumber() == 2)
+        else if(shootEffect.getSquareNumber() == 2){
             shootFlameThrower();
+        }
         else{
             for (Player target : gamePlayers) {
                 if (target.getPosition() == targetSquare.get(0)) {
@@ -352,18 +363,22 @@ public class Shoot implements Action, Serializable {
         ArrayList<NormalSquare> flameSquares = new ArrayList<>(targetSquare);
         int x = 0;
         int y = 0;
+        int c = 0;
         NormalSquare newTargetSquare = null;
         if (shooterPlayer.getPosition().getId().charAt(0) == flameSquares.get(0).getId().charAt(0)) {
-            x = shooterPlayer.getPosition().getId().charAt(0);
-            y = flameSquares.get(0).getId().charAt(2) + (flameSquares.get(0).getId().charAt(2) - shooterPlayer.getPosition().getId().charAt(2));
+            x = Integer.parseInt(String.valueOf(shooterPlayer.getPosition().getId().charAt(0)));
+            y = Integer.parseInt(String.valueOf(flameSquares.get(0).getId().charAt(2))) + Integer.parseInt(String.valueOf(flameSquares.get(0).getId().charAt(2))) - Integer.parseInt(String.valueOf(shooterPlayer.getPosition().getId().charAt(2)));
+            c = 1;
             newTargetSquare = shooterPlayer.getGameId().getMap().getSquareFromId(x + "," + y);
         } else if (shooterPlayer.getPosition().getId().charAt(2) == flameSquares.get(0).getId().charAt(2)) {
-            x = flameSquares.get(0).getId().charAt(0) + (flameSquares.get(0).getId().charAt(0) - shooterPlayer.getPosition().getId().charAt(0));
-            y = shooterPlayer.getPosition().getId().charAt(2);
+            x = Integer.parseInt(String.valueOf(flameSquares.get(0).getId().charAt(0))) + Integer.parseInt(String.valueOf(flameSquares.get(0).getId().charAt(0))) - Integer.parseInt(String.valueOf(shooterPlayer.getPosition().getId().charAt(0)));
+            y = Integer.parseInt(String.valueOf(shooterPlayer.getPosition().getId().charAt(2)));
+            c = 2;
             newTargetSquare = shooterPlayer.getGameId().getMap().getSquareFromId(x + "," + y);
         }
-        if(flameSquares.get(0).getN() == newTargetSquare || flameSquares.get(0).getE() == newTargetSquare || flameSquares.get(0).getS() == newTargetSquare || flameSquares.get(0).getW() == newTargetSquare)
+        if((c == 1) && flameSquares.get(0).getId().charAt(0) == newTargetSquare.getId().charAt(0) || (c == 2) && flameSquares.get(0).getId().charAt(2) == newTargetSquare.getId().charAt(2)) {
             flameSquares.add(newTargetSquare);
+        }
         for (int i = 0; i < flameSquares.size(); i++) {
             for (Player target : gamePlayers) {
                 if (target.getPosition() == flameSquares.get(i)) {

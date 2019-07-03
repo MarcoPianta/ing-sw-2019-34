@@ -19,11 +19,12 @@ public class SpawnSquare extends NormalSquare{
         spawn = true;
     }
 
-    public SpawnSquare(){
+    public SpawnSquare(Colors color){
         super();
         this.weapons = new ArrayList<>();
         while (this.weapons.size() < 3) this.weapons.add(null);
         spawn = true;
+        this.color = color;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class Effect implements Serializable {
             sDamage.add(sDamageArray.getInt(sDamage.size()));
         sMark = new ArrayList<>();
         while (sMark.size() < sMarkArray.size())
-            sMark.add(sDamageArray.getInt(sMark.size()));
+            sMark.add(sMarkArray.getInt(sMark.size()));
         rDamage = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("rDamage");
         rMark = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("rMark");
         myMove = jsonValues.getJsonArray(jsonString).getJsonObject(0).getInt("myMove");

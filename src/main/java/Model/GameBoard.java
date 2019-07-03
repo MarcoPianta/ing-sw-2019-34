@@ -70,7 +70,7 @@ public final class GameBoard implements Serializable {
                 }
                 else {
                     ArrayList<NormalSquare> tmpRoom;
-                    SpawnSquare newSquare =  new SpawnSquare();
+                    SpawnSquare newSquare =  new SpawnSquare(rooms.get(i).getColor());
                     newSquare.setId(currentSquare.getString("ID"));
                     tmpRoom = rooms.get(i).getNormalSquares();
                     tmpRoom.set(j, newSquare);

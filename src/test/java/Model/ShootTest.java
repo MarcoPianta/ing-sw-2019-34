@@ -69,11 +69,6 @@ public class ShootTest {
         testTargetSquareList.add(game.getMap().getRooms().get(1).getNormalSquares().get(2));
         action = new Shoot(testEffect, testShooterPlayer, null, testTargetSquareList, true);
         assertTrue(action.execute());
-        //Test3
-        testWeapon = new CardWeapon (WeaponDictionary.FURNACE.getAbbreviation());
-        testEffect = testWeapon.getEffects().get(0);
-        action = new Shoot(testEffect, testShooterPlayer, game.getMap().getRooms().get(1).getNormalSquares().get(0).getColor());
-        assertTrue(action.execute());
     }
     @Test
     public void isValidTest() throws FileNotFoundException {
@@ -217,5 +212,52 @@ public class ShootTest {
         Shoot action = new Shoot(testEffect, testShooterPlayer, testTargetList, null, false);
         action.execute();
         assertEquals(0, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getMark().size());
+    }
+
+    @Test
+    public void testAllWeapon() throws FileNotFoundException {
+        Colors color1 = Colors.RED, color2 = Colors.BLUE, color3 = Colors.GREEN, color4 = Colors.YELLOW, color5 = Colors.WHITE;
+        Game game = new Game(5,"map1");
+        Player testShooterPlayer = new Player(76765437, color1);
+        Player testTargetPlayer1 = new Player(85673612, color2);
+        Player testTargetPlayer2 = new Player(75743326, color3);
+        Player testTargetPlayer3 = new Player(85743331, color4);
+        Player testTargetPlayer4 = new Player(85744122, color5);
+        game.addPlayer(testShooterPlayer);
+        game.addPlayer(testTargetPlayer1);
+        game.addPlayer(testTargetPlayer2);
+        game.addPlayer(testTargetPlayer3);
+        game.addPlayer(testTargetPlayer4);
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(1));
+        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(2));
+        testTargetPlayer2.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer3.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(1));
+        testTargetPlayer4.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(1));
+        ArrayList<Player> testTargetList = new ArrayList<>();
+        ArrayList<NormalSquare> testSquareList = new ArrayList<>();
+
+        testTargetList.add(testTargetPlayer1);
+        testTargetList.add(testTargetPlayer2);
+        testTargetList.add(testTargetPlayer4);
+
+        testSquareList.add(testTargetPlayer1.getPosition());
+
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.SHOCKWAVE.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(2));
+        Shoot action = new Shoot(testEffect, testShooterPlayer, null, testSquareList, true);
+
+        if (action.isValid()) {
+            action.execute();
+        }
+        System.out.println("IsValid --> " + action.isValid());
+        assertEquals(1, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(1, testTargetPlayer2.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(0, testTargetPlayer3.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(0, testTargetPlayer4.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(0, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getMark().size());
+        assertEquals(0, testTargetPlayer2.getPlayerBoard().getHealthPlayer().getMark().size());
+ //       assertEquals(1, testTargetList.get(1).getPlayerBoard().getHealthPlayer().getMark().size());
+ //       assertEquals(1, testTargetList.get(2).getPlayerBoard().getHealthPlayer().getMark().size());
+
     }
 }
