@@ -46,7 +46,7 @@ public class GameLobby {
         this.pinged = new HashMap<>();
         this.disconnected = new ArrayList<>();
         try {
-            this.gameHandler = new GameHandler(skullNumber, this.clients, map, this);
+            this.gameHandler = new GameHandler(1, this.clients, map, this);
             for(Player p: gameHandler.getGame().getPlayers()){
                 players.put(p.getPlayerID(), p);
                 playersColor.put(p.getColor(),p.getPlayerID());

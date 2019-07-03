@@ -158,6 +158,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void chooseScopeTarget(ArrayList<Colors> targets) {
+        mapGui.chooseTargetScope(targets);
+    }
+
+    @Override
     public void showToken() {
         JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
         //new Thread(this::showGameSettingsRequest).start();

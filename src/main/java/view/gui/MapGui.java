@@ -288,10 +288,10 @@ public class MapGui extends JFrame{
      * */
     public void addDamage(List<Colors> damageBar){
         int i = 0;
+        currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         for (Colors c: damageBar){
             Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
 
-            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
             Graphics2D g = currentPlayerBoardModified.createGraphics();
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, 120 * currentPlayerBoardModified.getHeight() / 274, null);
@@ -306,6 +306,8 @@ public class MapGui extends JFrame{
      * This method add marks in player's playerboard
      * */
     public void addMarks(ArrayList<Colors> marks){
+        System.out.println("Marchi in gui:");
+        marks.forEach(System.out::println);
         int i = 0;
         for (Colors mark: marks) {
             Image imageColor = createColorMarker(mark, currentPlayerBoardModified.getWidth(), currentPlayerBoardModified.getHeight());
@@ -357,12 +359,12 @@ public class MapGui extends JFrame{
      * */
     public void usePowerUp(int position, boolean granade, boolean scope, Colors colors){
         System.out.println(powerUps.get(position).substring(0, powerUps.get(position).length()-2));
-        if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("teleporter")){
+        if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("teleporter") && !scope && !granade){
             actionType = "teleporter";
             JOptionPane.showMessageDialog(this, "Choose a square to teleport");
             selectedPowerUp = position;
-        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("newton")){
-            new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false);
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("newton") && !scope && !granade){
+            new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false, false);
             JOptionPane.showMessageDialog(this, "Choose a target to move him");
             selectedPowerUp = position;
         } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("tagBackGranade") && granade){
@@ -384,6 +386,14 @@ public class MapGui extends JFrame{
      * */
     public void canUseScoop(){
         new UsePowerUpGui(powerUps, this, false, true, null);
+    }
+
+    public void chooseTargetScope(ArrayList<Colors> targets){
+        new TargetChooseGui(targets, 1, this, false, true);
+    }
+
+    public void sendScopeTarget(Colors target){
+        client.send(new ScopeTargetResponse(client.getToken(), target));
     }
 
     /**
@@ -487,6 +497,7 @@ public class MapGui extends JFrame{
                         int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
                         if (response == 0) {
                             client.send(new Pass(client.getToken()));
+                            myTurn = false;
                             System.out.println("pass");
                         }
                     }
@@ -805,7 +816,7 @@ public class MapGui extends JFrame{
      * This method open a window which show the targetble players
      * */
     public void showTargetblePlayer(List<Colors> players, int max){
-        new TargetChooseGui(players, max, this, true);
+        new TargetChooseGui(players, max, this, true, false);
     }
 
     /**
