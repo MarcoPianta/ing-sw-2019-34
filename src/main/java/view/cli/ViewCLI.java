@@ -281,7 +281,7 @@ public class ViewCLI extends View {
     }
     @Override
     public void chooseScopeTarget(ArrayList<Colors> targets){
-        
+
     }
 
     @Override

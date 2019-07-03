@@ -163,7 +163,7 @@ public class TurnHandler {
      */
     protected boolean actionShot(Shot message){
         boolean valueReturn;
-        if(message.getSquare()==null && message.getRoom()==null) {
+        if(message.getSquare()==null && message.getRoom()==null&& message.getPowerUp()==-1) {
             valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
@@ -205,12 +205,6 @@ public class TurnHandler {
         if(valueReturn && message.getPowerUp()!=-1 && gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(message.getPowerUp()).getWhen().equals("get")){
             usePowerUp(message);
         }
-
-        /*//viene scaricata larma a ogni shot??
-        if(valueReturn) {
-            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).setCharge(false);
-
-        }*/
         return valueReturn;
     }
 

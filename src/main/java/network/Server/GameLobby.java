@@ -346,6 +346,18 @@ public class GameLobby {
                 server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 historyMessage=new ArrayList<>();
             }
+            else if(message.getActionType().getAbbreviation().equals(ActionType.SCOPETARGETRESPONSE.getAbbreviation())){
+                ScopeTargetResponse scopeTargetResponse=(ScopeTargetResponse)message;
+                ReceiveTargetSquare receiveTargetSquare=(ReceiveTargetSquare)historyMessage.get(0);
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).setCharge(false);
+                server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                //new history list with a fail shot message with power up
+                historyMessage = new ArrayList<>(shootHistoryMessage);
+                shootHistoryMessage = new ArrayList<>();
+                historyMessage.add(new Shot(targetList,-1,-1,scopePosition,players.get(playersColor.get(scopeTargetResponse.getTarget()))));
+                server.send(new Payment(currentPlayer, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getBonusCost(), true));
+
+            }
         }
     }
 
@@ -531,14 +543,21 @@ public class GameLobby {
         }
         else{
             System.out.println("L'azione è finita, qui inverto le history e invio il payment");
-            historyMessage = new ArrayList<>(shootHistoryMessage);
-            shootHistoryMessage = new ArrayList<>();
+            //scoop
             if(useScoop){
-
+                ArrayList<Colors> targetsColor=new ArrayList<>();
+                for(Player p:targetList)
+                    targetsColor.add(p.getColor());
+                server.send(new ScopeTargetRequest(gameHandler.getGame().getCurrentPlayer().getPlayerID(),targetsColor));
             }
-            else
+            else{
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).setCharge(false);
+                server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                historyMessage = new ArrayList<>(shootHistoryMessage);
+                shootHistoryMessage = new ArrayList<>();
                 server.send(new Payment(currentPlayer, effect.getBonusCost(), false));
-
+            }
+            //CanBackTag
             for(Player p:targetList){
                 for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
                     if (powerUp.getWhen().equals("get")) {
