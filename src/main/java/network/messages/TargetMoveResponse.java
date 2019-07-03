@@ -6,16 +6,16 @@ package network.messages;
  *  */
 public class TargetMoveResponse extends Message{
 
-    private String targetPlayer;
+    private String targetSquare;
 
     public TargetMoveResponse(Integer token, String targetSquare){
         this.token = token;
         this.actionType = ActionType.TARGETMOVERESPONSE;
-        this.targetPlayer = targetSquare;
+        this.targetSquare = targetSquare;
     }
 
-    public String getTargetPlayer() {
-        return targetPlayer;
+    public String getTargetSquare() {
+        return targetSquare;
     }
 
 }
