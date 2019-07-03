@@ -501,7 +501,7 @@ public class MapGui extends JFrame{
                             selectedPowerUp = 4;
                             actionType = "";
                         }
-                    }else if(actionType.equals("teleporter")){
+                    }else if(actionType.equals("newton")){
                         client.send(new UsePowerUpResponse(client.getToken(), selectedPowerUp, client.getToken(), targetPowerup, getSquareId(e.getX(), e.getY())));
                         actionType = "";
                     }

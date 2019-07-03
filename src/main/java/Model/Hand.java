@@ -88,9 +88,9 @@ public class Hand implements Serializable {
             target.getPlayerBoard().getHealthPlayer().addDamage(getPlayerBoard().getPlayer(),1);
         else if(cardPowerUp.getMark()==1)
             target.getPlayerBoard().getHealthPlayer().addMark(getPlayerBoard().getPlayer(),1);
-        else if(cardPowerUp.getMyMove()!=-1)
-            getPlayerBoard().getPlayer().newPosition(square);
-        else
+        else if(cardPowerUp.getMyMove()==-1){
+            getPlayerBoard().getPlayer().newPosition(square);}
+        else if(cardPowerUp.getOtherMove()==2)
             new Move(target,square,2).execute();
 
         removePowerUp(getPlayerPowerUps().indexOf(cardPowerUp));

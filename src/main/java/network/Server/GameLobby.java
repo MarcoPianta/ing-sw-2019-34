@@ -301,7 +301,7 @@ public class GameLobby {
             //players.get(players.getId) in ingresso il token
             else if (message.getActionType().getAbbreviation().equals(ActionType.USEPOWERUPRESPONSE.getAbbreviation())) {
                 UsePowerUpResponse usePowerUpResponse = (UsePowerUpResponse) message;
-                if (gameHandler.receiveServerMessage(new UsePowerUp(message.getToken(), usePowerUpResponse.getPowerUp(), players.get(usePowerUpResponse.getUser()), players.get(usePowerUpResponse.getUser()), gameHandler.getGame().getMap().getSquareFromId(usePowerUpResponse.getSquare())))) {
+                if (gameHandler.receiveServerMessage(new UsePowerUp(message.getToken(), usePowerUpResponse.getPowerUp(), players.get(usePowerUpResponse.getUser()), players.get(playersColor.get(usePowerUpResponse.getTarget())), gameHandler.getGame().getMap().getSquareFromId(usePowerUpResponse.getSquare())))) {
                     server.send(new UpdateClient(message.getToken(), "The use of the power up was successful"));
                     historyMessage = new ArrayList<>();
                 } else {
@@ -320,7 +320,10 @@ public class GameLobby {
 
             else if(message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPONRESPONSE.getAbbreviation())){
                 SubstituteWeaponResponse substituteWeaponResponse=(SubstituteWeaponResponse) message;
-                System.out.println("wdfnkeqcneaeonkvoeikneivo"+substituteWeaponResponse.getWeapon());
+                int pos=gameHandler.getGame().getCurrentPlayer().getPosition().setItems(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(substituteWeaponResponse.getWeapon()));
+                for(Player p: gameHandler.getGame().getPlayers()){
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPosition().getId(),gameHandler.getGame().getCurrentPlayer().getPosition().getWeapons().get(pos),pos));
+                }
                 players.get(substituteWeaponResponse.getToken()).getPlayerBoard().getHandPlayer().substituteWeapons(substituteWeaponResponse.getWeapon());
                 server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 historyMessage=new ArrayList<>();
