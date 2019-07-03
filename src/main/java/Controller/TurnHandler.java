@@ -376,8 +376,8 @@ public class TurnHandler {
         setNextState(StateMachineEnumerationTurn.START);
         endTurnChecks.fillSquare(gameHandler.getGame());
         System.out.println();
-        endTurnChecks.isFinalTurn(gameHandler.getGame());
         endTurnChecks.playerIsDead(gameHandler.getGame());
+        endTurnChecks.isFinalTurn(gameHandler.getGame());
         start();
 
     }

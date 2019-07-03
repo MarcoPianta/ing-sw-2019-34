@@ -307,7 +307,6 @@ public class MapGui extends JFrame{
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, i2, null);
         g.dispose();
-        setMyPosition(myPosition);
         Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
         player.setIcon(new ImageIcon(playerBoardResized));
         i++;
@@ -324,6 +323,7 @@ public class MapGui extends JFrame{
         for (Colors mark: marks) {
             i = updatePlayerImage(i, mark, currentPlayerBoardModified, marksPosition, currentPlayerBoard, 1);
         }
+        setMyPosition(myPosition);
     }
 
     /**
@@ -352,6 +352,7 @@ public class MapGui extends JFrame{
 
     public void spawn(){
         new SpawnGui(powerUps, this);
+        currentPlayerBoardModified = cloneImage(currentPlayerBoard);
     }
 
     public void sendSpawnMessage(int position){
@@ -376,6 +377,17 @@ public class MapGui extends JFrame{
         } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("targettingScope") && scope) {
             client.send(new CanUseScoopResponse(client.getToken(), true, position));
         }
+    }
+
+    public void finalTurn(){
+        File newPlayerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + "Back.png");
+        try {
+            BufferedImage newPlayerBoardImage = ImageIO.read(newPlayerBoard);
+            currentPlayerBoard = newPlayerBoardImage;
+            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
+            setMyPosition(myPosition);
+
+        }catch (IOException e){}
     }
 
     /**
@@ -486,7 +498,7 @@ public class MapGui extends JFrame{
             @Override
             public void componentResized(ComponentEvent e) {
                 JLabel label = (JLabel) e.getComponent();
-                resizeImage(label, (new ImageIcon(currentPlayerBoard)));
+                resizeImage(label, (new ImageIcon(currentPlayerBoardModified)));
             }
         });
 

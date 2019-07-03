@@ -146,9 +146,9 @@ public class PaymentGui extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (!payment.isPowerUp())
-                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), color[ammoChoose.getSelectedIndex()]));
-                else
                     mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), ""));
+                else
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), color[ammoChoose.getSelectedIndex()]));
                 dispose();
             }
 

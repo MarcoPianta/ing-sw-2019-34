@@ -179,6 +179,8 @@ public abstract class View {
 
     public abstract void setPoints(int points);
 
+    public abstract void finalTurn();
+
     public ArrayList<CardPowerUp> getPowerUps() {
         return powerUps;
     }

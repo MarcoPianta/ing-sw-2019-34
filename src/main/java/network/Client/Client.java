@@ -123,6 +123,9 @@ public abstract class Client {
             else
                 view.setNumberAction(3);
         }
+        else if (message.getActionType().getAbbreviation().equals(ActionType.FINALTURN.getAbbreviation())){
+            view.finalTurn();
+        }
 
     }
 

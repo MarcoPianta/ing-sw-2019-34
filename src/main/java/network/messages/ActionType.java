@@ -31,6 +31,7 @@ public enum ActionType {
     CANUSEVENOM("Can use venom"),
     CANUSESCOOP("Can use scoop"),
     SCOPETARGETREQUEST("Scope target request"),
+    FINALTURN("Finale turn"),
     SCOPETARGETRESPONSE("Scope target response"),
     RECEIVETARGETSQUARE("Receive target square"),
     USEPOWERUPRESPONSE("Use power up response"),

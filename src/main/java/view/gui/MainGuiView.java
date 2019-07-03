@@ -290,6 +290,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void finalTurn() {
+        mapGui.finalTurn();
+    }
+
+    @Override
     public void startGame(String map) {
         frame.setVisible(false);
         frame = null;
