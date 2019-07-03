@@ -93,6 +93,11 @@ public class Server {
      * */
     public void send(Message message){
         if (clients.get(message.getToken())) {
+            if (message.getActionType().equals(ActionType.UPDATECLIENTS)) {
+                UpdateClient updateClient = (UpdateClient) message;
+                if (updateClient.getUpdateType().equals(UpdateClient.MESSAGE))
+                    return;
+            }
             rmiServer.send(message);
         }
         else
@@ -141,7 +146,10 @@ public class Server {
      * @param token the token of the client that must be removed
      */
     public void removeClient(Integer token){
-        clients.remove(token);
+        if (lobbyHashMap.containsKey(token))
+            lobbyHashMap.get(token).remove(token);
+        else
+            clients.remove(token);
     }
 
     public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){

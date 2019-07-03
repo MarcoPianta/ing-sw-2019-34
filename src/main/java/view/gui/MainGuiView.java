@@ -46,12 +46,12 @@ public class MainGuiView extends View {
         frame.setSize(panelWidth, INITIALWINDOWHEIGHT);
 
         frame.setMinimumSize(new Dimension(panelWidth, INITIALWINDOWHEIGHT));
-        /*frame.addWindowListener(new WindowAdapter() {
+        frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 client.close();
             }
-        });*/
+        });
         mainPanel = new JPanel(new BorderLayout());
 
         ImageIcon icon = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "homeAdrenaline.png");
@@ -140,6 +140,11 @@ public class MainGuiView extends View {
 
     public void main() {
         this.frame.setVisible(true);
+    }
+
+    @Override
+    public void setNumberAction(int numberAction) {
+
     }
 
     @Override
@@ -284,6 +289,7 @@ public class MainGuiView extends View {
 
     @Override
     public void startTurn() {
+        mapGui.setActionNumber(1);
         setMyTurn(true);
     }
 

@@ -26,6 +26,10 @@ public class GameLobby {
     private HashMap<Integer, Boolean> pinged;
     private ArrayList<Integer> disconnected;
     private static final int PINGTIME = 15000;
+/*Qui metto gli attributi che servono per salvare i dati dello shooter mentre controllo le isValid*/
+    private NormalSquare shooterPosition = null;
+    private HashMap<Integer, NormalSquare> movedPlayer = new HashMap<>();
+
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
         this.clients = clients;
@@ -74,16 +78,20 @@ public class GameLobby {
                                 server.send(new Ping(i));
                             }
                             else {
-                                disconnected.add(i);
-                                if (clients.size() - disconnected.size() == 1) {
-                                    //gameHandler.winner();//TODO send winner
-                                }
-                                pinged.remove(i);
+                                remove(i);
                             }
                         }
                     }
                 })
                 ,0 ,PINGTIME);
+    }
+
+    public void remove(int i){
+        disconnected.add(i);
+        if (clients.size() - disconnected.size() == 1) {
+            gameHandler.winner();
+        }
+        pinged.remove(i);
     }
 
     public void startTurn(Integer token){
@@ -215,10 +223,15 @@ public class GameLobby {
             } else if (message.getActionType().equals(ActionType.TARGETMOVERESPONSE)) {
                 ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
                 TargetMoveResponse targetMoveResponse = (TargetMoveResponse) message;
-                Player target = players.get(targetMoveResponse.getTargetPlayer());
+                Shot lastShotMessage = (Shot) shootHistoryMessage.get(shootHistoryMessage.size() - 1);
+                gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), lastShotMessage.getTargets().get(0), gameHandler.getGame().getMap().getSquareFromId(targetMoveResponse.getTargetSquare())));
+
                 Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
-                server.send(new UpdateClient(targetMoveResponse.getToken(), new Move(target, null, effect.getTargetMove()).reachableSquare()));
-                shootHistoryMessage.add(new MoveMessage(target.getPlayerID(), null, null));
+                if(!movedPlayer.containsKey(lastShotMessage.getTargets().get(0).getPlayerID()))
+                    movedPlayer.put(lastShotMessage.getTargets().get(0).getPlayerID(), lastShotMessage.getTargets().get(0).getPosition());
+                server.send(new UpdateClient(receiveTargetSquare.getToken(), new Move(lastShotMessage.getTargets().get(0), gameHandler.getGame().getMap().getSquareFromId(targetMoveResponse.getTargetSquare()), effect.getTargetMove()).reachableSquare()));
+                shootHistoryMessage.add(new MoveMessage(receiveTargetSquare.getToken(), lastShotMessage.getTargets().get(0), gameHandler.getGame().getMap().getSquareFromId(targetMoveResponse.getTargetSquare())));
+                shootActionSequences(receiveTargetSquare);
 
             } else if (message.getActionType().equals(ActionType.MOVERESPONSE)) { // anche per grab se spawn quale carta vuole, se shot chiedere chi vuole sparare chiamando receive target
                 MoveResponse moveResponse = (MoveResponse) message;
@@ -243,8 +256,11 @@ public class GameLobby {
                     historyMessage = new ArrayList<>();
                     System.out.println("Ho azzerato la HISTORY");
                 } else if (receiveTargetSquare.getType().equals("shoot")) {
+                    System.out.println("MOVE x la Shoot");
+                    if(!movedPlayer.containsKey(message.getToken()))
+                        movedPlayer.put(message.getToken(), players.get(message.getToken()).getPosition());
                     gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
-                    historyMessage = new ArrayList<>();
+                    shootHistoryMessage.add(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
                     shootActionSequences(receiveTargetSquare);
                 }
             } else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPON.getAbbreviation())) {
@@ -455,9 +471,9 @@ public class GameLobby {
         server.send(new CanUseTagBack(player,playerShooter));
     }
 
-    public void endGame(Integer winner){
+    public void endGame(List<Integer> winner){
         for (Integer i: clients){
-            if (!(i.equals(winner)))
+            if (!(winner.contains(i)))
                 server.send(new WinnerMessage(i, false));
             else
                 server.send(new WinnerMessage(i, true));
@@ -498,7 +514,7 @@ public class GameLobby {
             } else if (actionSequence.charAt(i) == 'm') {
                 System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
                 ArrayList<String> squareList = new ArrayList<>();
-                Player target = players.get(shootHistoryMessage.get(shootHistoryMessage.size()).getToken());
+                Player target = players.get(shootHistoryMessage.get(shootHistoryMessage.size() - 1).getToken());
                 Integer move = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getTargetMove();
                 for (NormalSquare square: new Move(target, null, move).reachableSquare()) {
                     squareList.add(square.getId());
@@ -506,13 +522,16 @@ public class GameLobby {
                 server.send(new TargetMoveRequest(receiveTargetSquare.getToken(), squareList));
 
             } else if (actionSequence.charAt(i) == 'M') {
-                System.out.println("Nella shootActionSequences ho un "+actionSequence.charAt(i));
+                System.out.println("Nella shootActionSequences ho un " + actionSequence.charAt(i));
                 server.send(new UpdateClient(receiveTargetSquare.getToken(), new Move(gameHandler.getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
 
             }
         }
         else{
-            System.out.println("L'azione è finita, qui faccio le history");
+            System.out.println("L'azione è finita, qui inverto le history e invio il payment");
+            historyMessage = new ArrayList<>(shootHistoryMessage);
+            shootHistoryMessage = new ArrayList<>();
+            server.send(new Payment(currentPlayer, effect.getBonusCost(), false));
         }
     }
 
