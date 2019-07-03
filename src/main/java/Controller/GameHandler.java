@@ -18,7 +18,15 @@ public class GameHandler {
     private ActionValidController actionValidController;
     private PaymentController paymentController;
     private GameLobby gameLobby;
+    private boolean actionAdrenalineDone;
 
+    public void setActionAdrenalineDone(boolean actionAdrenalineDone) {
+        this.actionAdrenalineDone = actionAdrenalineDone;
+    }
+
+    public boolean isActionAdrenalineDone() {
+        return actionAdrenalineDone;
+    }
 
     /**
      * The constructor of gameHandler
@@ -192,11 +200,13 @@ public class GameHandler {
             gameLobby.send(new UpdateClient(message.getToken(),"the weapon in not charge "));
         else{
             if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
-                    &&!getGame().getDeadRoute().isFinalTurn())
+                    &&!getGame().getDeadRoute().isFinalTurn() && !actionAdrenalineDone)
                 gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
             else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
-                    ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 ) &&!getGame().getDeadRoute().isFinalTurn()) {
+                    ||getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1 || actionAdrenalineDone)
+                    &&!getGame().getDeadRoute().isFinalTurn()) {
 
+                actionAdrenalineDone = false;
                 Effect effect = game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getActionSequences().indexOf(message.getPosEffect()));
                 String actionSequence = effect.getActionSequence();
                 if (actionSequence.charAt(0) == 'p') {
@@ -251,12 +261,13 @@ public class GameHandler {
      * @param   message  indicates only the token for updateClient
      */
     private void receiveGrab(ReceiveTargetSquare message){
+        System.out.println(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction());
         if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
                 &&!game.getDeadRoute().isFinalTurn())
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
         else if((getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==1
                 ||game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2 ) &&!game.getDeadRoute().isFinalTurn())
-            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
+            gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,3).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())

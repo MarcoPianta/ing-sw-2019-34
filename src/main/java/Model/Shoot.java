@@ -20,7 +20,7 @@ public class Shoot implements Action, Serializable {
         this.targetSquare = square;
         if (isSquare) {
             this.actionType = 's';
-            this.gamePlayers = shooterPlayer.getGameId().getPlayers();
+            this.gamePlayers = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
             gamePlayers.remove(shooterPlayer);
         }
         else
@@ -32,7 +32,7 @@ public class Shoot implements Action, Serializable {
         this.shooterPlayer = shooter;
         this.roomColor = color;
         this.actionType = 'r';
-        this.gamePlayers = shooterPlayer.getGameId().getPlayers();
+        this.gamePlayers = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
         gamePlayers.remove(shooterPlayer);
     }
 
