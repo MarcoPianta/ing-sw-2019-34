@@ -1,6 +1,7 @@
 package network.Server.Socket;
 
 import network.Server.Server;
+import network.messages.ActionType;
 import network.messages.ConnectionResponse;
 import network.messages.GameSettingsRequest;
 import network.messages.Message;
@@ -80,6 +81,8 @@ public class SocketServer {
      * @param message the message to be forwarded to the server
      * */
     public void onReceive(Message message){
+        if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT))
+            removeClient(message.getToken());
         server.onReceive(message);
     }
 

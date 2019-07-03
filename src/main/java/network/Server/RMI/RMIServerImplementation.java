@@ -2,6 +2,7 @@ package network.Server.RMI;
 
 import network.Client.RMI.RMIClientInterface;
 import network.Server.Server;
+import network.messages.ActionType;
 import network.messages.Message;
 
 import java.rmi.NotBoundException;
@@ -18,6 +19,8 @@ public class RMIServerImplementation extends UnicastRemoteObject implements RMIS
     }
 
     public void onReceive(Message message) {
+        if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT))
+            rmiServer.removeClient(message.getToken());
        server.onReceive(message);
     }
 

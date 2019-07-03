@@ -6,6 +6,7 @@ import network.messages.ConnectionResponse;
 import network.messages.GameSettingsRequest;
 import network.messages.Message;
 
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -59,7 +60,11 @@ public class RMIServer {
 
     public void send(Message message) {
         try {
-            rmiHashMap.get(message.getToken()).onReceive(message);
+            try {
+                rmiHashMap.get(message.getToken()).onReceive(message);
+            }catch (ConnectException e){
+                removeClient(message.getToken());
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -71,11 +76,16 @@ public class RMIServer {
     }
 
     public void acceptConnection(RMIClientInterface client, Integer token) throws RemoteException, NotBoundException {
-        /*
-        Registry registry = LocateRegistry.getRegistry(PORT);
-        RMIClientInterface client = (RMIClientInterface) registry.lookup(token.toString());
-        clients.add(client);
-        */
         this.rmiHashMap.put(token, client);
+    }
+
+    /**
+     * When a rmi connection is closed the client is remove from the hash map containing the token of every
+     * connected client. The client is also removed from the main server
+     * @param token the identifier of the client to be removed.
+     */
+    public void removeClient(Integer token){
+        server.removeClient(token);
+        rmiHashMap.remove(token);
     }
 }

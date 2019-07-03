@@ -74,16 +74,20 @@ public class GameLobby {
                                 server.send(new Ping(i));
                             }
                             else {
-                                disconnected.add(i);
-                                if (clients.size() - disconnected.size() == 1) {
-                                    gameHandler.winner();
-                                }
-                                pinged.remove(i);
+                                remove(i);
                             }
                         }
                     }
                 })
                 ,0 ,PINGTIME);
+    }
+
+    public void remove(int i){
+        disconnected.add(i);
+        if (clients.size() - disconnected.size() == 1) {
+            gameHandler.winner();
+        }
+        pinged.remove(i);
     }
 
     public void startTurn(Integer token){

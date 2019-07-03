@@ -69,6 +69,12 @@ public class MapGui extends JFrame{
     public MapGui(Colors myColor, Client client, String mapImageFile){
         super("Adrenaline");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                client.close();
+            }
+        });
         this.myColor = myColor;
         this.enemies = new HashMap<>();
         this.setLayout(new GridBagLayout());

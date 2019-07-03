@@ -20,7 +20,9 @@ public abstract class Client {
         this.view = view;
     }
 
-    public abstract void close();
+    public void close(){
+        send(new Disconnect(token));
+    }
 
     /**
      * This method receive a message from the server and handle it.
