@@ -405,8 +405,8 @@ public class Shoot implements Action, Serializable {
     private void execR(){
         for (Player target: gamePlayers) {
             if (target.getPosition().getColor() == roomColor){
-                injureTarget(target, shootEffect.getpDamage().get(0));
-                markTarget(target, shootEffect.getpMark().get(0));
+                injureTarget(target, shootEffect.getrDamage());
+                markTarget(target, shootEffect.getrMark());
             }
         }
     }
