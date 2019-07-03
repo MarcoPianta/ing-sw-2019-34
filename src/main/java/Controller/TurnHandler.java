@@ -113,7 +113,7 @@ public class TurnHandler {
         }
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
-            if(newMessage.getPowerUp()!=null){
+            if(newMessage.getPowerUp()!= -1){
                 usePowerUp(message);
             }
             valueReturn= actionShot(newMessage);
@@ -164,7 +164,7 @@ public class TurnHandler {
     protected boolean actionShot(Shot message){
         boolean valueReturn;
         if(message.getSquare()==null && message.getRoom()==null) {
-            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
+            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
