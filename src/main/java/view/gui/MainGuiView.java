@@ -158,6 +158,16 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void setPoints(int points) {
+        mapGui.setPoints(points);
+    }
+
+    @Override
+    public void addMarks(ArrayList<Colors> marks, Colors player) {
+
+    }
+
+    @Override
     public void chooseScopeTarget(ArrayList<Colors> targets) {
         mapGui.chooseTargetScope(targets);
     }
@@ -173,10 +183,6 @@ public class MainGuiView extends View {
         mapGui.setCardsWeapon(weapons);
     }
 
-    @Override
-    public void addMarks(ArrayList<Colors> marks, Colors player) {
-
-    }
 
     @Override
     public void substituteWeaponRequest() {

@@ -63,6 +63,7 @@ public class MapGui extends JFrame{
     private int selectedPowerUp;
     private Colors targetPowerup;
     private int actionNumber;
+    private int points = 0;
 
     /**
      * This constructor creates the new windows
@@ -281,6 +282,10 @@ public class MapGui extends JFrame{
             Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
             map.setIcon(new ImageIcon(mapResized));
         }catch (IOException e){}
+    }
+
+    public void setPoints(int points){
+        this.points = points;
     }
 
     /**
@@ -568,7 +573,7 @@ public class MapGui extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getX() > 890 * player.getWidth()/1120){
-                    new PlayerInformationGui(cardsWeapon, ammos);
+                    new PlayerInformationGui(cardsWeapon, ammos, points);
                     System.out.println("info");
                 }
                 else

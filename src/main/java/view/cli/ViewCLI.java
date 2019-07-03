@@ -30,6 +30,11 @@ public class ViewCLI extends View {
 
     }
 
+    @Override
+    public void setPoints(int points) {
+
+    }
+
     //mostrare spawn weapomnd
     @Override
     public void grabWeaponRequest() {

@@ -152,6 +152,9 @@ public abstract class Client {
         else if (message.getUpdateType().equals(UpdateClient.POSITION))
             view.setMyPositionID(message.getSquareID());
 
+        else if (message.getUpdateType().equals(UpdateClient.POINTS))
+            view.setPoints(message.getPoints());
+
         else if (message.getUpdateType().equals(UpdateClient.POSSIBLESQUARES))
             view.showReachableSquares(message.getReachableSquares());
 
