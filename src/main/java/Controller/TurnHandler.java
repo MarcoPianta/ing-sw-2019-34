@@ -47,6 +47,7 @@ public class TurnHandler {
         ArrayList<Player> deadPlayerCopy=new ArrayList<>(gameHandler.getGame().getDeadPlayer());
         for(Player p:deadPlayerCopy)
             gameHandler.getGame().getDeadPlayer().remove(p);
+        System.out.println("Player correnteeeeeeeeeeeeeeeee " + gameHandler.getGame().getCurrentPlayer().getPlayerID());
         gameHandler.getGameLobby().startTurn(gameHandler.getGame().getCurrentPlayer().getPlayerID());
 
 
@@ -370,6 +371,7 @@ public class TurnHandler {
         gameHandler.getGame().incrementCurrentPlayer();
         setNextState(StateMachineEnumerationTurn.START);
         endTurnChecks.fillSquare(gameHandler.getGame());
+        System.out.println();
         endTurnChecks.isFinalTurn(gameHandler.getGame());
         endTurnChecks.playerIsDead(gameHandler.getGame());
         start();
@@ -444,7 +446,9 @@ public class TurnHandler {
         }
 
         public void isFinalTurn(Game game){
+            System.out.println("Check final turnsssss");
             if(game.getDeadRoute().isFinalTurn()){
+                System.out.println("In final turn");
                 game.getDeadRoute().setFinalTurnPlayer();
                 for(Player p:game.getPlayers())
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"));

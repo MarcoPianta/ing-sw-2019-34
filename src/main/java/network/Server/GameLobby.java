@@ -62,7 +62,7 @@ public class GameLobby {
                 .forEach(x -> send(new StartMessage(x, "game", skullNumber, map, players.get(x).getColor())));
         gameHandler.fillSquare();
         gameHandler.getTurnHandler().start();
-        new Thread(this::ping).start();
+        //new Thread(this::ping).start();
     }
 
     private void ping(){
@@ -89,6 +89,7 @@ public class GameLobby {
 
     public void remove(int i){
         disconnected.add(i);
+        System.out.println(i + "disconnesso");
         if (clients.size() - disconnected.size() == 1) {
             gameHandler.winner();
         }
@@ -96,6 +97,7 @@ public class GameLobby {
     }
 
     public void startTurn(Integer token){
+        System.out.println("current player: " + currentPlayer + " new player: " + token);
         actionPerformed.replace(token, false);
         if (currentPlayer != null)
             server.send(new EndMessage(currentPlayer));
@@ -260,11 +262,22 @@ public class GameLobby {
                     historyMessage = new ArrayList<>();
                     System.out.println("Ho azzerato la HISTORY");
                 } else if (receiveTargetSquare.getType().equals("shoot")) {
-                    System.out.println("MOVE x la Shoot");
-                    if(!movedPlayer.containsKey(message.getToken()))
-                        movedPlayer.put(message.getToken(), players.get(message.getToken()).getPosition());
-                    gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
-                    shootHistoryMessage.add(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                    if (players.get(message.getToken()).getPlayerBoard().getHealthPlayer().getAdrenalineAction() == 2 && !gameHandler.isActionAdrenalineDone()) {
+                        gameHandler.setActionAdrenalineDone(true);
+                        gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                        gameHandler.getGameLobby().send(new UpdateClient(message.getToken(), moveResponse.getSquareId()));
+                        gameHandler.getGameLobby().getClients()
+                                .parallelStream().
+                                filter(x -> (!x.equals(message.getToken()))).
+                                forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, players.get(message.getToken()).getColor(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()))));
+                    }
+                    else {
+                        System.out.println("MOVE x la Shoot");
+                        if (!movedPlayer.containsKey(message.getToken()))
+                            movedPlayer.put(message.getToken(), players.get(message.getToken()).getPosition());
+                        gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                        shootHistoryMessage.add(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+                    }
                     shootActionSequences(receiveTargetSquare);
                 }
             } else if (message.getActionType().getAbbreviation().equals(ActionType.GRABWEAPON.getAbbreviation())) {

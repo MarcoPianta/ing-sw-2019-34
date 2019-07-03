@@ -502,7 +502,7 @@ public class MapGui extends JFrame{
                         int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
                         if (response == 0) {
                             client.send(new Pass(client.getToken()));
-                            myTurn = false;
+                            //myTurn = false;
                             System.out.println("pass");
                         }
                     }
