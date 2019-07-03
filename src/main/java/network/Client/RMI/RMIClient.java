@@ -2,9 +2,7 @@ package network.Client.RMI;
 
 import network.Client.Client;
 import network.Server.RMI.RMIServerInterface;
-import network.messages.ConnectionResponse;
-import network.messages.GameSettingsRequest;
-import network.messages.Message;
+import network.messages.*;
 import view.View;
 
 import java.rmi.RemoteException;
@@ -67,6 +65,17 @@ public class RMIClient extends Client{
             e.printStackTrace();
         }
     }
+
+    /*@Override
+    public void onReceive(Message message) {
+        if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
+            if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
+                System.out.println("Ho ricevuto "+ message.getActionType());
+            }
+            else super.onReceive(message);
+        }
+        else super.onReceive(message);
+    }*/
 
     /**
      * This method is used to close connection between the client and the server.

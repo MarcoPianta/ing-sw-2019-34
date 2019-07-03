@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class GameHandler {
     private Game game;
     private FinalTurnHandler finalTurnHandler;
@@ -276,7 +278,7 @@ public class GameHandler {
      */
     public void winner(){
         int massimo=0;
-        ArrayList<Player> winnerList=new ArrayList<>();
+        List<Player> winnerList=new ArrayList<>();
         for(Player player:getGame().getPlayers()){
             if(player.getPlayerBoard().getPoints()>massimo) {
                 while(!winnerList.isEmpty()){
@@ -290,12 +292,8 @@ public class GameHandler {
                 massimo=winnerList.get(0).getPlayerBoard().getPoints(); //if winnerList is a new list
             }
         }
-        /*for(Player p:game.getPlayers()){
-            if(winnerList.contains(p))
-                gameLobby.send(new WinnerMessage(p.getPlayerID(),true));
-            else
-                gameLobby.send(new WinnerMessage(p.getPlayerID(),false));
-        }*/
+        List<Integer> winners = winnerList.stream().map(Player::getPlayerID).collect(toList());
+        gameLobby.endGame(winners);
     }
 
     /**
@@ -317,7 +315,7 @@ public class GameHandler {
      * @param player
      * @param winnerList
      */
-    private void modifiedWinnerList(Player player,ArrayList<Player> winnerList){
+    private void modifiedWinnerList(Player player, List<Player> winnerList){
         if(countPlayer(player)>countPlayer(winnerList.get(0))){
             while(!winnerList.isEmpty())
                 winnerList.remove(winnerList.size()-1);

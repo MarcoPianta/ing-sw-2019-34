@@ -76,7 +76,7 @@ public class GameLobby {
                             else {
                                 disconnected.add(i);
                                 if (clients.size() - disconnected.size() == 1) {
-                                    //gameHandler.winner();//TODO send winner
+                                    gameHandler.winner();
                                 }
                                 pinged.remove(i);
                             }
@@ -452,9 +452,9 @@ public class GameLobby {
         server.send(new CanUseTagBack(player,playerShooter));
     }
 
-    public void endGame(Integer winner){
+    public void endGame(List<Integer> winner){
         for (Integer i: clients){
-            if (!(i.equals(winner)))
+            if (!(winner.contains(i)))
                 server.send(new WinnerMessage(i, false));
             else
                 server.send(new WinnerMessage(i, true));

@@ -143,6 +143,11 @@ public class MainGuiView extends View {
     }
 
     @Override
+    public void setNumberAction(int numberAction) {
+
+    }
+
+    @Override
     public void setDamageBar(List<Colors> damageBar) {
         mapGui.addDamage(damageBar);
     }
@@ -284,6 +289,7 @@ public class MainGuiView extends View {
 
     @Override
     public void startTurn() {
+        mapGui.setActionNumber(1);
         setMyTurn(true);
     }
 

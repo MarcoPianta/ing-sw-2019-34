@@ -61,6 +61,7 @@ public class MapGui extends JFrame{
     private ArrayList<String> powerUps;
     private int selectedPowerUp;
     private Colors targetPowerup;
+    private int actionNumber;
 
     /**
      * This constructor creates the new windows
@@ -484,17 +485,25 @@ public class MapGui extends JFrame{
                             client.send(new MoveResponse(client.getToken(), id));
                             System.out.println("move to: " + id);
                             actionType = "";
+                            Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+                            map.setIcon(new ImageIcon(mapResized));
                         }
                     } else if (actionType.equals("room")) {
                         client.send(new ShootResponser(client.getToken(), getSquareId(e.getX(), e.getY())));
                         actionType = "";
+                        Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+                        map.setIcon(new ImageIcon(mapResized));
                     }
                     else if (actionType.equals("square")) {
                         client.send(new ShootResponses(client.getToken(), getSquareId(e.getX(), e.getY())));
                         actionType = "";
+                        Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+                        map.setIcon(new ImageIcon(mapResized));
                     } else if (actionType.equals("movep")) {
                         client.send(new TargetMoveResponse(client.getToken(), getSquareId(e.getX(), e.getY())));
                         actionType = "";
+                        Image mapResized = currentMapImage.getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT);
+                        map.setIcon(new ImageIcon(mapResized));
                     } else if (actionType.equals("teleporter")) {
                         if (selectedPowerUp < 4) {
                             client.send(new UsePowerUpResponse(client.getToken(), selectedPowerUp, client.getToken(), myColor, getSquareId(e.getX(), e.getY())));
@@ -505,9 +514,6 @@ public class MapGui extends JFrame{
                         client.send(new UsePowerUpResponse(client.getToken(), selectedPowerUp, client.getToken(), targetPowerup, getSquareId(e.getX(), e.getY())));
                         actionType = "";
                     }
-                    /*updateEnemyPosition(Colors.BLUE, "0,0");
-                    addWeaponToMap("1,0", 0, "cyberblade");
-                    addWeaponToMap("1,0", 1, "granadeLauncher");*/
                 }
                 else
                     JOptionPane.showMessageDialog(self, "Not your turn !!");
@@ -538,61 +544,34 @@ public class MapGui extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getX() > 890 * player.getWidth()/1120){
-                    /*ammos[0] = 0;
-                    ammos[1] = 0;
-                    ammos[2] = 1;
-                    cardsWeapon.add("cyberblade");
-                    cardsWeapon.add("electroscyte");*/
                     new PlayerInformationGui(cardsWeapon, ammos);
-                    //new SubstituteWeaponGui(cardsWeapon, self);
                     System.out.println("info");
                 }
                 else
                     if (myTurn) {
-                        if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
-                            //client.send(new ReceiveTargetSquare(client.getToken(), "move"));
-                            //TODO delete following code
-                            /*ArrayList<Colors> damagesList = new ArrayList<>();
-                            damagesList.add(Colors.BLUE);
-                            damagesList.add(Colors.GREEN);
-                            addDamage(damagesList);
-                            addMarks(Colors.BLUE);*/
-                            //till here
-                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
-                            if (response == 0) {
-                                client.send(new ReceiveTargetSquare(client.getToken(), "move"));
-                                System.out.println("move");
-                            }
-                        } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
-                            //client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
-                            //TODO delete following code
-                            /*ArrayList<Colors> damagesList = new ArrayList<>();
-                            damagesList.add(Colors.BLUE);
-                            damagesList.add(Colors.GREEN);
-                            updateOthersBar(damagesList, Colors.BLUE);
-                            ArrayList<String> ids = new ArrayList<>();
-                            ids.add("0,0");
-                            ids.add("0,2");
-                            ids.add("1,3");
-                            ids.add("2,1");
-                            addRedCross(ids);*/
-                            //till here
-                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
-                            if (response == 0) {
-                                client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
-                                System.out.println("grab");
-                            }
-                        } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
-                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
-                            if (response == 0) {
-                                System.out.println("shot");
-                                //TODO delete following code
-                                /*ArrayList<String> weaponsName = new ArrayList<>();
-                                weaponsName.add("cyberblade");
-                                weaponsName.add("electroscyte");*/
-                                //till here
-                                List<String> cardsName = cardsWeapon.stream().map(x -> x.getName()).collect(toList());
-                                new WeaponChooseGui(cardsName, self, true);
+                        if (1 == actionNumber || 2 == actionNumber){
+                            if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
+                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
+                                if (response == 0) {
+                                    client.send(new ReceiveTargetSquare(client.getToken(), "move"));
+                                    System.out.println("move");
+                                }
+                            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
+                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
+                                if (response == 0) {
+                                    client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                                    System.out.println("grab");
+                                }
+                            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
+                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
+                                if (response == 0) {
+                                    System.out.println("shot");
+                                    List<String> cardsName = cardsWeapon.stream().map(CardWeapon::getName).collect(toList());
+                                    new WeaponChooseGui(cardsName, self, true);
+                                }
+                            } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
+                                new UsePowerUpGui(powerUps, self, false, false);
+                                System.out.println("powerup");
                             }
                         } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
                             int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to reload?");
@@ -819,6 +798,12 @@ public class MapGui extends JFrame{
         chatLabel.setOpaque(false);
         chatArea.add(chatLabel);
         chatArea.revalidate();
+    }
+
+    public void setActionNumber(int actionNumber){
+        this.actionNumber = actionNumber;
+        if (3 == actionNumber)
+            JOptionPane.showMessageDialog(this, "You finish your action, you can only reload or use powerup");
     }
 
     private BufferedImage cloneImage(BufferedImage bi){
