@@ -92,12 +92,19 @@ public abstract class Client {
         else if (message.getActionType().getAbbreviation().equals(ActionType.SUBSTITUTEWEAPON.getAbbreviation())){
             view.substituteWeaponRequest();
         }
-
+        else if (message.getActionType().getAbbreviation().equals(ActionType.SCOPETARGETREQUEST.getAbbreviation())){
+            ScopeTargetRequest scopeTargetRequest = (ScopeTargetRequest) message;
+            view.chooseScopeTarget(scopeTargetRequest.getTargets());
+        }
         else if (message.getActionType().getAbbreviation().equals(ActionType.END.getAbbreviation())){
             view.setMyTurn(false);
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
             ChatMessage chatMessage = (ChatMessage) message;
+            if (chatMessage.getMessage().equals("INFO: is your turn" + message.getToken())) {
+                view.startTurn();
+                view.setNumberAction(1);
+            }
             view.chatMessage(chatMessage.getMessage());
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
@@ -138,6 +145,8 @@ public abstract class Client {
         if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE)){
             view.setDamageBar(message.getDamageBar());
             view.setMarks(message.getMarks());
+            System.out.println("Marks :");
+            message.getMarks().forEach(System.out::println);
         }
 
         else if (message.getUpdateType().equals(UpdateClient.POSITION))

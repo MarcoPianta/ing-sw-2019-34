@@ -30,6 +30,8 @@ public enum ActionType {
     SUBSTITUTEWEAPONRESPONSE("Substitute weapon response"),
     CANUSEVENOM("Can use venom"),
     CANUSESCOOP("Can use scoop"),
+    SCOPETARGETREQUEST("Scope target request"),
+    SCOPETARGETRESPONSE("Scope target response"),
     RECEIVETARGETSQUARE("Receive target square"),
     USEPOWERUPRESPONSE("Use power up response"),
     RESPAWN("Respwan"),
