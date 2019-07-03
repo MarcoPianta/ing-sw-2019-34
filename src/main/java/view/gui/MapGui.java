@@ -70,11 +70,11 @@ public class MapGui extends JFrame{
      * */
     public MapGui(Colors myColor, Client client, String mapImageFile){
         super("Adrenaline");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 client.close();
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
         this.myColor = myColor;
@@ -95,6 +95,7 @@ public class MapGui extends JFrame{
             currentPlayerBoard = ImageIO.read(playerBoard);
             currentRedCross = ImageIO.read(redCross);
             currentMapImage = ImageIO.read(mapImage);
+            currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         }catch (IOException e){}
 
         try {map = new JLabel(new ImageIcon(ImageIO.read(mapImage)));} catch (IOException e){}
@@ -295,16 +296,22 @@ public class MapGui extends JFrame{
         int i = 0;
         currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         for (Colors c: damageBar){
-            Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
-
-            Graphics2D g = currentPlayerBoardModified.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, 120 * currentPlayerBoardModified.getHeight() / 274, null);
-            g.dispose();
-            Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
-            player.setIcon(new ImageIcon(playerBoardResized));
-            i++;
+            i = updatePlayerImage(i, c, currentPlayerBoard, damagePosition, currentPlayerBoardModified, 120 * currentPlayerBoardModified.getHeight() / 274);
         }
+    }
+
+    private int updatePlayerImage(int i, Colors c, BufferedImage currentPlayerBoard, int[] damagePosition, BufferedImage currentPlayerBoardModified, int i2) {
+        Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
+
+        Graphics2D g = currentPlayerBoardModified.createGraphics();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+        g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, i2, null);
+        g.dispose();
+        setMyPosition(myPosition);
+        Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+        player.setIcon(new ImageIcon(playerBoardResized));
+        i++;
+        return i;
     }
 
     /**
@@ -315,15 +322,7 @@ public class MapGui extends JFrame{
         marks.forEach(System.out::println);
         int i = 0;
         for (Colors mark: marks) {
-            Image imageColor = createColorMarker(mark, currentPlayerBoardModified.getWidth(), currentPlayerBoardModified.getHeight());
-
-            Graphics2D g = currentPlayerBoardModified.createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            g.drawImage(imageColor, marksPosition[i] * currentPlayerBoard.getWidth() / 1120, 1, null);
-            g.dispose();
-            Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
-            player.setIcon(new ImageIcon(playerBoardResized));
-            i++;
+            i = updatePlayerImage(i, mark, currentPlayerBoardModified, marksPosition, currentPlayerBoard, 1);
         }
     }
 
@@ -787,13 +786,13 @@ public class MapGui extends JFrame{
 
     public void setMyPosition(String id){
         myPosition = id;
-        Graphics2D g = currentPlayerBoard.createGraphics();
+        Graphics2D g = currentPlayerBoardModified.createGraphics();
         Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
 
-        g.drawImage(number, 1050 * currentPlayerBoard.getWidth() / 1120, 0, null);
+        g.drawImage(number, 1050 * currentPlayerBoardModified.getWidth() / 1120, 0, null);
         g.dispose();
 
-        Image playerResized = currentPlayerBoard.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
+        Image playerResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
         player.setIcon(new ImageIcon(playerResized));
     }
 

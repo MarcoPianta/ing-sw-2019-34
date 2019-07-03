@@ -17,12 +17,13 @@ public class PaymentGui extends JFrame {
     private String scopeSelected;
     private Integer token;
     private boolean showPowerUps = false;
+    private JComboBox<String> ammoChoose;
 
     public PaymentGui(Payment payment, List<String> powerUps, MapGui mapGui, Integer token){
         this.token = token;
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        String[] color = {"R", "Y", "B"};
+        String[] color = {" ","R", "Y", "B"};
         String message = "You have to pay";
         int a = 0;
         for (Integer i: Arrays.asList(payment.getCost())){
@@ -84,8 +85,19 @@ public class PaymentGui extends JFrame {
         c.gridx = 0;
         c.gridy = 3;
         JCheckBox powerup = new JCheckBox("Use powerups to pay, otherwise ammos are used");
-        addListener(powerup, this, powerUps);
         this.add(powerup, c);
+
+        if (payment.isPowerUp()){
+            c.gridx = 0;
+            c.gridy = 4;
+            JLabel text = new JLabel("Select an ammo tu use if you want: ");
+            this.add(text, c);
+
+            c.gridx = 1;
+            c.gridy = 4;
+            ammoChoose = new JComboBox<>(color);
+            this.add(ammoChoose, c);
+        }
 
         int i = 1;
         for (String s: powerUps){
@@ -133,7 +145,10 @@ public class PaymentGui extends JFrame {
         button.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp()));
+                if (!payment.isPowerUp())
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), color[ammoChoose.getSelectedIndex()]));
+                else
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), ""));
                 dispose();
             }
 
@@ -164,54 +179,35 @@ public class PaymentGui extends JFrame {
         this.setVisible(true);
     }
 
-    private void addListener(JCheckBox jCheckBox, PaymentGui paymentGui, List<String> powerUps){
-        jCheckBox.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!showPowerUps){
-                    showPowerUps = true;
-
-                }
-                else
-                    showPowerUps = false;
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
+    private Integer[] createCost(JComboBox jComboBox){
+        if (jComboBox.getSelectedIndex() == 1) {
+            Integer[] ret = {1, 0, 0};
+            return ret;
+        } else if (jComboBox.getSelectedIndex() == 2){
+            Integer[] ret = {0, 1, 0};
+            return ret;
+        }else if (jComboBox.getSelectedIndex() == 3) {
+            Integer[] ret = {0, 0, 1};
+            return ret;
+        }else {
+            Integer[] ret = {0, 0, 0};
+            return ret;
+        }
     }
 
     private String getColor(String powerUp){
         return powerUp.substring(powerUp.length()-1).toLowerCase();
     }
 
-    private PaymentResponse createMessage(Payment payment, boolean usePowerup, boolean scoop){
+    private PaymentResponse createMessage(Payment payment, boolean usePowerup, boolean scoop, String cost){
         if (usePowerup && !scoop)
             return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop);
         else if (!usePowerup && !scoop)
             return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop);
         else if (!usePowerup && scoop)
-            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, scopeSelected);
+            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, cost);
         else
-            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, selected.get(0));
+            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, cost);
     }
 
     public static void main(String[] args) {
