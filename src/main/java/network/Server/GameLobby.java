@@ -164,7 +164,9 @@ public class GameLobby {
                     targetPlayer.add(players.get(playersColor.get(color)));
                 }
                 System.out.println("Chiamo la action valid con effetto" + receiveTargetSquare.getPosEffect());
-                effect.getpDamage().stream().filter(x -> (x > 0) && !targetList.contains(x)).forEach(x -> targetList.add(targetPlayer.get(x)));
+                effect.getpDamage().stream().
+                        filter(x -> (x > 0) && !targetList.contains(targetPlayer.get(effect.getpDamage().indexOf(x)))).
+                        forEach(x -> targetList.add(targetPlayer.get(effect.getpDamage().indexOf(x))));
                 if(actionValidController.actionValid(targetPlayer, effect, -1)){
                     shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                     shootActionSequences(receiveTargetSquare);

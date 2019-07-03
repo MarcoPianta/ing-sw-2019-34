@@ -177,6 +177,8 @@ public abstract class View {
 
     public abstract void chooseScopeTarget(ArrayList<Colors> targets);
 
+    public abstract void setPoints(int points);
+
     public ArrayList<CardPowerUp> getPowerUps() {
         return powerUps;
     }

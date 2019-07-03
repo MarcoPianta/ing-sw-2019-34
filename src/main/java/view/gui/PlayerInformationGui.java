@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class PlayerInformationGui extends JFrame {
 
-    public PlayerInformationGui(ArrayList<CardWeapon> cards, int[] ammos){
+    public PlayerInformationGui(ArrayList<CardWeapon> cards, int[] ammos, int points){
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4,4,4,4);
@@ -34,6 +34,11 @@ public class PlayerInformationGui extends JFrame {
         c.gridy = 2;
         c.gridwidth = cards.size();
         this.add(new JLabel("You have: " + ammos[0] + " red ammos, " + ammos[1] + " yellow ammos, " + +ammos[2] + " blue ammos"), c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = cards.size();
+        this.add(new JLabel("Your points are: " + points), c);
 
         this.pack();
         this.setVisible(true);

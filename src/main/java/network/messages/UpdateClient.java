@@ -24,6 +24,7 @@ public class UpdateClient extends Message implements Serializable {
     private int red;
     private int yellow;
     private int blue;
+    private int points;
 
     private void setMessageInfo(Integer token, String type){
         this.actionType = ActionType.UPDATECLIENTS;
@@ -118,6 +119,16 @@ public class UpdateClient extends Message implements Serializable {
     }
 
     /**
+     * This constructor is used to build messages to send to the client his points.
+     * @param token token of the clients who need to be updated
+     * @param points int for players points
+     */
+    public UpdateClient(Integer token, int points){
+        setMessageInfo(token, POINTS);
+        this.points = points;
+    }
+
+    /**
      * This constructor is used to build messages to send to the client a text message to be displayed.
      * @param token token of the clients who need to be updated
      * @param message a String that is the message to be sent to the client (for example to send error message)
@@ -143,7 +154,8 @@ public class UpdateClient extends Message implements Serializable {
     public static final String MESSAGE = "MESSAGE";
     public static final String HANDPLAYER = "HANDPLAYER";
     public static final String FILLSPAWN = "FILLSPAWN";
-    public static final String FILLSQUARE= "FILLSQUARE";
+    public static final String FILLSQUARE = "FILLSQUARE";
+    public static final String POINTS = "POINTS";
 
     public ArrayList<String> getReachableTarget() {
         return reachableTarget;
@@ -208,5 +220,9 @@ public class UpdateClient extends Message implements Serializable {
 
     public List<CardWeapon> getWeapons() {
         return weapons;
+    }
+
+    public int getPoints() {
+        return points;
     }
 }
