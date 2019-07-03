@@ -24,6 +24,12 @@ public class ViewCLI extends View {
         ViewCLI viewCLI=new ViewCLI();
         viewCLI.showPowerUpChooseRespawn();
     }
+
+    @Override
+    public void showScoopRequest() {
+
+    }
+
     //mostrare spawn weapomnd
     @Override
     public void grabWeaponRequest() {
@@ -247,7 +253,7 @@ public class ViewCLI extends View {
     public void showScopeRequest(ArrayList<Colors> playersId){
         out.println("\nYou can use Scope's powerUp\n press 1 to use scope or any key to cancel.\n");
         if(in.nextInt()==1){
-            client.send(new CanUseScoopResponse(client.getToken(), true));
+            //client.send(new CanUseScoopResponse(client.getToken(), true,i));
             /*int i;
             if(playersId.size()==1){
 
@@ -270,7 +276,7 @@ public class ViewCLI extends View {
             }*/
         }
         else{
-            client.send(new CanUseScoopResponse(client.getToken(), false));
+           // client.send(new CanUseScoopResponse(client.getToken(), false));
         }
     }
 
