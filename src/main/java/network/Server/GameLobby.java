@@ -62,7 +62,7 @@ public class GameLobby {
                 .forEach(x -> send(new StartMessage(x, "game", skullNumber, map, players.get(x).getColor())));
         gameHandler.fillSquare();
         gameHandler.getTurnHandler().start();
-        new Thread(this::ping).start();
+        //new Thread(this::ping).start();
     }
 
     private void ping(){
@@ -561,8 +561,10 @@ public class GameLobby {
             }
             //CanBackTag
             for(Player p:targetList){
+                System.out.println("fmeksldflknadkka");
                 for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
-                    if (powerUp.getWhen().equals("get")) {
+                    if (powerUp.getWhen().equals("deal")) {
+                        System.out.println("f,lyuppjtommteopmtjopmtdmjoemtopumeoptmuoepmopmoeptmop");
                         gameHandler.getGameLobby().canUseTagBack(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getColor());
                     }
                 }
