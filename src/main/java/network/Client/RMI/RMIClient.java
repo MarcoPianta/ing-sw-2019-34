@@ -2,6 +2,8 @@ package network.Client.RMI;
 
 import network.Client.Client;
 import network.Server.RMI.RMIServerInterface;
+import network.messages.ConnectionResponse;
+import network.messages.GameSettingsRequest;
 import network.messages.Message;
 import view.View;
 
@@ -28,11 +30,7 @@ public class RMIClient extends Client{
         this.rmi = true;
         this.PORT = port;
         this.hostname = hostname;
-        try {
-            init();
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
+        init();
     }
 
     /**
@@ -40,7 +38,7 @@ public class RMIClient extends Client{
      * get the registry by the port PORT, lookup for "Server"
      * rebind "Client" for the server that can lookup for it
      * */
-    public void init() throws RemoteException{
+    public void init() {
         try {
             Registry registry = LocateRegistry.getRegistry(hostname, PORT);
             server = (RMIServerInterface) registry.lookup("Server");
@@ -51,6 +49,10 @@ public class RMIClient extends Client{
             System.out.println("Client Exception: " + e.getMessage());
             e.printStackTrace();
         }
+        new Thread(() ->{
+                onReceive(new ConnectionResponse(token));
+                onReceive(new GameSettingsRequest(token));
+        }).start();
     }
 
     /**

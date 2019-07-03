@@ -351,7 +351,7 @@ public class MapGui extends JFrame{
             actionType = "teleporter";
             JOptionPane.showMessageDialog(this, "Choose a square to teleport");
             selectedPowerUp = position;
-        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-1).equals("newton")){
+        } else if (powerUps.get(position).substring(0, powerUps.get(position).length()-2).equals("newton")){
             new TargetChooseGui(new ArrayList<>(enemies.keySet()), 1, this, false);
             JOptionPane.showMessageDialog(this, "Choose a target to move him");
             selectedPowerUp = position;

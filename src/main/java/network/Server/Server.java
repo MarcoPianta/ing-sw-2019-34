@@ -78,8 +78,6 @@ public class Server {
                 //TODO delete token from clients
             }
             else {
-                System.out.println(message.getToken());
-                System.out.println(lobbyHashMap.get(message.getToken()));
                 lobbyHashMap.get(message.getToken()).receiveMessage(message);
             }
         }catch (Exception e){

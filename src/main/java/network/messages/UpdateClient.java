@@ -2,10 +2,11 @@ package network.messages;
 
 import Model.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateClient extends Message {
+public class UpdateClient extends Message implements Serializable {
     private List<Colors> damageBar; //The damageBar is made of colors to be displayed
     private String squareID; //The id of the square to send in the message
     private ArrayList<String> reachableSquares; //ArrayList of IDs of squares to be send

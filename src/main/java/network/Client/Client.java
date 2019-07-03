@@ -156,8 +156,9 @@ public abstract class Client {
             view.setPowerUps((ArrayList<CardPowerUp>) message.getPowerUps());
             view.setWeapons((ArrayList<CardWeapon>) message.getWeapons());
         }
-        else if (message.getUpdateType().equals(UpdateClient.MESSAGE))
+        else if (message.getUpdateType().equals(UpdateClient.MESSAGE)) {
             view.showMessage(message.getMessage());
+        }
         else if(message.getUpdateType().equals(UpdateClient.FILLSPAWN))
             view.fillSpawn(message.getSquareID(), message.getPosWeapon(), message.getWeapon().getName());
 
