@@ -1,5 +1,6 @@
 package Model;
 
+import network.messages.Payment;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -191,4 +192,30 @@ public class ShootTest {
         assertEquals(correctTargetList, action.targetablePlayer());
     }
 
+    @Test
+    public void markTest() throws FileNotFoundException {
+        Game game = new Game( 8, "map1");
+        Colors color1 = Colors.YELLOW, color2 = Colors.BLUE, color3 = Colors.VIOLET, color4 = Colors.GREEN, color5 = Colors.WHITE;
+        Player testShooterPlayer = new Player(36563744,color1);
+        Player testTargetPlayer1 = new Player(65364327,color2);
+        Player testTargetPlayer2 = new Player(65474375,color3);
+        Player testTargetPlayer3 = new Player(65543674,color4);
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
+        testTargetPlayer2.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(2));
+        testTargetPlayer3.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
+        game.addPlayer(testShooterPlayer);
+        game.addPlayer(testTargetPlayer1);
+        game.addPlayer(testTargetPlayer2);
+        game.addPlayer(testTargetPlayer3);
+
+        ArrayList<Player> testTargetList = new ArrayList<>();
+        testTargetList.add(testTargetPlayer1);
+
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(1));
+        Shoot action = new Shoot(testEffect, testShooterPlayer, testTargetList, null, false);
+        action.execute();
+        assertEquals(0, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getMark().size());
+    }
 }

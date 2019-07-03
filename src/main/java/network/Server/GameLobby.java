@@ -27,7 +27,7 @@ public class GameLobby {
     private ArrayList<Integer> disconnected;
     private static final int PINGTIME = 15000;
 /*Qui metto gli attributi che servono per salvare i dati dello shooter mentre controllo le isValid*/
-    private NormalSquare shooterPosition = null;
+    private ArrayList<Player> targetList = new ArrayList<>();
     private HashMap<Integer, NormalSquare> movedPlayer = new HashMap<>();
     private int scopePosition;
 
@@ -164,6 +164,7 @@ public class GameLobby {
                     targetPlayer.add(players.get(playersColor.get(color)));
                 }
                 System.out.println("Chiamo la action valid con effetto" + receiveTargetSquare.getPosEffect());
+                effect.getpDamage().stream().filter(x -> (x > 0) && !targetList.contains(x)).forEach(x -> targetList.add(targetPlayer.get(x)));
                 if(actionValidController.actionValid(targetPlayer, effect, -1)){
                     shootHistoryMessage.add(new Shot(targetPlayer, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                     shootActionSequences(receiveTargetSquare);
@@ -185,6 +186,8 @@ public class GameLobby {
                 Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
                 targetSquare.add(gameHandler.getGame().getMap().getSquareFromId(shootResponses.getTargetSquare()));
                 if (actionValidController.actionValid(targetSquare, effect, -1)) {
+                    effect.getsDamage().stream().filter(x -> (x > 0)).forEach(x -> gameHandler.getGame().getPlayers().stream().filter(y -> y.getPosition() == targetSquare.get(0) && !targetList.contains(y)).forEach(y -> targetList.add(y)));
+
                     shootHistoryMessage.add(new Shot(targetSquare, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                     shootActionSequences(receiveTargetSquare);
                 } else {
