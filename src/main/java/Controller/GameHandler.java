@@ -244,12 +244,17 @@ public class GameHandler {
                 gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,2).reachableSquare()));
             else if (getGame().getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
                 gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
+
+
             //verified if there is sight power up
             boolean isFind=false;
             for(int i=0;i< game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()&& !isFind;i++){
+                System.out.println("trrreydrey hai power up??");
+                System.out.println(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen());
                 if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
                         && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
                     isFind=true;
+
                     getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
                 }
            }

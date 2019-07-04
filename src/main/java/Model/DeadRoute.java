@@ -54,8 +54,10 @@ public class DeadRoute implements Serializable{
 
     public void setFinalTurnPlayer(){
         for(Player p:getGameId().getPlayers()){
-            if(p.getPlayerBoard().getHealthPlayer().getDamageBar().isEmpty())
+            if(p.getPlayerBoard().getHealthPlayer().getDamageBar().isEmpty()){
                 p.getPlayerBoard().setMaxReward(2);
+                p.getPlayerBoard().setFinalTurn(true);
+            }
         }
     }
     //start finalTurn

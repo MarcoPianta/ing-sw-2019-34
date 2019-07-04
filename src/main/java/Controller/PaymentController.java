@@ -66,12 +66,14 @@ public class PaymentController {
      */
     public boolean paymentPowerUp(int powerUp){
         boolean valueReturn;
+        System.out.println("thcthrrhtrjreferjy"+gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp));
         if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp)!= null){
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(powerUp);
             valueReturn = true;
         }
         else
             valueReturn = false;
+        System.out.println("thcthrrhtrjreferjy"+valueReturn);
         return  valueReturn;
     }
 

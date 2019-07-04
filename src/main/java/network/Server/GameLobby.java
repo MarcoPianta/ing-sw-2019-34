@@ -30,6 +30,7 @@ public class GameLobby {
     private ArrayList<Player> targetList = new ArrayList<>();
     private HashMap<Integer, NormalSquare> movedPlayer = new HashMap<>();
     private int scopePosition;
+    private Colors scopeTarget;
 
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
@@ -307,7 +308,7 @@ public class GameLobby {
                     historyMessage = new ArrayList<>();
                     historyMessage.add(moveMessage);
                     historyMessage.add(grabWeapon);
-                    server.send(new Payment(grabWeapon.getToken(), cost, false));
+                    server.send(new Payment(grabWeapon.getToken(), cost, -1));
                 }
             } else if (message.getActionType().getAbbreviation().equals(ActionType.RESPAWN.getAbbreviation())) {
                 RespawnMessage respawnMessage = (RespawnMessage) message;
@@ -326,7 +327,7 @@ public class GameLobby {
                     cost[0] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getRedCost();
                     cost[1] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getYellowCost();
                     cost[2] = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(reloadMessage.getWeapon()).getBlueCost();
-                    server.send(new Payment(reloadMessage.getToken(), cost, false));
+                    server.send(new Payment(reloadMessage.getToken(), cost, -1));
                     //there is only reload's message in history
                 } else
                     server.send(new UpdateClient(reloadMessage.getToken(), "you can't recharge the weapon"));
@@ -366,11 +367,13 @@ public class GameLobby {
                 ReceiveTargetSquare receiveTargetSquare=(ReceiveTargetSquare)historyMessage.get(0);
                 gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).setCharge(false);
                 server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                scopeTarget=scopeTargetResponse.getTarget();
+
                 //new history list with a fail shot message with power up
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = new ArrayList<>();
-                historyMessage.add(new Shot(targetList,-1,-1,scopePosition,players.get(playersColor.get(scopeTargetResponse.getTarget()))));
-                server.send(new Payment(currentPlayer, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getBonusCost(), true));
+
+                server.send(new Payment(currentPlayer, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getBonusCost(), scopePosition));
 
             }
         }
@@ -378,6 +381,7 @@ public class GameLobby {
 
     public void paymentServer(PaymentResponse paymentResponse){
             boolean valueReturn;
+            boolean scoopReturn;
             //No powerUp, no scoop
             if((!paymentResponse.isUsePowerUp()&& !paymentResponse.isScoop())) {
                 if (gameHandler.getGame().getCurrentPlayer().isValidCostWeapon(paymentResponse.getCost())) {
@@ -393,80 +397,111 @@ public class GameLobby {
 
                     }
                     else {
-                        server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), paymentResponse.isScoop()));
+                        server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), -1));
                         server.send(new UpdateClient(paymentResponse.getToken(), "Payment failure:use the correct powerUp"));
                     }
                 }
                 else{
                     server.send(new UpdateClient(paymentResponse.getToken(), "Payment failure:use  powerUp for payment"));
-                    server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), paymentResponse.isScoop()));
+                    server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), -1));
                 }
                 players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().forEach(x -> System.out.println(x.getName()));
                 server.send(new UpdateClient(paymentResponse.getToken(), players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
             }
             //no powerUp, si scoop
             else if(!paymentResponse.isUsePowerUp()&& paymentResponse.isScoop()){
+                System.out.println("ewfjnewiuongungugeoienoiwen pago scoop no powerUp");
                 if (gameHandler.getGame().getCurrentPlayer().isValidCostWeapon(paymentResponse.getCost())) {
                     valueReturn = gameHandler.getPaymentController().payment(paymentResponse.getCost());
+
                     if (valueReturn) {
-                        if (paymentResponse.getColorScoop() == null)
+                        System.out.println("demskoaniog"+paymentResponse.getPowerUpScoop());
+                        if (paymentResponse.getPowerUpScoop()==1 || paymentResponse.getPowerUpScoop()==2 ||paymentResponse.getPowerUpScoop()==3){
+                            System.out.println("demskoaniog"+paymentResponse.getPowerUpScoop());
                             valueReturn = gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getPowerUpScoop());
+                        }
                         else
                             valueReturn = gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getColorScoop());
-                        if (valueReturn) { //if both payment are successful
-                            gameHandler.receiveServerMessage(historyMessage.get(0));
+
+                        if (valueReturn) {//if both payment are successful
+                            for (Message m : historyMessage)
+                                gameHandler.receiveServerMessage(m);
+                            //use powerUp
+                            players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().addMark(gameHandler.getGame().getCurrentPlayer(),1);
+                            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition);
+
                             if (historyMessage.get(0).getActionType() != ActionType.RELOAD || historyMessage.get(0).getActionType() != ActionType.USEPOWERUP) {
                                 gameHandler.getTurnHandler().endAction();
                                 server.send(new FinalAction(paymentResponse.getToken()));
                             }
                             historyMessage = new ArrayList<>();
-                        } else {//powerUp in not used
-                            Shot messageResponse = (Shot) historyMessage.get(0);
-                            messageResponse.setPowerUp(-1);
-                            gameHandler.receiveServerMessage((messageResponse));
-                            historyMessage = new ArrayList<>();
+                        }
+                        else {//powerUp in not used
+                            for (Message m : historyMessage)
+                                gameHandler.receiveServerMessage(m);
+                            if (historyMessage.get(0).getActionType() != ActionType.RELOAD || historyMessage.get(0).getActionType() != ActionType.USEPOWERUP) {
+                                gameHandler.getTurnHandler().endAction();
+                                server.send(new FinalAction(paymentResponse.getToken()));
+                            }
+                            System.out.println("serwhwehwhedjwr è fallito");
+
+                                                         historyMessage = new ArrayList<>();
                             server.send(new UpdateClient(paymentResponse.getToken(), "Scoop is not used"));
                         }
                     } else {
                         server.send(new UpdateClient(paymentResponse.getToken(), "Payment failure:use the correct powerUp"));
-                        server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), paymentResponse.isScoop()));
+                        server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), scopePosition));
                     }
                 }
                 else{
                     server.send(new UpdateClient(paymentResponse.getToken(), "Payment failure:use the powerUp for payment"));
-                    server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(), paymentResponse.isScoop()));
+                    server.send(new Payment(paymentResponse.getToken(), paymentResponse.getCost(),scopePosition));
                 }
                 players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().forEach(x -> System.out.println(x.getName()));
                 server.send(new UpdateClient(paymentResponse.getToken(), players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
             }
             //si powerUp, si Scoop
             else if(paymentResponse.isUsePowerUp()&& paymentResponse.isScoop()){
+                System.out.println("ewfjnewiuongungugeoienoiwen pago scoop si powerUp");
                 valueReturn=gameHandler.getPaymentController().payment( Arrays.copyOf(paymentResponse.getCost(),3),paymentResponse.getPowerUp());
                 if(valueReturn){
-                    if(paymentResponse.getColorScoop()==null)
+                    if(paymentResponse.getPowerUpScoop()!=-1)
                         valueReturn=gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getPowerUpScoop());
                     else
                         valueReturn=gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getColorScoop());
                     if(valueReturn){
-                        gameHandler.receiveServerMessage(historyMessage.get(0));
+                        for (Message m : historyMessage)
+                            gameHandler.receiveServerMessage(m);
+
+                        //use powerUp
+                        players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().addMark(gameHandler.getGame().getCurrentPlayer(),1);
+                        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition);
+
+
                         if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                             gameHandler.getTurnHandler().endAction();
                             server.send(new FinalAction(paymentResponse.getToken()));
                             //increment  numerAction in view
                         }
+
                         historyMessage=new ArrayList<>();
                     }
                     else{
-                        Shot messageResponse=(Shot) historyMessage.get(0);
-                        messageResponse.setPowerUp(-1);
-                        gameHandler.receiveServerMessage((messageResponse));
+                        for (Message m : historyMessage)
+                            gameHandler.receiveServerMessage(m);
+
+                        if (historyMessage.get(0).getActionType() != ActionType.RELOAD || historyMessage.get(0).getActionType() != ActionType.USEPOWERUP) {
+                            gameHandler.getTurnHandler().endAction();
+                            server.send(new FinalAction(paymentResponse.getToken()));
+                        }
+
                         historyMessage=new ArrayList<>();
                         server.send(new UpdateClient(paymentResponse.getToken(), "Scoop is not used"));//reset update
                     }
                 }
                 else{
                     server.send(new UpdateClient(paymentResponse.getToken(), "Payment failure:use the correct powerUp"));
-                    server.send(new Payment(paymentResponse.getToken(),paymentResponse.getCost(),paymentResponse.isScoop()));
+                    server.send(new Payment(paymentResponse.getToken(),paymentResponse.getCost(),scopePosition));
                 }
                 players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().forEach(x -> System.out.println(x.getName()));
                 server.send(new UpdateClient(paymentResponse.getToken(), players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
@@ -485,7 +520,7 @@ public class GameLobby {
                 }
                 else{
                     server.send(new UpdateClient(paymentResponse.getToken(), "Payment failure:use the correct powerUp"));
-                    server.send(new Payment(paymentResponse.getToken(),paymentResponse.getCost(),paymentResponse.isScoop()));
+                    server.send(new Payment(paymentResponse.getToken(),paymentResponse.getCost(),-1));
                 }
                 players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().forEach(x -> System.out.println(x.getName()));
                 server.send(new UpdateClient(paymentResponse.getToken(), players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
@@ -570,7 +605,7 @@ public class GameLobby {
                 server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = new ArrayList<>();
-                server.send(new Payment(currentPlayer, effect.getBonusCost(), false));
+                server.send(new Payment(currentPlayer, effect.getBonusCost(), -1));
             }
             //CanBackTag
             for(Player p:targetList){
