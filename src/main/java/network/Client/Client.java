@@ -32,7 +32,6 @@ public abstract class Client implements Serializable {
      * @param message is the message received from the server
      * */
     public void onReceive(Message message) {
-        System.out.println("Ho finalmente ricevuto " + message.getActionType().getAbbreviation());
         if (message.getActionType().getAbbreviation().equals(ActionType.PING.getAbbreviation())){
             send(new Ping(token));
         }
@@ -126,8 +125,6 @@ public abstract class Client implements Serializable {
             if (finalTurnMessage.isFirstPlayer()) view.setNumberAction(2);
             view.finalTurn();
         }
-        System.out.println("Ho concluso la ricezione ");
-
     }
 
     /**
@@ -145,6 +142,10 @@ public abstract class Client implements Serializable {
      * */
     public abstract void send(Message message);
 
+    /**
+     * This method is used to handle message of UpdateClients type
+     * @param message the UpdateClient message
+     * */
     public void handleUpdate(UpdateClient message){
         if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE)){
             view.setDamageBar(message.getDamageBar());

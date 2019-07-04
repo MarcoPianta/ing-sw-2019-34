@@ -57,7 +57,7 @@ public abstract class View {
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
     protected boolean myTurn;
-    protected Integer numberAction=1;
+    protected int numberAction;
 
     public View() {
         this.weapons = new ArrayList<>(4);
@@ -75,6 +75,7 @@ public abstract class View {
 
         this.powerUps = new ArrayList<>();
         this.maxReward = 0;
+        this.numberAction = 1;
 
     }
 
@@ -163,10 +164,10 @@ public abstract class View {
         this.numberAction = numberAction;
     }
 
-    public Integer getNumberAction() {
+    public int getNumberAction() {
         return numberAction;
     }
-    
+
     public void setMarks(List<Colors> marks) {
         this.marks = marks;
     }

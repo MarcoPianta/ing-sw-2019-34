@@ -52,7 +52,7 @@ public class Queue {
             try {
                 this.wait(300);
             } catch (InterruptedException e) {
-                //TODO logger
+                Thread.currentThread().interrupt();
             }
             notifyServer(getPlayers(index));
             synchronized (lockIndex) {

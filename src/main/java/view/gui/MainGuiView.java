@@ -39,7 +39,7 @@ public class MainGuiView extends View {
     public MainGuiView(){
         super();
 
-        int panelWidth = new Double(INITIALWINDOWHEIGHT *GOLDENRATIO).intValue();
+        int panelWidth = (int) (INITIALWINDOWHEIGHT *GOLDENRATIO);
 
         frame = new JFrame("Adrenaline");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -138,6 +138,7 @@ public class MainGuiView extends View {
 
     @Override
     public void setNumberAction(int numberAction) {
+        super.setNumberAction(numberAction);
         mapGui.setActionNumber(numberAction);
     }
 
@@ -349,7 +350,7 @@ public class MainGuiView extends View {
 
     public void showTargetMove(List<String> targets){
         mapGui.setActionType("movep");
-        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ArrayList<String> ids = new ArrayList<>(Arrays.asList(ViewMap.getIds()));
         ids.removeAll(targets);
         mapGui.addRedCross(ids);
     } //When need to be shown target which have to be moved for a weapon effect
