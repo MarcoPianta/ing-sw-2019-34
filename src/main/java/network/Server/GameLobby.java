@@ -368,6 +368,13 @@ public class GameLobby {
             }
             else if(message.getActionType().getAbbreviation().equals(ActionType.SCOPETARGETRESPONSE.getAbbreviation())){
                 ScopeTargetResponse scopeTargetResponse=(ScopeTargetResponse)message;
+                for (Message m: new ArrayList<>(historyMessage)){
+                    if (!m.getActionType().getAbbreviation().equals(ActionType.RECEIVETARGETSQUARE.getAbbreviation()))
+                        historyMessage.remove(m);
+                    else
+                        break;
+                }
+
                 ReceiveTargetSquare receiveTargetSquare=(ReceiveTargetSquare)historyMessage.get(0);
                 gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).setCharge(false);
                 server.send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
