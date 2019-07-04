@@ -50,7 +50,7 @@ public class MapGui extends JFrame{
     private BufferedImage currentMapImage;
     private BufferedImage currentPlayerBoardModified;
     private BufferedImage[] currentOtherPlayerBoards = new BufferedImage[4];
-    private static HashMap<Colors, Integer> enemies; //The string is the color name of the player
+    private HashMap<Colors, Integer> enemies; //The string is the color name of the player
     private List<String> redCrosses;
     private String myPosition;
     private String[] othersPosition = {"","","",""};
@@ -64,6 +64,7 @@ public class MapGui extends JFrame{
     private Colors targetPowerup;
     private int actionNumber;
     private int points = 0;
+    private boolean finalTurn = false;
 
     /**
      * This constructor creates the new windows
@@ -214,7 +215,6 @@ public class MapGui extends JFrame{
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();
-            //g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             Image ammoScaledInstance = ammo.getScaledInstance(150 * currentMapImage.getWidth() / 2545, 150 * currentMapImage.getHeight() / 1928, Image.SCALE_DEFAULT);
             g.drawImage(ammoScaledInstance, ViewMap.getXCoordinates(id), ViewMap.getYCoordinates(id)+175, null);
             g.dispose();
@@ -380,6 +380,7 @@ public class MapGui extends JFrame{
     }
 
     public void finalTurn(){
+        this.finalTurn = true;
         File newPlayerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + "Back.png");
         try {
             BufferedImage newPlayerBoardImage = ImageIO.read(newPlayerBoard);
@@ -513,11 +514,10 @@ public class MapGui extends JFrame{
                         int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to pass?");
                         if (response == 0) {
                             client.send(new Pass(client.getToken()));
-                            //myTurn = false;
+                            myTurn = false;
                             System.out.println("pass");
                         }
                     }
-                    //System.out.println(e.getX() + " u " + e.getY());
                     openWeaponDetail(e.getX(), e.getY(), false);
                     if (actionType.equals("move")) {
                         String id = getSquareId(e.getX(), e.getY());
@@ -589,51 +589,13 @@ public class MapGui extends JFrame{
                 }
                 else
                     if (myTurn) {
-                        if (1 == actionNumber || 2 == actionNumber){
-                            if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
-                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to move?");
-                                if (response == 0) {
-                                    client.send(new ReceiveTargetSquare(client.getToken(), "move"));
-                                    System.out.println("move");
-                                }
-                            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
-                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to grab?");
-                                if (response == 0) {
-                                    client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
-                                    System.out.println("grab");
-                                }
-                            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
-                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to shot?");
-                                if (response == 0) {
-                                    System.out.println("shot");
-                                    List<String> cardsName = cardsWeapon.stream().map(CardWeapon::getName).collect(toList());
-                                    new WeaponChooseGui(cardsName, self, true);
-                                }
-                            } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
-                                new UsePowerUpGui(powerUps, self, false, false, null);
-                                System.out.println("powerup");
-                            } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
-                                int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to reload?");
-                                if (response == 0) {
-                                    new ReloadGui(cardsWeapon ,self);
-                                    System.out.println("reload");
-                                    actionNumber = 3;
-                                }
-                            }
-                        } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
-                            int response = JOptionPane.showConfirmDialog(self, "Are you sure you want to reload?");
-                            if (response == 0) {
-                                new ReloadGui(cardsWeapon ,self);
-                                System.out.println("reload");
-                            }
-                        } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
-                            new UsePowerUpGui(powerUps, self, false, false, null);
-                            System.out.println("powerup");
-                        }
+                        if (!finalTurn)
+                            actionPlayer(e);
+                        else
+                            actionPlayerFinalTurn(e);
                     }
                     else
                         JOptionPane.showMessageDialog(self, "Not your turn !!");
-
             }
 
             @Override
@@ -661,17 +623,101 @@ public class MapGui extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!text.getText().equals("")) {
-                    /*JLabel chatLabel = new JLabel("@"+myColor+": "+text.getText());
-                    chatLabel.setHorizontalTextPosition(JLabel.LEFT);
-                    chatLabel.setVerticalTextPosition(JLabel.BOTTOM);
-                    chatLabel.setOpaque(false);
-                    chatArea.add(chatLabel);
-                    chatArea.revalidate();*/
                     client.send(new ChatMessage(client.getToken(), "@"+myColor+": "+text.getText()));
                 }
                 text.setText("");
             }
         });
+    }
+
+    private void actionPlayer(MouseEvent e){
+        if (1 == actionNumber || 2 == actionNumber){
+            if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 60 * player.getHeight() / 274) && (e.getY() < (60 + 32) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to move?");
+                if (response == 0) {
+                    client.send(new ReceiveTargetSquare(client.getToken(), "move"));
+                    System.out.println("move");
+                }
+            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 104 * player.getHeight() / 274) && (e.getY() < (104 + 32) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to grab?");
+                if (response == 0) {
+                    client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                    System.out.println("grab");
+                }
+            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 147 * player.getHeight() / 274) && (e.getY() < (147 + 32) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to shot?");
+                if (response == 0) {
+                    System.out.println("shot");
+                    List<String> cardsName = cardsWeapon.stream().map(CardWeapon::getName).collect(toList());
+                    new WeaponChooseGui(cardsName, this, true);
+                }
+            } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
+                new UsePowerUpGui(powerUps, this, false, false, null);
+                System.out.println("powerup");
+            } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to reload?");
+                if (response == 0) {
+                    new ReloadGui(cardsWeapon ,this, false);
+                    System.out.println("reload");
+                    actionNumber = 3;
+                }
+            }
+        } else if (((e.getX() > 20 * player.getWidth() / 1120) && (e.getX() < (20 + 40) * player.getWidth() / 1120)) && ((e.getY() > 195 * player.getHeight() / 274) && (e.getY() < (195 + 55) * player.getHeight() / 274))) {
+            int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to reload?");
+            if (response == 0) {
+                new ReloadGui(cardsWeapon ,this, false);
+                System.out.println("reload");
+            }
+        } else usePowerUpInput(e);
+    }
+
+    private void actionPlayerFinalTurn(MouseEvent e){
+        if (1 == actionNumber || 2 == actionNumber){
+            if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 42 * player.getHeight() / 274) && (e.getY() < (39 + 32) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to shot?");
+                if (response == 0) {
+                    System.out.println("shot");
+                    new ReloadGui(cardsWeapon, this, true);
+                }
+            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 72 * player.getHeight() / 274) && (e.getY() < (72 + 32) * player.getHeight() / 274))) {
+
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to move?");
+                if (response == 0) {
+                    client.send(new ReceiveTargetSquare(client.getToken(), "move"));
+                    System.out.println("move");
+                }
+            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 105 * player.getHeight() / 274) && (e.getY() < (105 + 32) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to grab?");
+                if (response == 0) {
+                    client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                    System.out.println("grab");
+                }
+            } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
+                new UsePowerUpGui(powerUps, this, false, false, null);
+                System.out.println("powerup");
+            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 190* player.getHeight() / 274) && (e.getY() < (190 + 30) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to shot?");
+                if (response == 0) {
+                    System.out.println("shot");
+                    new ReloadGui(cardsWeapon, this, true);
+                }
+            } else if ((e.getX() < 67 * player.getWidth() / 1120) && ((e.getY() > 220* player.getHeight() / 274) && (e.getY() < (220 + 30) * player.getHeight() / 274))) {
+                int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to grab?");
+                if (response == 0) {
+                    client.send(new ReceiveTargetSquare(client.getToken(), "grab"));
+                    System.out.println("grab");
+                }
+            }
+        } else {
+            usePowerUpInput(e);
+        }
+    }
+
+    private void usePowerUpInput(MouseEvent e) {
+        if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
+            new UsePowerUpGui(powerUps, this, false, false, null);
+            System.out.println("powerup");
+        }
     }
 
     /**
@@ -824,7 +870,7 @@ public class MapGui extends JFrame{
         }
     }
 
-    public static int getPlayerPosition(Colors color){
+    public int getPlayerPosition(Colors color){
         return enemies.get(color);
     }
 

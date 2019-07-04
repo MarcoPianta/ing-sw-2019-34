@@ -112,10 +112,14 @@ public class Health implements Serializable {
      * reset mark after add damage
      * */
     private void resetMark(Player player){
-        int i=0;
-        while(countMarks(player)!=0) {
+        ArrayList<Player> markCopy = new ArrayList<>(mark);
+        for (Player p: markCopy){
+            if(p == player)
+                mark.remove(p);
+        }
+        /*while(countMarks(player)!=0) {
             if(mark.get(i)==player)
                 mark.remove(i);
-        }
+        }*/
     }
 }

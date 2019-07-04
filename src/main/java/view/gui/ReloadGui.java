@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class ReloadGui extends JFrame {
     private int i = 0;
 
-    public ReloadGui(List<CardWeapon> cards, MapGui mapGui) {
+    public ReloadGui(List<CardWeapon> cards, MapGui mapGui, boolean finalTurn) {
         this.setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
@@ -34,7 +36,12 @@ public class ReloadGui extends JFrame {
                     int choose = i;
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        mapGui.sendReload(choose);
+                        if (!finalTurn)
+                            mapGui.sendReload(choose);
+                        else{
+                            mapGui.sendReload(choose);
+                            new WeaponChooseGui(cards.stream().map(CardWeapon::getName).collect(toList()) , mapGui, true);
+                        }
                         dispose();
                     }
 

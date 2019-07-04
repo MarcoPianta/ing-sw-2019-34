@@ -4,13 +4,14 @@ import Model.*;
 import network.messages.*;
 import view.View;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This Class represents the client, it is extended from the Socket or RMI client.
  * The class contains attributes and methods common to Socket and RMI
  */
-public abstract class Client {
+public abstract class Client implements Serializable {
     protected boolean rmi;
     protected Integer token;
     protected View view;

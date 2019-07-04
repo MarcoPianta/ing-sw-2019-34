@@ -40,11 +40,6 @@ public class ViewCLI extends View {
 
     }
 
-    @Override
-    public void finalTurn() {
-
-    }
-
     //mostrare spawn weapomnd
     @Override
     public void grabWeaponRequest() {

@@ -178,7 +178,7 @@ public class TurnHandler {
             ArrayList<Player> players=new ArrayList<>();
             if (valueReturn){
                 for(Player p:gameHandler.getGame().getPlayers()) {
-                    if (p != gameHandler.getGame().getCurrentPlayer() && p.getPosition().getColor().getAbbreviation().equals(message.getRoom().getColor()))
+                    if (p != gameHandler.getGame().getCurrentPlayer() && p.getPosition().getColor().getAbbreviation().equals(message.getRoom().getColor().getAbbreviation()))
                         players.add(p);
                 }
                 for(Player p:players){
@@ -324,7 +324,7 @@ public class TurnHandler {
 
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),new ArrayList<>(newMessage.getTarget().getPlayerBoard().getHealthPlayer().getDamageBar()), new ArrayList<>(newMessage.getTarget().getPlayerBoard().getHealthPlayer().getMark())));
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getUser().getColor()+"used grenade tag back"));
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getUser().getColor()+" used grenade tag back"));
             }
             else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
                     powerUp.getOtherMove()==0)//teleporter

@@ -31,6 +31,7 @@ public class GameLobby {
     private HashMap<Integer, NormalSquare> movedPlayer = new HashMap<>();
     private int scopePosition;
     private Colors scopeTarget;
+    private boolean finalTurnAction = false;
 
 
     public GameLobby(ArrayList<Integer> clients, int skullNumber, String map, Server server){
@@ -241,6 +242,12 @@ public class GameLobby {
                 shootActionSequences(receiveTargetSquare);
 
             } else if (message.getActionType().equals(ActionType.MOVERESPONSE)) { // anche per grab se spawn quale carta vuole, se shot chiedere chi vuole sparare chiamando receive target
+                for (Message m: new ArrayList<>(historyMessage)) {
+                    if (!m.getActionType().equals(ActionType.RECEIVETARGETSQUARE))
+                        historyMessage.remove(m);
+                    else
+                        break;
+                }
                 MoveResponse moveResponse = (MoveResponse) message;
                 ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
                 if (receiveTargetSquare.getType().equals("grab")) {
@@ -263,14 +270,13 @@ public class GameLobby {
                     historyMessage = new ArrayList<>();
                     System.out.println("Ho azzerato la HISTORY");
                 } else if (receiveTargetSquare.getType().equals("shoot")) {
-                    if (players.get(message.getToken()).getPlayerBoard().getHealthPlayer().getAdrenalineAction() == 2 && !gameHandler.isActionAdrenalineDone()) {
+                    if (gameHandler.getGame().getDeadRoute().isFinalTurn() && !finalTurnAction) {
+                        finalTurnAction = true;
+                        movesForShot(message, moveResponse);
+                    }
+                    else if (players.get(message.getToken()).getPlayerBoard().getHealthPlayer().getAdrenalineAction() == 2 && !gameHandler.isActionAdrenalineDone()) {
                         gameHandler.setActionAdrenalineDone(true);
-                        gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
-                        gameHandler.getGameLobby().send(new UpdateClient(message.getToken(), moveResponse.getSquareId()));
-                        gameHandler.getGameLobby().getClients()
-                                .parallelStream().
-                                filter(x -> (!x.equals(message.getToken()))).
-                                forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, players.get(message.getToken()).getColor(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()))));
+                        movesForShot(message, moveResponse);
                     }
                     else {
                         System.out.println("MOVE x la Shoot");
@@ -377,6 +383,15 @@ public class GameLobby {
 
             }
         }
+    }
+
+    private void movesForShot(Message message, MoveResponse moveResponse) {
+        gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
+        gameHandler.getGameLobby().send(new UpdateClient(message.getToken(), moveResponse.getSquareId()));
+        gameHandler.getGameLobby().getClients()
+                .parallelStream().
+                filter(x -> (!x.equals(message.getToken()))).
+                forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, players.get(message.getToken()).getColor(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()))));
     }
 
     public void paymentServer(PaymentResponse paymentResponse){
@@ -617,6 +632,7 @@ public class GameLobby {
                     }
                 }
             }
+            finalTurnAction = false;
         }
     }
 
