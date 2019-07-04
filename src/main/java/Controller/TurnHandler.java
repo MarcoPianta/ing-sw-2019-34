@@ -168,7 +168,7 @@ public class TurnHandler {
             valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
             }
@@ -182,7 +182,7 @@ public class TurnHandler {
                         players.add(p);
                 }
                 for(Player p:players){
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
             }
@@ -196,7 +196,7 @@ public class TurnHandler {
                         players.add(p);
                 }
                 for(Player p:players){
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
 
@@ -319,12 +319,17 @@ public class TurnHandler {
             //update of powerUp
             if(newMessage.getUser()!=gameHandler.getGame().getCurrentPlayer()) {
 
-                newMessage.getTarget().getPlayerBoard().getHealthPlayer().addMark(newMessage.getUser(),1);
+                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().addMark(newMessage.getUser(),1);
                 newMessage.getUser().getPlayerBoard().getHandPlayer().removePowerUp(newMessage.getPowerUp());
+                System.out.println( newMessage.getTarget().getPlayerBoard().getHealthPlayer().getMark().size());
+                System.out.println( "adfmkogknosgnogn"+gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getMark().size());
 
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
-                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),new ArrayList<>(newMessage.getTarget().getPlayerBoard().getHealthPlayer().getDamageBar()), new ArrayList<>(newMessage.getTarget().getPlayerBoard().getHealthPlayer().getMark())));
+
+                gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getDamageBar()), new ArrayList<>(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getMark())));
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getUser().getColor()+"used grenade tag back"));
+                System.out.println("FASDGASDRHHTS" +new ArrayList<>(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getMark()));
+
             }
             else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
                     powerUp.getOtherMove()==0)//teleporter
@@ -450,7 +455,6 @@ public class TurnHandler {
         }
 
         public void isFinalTurn(Game game){
-            System.out.println("Check final turnsssss");
             if(game.getDeadRoute().isFinalTurn()){
                 System.out.println("In final turn");
                 game.getDeadRoute().setFinalTurnPlayer();
@@ -463,7 +467,13 @@ public class TurnHandler {
                 getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
                 if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())
                     getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
+                //update plance
+
+                gameHandler.getGameLobby().getClients().forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x,gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHandPlayer().getAmmoRYB()[0],gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHandPlayer().getAmmoRYB()[1],gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHandPlayer().getPlayerWeapons()),new ArrayList<>(gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHandPlayer().getPlayerPowerUps()))));
+
+                gameHandler.getGameLobby().getClients().stream().filter(x ->!gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().isFinalTurn()).forEach(x->gameHandler.getGameLobby().send(new UpdateClient(x,new ArrayList<>(gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(gameHandler.getGameLobby().getPlayers().get(x).getPlayerBoard().getHealthPlayer().getMark()))));
             }
+
         }
     }
 }
