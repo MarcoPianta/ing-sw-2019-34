@@ -12,7 +12,7 @@ public class CardPowerUpTest {
     public void testConstructor() throws FileNotFoundException {
         CardPowerUp cardPowerUp = new CardPowerUp(PowerUpEnum.NEWTON_B.getAbbreviation());
 
-        assertEquals(cardPowerUp.getName()+"_B", PowerUpEnum.NEWTON_B.getAbbreviation());
+        assertEquals(cardPowerUp.getName(), PowerUpEnum.NEWTON_B.getAbbreviation());
         assertEquals(cardPowerUp.getColor(), AmmoColors.BLUE);
         assertEquals(0, cardPowerUp.getCost());
         assertEquals(0, cardPowerUp.getDamage());

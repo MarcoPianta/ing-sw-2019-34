@@ -22,6 +22,6 @@ public class DrawerTest {
             }
             return false;
         });
-        assertFalse(drawer.hasNext());
+        assertTrue(drawer.hasNext());
     }
 }

@@ -59,8 +59,8 @@ public class HandTest {
         newPlayerWeapons.add(cardWeapon4);
 
         player.getPlayerBoard().getHandPlayer().substituteWeapons(1);
-        assertEquals(3,player.getPlayerBoard().getHandPlayer().getPlayerWeapons().size());
-        assertEquals(cardWeapon2,player.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
+        assertEquals(2,player.getPlayerBoard().getHandPlayer().getPlayerWeapons().size());
+        assertEquals(cardWeapon1,player.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0));
     }
 
     /**
@@ -102,16 +102,10 @@ public class HandTest {
 
         player.getPlayerBoard().getHandPlayer().chargeWeapon(cardWeapon1, 1,0,1);
         assertTrue(player.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(0).isCharge());
-        assertEquals(2, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
+        assertEquals(3, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
         assertEquals(3, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
-        assertEquals(2, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
+        assertEquals(3, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
 
-        /*TODO player.getPlayerBoard().getHandPlayer().chargeWeapon(cardWeapon2,0,0,1,cardPowerUp);
-        assertTrue(player.getPlayerBoard().getHandPlayer().getPlayerWeapons().get(1).isCharge());
-        assertEquals(2, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
-        assertEquals(3, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
-        assertEquals(2, player.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
-        assertEquals(0,player.getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());*/
     }
 
     /**
