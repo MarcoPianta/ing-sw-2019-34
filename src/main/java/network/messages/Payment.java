@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Payment extends Message {
     private Integer[] cost;
-    private boolean powerUp;
+    private Integer powerUp;//-1 if not used , other used
 
-    public  Payment(Integer token,Integer[] cost, boolean powerUp){
+    public  Payment(Integer token,Integer[] cost, Integer powerUp){
         actionType=ActionType.PAYMENT;
         this.token=token;
         this.cost=cost;
@@ -17,7 +17,7 @@ public class Payment extends Message {
         return cost;
     }
 
-    public boolean isPowerUp() {
+    public Integer getPowerUp() {
         return powerUp;
     }
 }
