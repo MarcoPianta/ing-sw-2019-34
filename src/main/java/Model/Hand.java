@@ -100,6 +100,7 @@ public class Hand implements Serializable {
      * */
     public void removePowerUp(int position){
         System.out.println(getPlayerPowerUps().size());
+        System.out.println(position);
         getPlayerPowerUps().remove(position);
     }
 

@@ -86,7 +86,7 @@ public class PaymentGui extends JFrame {
         }
 
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 6;
         JButton button = new JButton("Confirm");
         button.addMouseListener(new MouseListener() {
             @Override

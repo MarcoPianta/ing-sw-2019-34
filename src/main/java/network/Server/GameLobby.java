@@ -431,20 +431,29 @@ public class GameLobby {
 
                     if (valueReturn) {
                         System.out.println("demskoaniog"+paymentResponse.getPowerUpScoop());
-                        if (paymentResponse.getPowerUpScoop()==1 || paymentResponse.getPowerUpScoop()==2 ||paymentResponse.getPowerUpScoop()==3){
+                        if (paymentResponse.getPowerUpScoop()!=-1){
                             System.out.println("demskoaniog"+paymentResponse.getPowerUpScoop());
                             valueReturn = gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getPowerUpScoop());
                         }
-                        else
-                            valueReturn = gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getColorScoop());
+                        else{
+                            System.out.println("demskoaniog"+paymentResponse.getColorScoop());
+                            valueReturn = gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getColorScoop());}
 
                         if (valueReturn) {//if both payment are successful
                             for (Message m : historyMessage)
                                 gameHandler.receiveServerMessage(m);
                             //use powerUp
+                            System.out.println("fjwbbsuiuisa faccio il powerUp ora");
                             players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().addMark(gameHandler.getGame().getCurrentPlayer(),1);
-                            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition);
 
+                            if(paymentResponse.getPowerUpScoop()!=-1)
+                                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition-1);
+                            else
+                                gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition);
+
+                            server.send(new UpdateClient(playersColor.get(scopeTarget),new ArrayList<>(players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().getMark())));
+                            scopePosition=-1;//fix
+                            useScoop=false;
                             if (historyMessage.get(0).getActionType() != ActionType.RELOAD || historyMessage.get(0).getActionType() != ActionType.USEPOWERUP) {
                                 gameHandler.getTurnHandler().endAction();
                                 server.send(new FinalAction(paymentResponse.getToken()));
@@ -460,7 +469,7 @@ public class GameLobby {
                             }
                             System.out.println("serwhwehwhedjwr è fallito");
 
-                                                         historyMessage = new ArrayList<>();
+                            historyMessage = new ArrayList<>();
                             server.send(new UpdateClient(paymentResponse.getToken(), "Scoop is not used"));
                         }
                     } else {
@@ -478,7 +487,7 @@ public class GameLobby {
             //si powerUp, si Scoop
             else if(paymentResponse.isUsePowerUp()&& paymentResponse.isScoop()){
                 System.out.println("ewfjnewiuongungugeoienoiwen pago scoop si powerUp");
-                valueReturn=gameHandler.getPaymentController().payment( Arrays.copyOf(paymentResponse.getCost(),3),paymentResponse.getPowerUp());
+                valueReturn=gameHandler.getPaymentController().payment( Arrays.copyOf(paymentResponse.getCost(),3),new ArrayList<>(paymentResponse.getPowerUp()));
                 if(valueReturn){
                     if(paymentResponse.getPowerUpScoop()!=-1)
                         valueReturn=gameHandler.getPaymentController().paymentPowerUp(paymentResponse.getPowerUpScoop());
@@ -490,9 +499,14 @@ public class GameLobby {
 
                         //use powerUp
                         players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().addMark(gameHandler.getGame().getCurrentPlayer(),1);
-                        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition);
+                        if(paymentResponse.getPowerUpScoop()!=-1)
+                            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition-1-paymentResponse.getPowerUp().size());
+                        else
+                            gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(scopePosition-paymentResponse.getPowerUp().size());
 
-
+                        server.send(new UpdateClient(playersColor.get(scopeTarget),new ArrayList<>(players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(players.get(playersColor.get(scopeTarget)).getPlayerBoard().getHealthPlayer().getMark())));
+                        scopePosition=1;
+                        useScoop=false;
                         if(historyMessage.get(0).getActionType()!=ActionType.RELOAD || historyMessage.get(0).getActionType()!=ActionType.USEPOWERUP){
                             gameHandler.getTurnHandler().endAction();
                             server.send(new FinalAction(paymentResponse.getToken()));
@@ -540,6 +554,7 @@ public class GameLobby {
                 players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons().forEach(x -> System.out.println(x.getName()));
                 server.send(new UpdateClient(paymentResponse.getToken(), players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[0], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[1], players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(players.get(paymentResponse.getToken()).getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
             }
+
     }
 
     public void canUseScoop(Integer player){
@@ -633,6 +648,7 @@ public class GameLobby {
                 }
             }
             finalTurnAction = false;
+            targetList=new ArrayList<>();
         }
     }
 
