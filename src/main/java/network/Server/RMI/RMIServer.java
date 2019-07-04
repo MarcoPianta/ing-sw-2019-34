@@ -19,7 +19,6 @@ public class RMIServer {
 
     private final int PORT;
     private Server server;
-    private ArrayList<RMIClientInterface> clients;
     private HashMap<Integer , RMIClientInterface> rmiHashMap;
     private static Logger logger = Logger.getLogger("rmiServer");
 
@@ -31,7 +30,6 @@ public class RMIServer {
         this.server = server;
         this.PORT = 10001;
         rmiHashMap = new HashMap<>();
-        clients = new ArrayList<>();
     }
 
     /**
@@ -43,7 +41,6 @@ public class RMIServer {
         this.server = server;
         this.PORT = port;
         rmiHashMap = new HashMap<>();
-        clients = new ArrayList<>();
     }
 
     private void init() throws RemoteException{
@@ -51,10 +48,9 @@ public class RMIServer {
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));
-            System.err.println("RMIServer ready");
+            logger.info("RMIServer ready");
         } catch (Exception e) {
-            System.err.println("Server Exception: " + e.getMessage());
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -66,7 +62,7 @@ public class RMIServer {
                 removeClient(message.getToken());
             }
         } catch (RemoteException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -75,7 +71,7 @@ public class RMIServer {
 
     }
 
-    public void acceptConnection(RMIClientInterface client, Integer token) throws RemoteException, NotBoundException {
+    void acceptConnection(RMIClientInterface client, Integer token) throws RemoteException, NotBoundException {
         this.rmiHashMap.put(token, client);
     }
 
@@ -84,7 +80,7 @@ public class RMIServer {
      * connected client. The client is also removed from the main server
      * @param token the identifier of the client to be removed.
      */
-    public void removeClient(Integer token){
+    void removeClient(Integer token){
         server.removeClient(token);
         rmiHashMap.remove(token);
     }

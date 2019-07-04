@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * This class represents the server which handle connection with the clients.
@@ -23,6 +24,8 @@ public class Server {
     private HashMap<Integer, Boolean> clients;
     private RMIServer rmiServer;
     private HashMap<Integer, GameLobby> lobbyHashMap;
+    private static Logger logger = Logger.getLogger("Server");
+
 
     /**
      * The constructor creates a new queue which contains the client that are waiting for a new Game to start, it also
@@ -47,12 +50,12 @@ public class Server {
         try {
             socketServer.run();
         }catch (IOException e){
-            //TODO log that Socket server has not been started
+            logger.severe("Socket server not started" + e.getMessage());
         }
         try {
             rmiServer.run();
         }catch (IOException e){
-            //TODO log that RMI server has not been started
+            logger.severe("RMI server not started" + e.getMessage());
         }
     }
 
@@ -82,7 +85,7 @@ public class Server {
                 lobbyHashMap.get(message.getToken()).receiveMessage(message);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -114,7 +117,6 @@ public class Server {
         else {
             if (clients.containsKey(token)){
                 if (lobbyHashMap.containsKey(token)) {
-                    //TODO send new RECONNECTIONREQUEST
                     return token;
                 }
                 else
@@ -148,7 +150,7 @@ public class Server {
             clients.remove(token);
     }
 
-    public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
+    void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
         GameLobby gameLobby = new GameLobby(players, skullNumber, "map"+map, this);
         for (Integer i: players){
             lobbyHashMap.put(i, gameLobby);

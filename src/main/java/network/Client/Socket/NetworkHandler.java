@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * This class is used to handle the connection between socket client and server on the client side.
@@ -17,6 +18,8 @@ public class NetworkHandler implements Runnable{
     private ObjectInputStream in; //Used to send message to server
     private ObjectOutputStream out; //Used to receive message from server
     private boolean loop;
+    private static Logger logger = Logger.getLogger("NetworkHandler");
+
 
     /**
      * The constructor create input and output stream of the socket connection to communicate with server.
@@ -54,7 +57,7 @@ public class NetworkHandler implements Runnable{
                 }
             }catch (IOException|ClassNotFoundException e){
                 loop = false;
-                e.printStackTrace();
+                logger.severe(e.getMessage());
             }
         }
     }
