@@ -335,7 +335,7 @@ public class MainGuiView extends View {
 
     public void showPossibleRooms(List<String> targets){
         mapGui.setActionType("room");
-        List<String> ids = Arrays.asList(ViewMap.getIds());
+        ArrayList<String> ids = new ArrayList<>(Arrays.asList(ViewMap.getIds()));
         ids.removeAll(targets);
         mapGui.addRedCross(ids);
     } //For shot action

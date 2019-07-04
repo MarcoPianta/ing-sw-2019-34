@@ -229,7 +229,7 @@ public class ShootTest {
         game.addPlayer(testTargetPlayer3);
         game.addPlayer(testTargetPlayer4);
         testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(1));
-        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(2));
+        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(1));
         testTargetPlayer2.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
         testTargetPlayer3.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(1));
         testTargetPlayer4.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(1));
@@ -237,21 +237,21 @@ public class ShootTest {
         ArrayList<NormalSquare> testSquareList = new ArrayList<>();
 
         testTargetList.add(testTargetPlayer1);
-        testTargetList.add(testTargetPlayer2);
-        testTargetList.add(testTargetPlayer4);
+//        testTargetList.add(testTargetPlayer2);
+//        testTargetList.add(testTargetPlayer4);
 
         testSquareList.add(testTargetPlayer1.getPosition());
 
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.SHOCKWAVE.getAbbreviation());
-        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(2));
-        Shoot action = new Shoot(testEffect, testShooterPlayer, null, testSquareList, true);
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.CYBERBLADE.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(1));
+        Shoot action = new Shoot(testEffect, testShooterPlayer, testTargetList, null, false);
 
         if (action.isValid()) {
             action.execute();
         }
         System.out.println("IsValid --> " + action.isValid());
-        assertEquals(1, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getDamageBar().size());
-        assertEquals(1, testTargetPlayer2.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(2, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(0, testTargetPlayer2.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(0, testTargetPlayer3.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(0, testTargetPlayer4.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(0, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getMark().size());

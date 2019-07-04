@@ -166,7 +166,7 @@ public abstract class View {
     public Integer getNumberAction() {
         return numberAction;
     }
-
+    
     public void setMarks(List<Colors> marks) {
         this.marks = marks;
     }
