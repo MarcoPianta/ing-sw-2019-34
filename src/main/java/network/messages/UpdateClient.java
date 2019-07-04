@@ -5,6 +5,7 @@ import Model.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UpdateClient extends Message implements Serializable {
     private List<Colors> damageBar; //The damageBar is made of colors to be displayed
@@ -16,7 +17,7 @@ public class UpdateClient extends Message implements Serializable {
     private CardWeapon weapon;
     private int posWeapon;
     private CardAmmo ammo;
-    private ArrayList<Colors> marks;
+    private List<Colors> marks;
     private String textMessage;
     private Colors otherColor;
     private List<CardWeapon> weapons;
@@ -39,15 +40,8 @@ public class UpdateClient extends Message implements Serializable {
      */
     public UpdateClient(Integer token, List<Player> damageBar,List<Player> marks){
         setMessageInfo(token, DAMAGEBARUPDATE);
-        this.damageBar = new ArrayList<>();
-        for (Player p: damageBar){
-            this.damageBar.add(p.getColor());
-        }
-        this.marks = new ArrayList<>();
-        for (Player p: marks){
-            this.marks.add(p.getColor());
-        }
-
+        this.damageBar = damageBar.stream().map(Player::getColor).collect(Collectors.toList());
+        this.marks = marks.stream().map(Player::getColor).collect(Collectors.toList());
     }
 
     /**
@@ -89,7 +83,7 @@ public class UpdateClient extends Message implements Serializable {
      * @param players a list that contains the reachable squares
      */
     public UpdateClient(Integer token, ArrayList<Player> players){
-        setMessageInfo(token, POSSIBLESQUARES);
+        setMessageInfo(token, POSSIBLETARGET);
         this.reachableTarget = new ArrayList<>();
         for (Player p: players)
             this.reachableTarget.add(p.getPosition().getId());
@@ -197,7 +191,7 @@ public class UpdateClient extends Message implements Serializable {
         return otherColor;
     }
 
-    public ArrayList<Colors> getMarks() {
+    public List<Colors> getMarks() {
         return marks;
     }
 

@@ -44,8 +44,7 @@ public class RMIClient extends Client{
             this.token = server.generateToken();
             server.acceptConnection(new RMIClientImplementation(this), token);
         }catch (Exception e){
-            System.out.println("Client Exception: " + e.getMessage());
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
         new Thread(() ->{
                 onReceive(new ConnectionResponse(token));
@@ -62,20 +61,9 @@ public class RMIClient extends Client{
 
             server.onReceive(message);
         }catch (RemoteException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
-
-    /*@Override
-    public void onReceive(Message message) {
-        if (message.getActionType().getAbbreviation().equals(ActionType.UPDATECLIENTS.getAbbreviation())) {
-            if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
-                System.out.println("Ho ricevuto "+ message.getActionType());
-            }
-            else super.onReceive(message);
-        }
-        else super.onReceive(message);
-    }*/
 
     /**
      * This method is used to close connection between the client and the server.

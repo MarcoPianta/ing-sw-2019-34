@@ -35,7 +35,7 @@ public abstract class View {
     /**
      * The player damage bar, is an array
      */
-    protected ArrayList<Colors> marks;
+    protected List<Colors> marks;
     protected ArrayList<CardPowerUp> powerUps;
     /**
      * The powerUps owned from the player
@@ -57,7 +57,7 @@ public abstract class View {
     protected HashMap<Colors, Integer> players;//bisogna inizializzare
     protected ArrayList<Colors> playersColor;//bisogna inizializzare
     protected boolean myTurn;
-    protected Integer numberAction=1;
+    protected int numberAction;
 
     public View() {
         this.weapons = new ArrayList<>(4);
@@ -75,6 +75,7 @@ public abstract class View {
 
         this.powerUps = new ArrayList<>();
         this.maxReward = 0;
+        this.numberAction = 1;
 
     }
 
@@ -171,11 +172,12 @@ public abstract class View {
         this.numberAction = numberAction;
     }
 
-    public Integer getNumberAction() {
+    public int getNumberAction() {
         return numberAction;
     }
 
-    public void setMarks(ArrayList<Colors> marks) {this.marks=new ArrayList<>(marks);
+    public void setMarks(List<Colors> marks) {
+        this.marks = marks;
     }
 
     public void setMap(GameBoard map) {
@@ -210,8 +212,6 @@ public abstract class View {
 
     public abstract void setOtherPosition(Colors player, String position);
 
-    public void setMyTurn(boolean myTurn){
-        this.myTurn = myTurn;
-    }
+    public abstract void setMyTurn(boolean myTurn);
 
 }

@@ -102,10 +102,6 @@ public abstract class Client implements Serializable {
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
             ChatMessage chatMessage = (ChatMessage) message;
-            if (chatMessage.getMessage().equals("INFO: is your turn" + message.getToken())) {
-                view.startTurn();
-                view.setNumberAction(1);
-            }
             view.chatMessage(chatMessage.getMessage());
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
@@ -125,9 +121,10 @@ public abstract class Client implements Serializable {
                 view.setNumberAction(3);
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.FINALTURN.getAbbreviation())){
+            FinalTurnMessage finalTurnMessage = (FinalTurnMessage) message;
+            if (finalTurnMessage.isFirstPlayer()) view.setNumberAction(2);
             view.finalTurn();
         }
-
     }
 
     /**
@@ -145,12 +142,14 @@ public abstract class Client implements Serializable {
      * */
     public abstract void send(Message message);
 
+    /**
+     * This method is used to handle message of UpdateClients type
+     * @param message the UpdateClient message
+     * */
     public void handleUpdate(UpdateClient message){
         if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE)){
             view.setDamageBar(message.getDamageBar());
             view.setMarks(message.getMarks());
-            System.out.println("Marks :");
-            message.getMarks().forEach(System.out::println);
         }
 
         else if (message.getUpdateType().equals(UpdateClient.POSITION))

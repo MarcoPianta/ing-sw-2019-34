@@ -52,6 +52,12 @@ public class ViewCLI extends View {
 
     }
 
+    public void setMyTurn(boolean myTurn) {
+
+    }
+
+
+
     @Override
     public void finalTurn() {
 

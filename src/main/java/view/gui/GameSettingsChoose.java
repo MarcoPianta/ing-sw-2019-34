@@ -60,7 +60,7 @@ public class GameSettingsChoose extends JFrame{
         mainPanel.addComponentListener(new ResizeMaps());
         maps.addActionListener(new ChangeMap());
 
-        int panelWidth = new Double(INITIALWINDOWHEIGHT *GOLDENRATIO).intValue();
+        int panelWidth = (int)(INITIALWINDOWHEIGHT *GOLDENRATIO);
 
         add(mainPanel);
         setMinimumSize(new Dimension(panelWidth, INITIALWINDOWHEIGHT));

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * This class represents the server which handle connection with the clients.
@@ -23,6 +24,8 @@ public class Server {
     private HashMap<Integer, Boolean> clients;
     private RMIServer rmiServer;
     private HashMap<Integer, GameLobby> lobbyHashMap;
+    private static Logger logger = Logger.getLogger("Server");
+
 
     /**
      * The constructor creates a new queue which contains the client that are waiting for a new Game to start, it also
@@ -47,12 +50,12 @@ public class Server {
         try {
             socketServer.run();
         }catch (IOException e){
-            //TODO log that Socket server has not been started
+            logger.severe("Socket server not started" + e.getMessage());
         }
         try {
             rmiServer.run();
         }catch (IOException e){
-            //TODO log that RMI server has not been started
+            logger.severe("RMI server not started" + e.getMessage());
         }
     }
 
@@ -65,6 +68,7 @@ public class Server {
     }
 
     public void onReceive(Message message){
+        System.out.println("Ho RICEVUTO un messaggio di " + message.getActionType() + " da " + clients.get(message.getToken()));
         try {
             if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
                 GameSettingsResponse m = (GameSettingsResponse) message;
@@ -81,7 +85,7 @@ public class Server {
                 lobbyHashMap.get(message.getToken()).receiveMessage(message);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -93,15 +97,6 @@ public class Server {
      * */
     public void send(Message message){
         if (clients.get(message.getToken())) {
-            if (message.getActionType().equals(ActionType.UPDATECLIENTS)) {
-                UpdateClient updateClient = (UpdateClient) message;
-                if (updateClient.getUpdateType().equals(UpdateClient.MESSAGE))
-                    return;
-            } else if (message.getActionType().equals(ActionType.START)) {
-                StartMessage startMessage = (StartMessage) message;
-                if (startMessage.getType().equals("Turn"))
-                    rmiServer.send(new ChatMessage(message.getToken(), "INFO: is your turn" + message.getToken()));
-            }
             rmiServer.send(message);
         }
         else
@@ -122,7 +117,6 @@ public class Server {
         else {
             if (clients.containsKey(token)){
                 if (lobbyHashMap.containsKey(token)) {
-                    //TODO send new RECONNECTIONREQUEST
                     return token;
                 }
                 else
@@ -156,7 +150,7 @@ public class Server {
             clients.remove(token);
     }
 
-    public void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
+    void notifyFromQueue(ArrayList<Integer> players, int skullNumber, int map){
         GameLobby gameLobby = new GameLobby(players, skullNumber, "map"+map, this);
         for (Integer i: players){
             lobbyHashMap.put(i, gameLobby);
