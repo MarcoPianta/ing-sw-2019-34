@@ -2,14 +2,14 @@ package view.gui;
 
 import Model.CardWeapon;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 
 public class PlayerInformationGui extends JFrame {
 
-    public PlayerInformationGui(ArrayList<CardWeapon> cards, int[] ammos, int points){
+    public PlayerInformationGui(List<CardWeapon> cards, int[] ammos, int points){
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4,4,4,4);

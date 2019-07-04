@@ -45,7 +45,8 @@ public class Shot extends Message {
         this.targetPowerUp=targetPowerUp;
     }
 
-    public Shot(List<Player> targets, Integer posEffect, int weapon){
+    public Shot(Integer token, List<Player> targets, Integer posEffect, int weapon){
+        this.token = token;
         actionType=ActionType.SHOT;
         this.posEffect =posEffect;
         this.room=null;
@@ -55,7 +56,8 @@ public class Shot extends Message {
         this.weapon=weapon;
 
     }
-    public Shot(ArrayList<NormalSquare> square, Integer posEffect, int weapon){
+    public Shot(Integer token, ArrayList<NormalSquare> square, Integer posEffect, int weapon){
+        this.token = token;
         actionType=ActionType.SHOT;
         this.posEffect =posEffect;
         this.room=null;
@@ -64,7 +66,8 @@ public class Shot extends Message {
         this.powerUp=-1;
         this.weapon=weapon;
     }
-    public Shot(Room room, Integer posposEffect, int weapon){
+    public Shot(Integer token, Room room, Integer posposEffect, int weapon){
+        this.token = token;
         actionType=ActionType.SHOT;
         this.posEffect =posEffect;
         this.room=room;

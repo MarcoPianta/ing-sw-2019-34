@@ -20,7 +20,7 @@ public class RMIServerImplementation extends UnicastRemoteObject implements RMIS
     }
 
     public void onReceive(Message message) {
-        if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT))
+        if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT.getAbbreviation()))
             rmiServer.removeClient(message.getToken());
        server.onReceive(message);
     }

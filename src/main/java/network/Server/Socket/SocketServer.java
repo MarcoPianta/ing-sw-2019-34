@@ -81,7 +81,7 @@ public class SocketServer {
      * @param message the message to be forwarded to the server
      * */
     public void onReceive(Message message){
-        if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT))
+        if (message.getActionType().getAbbreviation().equals(ActionType.DISCONNECT.getAbbreviation()))
             removeClient(message.getToken());
         server.onReceive(message);
     }
