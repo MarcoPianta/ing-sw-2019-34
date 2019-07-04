@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PaymentGui extends JFrame {
     ArrayList<Integer> selected = new ArrayList<>();
-    private String scopeSelected;
+    private int scopeSelectedPayment = -1;
     private Integer token;
     private boolean showPowerUps = false;
     private JComboBox<String> ammoChoose;
@@ -23,11 +23,11 @@ public class PaymentGui extends JFrame {
         this.token = token;
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        String[] color = {" ","R", "Y", "B"};
+        String[] color = {" ","r", "y", "b"};
         String message = "You have to pay";
         int a = 0;
         for (Integer i: Arrays.asList(payment.getCost())){
-            message = message + " " + color[a] + " " + i;
+            message = message + " " + color[a+1] + " " + i;
             a++;
         }
         c.gridx = 0;
@@ -35,20 +35,29 @@ public class PaymentGui extends JFrame {
         c.gridwidth = 1;
         this.add(new JLabel(message), c);
 
-        if (payment.isPowerUp()){
-            c.gridx = 0;
-            c.gridy = 1;
-            this.add(new JLabel("Select a scope"), c);
-            int index = 1;
-            for (String s: powerUps) {
-                JLabel scopeP = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
-                c.gridx = index;
-                c.gridy = 1;
-                scopeP.addMouseListener(new MouseListener() {
+        c.gridx = 0;
+        c.gridy = 1;
+        JLabel label = new JLabel("What you want to use to pay");
+        this.add(label, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        JCheckBox powerup = new JCheckBox("Use powerups to pay, otherwise ammos are used");
+        this.add(powerup, c);
+
+        int i = 1;
+        for (String s: powerUps){
+            c.gridx = i;
+            c.gridy = 2;
+            if (!(payment.getPowerUp() != -1 && s.equals(powerups.get(payment.getPowerUp())))) {
+                JLabel labelPo = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
+                System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
+                int choose = i;
+                labelPo.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        scopeSelected = getColor(s);
-                        JOptionPane.showMessageDialog(scopeP, "You select the power up");
+                        selected.add(choose - 1);
+                        JOptionPane.showMessageDialog(labelPo, "You select " + powerUps.get(choose - 1) + " to pay");
                     }
 
                     @Override
@@ -71,84 +80,21 @@ public class PaymentGui extends JFrame {
 
                     }
                 });
-                this.add(scopeP, c);
-                index++;
+                i++;
+                this.add(labelPo, c);
             }
-
         }
 
         c.gridx = 0;
-        c.gridy = 2;
-        JLabel label = new JLabel("What you want to use to pay");
-        this.add(label, c);
-
-        c.gridx = 0;
-        c.gridy = 3;
-        JCheckBox powerup = new JCheckBox("Use powerups to pay, otherwise ammos are used");
-        this.add(powerup, c);
-
-        if (payment.isPowerUp()){
-            c.gridx = 0;
-            c.gridy = 4;
-            JLabel text = new JLabel("Select an ammo tu use if you want: ");
-            this.add(text, c);
-
-            c.gridx = 1;
-            c.gridy = 4;
-            ammoChoose = new JComboBox<>(color);
-            this.add(ammoChoose, c);
-        }
-
-        int i = 1;
-        for (String s: powerUps){
-            c.gridx = i;
-            c.gridy = 3;
-            JLabel labelPo = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
-            System.out.println("Qui");
-            System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
-            int choose = i;
-            labelPo.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    selected.add(choose-1);
-                    JOptionPane.showMessageDialog(labelPo, "You select "+ powerUps.get(choose-1)+" to pay");
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-
-                }
-            });
-            i++;
-            this.add(labelPo, c);
-        }
-
-
-        c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         JButton button = new JButton("Confirm");
         button.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (!payment.isPowerUp())
-                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), ""));
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, ""));
                 else
-                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.isPowerUp(), color[ammoChoose.getSelectedIndex()]));
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, color[ammoChoose.getSelectedIndex()]));
                 dispose();
             }
 
@@ -172,6 +118,61 @@ public class PaymentGui extends JFrame {
 
             }
         });
+
+        if (payment.getPowerUp() != -1){
+            c.gridx = 0;
+            c.gridy = 3;
+            this.add(new JLabel("Select powerup to pay scope"), c);
+            int index = 1;
+            for (String s: powerUps) {
+                if (!s.equals(powerUps.get(payment.getPowerUp()))) {
+                    JLabel scopeP = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
+                    c.gridx = index;
+                    c.gridy = 3;
+                    int chosen = index;
+                    scopeP.addMouseListener(new MouseListener() {
+                        int choose = chosen;
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            scopeSelectedPayment = choose-1;
+                            JOptionPane.showMessageDialog(scopeP, "You select the power up");
+                        }
+
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+
+                        }
+
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+
+                        }
+                    });
+                    this.add(scopeP, c);
+                    index++;
+                }
+
+            }
+            c.gridx = 0;
+            c.gridy = 4;
+            JLabel text = new JLabel("Select an ammo tu use if you want: ");
+            this.add(text, c);
+
+            c.gridx = 1;
+            c.gridy = 4;
+            ammoChoose = new JComboBox<>(color);
+            this.add(ammoChoose, c);
+        }
 
         this.add(button, c);
 
@@ -205,9 +206,9 @@ public class PaymentGui extends JFrame {
         else if (!usePowerup && !scoop)
             return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop);
         else if (!usePowerup && scoop)
-            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, cost);
+            return new PaymentResponse(token, new ArrayList<>(), usePowerup, payment.getCost(), scoop, cost, scopeSelectedPayment);
         else
-            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, cost);
+            return new PaymentResponse(token, selected, usePowerup, payment.getCost(), scoop, cost, scopeSelectedPayment);
     }
 
     public static void main(String[] args) {

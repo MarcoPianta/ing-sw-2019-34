@@ -31,6 +31,11 @@ public class ViewCLI extends View {
     }
 
     @Override
+    public void finalTurn() {
+
+    }
+
+    @Override
     public void setPoints(int points) {
 
     }

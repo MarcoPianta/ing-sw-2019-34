@@ -454,8 +454,12 @@ public class TurnHandler {
             if(game.getDeadRoute().isFinalTurn()){
                 System.out.println("In final turn");
                 game.getDeadRoute().setFinalTurnPlayer();
-                for(Player p:game.getPlayers())
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"Is final Turn, the rule of the action have changed"));
+                for(Player p:game.getPlayers()) {
+                    if (p.getPlayerBoard().isFinalTurn())
+                        gameHandler.getGameLobby().send(new FinalTurnMessage(p.getPlayerID()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), "Is final Turn, the rule of the action have changed"));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHandPlayer().getAmmoRYB()[0], p.getPlayerBoard().getHandPlayer().getAmmoRYB()[1], p.getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(p.getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(p.getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                }
                 getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
                 if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())
                     getGameHandler().getFinalTurnHandler().setAlreadyFirsPlayer(true);
