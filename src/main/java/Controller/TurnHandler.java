@@ -178,7 +178,7 @@ public class TurnHandler {
             ArrayList<Player> players=new ArrayList<>();
             if (valueReturn){
                 for(Player p:gameHandler.getGame().getPlayers()) {
-                    if (p != gameHandler.getGame().getCurrentPlayer() && p.getPosition().getColor().getAbbreviation().equals(message.getRoom().getColor()))
+                    if (p != gameHandler.getGame().getCurrentPlayer() && p.getPosition().getColor().getAbbreviation().equals(message.getRoom().getColor().getAbbreviation()))
                         players.add(p);
                 }
                 for(Player p:players){
