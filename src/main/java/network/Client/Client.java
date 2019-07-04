@@ -32,6 +32,7 @@ public abstract class Client implements Serializable {
      * @param message is the message received from the server
      * */
     public void onReceive(Message message) {
+        System.out.println("Ho finalmente ricevuto " + message.getActionType().getAbbreviation());
         if (message.getActionType().getAbbreviation().equals(ActionType.PING.getAbbreviation())){
             send(new Ping(token));
         }
@@ -102,10 +103,6 @@ public abstract class Client implements Serializable {
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.MESSAGE.getAbbreviation())){
             ChatMessage chatMessage = (ChatMessage) message;
-            if (chatMessage.getMessage().equals("INFO: is your turn" + message.getToken())) {
-                view.startTurn();
-                view.setNumberAction(1);
-            }
             view.chatMessage(chatMessage.getMessage());
         }
         else if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSREQUEST.getAbbreviation())){
@@ -125,8 +122,11 @@ public abstract class Client implements Serializable {
                 view.setNumberAction(3);
         }
         else if (message.getActionType().getAbbreviation().equals(ActionType.FINALTURN.getAbbreviation())){
+            FinalTurnMessage finalTurnMessage = (FinalTurnMessage) message;
+            if (finalTurnMessage.isFirstPlayer()) view.setNumberAction(2);
             view.finalTurn();
         }
+        System.out.println("Ho concluso la ricezione ");
 
     }
 
@@ -149,8 +149,6 @@ public abstract class Client implements Serializable {
         if (message.getUpdateType().equals(UpdateClient.DAMAGEBARUPDATE)){
             view.setDamageBar(message.getDamageBar());
             view.setMarks(message.getMarks());
-            System.out.println("Marks :");
-            message.getMarks().forEach(System.out::println);
         }
 
         else if (message.getUpdateType().equals(UpdateClient.POSITION))

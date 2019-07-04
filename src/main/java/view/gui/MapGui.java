@@ -316,12 +316,12 @@ public class MapGui extends JFrame{
     /**
      * This method add marks in player's playerboard
      * */
-    public void addMarks(ArrayList<Colors> marks){
+    public void addMarks(List<Colors> marks){
         System.out.println("Marchi in gui:");
         marks.forEach(System.out::println);
         int i = 0;
         for (Colors mark: marks) {
-            i = updatePlayerImage(i, mark, currentPlayerBoardModified, marksPosition, currentPlayerBoard, 1);
+            i = updatePlayerImage(i, mark, currentPlayerBoard , marksPosition, currentPlayerBoardModified, 1);
         }
         setMyPosition(myPosition);
     }
@@ -384,7 +384,7 @@ public class MapGui extends JFrame{
         File newPlayerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + "Back.png");
         try {
             BufferedImage newPlayerBoardImage = ImageIO.read(newPlayerBoard);
-            currentPlayerBoard = newPlayerBoardImage;
+            currentPlayerBoard = cloneImage(newPlayerBoardImage);
             currentPlayerBoardModified = cloneImage(currentPlayerBoard);
             setMyPosition(myPosition);
 
@@ -468,7 +468,7 @@ public class MapGui extends JFrame{
     public void setTargetPowerUp(Colors color){
         targetPowerup = color;
         actionType = "newton";
-        JOptionPane.showMessageDialog(this, "Choose a square to move the selected player");
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, "Choose a square to move the selected player"));
     }
 
     /**

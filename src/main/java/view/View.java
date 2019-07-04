@@ -35,7 +35,7 @@ public abstract class View {
     /**
      * The player damage bar, is an array
      */
-    protected ArrayList<Colors> marks;
+    protected List<Colors> marks;
     protected ArrayList<CardPowerUp> powerUps;
     /**
      * The powerUps owned from the player
@@ -167,7 +167,7 @@ public abstract class View {
         return numberAction;
     }
 
-    public void setMarks(ArrayList<Colors> marks) {
+    public void setMarks(List<Colors> marks) {
         this.marks = marks;
     }
 
@@ -203,8 +203,6 @@ public abstract class View {
 
     public abstract void setOtherPosition(Colors player, String position);
 
-    public void setMyTurn(boolean myTurn){
-        this.myTurn = myTurn;
-    }
+    public abstract void setMyTurn(boolean myTurn);
 
 }

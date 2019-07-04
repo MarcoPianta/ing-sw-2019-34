@@ -5,11 +5,12 @@ import network.Server.Server;
 import network.messages.ActionType;
 import network.messages.Message;
 
+import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RMIServerImplementation extends UnicastRemoteObject implements RMIServerInterface {
+public class RMIServerImplementation extends UnicastRemoteObject implements RMIServerInterface, Serializable {
     private RMIServer rmiServer;
     private Server server;
 

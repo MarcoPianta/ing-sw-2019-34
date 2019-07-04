@@ -48,6 +48,7 @@ public class TargetChooseGui extends JFrame {
                     if (maxMove > 0) {
                         chosen.add(playerChoose);
                         maxMove--;
+                        JOptionPane.showMessageDialog(null, "You choose the player, you still can choose " + maxMove + " players");
                     }
                 }
 
@@ -75,14 +76,39 @@ public class TargetChooseGui extends JFrame {
             i++;
         }
 
-        this.addWindowListener(new WindowAdapter() {
+        c.gridx = 0;
+        c.gridy = 1;
+        JButton confirm = new JButton("Confirm");
+        confirm.addMouseListener(new MouseListener() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 if (shoot)mapGui.targetChosen(chosen);
                 else if (scope) mapGui.sendScopeTarget(chosen.get(0));
                 else mapGui.setTargetPowerUp(chosen.get(0));
+                dispose();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
+        this.add(confirm, c);
 
         this.pack();
         this.setVisible(true);

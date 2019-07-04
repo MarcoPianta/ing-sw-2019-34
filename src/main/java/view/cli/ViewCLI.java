@@ -26,6 +26,11 @@ public class ViewCLI extends View {
     }
 
     @Override
+    public void setMyTurn(boolean myTurn) {
+
+    }
+
+    @Override
     public void showScoopRequest() {
 
     }

@@ -60,7 +60,7 @@ public class MainGuiView extends View {
                 try {
                     java.awt.Desktop.getDesktop().browse(new URI(RULESWEBSITE));
                 }catch (URISyntaxException| IOException i){
-                    JOptionPane.showMessageDialog(frame, "Cannot show rules");
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "Cannot show rules"));
                 }
             }
         });
@@ -85,11 +85,11 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("localhost", 10000, self);
+                    client = new SocketClient("192.168.0.3", 10000, self);
                 else
-                    client = new RMIClient("localhost",10001, self);
+                    client = new RMIClient("192.168.0.3",10001, self);
                 //showGameSettingsRequest();
-                //JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
+                //SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
         });
         buttonAndTextPanel.add(button, BorderLayout.LINE_END);
@@ -138,7 +138,7 @@ public class MainGuiView extends View {
 
     @Override
     public void setNumberAction(int numberAction) {
-
+        mapGui.setActionNumber(numberAction);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void setMarks(ArrayList<Colors> marks) {
+    public void setMarks(List<Colors> marks) {
         mapGui.addMarks(marks);
     }
 
@@ -168,8 +168,7 @@ public class MainGuiView extends View {
 
     @Override
     public void showToken() {
-        JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() );
-        //new Thread(this::showGameSettingsRequest).start();
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "Your token is : " + client.getToken() ));
     }
 
     @Override
@@ -235,11 +234,16 @@ public class MainGuiView extends View {
 
     @Override
     public void setMyTurn(boolean myTurn) {
+        System.out.println("Sto per settare bool");
         mapGui.myTurn(myTurn);
+        System.out.println("Ho settato bool");
         if (myTurn)
-            JOptionPane.showMessageDialog(mapGui, "It's your turn");
-        else
-            JOptionPane.showMessageDialog(mapGui, "Your turn is ended");
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mapGui, "It's your turn"));
+        else {
+            System.out.println("Arriva finestra");
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mapGui, "Your turn is ended"));
+            System.out.println("Fatta finestra");
+        }
     }
 
     @Override
@@ -263,23 +267,27 @@ public class MainGuiView extends View {
     @Override
     public void showMessage(String message) {
         if (frame != null)
-            JOptionPane.showMessageDialog(frame, message);
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, message));
         else
-            JOptionPane.showMessageDialog(mapGui, message);
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mapGui, message));
     }
 
     @Override
     public void showVenomRequest(Colors playerColor) {
-        int value = JOptionPane.showConfirmDialog(mapGui, playerColor + " Hurt you, do you want to use tag back granade?");
-        if (value == 0)
-            mapGui.canUseVenom(playerColor);
+        SwingUtilities.invokeLater(() -> {
+            int value = JOptionPane.showConfirmDialog(mapGui, playerColor + " Hurt you, do you want to use tag back granade?");
+            if (value == 0)
+                mapGui.canUseVenom(playerColor);
+        });
     }
 
     //TODO probably the name will be modified
     public void showScoopRequest(){
-        int value = JOptionPane.showConfirmDialog(mapGui, "Do you want to use scoop power up?");
-        if (value == 0)
-            mapGui.canUseScoop();
+        SwingUtilities.invokeLater(() -> {
+            int value = JOptionPane.showConfirmDialog(mapGui, "Do you want to use scoop power up?");
+            if (value == 0)
+                mapGui.canUseScoop();
+        });
     }
 
     @Override
@@ -311,9 +319,9 @@ public class MainGuiView extends View {
     @Override
     public void endGame(boolean winner) {
         if (winner)
-            JOptionPane.showMessageDialog(frame, "The game is over.\nCongratulation, you won!");
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "The game is over.\nCongratulation, you won!"));
         else
-            JOptionPane.showMessageDialog(frame, "The game is over.\nUnfortunately you didn't win");
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "The game is over.\nUnfortunately you didn't win"));
     }
 
     public void setClient(Client client){

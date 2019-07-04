@@ -65,6 +65,7 @@ public class Server {
     }
 
     public void onReceive(Message message){
+        System.out.println("Ho RICEVUTO un messaggio di " + message.getActionType() + " da " + clients.get(message.getToken()));
         try {
             if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
                 GameSettingsResponse m = (GameSettingsResponse) message;
@@ -93,15 +94,6 @@ public class Server {
      * */
     public void send(Message message){
         if (clients.get(message.getToken())) {
-            if (message.getActionType().equals(ActionType.UPDATECLIENTS)) {
-                UpdateClient updateClient = (UpdateClient) message;
-                if (updateClient.getUpdateType().equals(UpdateClient.MESSAGE))
-                    return;
-            } else if (message.getActionType().equals(ActionType.START)) {
-                StartMessage startMessage = (StartMessage) message;
-                if (startMessage.getType().equals("Turn"))
-                    rmiServer.send(new ChatMessage(message.getToken(), "INFO: is your turn" + message.getToken()));
-            }
             rmiServer.send(message);
         }
         else
