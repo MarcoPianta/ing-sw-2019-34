@@ -40,7 +40,7 @@ public class ReloadGui extends JFrame {
                             mapGui.sendReload(choose);
                         else{
                             mapGui.sendReload(choose);
-                            new WeaponChooseGui(cards.stream().map(CardWeapon::getName).collect(toList()) , mapGui, true);
+                            new WeaponChooseGui(cards , mapGui, true);
                         }
                         dispose();
                     }

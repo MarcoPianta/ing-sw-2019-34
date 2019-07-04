@@ -180,7 +180,7 @@ public abstract class Client implements Serializable {
             view.showMessage(message.getMessage());
         }
         else if(message.getUpdateType().equals(UpdateClient.FILLSPAWN))
-            view.fillSpawn(message.getSquareID(), message.getPosWeapon(), message.getWeapon().getName());
+            view.fillSpawn(message.getSquareID(), message.getPosWeapon(), message.getWeapon());
 
         else if(message.getUpdateType().equals(UpdateClient.FILLSQUARE))
             view.fillSquare(message.getSquareID(),message.getAmmo());

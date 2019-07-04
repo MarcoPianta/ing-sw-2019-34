@@ -85,9 +85,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("192.168.0.3", 10000, self);
+                    client = new SocketClient("localhost", 10000, self);
                 else
-                    client = new RMIClient("192.168.0.3",10001, self);
+                    client = new RMIClient("localhost",10001, self);
                 //showGameSettingsRequest();
                 //SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -204,7 +204,7 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void fillSpawn(String squareID, int position, String weaponName) {
+    public void fillSpawn(String squareID, int position, CardWeapon weaponName) {
         mapGui.addWeaponToMap(squareID, position,weaponName);
     }
 

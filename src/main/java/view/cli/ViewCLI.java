@@ -186,8 +186,8 @@ public class ViewCLI extends View {
         client.send(new ShootResponsep(client.getToken(),targetChoose));
     }
     @Override
-    public void fillSpawn(String squareID, int position, String weaponName){
-        out.println(squareID+":"+"position" +position+weaponName+"\n" );
+    public void fillSpawn(String squareID, int position, CardWeapon weaponName){
+        out.println(squareID+":"+"position" +position+weaponName.getName()+"\n" );
     }
 
 
