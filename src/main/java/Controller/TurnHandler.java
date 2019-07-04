@@ -168,7 +168,7 @@ public class TurnHandler {
             valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
             }
@@ -182,7 +182,7 @@ public class TurnHandler {
                         players.add(p);
                 }
                 for(Player p:players){
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
             }
@@ -196,7 +196,7 @@ public class TurnHandler {
                         players.add(p);
                 }
                 for(Player p:players){
-                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),p.getPlayerBoard().getHealthPlayer().getDamageBar(),p.getPlayerBoard().getHealthPlayer().getMark()));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
                 }
 
@@ -327,6 +327,7 @@ public class TurnHandler {
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getUser().getPlayerID(),newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[0],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[1],newMessage.getUser().getPlayerBoard().getHandPlayer().getAmmoRYB()[2],new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(newMessage.getUser().getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
                 gameHandler.getGameLobby().send(new UpdateClient(gameHandler.getGame().getCurrentPlayer().getPlayerID(),new ArrayList<>(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getDamageBar()), new ArrayList<>(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getMark())));
                 gameHandler.getGameLobby().send(new UpdateClient(newMessage.getTarget().getPlayerID(),newMessage.getUser().getColor()+"used grenade tag back"));
+                System.out.println("FASDGASDRHHTS" +new ArrayList<>(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHealthPlayer().getMark()));
             }
             else if(newMessage.getUser()==gameHandler.getGame().getCurrentPlayer()&&
                     powerUp.getOtherMove()==0)//teleporter
