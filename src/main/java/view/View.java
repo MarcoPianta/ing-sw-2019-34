@@ -167,8 +167,7 @@ public abstract class View {
         return numberAction;
     }
 
-    public void setMarks(ArrayList<Colors> marks) {
-        this.marks = marks;
+    public void setMarks(ArrayList<Colors> marks) {this.marks=new ArrayList<>(marks);
     }
 
     public void setMap(GameBoard map) {
