@@ -1,18 +1,27 @@
 package view.cli;
 
+import Model.Action;
+import Model.CardWeapon;
 import network.messages.ReceiveTargetSquare;
+import network.messages.ReloadMessage;
 import network.messages.UsePowerUp;
+import view.View;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class ActionCLI extends ViewCLI {
+public class ActionCLI {
+    private ViewCLI viewCLI;
     private static PrintWriter out=new PrintWriter(System.out,true);
     private static Scanner in=new Scanner(System.in);
 
+    public ActionCLI(ViewCLI viewCLI){
+        this.viewCLI=viewCLI;
+    }
 
 
-    public void actionPowerUp(){
+
+    /*public void actionPowerUp(){
         if(powerUps.size()==0){
             out.println("\n you have no Power up \n");
             if(getNumberAction()==3)
@@ -72,51 +81,87 @@ public class ActionCLI extends ViewCLI {
             }
 
         }
-    }
+    }*/
     public void actionShot(){
-        if(weapons.size()==0){
+        if(viewCLI.getWeapons().size()==0){
             out.println("\n you have no weapon \n");
-            startActions();
+            viewCLI.startActions();
         }
 
-        int i;
-        for ( i = 1; i <= weapons.size(); i++)
-            out.println(i + ":" + weapons.get(i - 1).getName() + "\t");
-        out.println("\n choose a number from 1 to" + weapons.size() + "or 9 to cancel\n");
+        int count=1;
+        for (CardWeapon weapon: viewCLI.getWeapons()){
+            if(weapon.isCharge()){
+                out.println(count + ":" + weapon.getName() + "\t");
+                count++;
+            }
+        }
+        out.println("\n choose a number from 1 to" + (count-1) + "or 9 to cancel\n");
         boolean corrected = false;
         while (!corrected) {
+            int i;
             int posWeapon= in.nextInt();
-            if (posWeapon >= 1 && posWeapon<= weapons.size()) {
-                for ( i = 1; i <= weapons.get(posWeapon-1).getEffects().size(); i++)
-                    out.println(i + ":" + weapons.get(posWeapon-1).getEffects().get(i-1)+ "\t");
-                out.println("\n choose a number from 1 to" + weapons.get(posWeapon-1).getEffects().size() + "or 9 to cancel\n");
+            if (posWeapon >= 1 && posWeapon<= (count-1)) {
+                for ( i = 1; i <= viewCLI.getWeapons().get(posWeapon-1).getEffects().size(); i++)
+                    out.println(i + ":" + viewCLI.getWeapons().get(posWeapon-1).getActionSequences().get(i-1)+ "\t");
+                out.println("\n choose a number from 1 to" + viewCLI.getWeapons().get(posWeapon-1).getEffects().size() + "or 9 to cancel\n");
                 while (!corrected) {
                     int posEffect= in.nextInt();
-                    if (posEffect >= 1 && i <=weapons.get(posWeapon-1).getEffects().size()) {
-                        client.send(new ReceiveTargetSquare(client.getToken(),"shot",posWeapon,posEffect));
+                    if (posEffect >= 1 && i <=viewCLI.getWeapons().get(posWeapon-1).getActionSequences().size()) {
+                        viewCLI.getClient().send(new ReceiveTargetSquare(viewCLI.getClient().getToken(),"shot",posWeapon,posEffect));
                         corrected = true;
 
                     }
                     else if(posWeapon==9){
                         corrected=true;
-                        startActions();
+                        viewCLI.startActions();
                         in.close();
                     }
                     else {
                         out.println("it's not difficult, you can do it \n");
-                        out.println("choose a number from 1 to " + weapons.get(posWeapon-1).getEffects().size() + "or 9 to cancel\n");
+                        out.println("choose a number from 1 to " + viewCLI.getWeapons().get(posWeapon-1).getActionSequences().size() + "or 9 to cancel\n");
                     }
                 }
             }
             else if(posWeapon==9){
                 corrected=true;
-                startActions();
+                viewCLI.startActions();
                 in.close();
             }
             else {
                 out.println("it's not difficult, you can do it \n");
-                out.println("choose a number from 1 to " + weapons.size() + "or 9 to cancel\n");
+                out.println("choose a number from 1 to " + (count -1) + "or 9 to cancel\n");
             }
         }
     }
+    public  void actionReload(){
+        if(viewCLI.getWeapons().size()==0){
+            out.println("\n you have no weapon \n");
+            if(viewCLI.getNumberAction()>=3)
+                viewCLI.finalActions();
+            else
+                viewCLI.startActions();
+        }
+
+        int count=1;
+        for (CardWeapon weapon: viewCLI.getWeapons()){
+            if(!weapon.isCharge()){
+                out.println(count + ":" + weapon.getName() + "\t");
+                count++;
+            }
+        }
+        out.println("\n choose a number from 1 to" + (count-1) + "or 9 to cancel\n");
+        boolean corrected=false;
+        while(!corrected) {
+            int i=in.nextInt();
+            if(i>=1 && i<=(count-1)){
+                viewCLI.getClient().send(new ReloadMessage(viewCLI.getClient().getToken(),i-1));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it ");
+                out.println("choose a number from 1 to "+ (count-1)+"" );
+            }
+        }
+    }
+
 }

@@ -78,6 +78,14 @@ public abstract class View {
 
     }
 
+    public ArrayList<CardWeapon> getWeapons() {
+        return weapons;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
     public abstract void substituteWeaponRequest();
 
     public abstract void addMarks(ArrayList<Colors> marks, Colors player);
