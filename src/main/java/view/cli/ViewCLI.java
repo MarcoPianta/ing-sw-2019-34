@@ -16,6 +16,9 @@ public class ViewCLI extends View {
     private static PrintWriter out=new PrintWriter(System.out,true);
     private static Scanner in=new Scanner(System.in);
     private int myPoint;
+    private HashMap<String, String[]> spawnSquareWeapon;
+
+
 
     private ActionCLI actionCLI;
 
@@ -157,6 +160,7 @@ public class ViewCLI extends View {
                 }
             }
     }
+
 
     @Override
     public void showPossibleSquares(List<String> targets) {
@@ -491,6 +495,7 @@ public class ViewCLI extends View {
     @Override
     public void fillSpawn(String squareID, int position, String weaponName){
         out.println(squareID+":"+"position" +position+weaponName+"" );
+        spawnSquareWeapon.get(squareID)[position]=weaponName;
     }
 
     @Override

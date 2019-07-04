@@ -21,7 +21,7 @@ public class ActionCLI {
 
 
 
-    /*public void actionPowerUp(){
+    public void actionPowerUp(){
         if(powerUps.size()==0){
             out.println("\n you have no Power up \n");
             if(getNumberAction()==3)
@@ -81,7 +81,7 @@ public class ActionCLI {
             }
 
         }
-    }*/
+    }
     public void actionShot(){
         if(viewCLI.getWeapons().size()==0){
             out.println("\n you have no weapon \n");
