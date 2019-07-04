@@ -199,6 +199,18 @@ public class GameHandler {
         if(!getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).isCharge())
             gameLobby.send(new UpdateClient(message.getToken(),"the weapon in not charge "));
         else{
+            //verified if there is sight power up
+            boolean isFind=false;
+            for(int i=0;i< game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()&& !isFind ;i++){
+                System.out.println("trrreydrey hai power up??");
+                System.out.println(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen());
+                if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
+                        && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
+                    isFind=true;
+
+                    getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
+                }
+            }
             if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==2
                     &&!getGame().getDeadRoute().isFinalTurn() && !actionAdrenalineDone)
                 gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
@@ -246,18 +258,7 @@ public class GameHandler {
                 gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));
 
 
-            //verified if there is sight power up
-            boolean isFind=false;
-            for(int i=0;i< game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()&& !isFind;i++){
-                System.out.println("trrreydrey hai power up??");
-                System.out.println(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen());
-                if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
-                        && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(message.getPosEffect()).getBonusCost(),true)){
-                    isFind=true;
 
-                    getGameLobby().canUseScoop(game.getCurrentPlayer().getPlayerID());
-                }
-           }
         }
     }
 
@@ -291,7 +292,10 @@ public class GameHandler {
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,3).reachableSquare()));
         else if (game.getDeadRoute().isFinalTurn() && !getFinalTurnHandler().isAlreadyFirstPlayer())
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,4).reachableSquare()));
+        else if (game.getDeadRoute().isFinalTurn() && getFinalTurnHandler().isAlreadyFirstPlayer())
+            gameLobby.send(new UpdateClient(message.getToken(), "you can't move "));
     }
+
 
     /**
      * this method values who are/is win the game

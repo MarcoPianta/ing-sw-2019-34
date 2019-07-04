@@ -61,7 +61,16 @@ public class FinalTurnHandler extends TurnHandler {
         boolean valueReturn;
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
-            valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 4).execute();}
+            valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 4).execute();
+            if(valueReturn) {
+                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
+                gameHandler.getGameLobby().getClients()
+                        .parallelStream().
+                        filter(x -> (!x.equals(newMessage.getPlayerTarget().getPlayerID()))).
+                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
+            }
+
+        }
         else if(message.getActionType()==ActionType.SHOT){
             Shot newMessage=(Shot)message;
             valueReturn= actionShot(newMessage);
