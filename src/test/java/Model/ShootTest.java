@@ -184,6 +184,7 @@ public class ShootTest {
         ArrayList<Player> correctTargetList = new ArrayList<>();
         correctTargetList.add(testTargetPlayer1);
         correctTargetList.add(testTargetPlayer2);
+        correctTargetList.add(testTargetPlayer3);
         assertEquals(correctTargetList, action.targetablePlayer());
     }
 

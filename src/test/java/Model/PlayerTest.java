@@ -72,7 +72,7 @@ public class PlayerTest {
 
         Integer[] ammo;
         ammo=game.getPlayers().get(0).calculateMaxAmmo(true);
-        assertEquals(2,ammo[0]);
+        assertEquals(1,ammo[0]);
         assertEquals(2,ammo[1]);
         assertEquals(3,ammo[2]);
 

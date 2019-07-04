@@ -19,13 +19,19 @@ public class SpawnSquareTest {
     @Test
     public void setItemsGetWeaponsTest() throws FileNotFoundException{
         ArrayList<CardWeapon> weaponsTest = new ArrayList<>();
-        weaponsTest.add(null);
-        CardWeapon weaponTest;
-        weaponTest = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
+        CardWeapon weaponTest1;
+        CardWeapon weaponTest2;
+        CardWeapon weaponTest3;
+        weaponTest1 = new CardWeapon(WeaponDictionary.ELECTROSCYTE.getAbbreviation());
+        weaponTest2 = new CardWeapon(WeaponDictionary.FURNACE.getAbbreviation());
+        weaponTest3 = new CardWeapon(WeaponDictionary.GRENADELAUNCHER.getAbbreviation());
+        weaponsTest.add(weaponTest1);
+        weaponsTest.add(weaponTest2);
+        weaponsTest.add(weaponTest3);
 
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null, weaponsTest);
-        spawnSquare.setItems(weaponTest);
-        assertEquals(weaponTest, spawnSquare.getWeapons().get(0));
+        spawnSquare.setItems(weaponTest1);
+        assertEquals(weaponTest1, spawnSquare.getWeapons().get(0));
     }
 
     @Test
@@ -35,6 +41,6 @@ public class SpawnSquareTest {
         SpawnSquare spawnSquare = new SpawnSquare(null, null, null, null, null, weapons);
         assertEquals(weapons.get(0), spawnSquare.grabItem(0));
         assertNull(spawnSquare.grabItem(0));
-        assertEquals(0, spawnSquare.getWeapons().size());
+        assertEquals(1, spawnSquare.getWeapons().size());
     }
 }

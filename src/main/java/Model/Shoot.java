@@ -266,16 +266,16 @@ public class Shoot implements Action, Serializable {
     public List<NormalSquare> reachableRoom() {
         ArrayList<Colors> roomList = new ArrayList<>();
         List<NormalSquare> squareList = new ArrayList<>();
-        if(!roomList.contains(shooterPlayer.getPosition().getN()) && shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor()) {
+        if(shooterPlayer.getPosition().getN().getColor() != shooterPlayer.getPosition().getColor()) {
             roomList.add(shooterPlayer.getPosition().getN().getColor());
         }
-        if(!roomList.contains(shooterPlayer.getPosition().getE()) && shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor()) {
+        if(!roomList.contains(shooterPlayer.getPosition().getE().getColor()) && shooterPlayer.getPosition().getE().getColor() != shooterPlayer.getPosition().getColor()) {
             roomList.add(shooterPlayer.getPosition().getE().getColor());
         }
-        if(!roomList.contains(shooterPlayer.getPosition().getS()) && shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor()) {
+        if(!roomList.contains(shooterPlayer.getPosition().getS().getColor()) && shooterPlayer.getPosition().getS().getColor() != shooterPlayer.getPosition().getColor()) {
             roomList.add(shooterPlayer.getPosition().getS().getColor());
         }
-        if(!roomList.contains(shooterPlayer.getPosition().getW()) && shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor()) {
+        if(!roomList.contains(shooterPlayer.getPosition().getW().getColor()) && shooterPlayer.getPosition().getW().getColor() != shooterPlayer.getPosition().getColor()) {
             roomList.add(shooterPlayer.getPosition().getW().getColor());
         }
         for (int i = 0; i < shooterPlayer.getGameId().getMap().getRooms().size(); i++) {

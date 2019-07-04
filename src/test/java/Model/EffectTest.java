@@ -31,14 +31,14 @@ public class EffectTest {
         assertEquals(0, effect.getBonusCost()[0]);
         assertEquals(1, effect.getTargetNumber());
         assertEquals(0, effect.getSquareNumber());
-        assertEquals("pM", effect.getActionSequence());
+        assertEquals("p", effect.getActionSequence());
         assertEquals(2, effect.getpDamage().get(0));
-        assertEquals(2, effect.getpMark().get(0));
+        assertEquals(0, effect.getpMark().get(0));
         assertEquals(0, effect.getsDamage().get(0));
         assertEquals(0, effect.getsMark().get(0));
         assertEquals(0, effect.getrDamage());
         assertEquals(0, effect.getrMark());
-        assertEquals(1, effect.getMyMove());
+        assertEquals(0, effect.getMyMove());
         assertEquals(0, effect.getTargetMove());
     }
 
