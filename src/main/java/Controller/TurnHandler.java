@@ -113,6 +113,7 @@ public class TurnHandler {
             }
         }
         else if(message.getActionType()==ActionType.SHOT){
+            System.out.println("in actionAdrenaline " + ((Shot)message).getPosEffect());
             Shot newMessage=(Shot)message;
             if(newMessage.getPowerUp()!= -1){
                 usePowerUp(message);
@@ -165,7 +166,7 @@ public class TurnHandler {
     protected boolean actionShot(Shot message){
         boolean valueReturn;
         if(message.getSquare()==null && message.getRoom()==null&& message.getPowerUp()==-1) {
-            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
+            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), convertedPlayer(message.getTargets()), null, false).execute();
             if(valueReturn){
                 for(Player p:message.getTargets()){
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
@@ -174,7 +175,11 @@ public class TurnHandler {
             }
         }
         else if(message.getSquare()==null && message.getTargets()==null) {
-            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), message.getRoom().getColor()).execute();
+            System.out.println("mes.gPE " + message.getPosEffect());
+            System.out.println("mes.gPW " + message.getWeapon());
+            valueReturn = new Shoot(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())),
+                    gameHandler.getGame().getCurrentPlayer(),
+                    message.getRoom().getColor()).execute();
             ArrayList<Player> players=new ArrayList<>();
             if (valueReturn){
                 for(Player p:gameHandler.getGame().getPlayers()) {
@@ -188,7 +193,8 @@ public class TurnHandler {
             }
         }
         else {
-            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects().get(message.getPosEffect()), gameHandler.getGame().getCurrentPlayer(), null, message.getSquare(), true).execute();
+            valueReturn = new Shoot(getGameHandler().getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getEffects()
+                                    .get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getWeapon()).getActionSequences().indexOf(message.getPosEffect())), gameHandler.getGame().getCurrentPlayer(), null, message.getSquare(), true).execute();
             if (valueReturn){
                 ArrayList<Player> players=new ArrayList<>();
                 for(Player p:gameHandler.getGame().getPlayers()){

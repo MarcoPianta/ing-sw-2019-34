@@ -213,6 +213,7 @@ public class GameLobby {
                 }
                 Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
                 if (actionValidController.actionValid(targetRoom, effect, -1)){
+                    System.out.println("QUI COME èèèèèèèèèèèèèèè " + receiveTargetSquare.getPosEffect());
                     shootHistoryMessage.add(new Shot(targetRoom, receiveTargetSquare.getPosEffect(), receiveTargetSquare.getPosWeapon()));
                     shootActionSequences(receiveTargetSquare);
                 }
@@ -376,7 +377,10 @@ public class GameLobby {
                 //new history list with a fail shot message with power up
                 historyMessage = new ArrayList<>(shootHistoryMessage);
                 shootHistoryMessage = new ArrayList<>();
-
+                historyMessage.stream().forEach(x ->
+                                        {System.out.println(x.getActionType());
+                                            if(x.getActionType() == ActionType.SHOT)
+                                                System.out.println(((Shot) x).getPosEffect()); });
                 server.send(new Payment(currentPlayer, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(receiveTargetSquare.getPosEffect()).getBonusCost(), scopePosition));
 
             }
@@ -400,8 +404,10 @@ public class GameLobby {
                 if (gameHandler.getGame().getCurrentPlayer().isValidCostWeapon(paymentResponse.getCost())) {
                     valueReturn = gameHandler.getPaymentController().payment(paymentResponse.getCost());
                     if (valueReturn) {
-                        for (Message m : historyMessage)
+                        for (Message m : historyMessage) {
+                            if(m.getActionType() == ActionType.SHOT)System.out.println("in payment " + ((Shot) m).getPosEffect());
                             gameHandler.receiveServerMessage(m);
+                        }
                         if (historyMessage.get(0).getActionType() != ActionType.RELOAD || historyMessage.get(0).getActionType() != ActionType.USEPOWERUP) {
                             gameHandler.getTurnHandler().endAction();
                             server.send(new FinalAction(paymentResponse.getToken()));
@@ -636,7 +642,7 @@ public class GameLobby {
                 server.send(new Payment(currentPlayer, effect.getBonusCost(), -1));
             }
             //CanBackTag
-            for(Player p:targetList){
+            /*for(Player p:targetList){
                 System.out.println("fmeksldflknadkka");
                 for (CardPowerUp powerUp : p.getPlayerBoard().getHandPlayer().getPlayerPowerUps()) {
                     if (powerUp.getWhen().equals("deal")) {
@@ -644,7 +650,7 @@ public class GameLobby {
                         gameHandler.getGameLobby().canUseTagBack(p.getPlayerID(),gameHandler.getGame().getCurrentPlayer().getColor());
                     }
                 }
-            }
+            }*/
             finalTurnAction = false;
             targetList=new ArrayList<>();
         }
