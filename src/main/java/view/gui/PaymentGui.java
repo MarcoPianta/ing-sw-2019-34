@@ -49,7 +49,7 @@ public class PaymentGui extends JFrame {
         for (String s: powerUps){
             c.gridx = i;
             c.gridy = 2;
-            if (!(payment.getPowerUp() != -1 && s.equals(powerups.get(payment.getPowerUp())))) {
+            if (!(payment.getPowerUp() != -1 && s.equals(powerUps.get(payment.getPowerUp())))) {
                 JLabel labelPo = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
                 System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
                 int choose = i;
@@ -91,7 +91,7 @@ public class PaymentGui extends JFrame {
         button.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!payment.isPowerUp())
+                if (payment.getPowerUp()==-1)
                     mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, ""));
                 else
                     mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, color[ammoChoose.getSelectedIndex()]));
@@ -214,7 +214,7 @@ public class PaymentGui extends JFrame {
     public static void main(String[] args) {
         Integer[] costs = {0, 1, 1};
         ArrayList<String> powerUps = new ArrayList<>();
-        new PaymentGui(new Payment(000, costs, true), powerUps, null, null);
+        //new PaymentGui(new Payment(000, costs, true), powerUps, null, null);
     }
 
 }
