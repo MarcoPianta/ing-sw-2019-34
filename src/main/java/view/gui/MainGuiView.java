@@ -41,7 +41,7 @@ public class MainGuiView extends View {
     private static final int INITIALWINDOWHEIGHT = 600;
     private final String RULESWEBSITE = "https://czechgames.com/files/rules/adrenaline-rules-en.pdf";
 
-    public MainGuiView(String ip){
+    public MainGuiView(String id){
         super();
 
         int panelWidth = (int) (INITIALWINDOWHEIGHT *GOLDENRATIO);
@@ -90,9 +90,9 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient(ip, 10000, self);
+                    client = new SocketClient(id, 10000, self);
                 else
-                    client = new RMIClient(ip,10001, self);
+                    client = new RMIClient(id,10001, self);
 
                 //SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
@@ -133,7 +133,7 @@ public class MainGuiView extends View {
     public static void main(String[] args) {
         setUIManager();
 
-        MainGuiView view = new MainGuiView(args[0]);
+        MainGuiView view = new MainGuiView(args[1]);
         view.frame.setVisible(true);
     }
 

@@ -18,7 +18,7 @@ public class DeckCollectorTest {
         Deck<CardPowerUp> cardPowerUpDeck = deckCollector.getCardPowerUpDeck();
         Deck<CardAmmo> cardAmmoDeck = deckCollector.getCardAmmoDeck();
 
-        assertEquals(20, deckCollector.getCardWeaponDeck().getSize()); //Expected value for CardWeapon deck size is 21
+        assertEquals(21, deckCollector.getCardWeaponDeck().getSize()); //Expected value for CardWeapon deck size is 21
         assertEquals(12, deckCollector.getCardPowerUpDeck().getSize()); //Expected value for PowerUp deck size is 12
         assertEquals(36, deckCollector.getCardAmmoDeck().getSize()); //Expected value for Ammo deck size is 36
 
@@ -26,7 +26,7 @@ public class DeckCollectorTest {
         assertNotNull(deckCollector.getCardPowerUpDrawer().draw());
         assertNotNull(deckCollector.getCardAmmoDrawer().draw());
 
-        assertEquals(19, deckCollector.getCardWeaponDeck().getSize());
+        assertEquals(20, deckCollector.getCardWeaponDeck().getSize());
         assertEquals(11, deckCollector.getCardPowerUpDeck().getSize());
         assertEquals(35, deckCollector.getCardAmmoDeck().getSize());
 
