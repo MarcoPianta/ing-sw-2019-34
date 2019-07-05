@@ -7,6 +7,7 @@ import network.messages.*;
 import view.View;
 
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,8 @@ public class ViewCLI extends View {
     private static PrintWriter out=new PrintWriter(System.out,true);
     private static Scanner in=new Scanner(System.in);
     private int myPoint;
-    private HashMap<String, String[]> spawnSquareWeapon;
+    private HashMap<String, CardWeapon[]> spawnSquareWeapon;
+
 
 
 
@@ -43,6 +45,10 @@ public class ViewCLI extends View {
             }
         }
         myPoint=0;
+        spawnSquareWeapon=new HashMap<>();
+        spawnSquareWeapon.put("0,2",new CardWeapon[3]);
+        spawnSquareWeapon.put("1,0",new CardWeapon[3]);
+        spawnSquareWeapon.put("2,3",new CardWeapon[3]);
     }
 
     public static void main(String[] args) {
@@ -71,7 +77,8 @@ public class ViewCLI extends View {
     public void grabWeaponRequest() {
         out.println("you can choose one of this weapon to grab");
         int i=1;
-        for(CardWeapon weapon:weapons){
+
+        for(CardWeapon weapon :spawnSquareWeapon.get(myPositionID)){
             out.println(1+ "="+weapon.getName() +"\t");
             i++;
         }
@@ -244,7 +251,7 @@ public class ViewCLI extends View {
     }
 
     @Override
-    public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
+    public void updateEnemiesDamageBar(List<Colors> damageBar,List<Colors> marks, Colors player) {
         out.println(player+"was attacked and his damagedBar was changed:" );
         for(Colors color:damageBar)
             out.println(color+",");
@@ -377,7 +384,6 @@ public class ViewCLI extends View {
 
     @Override
     public void showGameSettingsRequest() {
-        //TODO implement method
     }
 
     @Override
@@ -386,6 +392,43 @@ public class ViewCLI extends View {
             out.println("The game is over.Congratulation, you won!");
         else
             out.println("The game is over.You didn't win!");
+    }
+
+
+    @Override
+    public void setBlueAmmo(int blueAmmo) {
+        super.setBlueAmmo(blueAmmo);
+        out.print("\n You have ammo blue="+blueAmmo);
+    }
+
+    @Override
+    public void setRedAmmo(int redAmmo) {
+        super.setRedAmmo(redAmmo);
+        out.print("\n You have ammo red="+redAmmo);
+    }
+
+    @Override
+    public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
+        this.setPowerUps(powerUps);
+        out.print("\n You grab a new POWER UP="+powerUps.get(powerUps.size()-1));
+        out.print("\n Yours powerUp are: \t");
+        for(CardPowerUp powerUp:powerUps)
+            out.print(powerUp +"\n");
+    }
+
+    @Override
+    public void setWeapons(ArrayList<CardWeapon> weapons) {
+        this.setWeapons(weapons);
+        out.print("\n You grab a new POWER UP="+weapons.get(weapons.size()-1));
+        out.print("\n Yours weapons are: \t");
+        for(CardWeapon weapon :weapons)
+            out.print(weapon +"\n");
+    }
+
+    @Override
+    public void setYellowAmmo(int yellowAmmo) {
+        super.setYellowAmmo(yellowAmmo);
+        out.print("\n You have ammo yellow="+yellowAmmo);
     }
 
     @Override
@@ -423,11 +466,11 @@ public class ViewCLI extends View {
                 corrected=true;
             }
             else if(i==4){
-                //actionCLI.actionPowerUp();
+                actionCLI.actionPowerUp();
                 corrected=true;
             }
             else if(i==5){
-                //actionCLI.actionReload();
+                actionCLI.actionReload();
                 corrected=true;
             }
             else if(i==6){
@@ -448,7 +491,7 @@ public class ViewCLI extends View {
         while(!corrected){
             int i=in.nextInt();
             if(i==1){
-                //actionCLI.actionPowerUp();
+                actionCLI.actionPowerUp();
                 corrected=true;
             }
             else if(i==2){
@@ -466,21 +509,6 @@ public class ViewCLI extends View {
         }
     }
 
-    /*public  void endAction(Boolean executed){
-        if(executed){
-            out.println("the action was executed, the game was updated");
-            numberAction++;
-            if(numberAction==3)
-                finalActions();
-            else
-                startActions();
-        }
-        else
-            out.println("There was an error, please try again");
-    }*/
-
-
-
 
     @Override
     public void setMyPositionID(String myPositionID) {
@@ -492,15 +520,17 @@ public class ViewCLI extends View {
     public void updateEnemyPosition(Colors player, String position) {
         out.println(player +"has moved in"+position +"" );
     }
-    @Override
-    public void fillSpawn(String squareID, int position, String weaponName){
-        out.println(squareID+":"+"position" +position+weaponName+"" );
-        spawnSquareWeapon.get(squareID)[position]=weaponName;
-    }
+
 
     @Override
     public void fillSquare(String squareID, CardAmmo ammo){
         out.println(squareID+":"+ammo.getName()+"");
+    }
+    @Override
+    public void fillSpawn(String squareID, int position, CardWeapon weapon){
+        out.println(squareID+":"+"position" +position+weapon.getName()+"\n" );
+        spawnSquareWeapon.get(squareID)[position] = weapon;
+
     }
     @Override
     public void setOtherPosition(Colors player, String position) {
@@ -511,5 +541,4 @@ public class ViewCLI extends View {
         myPoint+=points;
         out.println("you have gained  "+points+" points han you have "+myPoint+"points");
     }
-
 }

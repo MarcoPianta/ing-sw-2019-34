@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -54,7 +55,7 @@ public class MapGui extends JFrame{
     private List<String> redCrosses;
     private String myPosition;
     private String[] othersPosition = {"","","",""};
-    private HashMap<String, String[]> spawnSquareWeapon;
+    private HashMap<String, CardWeapon[]> spawnSquareWeapon;
     private HashMap<String, CardAmmo> ammosOnMap;
     private boolean myTurn;
     private ArrayList<Colors> marks;
@@ -229,7 +230,7 @@ public class MapGui extends JFrame{
      * @param position the position where to add
      * @param weapon the name of the weapon to add
      * */
-    void addWeaponToMap(String id, int position, String weapon){
+    void addWeaponToMap(String id, int position, CardWeapon weapon){
         double rotationRequired;
         double rotationBack;
         int backWidth;
@@ -270,7 +271,7 @@ public class MapGui extends JFrame{
             g2d.setPaint(Color.WHITE);
             Font font = new Font("Arial", Font.BOLD, 50);
             g2d.setFont(font);
-            g2d.drawString(weapon, 0, text.getHeight() / 2);
+            g2d.drawString(weapon.getName(), 0, text.getHeight() / 2);
             g2d.dispose();
             double locationX = 0;
             double locationY = text.getHeight();
@@ -694,7 +695,7 @@ public class MapGui extends JFrame{
                 int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to shot?");
                 if (response == 0) {
                     List<String> cardsName = cardsWeapon.stream().map(CardWeapon::getName).collect(toList());
-                    new WeaponChooseGui(cardsName, this, true);
+                    new WeaponChooseGui(cardsWeapon, this, true);
                 }
             } else if (((e.getX() > 615 * player.getWidth() / 1120) && (e.getX() < (615 + 75) * player.getWidth() / 1120)) && (e.getY() > 185 * player.getHeight() / 274)) {
                 new UsePowerUpGui(powerUps, this, false, false, null);
@@ -780,7 +781,7 @@ public class MapGui extends JFrame{
             for (int a = 0; a < 3; a++){
                 if((!spawnSquareWeapon.get(s)[a].equals("")) && (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
                             && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928)))){
-                    new WeaponDetailGui(spawnSquareWeapon.get(s)[a], s, a, false, this);
+                    new WeaponDetailGui(spawnSquareWeapon.get(s)[a].getName(), s, a, false, this);
                 }
             }
         }
@@ -921,13 +922,17 @@ public class MapGui extends JFrame{
      * */
     private void initializeSpawnWeapon(){
         this.spawnSquareWeapon = new HashMap<>();
-        spawnSquareWeapon.put("0,2", new String[3]);
-        spawnSquareWeapon.put("1,0", new String[3]);
-        spawnSquareWeapon.put("2,3", new String[3]);
+        spawnSquareWeapon.put("0,2", new CardWeapon[3]);
+        spawnSquareWeapon.put("1,0", new CardWeapon[3]);
+        spawnSquareWeapon.put("2,3", new CardWeapon[3]);
 
         for (String s: spawnSquareWeapon.keySet()){
             for (int i = 0; i < 3; i++){
-                spawnSquareWeapon.get(s)[i] = "";
+                try {
+                    spawnSquareWeapon.get(s)[i] = new CardWeapon("void");
+                }catch (FileNotFoundException e){
+                    //
+                }
             }
         }
     }

@@ -79,12 +79,20 @@ public abstract class View {
 
     }
 
+    public GameBoard getMap() {
+        return map;
+    }
+
     public ArrayList<CardWeapon> getWeapons() {
         return weapons;
     }
 
     public Client getClient() {
         return client;
+    }
+
+    public HashMap<Colors, Integer> getPlayers() {
+        return players;
     }
 
     public abstract void substituteWeaponRequest();
@@ -95,7 +103,7 @@ public abstract class View {
 
     public abstract void showToken();
 
-    public abstract void fillSpawn(String squareID, int position, String weaponName);
+    public abstract void fillSpawn(String squareID, int position, CardWeapon weaponName);
 
     public abstract void fillSquare(String squareID, CardAmmo ammo);
 

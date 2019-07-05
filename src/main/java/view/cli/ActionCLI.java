@@ -1,13 +1,14 @@
 package view.cli;
 
-import Model.Action;
-import Model.CardWeapon;
+import Model.*;
 import network.messages.ReceiveTargetSquare;
 import network.messages.ReloadMessage;
 import network.messages.UsePowerUp;
+import network.messages.UsePowerUpResponse;
 import view.View;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ActionCLI {
@@ -22,68 +23,138 @@ public class ActionCLI {
 
 
     public void actionPowerUp(){
-        if(powerUps.size()==0){
+        if(viewCLI.getPowerUps().isEmpty()){
             out.println("\n you have no Power up \n");
-            if(getNumberAction()==3)
-                finalActions();
+            if(viewCLI.getNumberAction()==3)
+                viewCLI.finalActions();
             else
-                startActions();
+                viewCLI.startActions();
         }
         else{
             int i;
-            for ( i = 1; i <= powerUps.size(); i++)
-                out.println(i + ":" + powerUps.get(i - 1)+ powerUps.get(i - 1).getColor() + "\t");
-            out.println("\n choose a number from 1 to" + powerUps.size() + "or 9 to cancel\n");
+            for ( i = 1; i <= viewCLI.getPowerUps().size(); i++)
+                out.println(i + ":" +viewCLI.getPowerUps().get(i - 1)+ viewCLI.getPowerUps().get(i - 1).getColor() + "\t");
+            out.println("\n choose a number from 1 to" + viewCLI.getPowerUps().size() + "or 9 to cancel\n");
             boolean corrected = false;
             while (!corrected) {
                 i = in.nextInt();
-                if (i >= 1 && i <= powerUps.size()) {
-                    //if(powerUps.get(i-1).getMyMove().)
-                    for ( i = 1; i <= players.size(); i++)
-                        out.println(i + ":" +playersColor.get(i-1)+ "\t");
-
-                    out.println("\n choose a number from 1 to" + playersColor.size() + "or 9 to cancel \n");
-                    while (!corrected) {
-                        int player= in.nextInt();
-                        if (player >= 1 && i <= playersColor.size()) {
-                            //client.send(new UsePowerUp(client.getToken(),i-1,client,playersColor.get(player-1),));
-                            corrected = true;
-                        }
-                        else if(i==9) {
-                            in.close();
-                            corrected = true;
-                            if (getNumberAction() == 3)
-                                finalActions();
-                            else
-                                startActions();
-                        }
-                        else {
-                            out.println("it's not difficult, you can do it \n");
-                            out.println("choose a number from 1 to " + playersColor.size() + "\n");
-                        }
+                if (i >= 1 && i <= viewCLI.getPowerUps().size()) {
+                    if (viewCLI.getPowerUps().get(i-1).getOtherMove()==2)
+                        newtonPowerUp(i);
+                    else if(viewCLI.getPowerUps().get(i-1).getMyMove()==-1)
+                        teletrasporterPowerUp(i);
+                    else{
+                        out.println("The powerUp selected is tagBack grenade o targetting Scope, the game will tell you when to use them");
+                        if(viewCLI.getNumberAction()==3)
+                            viewCLI.finalActions();
+                        else
+                            viewCLI.startActions();
                     }
-                    //client.send(new UsePowerUp(client.getToken(),i-1,e,3));
                     corrected = true;
                 }
                 else if(i==9){
-                    in.close();
                     corrected=true;
-                    if(getNumberAction()==3)
-                        finalActions();
+                    if(viewCLI.getNumberAction()==3)
+                        viewCLI.finalActions();
                     else
-                        startActions();
+                        viewCLI.startActions();
 
                 }
                 else {
                     out.println("it's not difficult, you can do it \n");
-                    out.println("choose a number from 1 to " + powerUps.size() +"or 9 to cancel"+ "\n");
+                    out.println("choose a number from 1 to " + viewCLI.getPowerUps() +"or 9 to cancel"+ "\n");
                 }
             }
 
         }
     }
+
+    private void  newtonPowerUp(int posPowerUp){
+        //venom
+        ArrayList<Colors> colorsPlayer=new ArrayList<>();
+        ArrayList<NormalSquare> squares=new ArrayList<>();
+        int count=1;
+        out.println("Choose the TARGET for NEWTON");
+        for (Colors color:viewCLI.getPlayers().keySet()){
+            out.print(count + ":" +color + "\t");
+            colorsPlayer.add(color);
+            count++;
+
+        }
+        out.println(" choose a number from 1 to" + viewCLI.getPlayers().keySet().size());
+        boolean corrected = false;
+        while (!corrected) {
+            int target= in.nextInt();
+            if (target >= 1 && target <= viewCLI.getPowerUps().size()) {
+                out.println("Choose a square, the square must be at maximum distance 2 from the target \n" +
+                        "and in cardinal position");
+                count=1;
+                for (Room room:viewCLI.getMap().getRooms()){
+                    for(NormalSquare normalSquare:room.getNormalSquares()){
+                        out.print(count + ":" +normalSquare.getId() + "\t");
+                        squares.add(normalSquare);
+                        count++;
+                    }
+                }
+                out.println(" choose a number from 1 to 12 " );
+                while (!corrected) {
+                    int square= in.nextInt();
+                    if (square>= 1 && square <=12) {
+                        viewCLI.getClient().send(new UsePowerUpResponse(viewCLI.getClient().getToken(),posPowerUp-1,viewCLI.getClient().getToken(),colorsPlayer.get(target-1),squares.get(square-1).getId()));
+                        corrected=true;
+                    }
+                    else{
+                        out.println("it's not difficult, you can do it");
+                        out.println("choose a number from 1 to 12");
+                    }
+                }
+
+            }
+
+            else {
+                out.println("it's not difficult, you can do it \n");
+                out.println("choose a number from 1 to " + viewCLI.getPlayers().keySet().size());
+            }
+        }
+        if(viewCLI.getNumberAction()==3)
+            viewCLI.finalActions();
+        else
+            viewCLI.startActions();
+
+    }
+    private void teletrasporterPowerUp(int posPowerUp){
+        ArrayList<NormalSquare> squares=new ArrayList<>();
+        out.println("choose any square where to transport yourself, have a good trip");
+        int count=1;
+
+        for (Room room:viewCLI.getMap().getRooms()){
+            for(NormalSquare normalSquare:room.getNormalSquares()){
+                out.print(count + ":" +normalSquare.getId() + "\t");
+                squares.add(normalSquare);
+                count++;
+            }
+        }
+        boolean corrected=false;
+        out.println(" choose a number from 1 to 12 where to transport " );
+        while (!corrected) {
+            int square= in.nextInt();
+            if (square>= 1 && square <=12) {
+                viewCLI.getClient().send(new UsePowerUpResponse(viewCLI.getClient().getToken(),posPowerUp-1,viewCLI.getClient().getToken(),Colors.BLUE,squares.get(square-1).getId()));
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult you can do it");
+                out.println("choose a number from 1 to 12");
+            }
+        }
+        if(viewCLI.getNumberAction()==3)
+            viewCLI.finalActions();
+        else
+            viewCLI.startActions();
+    }
+
     public void actionShot(){
-        if(viewCLI.getWeapons().size()==0){
+        if(viewCLI.getWeapons().isEmpty()){
             out.println("\n you have no weapon \n");
             viewCLI.startActions();
         }
@@ -125,7 +196,6 @@ public class ActionCLI {
             else if(posWeapon==9){
                 corrected=true;
                 viewCLI.startActions();
-                in.close();
             }
             else {
                 out.println("it's not difficult, you can do it \n");
@@ -133,8 +203,9 @@ public class ActionCLI {
             }
         }
     }
+
     public  void actionReload(){
-        if(viewCLI.getWeapons().size()==0){
+        if(viewCLI.getWeapons().isEmpty()){
             out.println("\n you have no weapon \n");
             if(viewCLI.getNumberAction()>=3)
                 viewCLI.finalActions();
@@ -163,5 +234,4 @@ public class ActionCLI {
             }
         }
     }
-
 }
