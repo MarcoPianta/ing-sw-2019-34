@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class SubstituteWeaponGui extends JFrame {
 
             c.gridx = choose;
             c.gridy = 1;
-            JLabel weapon = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + card + ".png"));
+            JLabel weapon = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + card + ".png")));
             weapon.addMouseListener(new MouseListener() {
                 int chosen = choose;
                 @Override

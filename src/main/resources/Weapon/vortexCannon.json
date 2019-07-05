@@ -1,67 +1,101 @@
 {
-  "name": "vortex cannon",
-  "cost": {
-    "R": 1,
-    "Y": 0,
-    "B": 1
-  },
-  "color": "red",
+  "name": "vortexCannon",
+  "cost": [
+    1,
+    0,
+    1
+  ],
+  "color": "RED",
   "effectNumber": 2,
-  "effectOrder": false,
-  "alternativeEffect": false,
-  "basicEffect": [
+  "actionSequences": [
+    1,
+    12
+  ],
+  "Effect1": [
     {
-      "target": 1,
-      "allTarget": true,
-      "damage": 2,
-      "mark": 0,
+      "bonusCost":[
+        0,
+        0,
+        0
+      ],
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "sp",
+      "pDamage": [
+        2
+      ],
+      "pMark": [
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
-          "minRange": 1,
-          "maxRange": 2,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-          "otherPosition": true
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false,
+          "consecutive": false,
+          "tractor": false
         }
       ]
     }
   ],
-  "secondEffect": [
+
+  "Effect2": [
     {
-      "bonusCost": [
-        {
-          "R": 1,
-          "Y": 0,
-          "B": 0
-        }
+      "bonusCost":[
+        1,
+        0,
+        0
       ],
-      "target": 2,
-      "allTarget": true,
-      "damage": 2,
-      "mark": 0,
+      "targetNumber": 1,
+      "squareNumber": 0,
+      "actionSequence": "sp",
+      "pDamage": [
+        2,
+        1,
+        1
+      ],
+      "pMark": [
+        0,
+        0,
+        0
+      ],
+      "sDamage": [
+        0
+      ],
+      "sMark": [
+        0
+      ],
+      "rDamage": 0,
+      "rMark": 0,
       "myMove": 0,
-      "otherMove": 0,
-      "iteration": 1,
+      "targetMove": 0,
       "preCondition": [
         {
           "vision": true,
-          "minRange": 1,
-          "maxRange": 2,
+          "blind": false,
+          "melee": false,
+          "minRange": 0,
+          "maxRange": 0,
           "cardinal": false,
-          "otherPosition": true ----------------------
-        }
-      ],
-      "postCondition":[
-        {
-          "targetMove": 0
+          "enemiesDifferentSquare": false,
+          "sameSquare": false,
+          "consecutive": false,
+          "tractor": false
         }
       ]
     }

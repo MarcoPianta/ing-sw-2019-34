@@ -46,7 +46,6 @@ public class DeadRoute implements Serializable{
             counter--;
         }
         skulls--;
-        System.out.println(skulls);
         if(skulls<=0){
             finalTurn=true;
         }

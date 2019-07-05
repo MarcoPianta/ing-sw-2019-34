@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -19,14 +18,12 @@ public class SpawnGui extends JFrame {
 
         position = 0;
         for (String s: powerUps){
-            System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
-            JLabel label = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
+            JLabel label = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/powerups/" + s + ".png")));
             label.addMouseListener(new MouseListener() {
                 int pos = position;
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     mapGui.sendSpawnMessage(pos);
-                    System.out.println(pos);
                     dispose();
                 }
 

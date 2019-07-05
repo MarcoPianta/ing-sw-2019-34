@@ -183,8 +183,8 @@ public class ShootTest {
         testTargetList.add(testTargetPlayer2);
         testTargetList.add(testTargetPlayer3);
 
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.THOR.getAbbreviation());
-        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(123));
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.VORTEXCANNON.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(1));
         Shoot action = new Shoot(testEffect, testShooterPlayer, testTargetList, null, false);
         ArrayList<Player> correctTargetList = new ArrayList<>();
         correctTargetList.add(testTargetPlayer1);
@@ -259,7 +259,6 @@ public class ShootTest {
         if (action.isValid()) {
             action.execute();
         }
-        System.out.println("IsValid --> " + action.isValid());
         assertEquals(2, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(0, testTargetPlayer2.getPlayerBoard().getHealthPlayer().getDamageBar().size());
         assertEquals(0, testTargetPlayer3.getPlayerBoard().getHealthPlayer().getDamageBar().size());

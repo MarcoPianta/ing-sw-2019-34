@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,8 +52,7 @@ public class PaymentGui extends JFrame {
             c.gridx = i;
             c.gridy = 2;
             if (!(payment.getPowerUp() != -1 && s.equals(powerUps.get(payment.getPowerUp())))) {
-                JLabel labelPo = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
-                System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
+                JLabel labelPo = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/powerups/" + s + ".png")));
                 int choose = i;
                 labelPo.addMouseListener(new MouseListener() {
                     @Override
@@ -95,7 +93,7 @@ public class PaymentGui extends JFrame {
             int index = 1;
             for (String s: powerUps) {
                 if (!s.equals(powerUps.get(payment.getPowerUp()))) {
-                    JLabel scopeP = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
+                    JLabel scopeP = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/powerups/" + s + ".png")));
                     c.gridx = index;
                     c.gridy = 3;
                     int chosen = index;

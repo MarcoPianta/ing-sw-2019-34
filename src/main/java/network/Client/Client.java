@@ -162,7 +162,6 @@ public abstract class Client implements Serializable {
             view.showReachableSquares(message.getReachableSquares());
 
         else if (message.getUpdateType().equals(UpdateClient.RESPAWN)) {
-            System.out.println("Respawn");
             view.showPowerUpChooseRespawn();
         }
         else if (message.getUpdateType().equals(UpdateClient.OTHERPOSITION))
@@ -171,8 +170,6 @@ public abstract class Client implements Serializable {
             view.updateEnemiesDamageBar(message.getDamageBar(), message.getMarks(), message.getOtherColor());
         }
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
-            System.out.println("Bellaaaa");
-            message.getWeapons().forEach(x -> System.out.println(x.getName()));
             view.setBlueAmmo(message.getBlue());
             view.setRedAmmo(message.getRed());
             view.setYellowAmmo(message.getYellow());
