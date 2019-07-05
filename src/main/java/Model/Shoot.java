@@ -90,7 +90,7 @@ public class Shoot implements Action, Serializable {
     }
 
     private boolean isValidTHOR() {
-        targets = shooterPlayer.getGameId().getPlayers();
+        targets = new ArrayList(shooterPlayer.getGameId().getPlayers());
         targets.remove(shooterPlayer);
         for(int i = 0; i < targets.size(); i++){
             if(i == 0){
