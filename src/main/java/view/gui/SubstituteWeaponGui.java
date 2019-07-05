@@ -6,10 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to display a window fto ask the player which weapon wants to discard
+ */
 public class SubstituteWeaponGui extends JFrame {
     int choose;
 
@@ -28,7 +30,7 @@ public class SubstituteWeaponGui extends JFrame {
 
             c.gridx = choose;
             c.gridy = 1;
-            JLabel weapon = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + card + ".png"));
+            JLabel weapon = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + card + ".png")));
             weapon.addMouseListener(new MouseListener() {
                 int chosen = choose;
                 @Override

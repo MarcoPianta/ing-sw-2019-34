@@ -125,6 +125,8 @@ public class Effect implements Serializable {
         private boolean cardinal;
         private boolean sameSquare;
         private boolean consecutive;
+        private boolean tractor;
+
 
 
         public PreCondition(JsonObject jsonValues){
@@ -137,7 +139,7 @@ public class Effect implements Serializable {
             cardinal = jsonValues.getBoolean("cardinal");
             sameSquare = jsonValues.getBoolean("sameSquare");
             consecutive = jsonValues.getBoolean("consecutive");
-
+            tractor = jsonValues.getBoolean("tractor");
         }
 
         /**
@@ -153,6 +155,7 @@ public class Effect implements Serializable {
             this.cardinal = preCondition.isCardinal();
             this.sameSquare = preCondition.isSameSquare();
             this.consecutive = preCondition.isConsecutive();
+            this.tractor = preCondition.isTractor();
         }
 
         public boolean isVision() {
@@ -187,6 +190,10 @@ public class Effect implements Serializable {
 
         public boolean isConsecutive(){
             return consecutive;
+        }
+
+        public boolean isTractor() {
+            return tractor;
         }
 
     }

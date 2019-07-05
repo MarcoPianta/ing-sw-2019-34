@@ -50,7 +50,7 @@ public class HealthTest {
         playerTest.getPlayerBoard().getHealthPlayer().addDamage(player1, 11);
         assertEquals(playerTest, player1.getPlayerBoard().getHealthPlayer().getMark().get(0));
         assertEquals(3, playerTest.getPlayerBoard().getPlayer().getGameId().getDeadRoute().getMurders().size());
-        assertEquals(21,player1.getPlayerBoard().getPoints());
+        assertEquals(20,player1.getPlayerBoard().getPoints());
     }
 
     /**

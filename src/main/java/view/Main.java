@@ -1,4 +1,6 @@
-package view.gui;
+package view;
+
+import view.gui.MainGuiView;
 
 import java.util.logging.Logger;
 
@@ -9,7 +11,7 @@ public class Main {
 
         if (args[0].equals("gui")) {
             MainGuiView.setUIManager();
-            new MainGuiView().main();
+            new MainGuiView(args[1]).main();
         }else if (args[0].equals("cli")) {
             //TODO start cli view
         }

@@ -5,8 +5,10 @@ import Model.CardWeapon;
 import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
+/**
+ * This class is used to display a window for player's infos
+ */
 public class PlayerInformationGui extends JFrame {
 
     public PlayerInformationGui(List<CardWeapon> cards, int[] ammos, int points){
@@ -19,7 +21,7 @@ public class PlayerInformationGui extends JFrame {
             String card = cardWeapon.getName();
             c.gridx = i;
             c.gridy = 1;
-            JLabel weapon = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + card + ".png"));
+            JLabel weapon = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + card + ".png")));
             this.add(weapon, c);
             i++;
         }

@@ -10,6 +10,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * This class is the main class which check if rules are respected during the game
+ */
 public class GameHandler {
     private Game game;
     private FinalTurnHandler finalTurnHandler;
@@ -20,20 +23,11 @@ public class GameHandler {
     private GameLobby gameLobby;
     private boolean actionAdrenalineDone;
 
-    public void setActionAdrenalineDone(boolean actionAdrenalineDone) {
-        this.actionAdrenalineDone = actionAdrenalineDone;
-    }
-
-    public boolean isActionAdrenalineDone() {
-        return actionAdrenalineDone;
-    }
-
     /**
      * The constructor of gameHandler
      * @param n the numbers of skulls
      * @param players the list of tokens' player
      * @param file  the map's file
-     * @throws FileNotFoundException
      */
     public GameHandler(int n, List<Integer> players, String file, GameLobby gameLobby) throws FileNotFoundException {
         this.game = new Game(n,file);
@@ -52,16 +46,24 @@ public class GameHandler {
         this.gameLobby=gameLobby;
     }
 
+    /**
+     * This method set a boolean to tell if the action adrenaline as yet been done
+     * @param actionAdrenalineDone
+     */
+    public void setActionAdrenalineDone(boolean actionAdrenalineDone) {
+        this.actionAdrenalineDone = actionAdrenalineDone;
+    }
+
+    public boolean isActionAdrenalineDone() {
+        return actionAdrenalineDone;
+    }
+
     public PaymentController getPaymentController() {
         return paymentController;
     }
 
     public GameLobby getGameLobby() {
         return gameLobby;
-    }
-
-    public void setPlayerValid (Player playerValid) {
-        this.playerValid = playerValid;
     }
 
     public Player getPlayerValid() {
@@ -232,11 +234,16 @@ public class GameHandler {
 
                 } else if (actionSequence.charAt(0) == 's') {
                     System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
-                    ArrayList<String> targetID = new ArrayList<>();
-                    for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
-                        targetID.add(target.getId());
+                    if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getName().equals(WeaponDictionary.VORTEXCANNON.getAbbreviation())){
+                        gameLobby.send(new UpdateClient(message.getToken(), new Shoot(effect, game.getCurrentPlayer(), null, null, false).reachableSquare()));
                     }
-                    gameLobby.send(new ShootRequests(message.getToken(), targetID));
+                    else{
+                        ArrayList<String> targetID = new ArrayList<>();
+                        for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
+                            targetID.add(target.getId());
+                        }
+                        gameLobby.send(new ShootRequests(message.getToken(), targetID));
+                    }
 
                 } else if (actionSequence.charAt(0) == 'r') {
                     System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
@@ -245,7 +252,6 @@ public class GameHandler {
                         targetID.add(target.getId());
                     }
                     gameLobby.send(new ShootRequestr(message.getToken(), targetID));
-
                 }else if (actionSequence.charAt(0) == 'M') {
                     System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
                     gameLobby.send(new UpdateClient(message.getToken(), new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));

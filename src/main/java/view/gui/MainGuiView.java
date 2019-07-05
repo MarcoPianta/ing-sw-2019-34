@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -24,6 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is the main class, it display the first window and handle all method calls based on messages from the View
+ * abstract class
+ */
 public class MainGuiView extends View {
     private JFrame frame;
     private MapGui mapGui;
@@ -36,7 +41,7 @@ public class MainGuiView extends View {
     private static final int INITIALWINDOWHEIGHT = 600;
     private final String RULESWEBSITE = "https://czechgames.com/files/rules/adrenaline-rules-en.pdf";
 
-    public MainGuiView(){
+    public MainGuiView(String ip){
         super();
 
         int panelWidth = (int) (INITIALWINDOWHEIGHT *GOLDENRATIO);
@@ -48,7 +53,7 @@ public class MainGuiView extends View {
         frame.setMinimumSize(new Dimension(panelWidth, INITIALWINDOWHEIGHT));
         mainPanel = new JPanel(new BorderLayout());
 
-        ImageIcon icon = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "homeAdrenaline.png");
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("GUI/homeAdrenaline.png"));
         imageLabel = new JLabel(icon);
 
         FlowLayout flowLayout = new FlowLayout();
@@ -85,10 +90,10 @@ public class MainGuiView extends View {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (socketRMI.getSelectedIndex() == 0)
-                    client = new SocketClient("localhost", 10000, self);
+                    client = new SocketClient(ip, 10000, self);
                 else
-                    client = new RMIClient("localhost",10001, self);
-                //showGameSettingsRequest();
+                    client = new RMIClient(ip,10001, self);
+
                 //SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame, "Connection request sent, waiting for server");
             }
         });
@@ -128,7 +133,7 @@ public class MainGuiView extends View {
     public static void main(String[] args) {
         setUIManager();
 
-        MainGuiView view = new MainGuiView();
+        MainGuiView view = new MainGuiView(args[0]);
         view.frame.setVisible(true);
     }
 

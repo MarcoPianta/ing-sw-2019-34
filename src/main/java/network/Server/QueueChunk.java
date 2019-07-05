@@ -35,7 +35,7 @@ public class QueueChunk {
     public void addPlayer(Integer player){
         Timer timer = new Timer();
         synchronized (this) {
-            if (chunks.get(maxChunkIndex).size() < 2) {
+            if (chunks.get(maxChunkIndex).size() < 5) {
                 chunks.get(maxChunkIndex).add(player);
                 if (chunks.get(maxChunkIndex).size() >= 2 && !startedCheck.get(maxChunkIndex)) {
                     startedCheck.put(maxChunkIndex, true);

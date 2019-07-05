@@ -8,6 +8,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 
+/**
+ * This class is used to display weapon infos
+ */
 public class WeaponDetailGui extends JFrame {
     ImageIcon card;
 
@@ -19,7 +22,7 @@ public class WeaponDetailGui extends JFrame {
         c.gridx = 0;
         c.gridy = 0;
         c.insets = new Insets(5,5,5,5);
-        this.card = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + weapon + ".png");
+        this.card = new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + weapon + ".png"));
         JLabel image = new JLabel(card);
         this.add(image, c);
 

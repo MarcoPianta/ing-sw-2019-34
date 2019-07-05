@@ -29,6 +29,8 @@ public class PaymentControllerTest {
         GameHandler gameHandler = new GameHandler(8, players,"map1",null);
         gameHandler.getGame().setCurrentPlayer(gameHandler.getGame().getPlayers().get(0));
         gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addPowerUp(gameHandler.getGame().getDeckCollector().getCardPowerUpDrawer().draw());
+        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addPowerUp(gameHandler.getGame().getDeckCollector().getCardPowerUpDrawer().draw());
+        gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().addPowerUp(gameHandler.getGame().getDeckCollector().getCardPowerUpDrawer().draw());
 
         for (int i = 0; i < 3; i++){
 
@@ -44,13 +46,13 @@ public class PaymentControllerTest {
         //gameHandler.getPaymentController().payment(cost, powerUps);
 
         assertEquals(3, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
-        assertEquals(1, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
+        assertEquals(3, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
         assertEquals(3, gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
 
         gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().addAmmo(3,3,3);
         //gameHandler.getPaymentController().payment(cost);
         assertEquals((3 - cost[0]), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
-        assertEquals((3 - cost[1]), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
+        assertEquals(3 , gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
         assertEquals((3 - cost[2]), gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
     }
 

@@ -9,10 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.File;
 
 import static view.gui.MainGuiView.GOLDENRATIO;
 
+/**
+ * This class is used to display a window for game setting choose
+ */
 public class GameSettingsChoose extends JFrame{
     private Client client;
     private JPanel mainPanel;
@@ -45,7 +47,7 @@ public class GameSettingsChoose extends JFrame{
 
         mainPanel.add(comboAndText, BorderLayout.PAGE_START);
 
-        ImageIcon mapImage = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "mappe" + File.separatorChar + "map1.png");
+        ImageIcon mapImage = new ImageIcon(getClass().getClassLoader().getResource("GUI/mappe/map1.png"));
         map = new JLabel(mapImage);
         mainPanel.add(map, BorderLayout.CENTER);
 
@@ -104,7 +106,7 @@ public class GameSettingsChoose extends JFrame{
 
     private void setImageMap(){
         synchronized (lock) {
-            ImageIcon im = new ImageIcon(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "mappe" + File.separatorChar + currentMap + ".png").getImage().getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT));
+            ImageIcon im = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("GUI/mappe/" + currentMap + ".png")).getImage().getScaledInstance(map.getWidth(), map.getHeight(), Image.SCALE_DEFAULT));
             map.setIcon(im);
         }
     }

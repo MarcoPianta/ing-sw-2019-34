@@ -1,20 +1,16 @@
 package view.gui;
 
 import Model.CardWeapon;
-import network.messages.Payment;
-import network.messages.PaymentResponse;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
+/**
+ * This class is used to display a window for reload action
+ */
 public class ReloadGui extends JFrame {
     private int i = 0;
 
@@ -31,7 +27,7 @@ public class ReloadGui extends JFrame {
                 c.gridx = i;
                 c.gridy = 1;
 
-                JLabel label = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + cardWeapon.getName() + ".png"));
+                JLabel label = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + cardWeapon.getName() + ".png")));
                 label.addMouseListener(new MouseListener() {
                     int choose = i;
                     @Override

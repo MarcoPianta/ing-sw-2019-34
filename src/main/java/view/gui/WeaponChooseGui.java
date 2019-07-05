@@ -8,11 +8,13 @@ import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to display a window for choose a weapon to use
+ */
 public class WeaponChooseGui extends JFrame {
     private ArrayList<JButton> weaponButtons;
     private int choose;
@@ -37,7 +39,7 @@ public class WeaponChooseGui extends JFrame {
             constraints.weightx = 0.5;
             constraints.weighty = 0.3;
             constraints.insets = new Insets(5, 5, 5, 5);
-            ImageIcon card = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + c + ".png");
+            ImageIcon card = new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + c + ".png"));
             JButton button = new JButton(card);
             this.add(button, constraints);
             weaponButtons.add(button);
@@ -172,7 +174,7 @@ public class WeaponChooseGui extends JFrame {
                 for (JButton b: weaponButtons) {
                     new Thread(() -> {
                         Dimension size = b.getSize();
-                        Image resized = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + b.getName() + ".png").getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT);
+                        Image resized = new ImageIcon(getClass().getClassLoader().getResource("GUI/weapons/" + b.getName() + ".png")).getImage().getScaledInstance(size.width, size.height, Image.SCALE_DEFAULT);
                         b.setIcon(new ImageIcon(resized));
                     }).start();
                 }

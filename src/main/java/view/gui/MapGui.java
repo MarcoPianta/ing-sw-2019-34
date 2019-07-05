@@ -18,6 +18,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 
@@ -42,10 +43,10 @@ public class MapGui extends JFrame{
     private JPanel chatArea;
     private JTextField text;
     private JScrollPane chatPane;
-    private File playerBoard;
-    private File redCross;
-    private File mapImage;
-    private File[] otherPlayerBoards = new File[4];
+    private URL playerBoard;
+    private URL redCross;
+    private URL mapImage;
+    private URL[] otherPlayerBoards = new URL[4];
     private BufferedImage currentPlayerBoard;
     private BufferedImage currentRedCross;
     private BufferedImage currentMapImage;
@@ -91,9 +92,9 @@ public class MapGui extends JFrame{
         this.ammosOnMap = new HashMap<>();
         initializeSpawnWeapon();
 
-        playerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + ".png");
-        redCross = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "redCross.png");
-        mapImage = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "mappe" + File.separatorChar + mapImageFile +".png");
+        playerBoard = getClass().getClassLoader().getResource("GUI/playerBoards/" + myColor.getAbbreviation() + ".png");
+        redCross = getClass().getClassLoader().getResource("GUI/redCross.png");
+        mapImage = getClass().getClassLoader().getResource("GUI/mappe/" + mapImageFile +".png");
         try{
             currentPlayerBoard = ImageIO.read(playerBoard);
             currentRedCross = ImageIO.read(redCross);
@@ -107,7 +108,7 @@ public class MapGui extends JFrame{
         int index = 0;
         for (int i = 0; i < 5; i++){
             if (!Colors.values()[i].getAbbreviation().equals(myColor.getAbbreviation())) {
-                otherPlayerBoards[index] = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + Colors.values()[i].getAbbreviation() + ".png");
+                otherPlayerBoards[index] = getClass().getClassLoader().getResource("GUI/playerBoards/" + Colors.values()[i].getAbbreviation() + ".png");
                 try {
                     currentOtherPlayerBoards[index] = ImageIO.read(otherPlayerBoards[index]);
                     currentOtherPlayerBoardsModified[index] = currentOtherPlayerBoards[index];
@@ -217,7 +218,7 @@ public class MapGui extends JFrame{
         String cardName;
         if (card.getName().equals("back")) cardName = "back"; else cardName = card.getName();
 
-        File file = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "cardammo" + File.separatorChar + path + File.separatorChar + cardName + ".png");
+        URL file = getClass().getClassLoader().getResource("GUI/cardammo/" + path + "/" + cardName + ".png");
         try {
             BufferedImage ammo = ImageIO.read(file);
             Graphics2D g = currentMapImage.createGraphics();
@@ -266,7 +267,7 @@ public class MapGui extends JFrame{
         }
 
         try {
-            BufferedImage back = ImageIO.read(new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "weapons" + File.separatorChar + "back.png"));
+            BufferedImage back = ImageIO.read(getClass().getClassLoader().getResource("GUI/weapons/back.png"));
             double locationXBack = 0;
             double locationYBack = back.getHeight(null);
             AffineTransform txBack = AffineTransform.getRotateInstance(rotationBack, locationXBack, locationYBack);
@@ -321,7 +322,6 @@ public class MapGui extends JFrame{
         Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
 
         Graphics2D g = currentPlayerBoardModified.createGraphics();
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, i2, null);
         g.dispose();
         Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
@@ -418,7 +418,7 @@ public class MapGui extends JFrame{
      * */
     void finalTurn(){
         this.finalTurn = true;
-        File newPlayerBoard = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + myColor.getAbbreviation() + "Back.png");
+        URL newPlayerBoard = getClass().getClassLoader().getResource("GUI/playerBoards/" + myColor.getAbbreviation() + "/Back.png");
         try {
             BufferedImage newPlayerBoardImage = ImageIO.read(newPlayerBoard);
             currentPlayerBoard = cloneImage(newPlayerBoardImage);
@@ -913,7 +913,7 @@ public class MapGui extends JFrame{
     void updateEnemyPosition(Colors player, String id){
         othersPosition[enemies.get(player)] = id;
         Graphics2D g = currentOtherPlayerBoardsModified[enemies.get(player)].createGraphics();
-        Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
+        Image number = new ImageIcon(getClass().getClassLoader().getResource("GUI/numbers/" + (ViewMap.getSquareNumber(id)+1) + ".png")).getImage();
 
         g.drawImage(number, 1050 * currentOtherPlayerBoardsModified[enemies.get(player)].getWidth() / 1120, 0, null);
         g.dispose();
@@ -929,7 +929,7 @@ public class MapGui extends JFrame{
     void setMyPosition(String id){
         myPosition = id;
         Graphics2D g = currentPlayerBoardModified.createGraphics();
-        Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
+        Image number = new ImageIcon(getClass().getClassLoader().getResource("GUI/numbers/" + (ViewMap.getSquareNumber(id)+1) + ".png")).getImage();
 
         g.drawImage(number, 1050 * currentPlayerBoardModified.getWidth() / 1120, 0, null);
         g.dispose();

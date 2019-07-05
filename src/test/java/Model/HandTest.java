@@ -112,7 +112,7 @@ public class HandTest {
      * this method tests the adding off ammo
      * */
     @Test
-    public  void testAddAmmo(){
+    public  void testAddAmmo() throws FileNotFoundException{
         Player player=new Player(832, Colors.GREEN);
 
         int red=2;
@@ -126,29 +126,23 @@ public class HandTest {
         red=2;
         player.getPlayerBoard().getHandPlayer().addAmmo(red,yellow,blue);
         assertEquals(3,player.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
+        player.getPlayerBoard().getHandPlayer().decrementAmmo(1, 0, 0);
+        assertEquals(2,player.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
+        player.getPlayerBoard().getHandPlayer().chargeWeapon(new CardWeapon("cyberblade"), 0, 1, 0, new ArrayList<>());
+        assertEquals(1,player.getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
     }
     /*
      *this method tests the use of power up
      * */
     @Test
     public void usePowerUpTest() throws  FileNotFoundException{
-        List<NormalSquare> squares=new ArrayList<>();
-        ArrayList<Integer> tokens=new ArrayList<>();
-        tokens.add(1322);
-        tokens.add(32525);
-        /*GameHandler gameHandler=new GameHandler(5,tokens,"map1",null);
-        CardPowerUp cardPowerUp = new CardPowerUp(PowerUpEnum.NEWTON_B.getAbbreviation());
-        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().addPowerUp(cardPowerUp);
-        gameHandler.getGame().getPlayers().get(1).spawn(2);
-        gameHandler.getGame().getPlayers().get(1).calculateNewPosition(gameHandler.getGame().getPlayers().get(1).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0));
+        Player player=new Player(832, Colors.GREEN);
+        Player player2=new Player(831, Colors.BLUE);
 
-        PossibleMove possibleMove=new PossibleMove(gameHandler.getGame().getPlayers().get(0).getPlayerID(),1);
-        squares=gameHandler.receiveSquare(possibleMove);
-        //use powerUp
-        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().usePowerUp(gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(0),gameHandler.getGame().getPlayers().get(1),squares.get(0));
-
-        assertEquals(squares.get(0),gameHandler.getGame().getPlayers().get(1).getPosition());
-        assertEquals(0,gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());*/
+        CardPowerUp powerUpTest = new CardPowerUp("newton_B");
+        player.getPlayerBoard().getHandPlayer().addPowerUp(powerUpTest);
+        assertEquals(1,player.getPlayerBoard().getHandPlayer().getPlayerPowerUps().size());
+        player.getPlayerBoard().getHandPlayer().usePowerUp(powerUpTest, player, null, 0);
     }
 
 

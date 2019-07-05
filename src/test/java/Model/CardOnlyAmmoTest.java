@@ -23,6 +23,7 @@ public class CardOnlyAmmoTest {
         cardOnlyAmmo = new CardOnlyAmmo();
 
         assertNull(cardOnlyAmmo.getItem1());
+        assertFalse(cardOnlyAmmo.isWithPowerUp());
     }
 
     @Test
