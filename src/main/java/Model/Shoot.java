@@ -90,6 +90,8 @@ public class Shoot implements Action, Serializable {
     }
 
     private boolean isValidTHOR() {
+        targets = new ArrayList(shooterPlayer.getGameId().getPlayers());
+        targets.remove(shooterPlayer);
         for(int i = 0; i < targets.size(); i++){
             if(i == 0){
                 if(!targetablePlayer().contains(targets.get(i)))
@@ -309,6 +311,9 @@ public class Shoot implements Action, Serializable {
          * @return the list of Player that can be targeted by the actorPlayer
          */
     public List<Player> targetablePlayer(){
+        if(shootEffect.getPreCondition().isConsecutive()){
+            return shooterPlayer.getGameId().getPlayers();
+        }
         ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
         reachablePlayer.remove(shooterPlayer);
 
@@ -346,7 +351,7 @@ public class Shoot implements Action, Serializable {
      * This method execute the Shoot Action only in 'p' case
      */
     private void execP(){
-        for (int i = 0; i < targets.size(); i++) {
+        for (int i = 0; i < targets.size() && i < shootEffect.getpDamage().size() ; i++) {
             injureTarget(targets.get(i), shootEffect.getpDamage().get(i));
             markTarget(targets.get(i), shootEffect.getpMark().get(i));
         }

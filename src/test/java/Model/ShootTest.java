@@ -169,23 +169,32 @@ public class ShootTest {
         Player testTargetPlayer1 = new Player(65364327,color2);
         Player testTargetPlayer2 = new Player(65474375,color3);
         Player testTargetPlayer3 = new Player(65543674,color4);
-        testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
-        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(0));
-        testTargetPlayer2.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(2));
-        testTargetPlayer3.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
+        testShooterPlayer.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(1));
+        testTargetPlayer1.newPosition(game.getMap().getRooms().get(0).getNormalSquares().get(2));
+        testTargetPlayer2.newPosition(game.getMap().getRooms().get(1).getNormalSquares().get(2));
+        testTargetPlayer3.newPosition(game.getMap().getRooms().get(2).getNormalSquares().get(0));
         game.addPlayer(testShooterPlayer);
         game.addPlayer(testTargetPlayer1);
         game.addPlayer(testTargetPlayer2);
         game.addPlayer(testTargetPlayer3);
         //initialization of the action
-        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.MACHINEGUN.getAbbreviation());
-        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(1));
-        Shoot action = new Shoot(testEffect, testShooterPlayer, null, null, false);
+        ArrayList<Player> testTargetList = new ArrayList<>();
+        testTargetList.add(testTargetPlayer1);
+        testTargetList.add(testTargetPlayer2);
+        testTargetList.add(testTargetPlayer3);
+
+        CardWeapon testWeapon = new CardWeapon (WeaponDictionary.THOR.getAbbreviation());
+        Effect testEffect = testWeapon.getEffects().get(testWeapon.getActionSequences().indexOf(123));
+        Shoot action = new Shoot(testEffect, testShooterPlayer, testTargetList, null, false);
         ArrayList<Player> correctTargetList = new ArrayList<>();
         correctTargetList.add(testTargetPlayer1);
-        correctTargetList.add(testTargetPlayer2);
-        correctTargetList.add(testTargetPlayer3);
-        assertEquals(correctTargetList, action.targetablePlayer());
+   //     correctTargetList.add(testTargetPlayer2);
+   //     correctTargetList.add(testTargetPlayer3);
+        assertTrue(action.isValid());
+        action.execute();
+        assertEquals(2, testTargetPlayer1.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(1, testTargetPlayer2.getPlayerBoard().getHealthPlayer().getDamageBar().size());
+        assertEquals(2, testTargetPlayer3.getPlayerBoard().getHealthPlayer().getDamageBar().size());
     }
 
     @Test
