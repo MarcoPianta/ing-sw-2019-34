@@ -167,6 +167,9 @@ public abstract class Client implements Serializable {
         }
         else if (message.getUpdateType().equals(UpdateClient.OTHERPOSITION))
             view.setOtherPosition(message.getOtherColor(), message.getSquareID());
+        else if (message.getUpdateType().equals(UpdateClient.OTHERDAMAGEBAR)) {
+            view.updateEnemiesDamageBar(message.getDamageBar(), message.getMarks(), message.getOtherColor());
+        }
         else if(message.getUpdateType().equals(UpdateClient.HANDPLAYER)){
             System.out.println("Bellaaaa");
             message.getWeapons().forEach(x -> System.out.println(x.getName()));

@@ -245,7 +245,7 @@ public class ViewCLI extends View {
     }
 
     @Override
-    public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
+    public void updateEnemiesDamageBar(List<Colors> damageBar, List<Colors> marks, Colors player) {
         out.println(player+"was attacked and his damagedBar was changed:" );
         for(Colors color:damageBar)
             out.println(color+",");

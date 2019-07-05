@@ -171,6 +171,7 @@ public class TurnHandler {
                 for(Player p:message.getTargets()){
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
+                    gameHandler.getGameLobby().getClients().forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, p.getColor(), new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark()))));
                 }
             }
         }
@@ -189,6 +190,7 @@ public class TurnHandler {
                 for(Player p:players){
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
+                    gameHandler.getGameLobby().getClients().forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, p.getColor(), new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark()))));
                 }
             }
         }
@@ -204,6 +206,7 @@ public class TurnHandler {
                 for(Player p:players){
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark())));
                     gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(),"you have been attacked by"+gameHandler.getGame().getCurrentPlayer().getColor()));
+                    gameHandler.getGameLobby().getClients().forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, p.getColor(), new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getDamageBar()),new ArrayList<>(p.getPlayerBoard().getHealthPlayer().getMark()))));
                 }
 
             }

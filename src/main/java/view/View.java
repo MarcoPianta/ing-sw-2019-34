@@ -111,7 +111,7 @@ public abstract class View {
 
     public abstract void payment(Payment message);
 
-    public abstract void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player);
+    public abstract void updateEnemiesDamageBar(List<Colors> damageBar, List<Colors> marks, Colors player);
 
     public abstract void updateEnemyPosition(Colors player, String position);
 

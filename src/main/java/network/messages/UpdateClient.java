@@ -45,6 +45,18 @@ public class UpdateClient extends Message implements Serializable {
     }
 
     /**
+     * This constructor is used to build messages to update the damage bar status in clients
+     * @param token token of the clients who need to be updated
+     * @param damageBar the array which contains the new damageBar to send to the client
+     */
+    public UpdateClient(Integer token, Colors player, List<Player> damageBar, List<Player> marks){
+        setMessageInfo(token, OTHERDAMAGEBAR);
+        this.otherColor = player;
+        this.damageBar = damageBar.stream().map(Player::getColor).collect(Collectors.toList());
+        this.marks = marks.stream().map(Player::getColor).collect(Collectors.toList());
+    }
+
+    /**
      * This constructor is used to build messages to update the position of a player
      * @param token token of the clients who need to be updated
      * @param square the square which indicates the new position of the player
@@ -144,6 +156,7 @@ public class UpdateClient extends Message implements Serializable {
     public static final String POSSIBLESQUARES = "POSSIBLESQUARES";
     public static final String POSITION = "POSITION";
     public static final String OTHERPOSITION = "OTHERPOSITION";
+    public static final String OTHERDAMAGEBAR = "OTHERDAMAGEBAR";
     public static final String RESPAWN = "RESPAWN";
     public static final String MESSAGE = "MESSAGE";
     public static final String HANDPLAYER = "HANDPLAYER";

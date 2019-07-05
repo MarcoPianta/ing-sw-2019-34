@@ -60,7 +60,6 @@ public class Grab implements Action, Serializable {
                 actorPlayer.getPlayerBoard().getHandPlayer().addAmmo(grabAmmo(grabbedNotOnlyAmmo.getItem3().getAbbreviation())[0], grabAmmo(grabbedNotOnlyAmmo.getItem3().getAbbreviation())[1], grabAmmo(grabbedNotOnlyAmmo.getItem3().getAbbreviation())[2]);
                 if (actorPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps().size() != 3)
                     actorPlayer.getPlayerBoard().getHandPlayer().addPowerUp(actorPlayer.getGameId().getDeckCollector().getCardPowerUpDrawer().draw());
-                //TODO prompt fullPowerUp in else
             }
             return true;
     }

@@ -35,7 +35,7 @@ public class DeckCreator implements Serializable {
             try {
                 deck.add(new CardWeapon(WeaponDictionary.values()[i].getAbbreviation()));
             }catch (FileNotFoundException e){
-                //TODO send message that  the card will be not used
+                e.getMessage();
             }
         }
         return deck;
@@ -50,14 +50,14 @@ public class DeckCreator implements Serializable {
             try {
                 deck.add(new CardOnlyAmmo(AmmoEnum.values()[i].getAbbreviation()));
             }catch (FileNotFoundException e){
-                //TODO send message that  the card will be not used
+                e.getMessage();
             }
         }
         for (int i = 0; i < AmmoEnum.values().length; i++){
             try {
                 deck.add(new CardNotOnlyAmmo(AmmoEnum.values()[i].getAbbreviation()));
             }catch (FileNotFoundException e){
-                //TODO send message that  the card will be not used
+                e.getMessage();
             }
         }
         deck.setTrashDeck();
@@ -73,7 +73,7 @@ public class DeckCreator implements Serializable {
             try {
                 deck.add(new CardPowerUp(PowerUpEnum.values()[i].getAbbreviation()));
             }catch (FileNotFoundException e){
-                //TODO send message that  the card will be not used
+                e.getMessage();
             }
         }
         deck.setTrashDeck();

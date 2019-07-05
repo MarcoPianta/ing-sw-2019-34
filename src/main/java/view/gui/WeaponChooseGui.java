@@ -61,7 +61,7 @@ public class WeaponChooseGui extends JFrame {
                             }
                             choosed = true;
                             if (shot)
-                                JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0) + " effect: " + weaponChoose.charAt(2));
+                                JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0) + " effect: " + weaponChoose.charAt(weaponChoose.length()-1));
                             else
                                 JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0));
                         } else {
@@ -122,15 +122,23 @@ public class WeaponChooseGui extends JFrame {
         choose.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                System.out.println("Effetto stringaaaaa: " + weaponChoose);
                 if (!weaponChoose.equals("")) {
                     if (shot) {
-                        if (!cardWeapon.get(Character.getNumericValue(weaponChoose.charAt(0))).getActionSequences().contains(Integer.parseInt(weaponChoose.substring(2))))
+                        if (!cardWeapon.get(Character.getNumericValue(weaponChoose.charAt(0))).getActionSequences().contains(Integer.parseInt(weaponChoose.substring(2)))) {
                             JOptionPane.showMessageDialog(choose, "You choose an incorrect effect!");
-                        mapGui.weaponChosen(weaponChoose);
+                            choosed = false;
+                            weaponChoose = "";
+                        }
+                        else {
+                            mapGui.weaponChosen(weaponChoose);
+                            dispose();
+                        }
                     }
-                    else
+                    else {
                         mapGui.sendGrabWeapon(Character.getNumericValue(weaponChoose.charAt(0)));
-                    dispose();
+                        dispose();
+                    }
                 }
                 else
                     JOptionPane.showMessageDialog(choose, "You choose nothing!");

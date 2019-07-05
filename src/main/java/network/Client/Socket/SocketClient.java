@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * This class is used from the client to communicate with SocketServer when a Socket connection is used.
@@ -19,6 +20,7 @@ public class SocketClient extends Client{
     private ObjectInputStream in; //Used to send message to server
     private ObjectOutputStream out; //Used to receive message from server
     private Thread networkHandler;
+    private static Logger logger = Logger.getLogger("Client");
 
     /**
      * The constructor only initialize the host and port attribute, it doesn't establish connection. Attributes will be
@@ -34,7 +36,7 @@ public class SocketClient extends Client{
         try {
             init();
         }catch (IOException e){
-            //e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -55,13 +57,12 @@ public class SocketClient extends Client{
      * This method send a message to the server
      * @param message is the message that must be sent to the server
      * */
-    //TODO handle exception, maybe with a logger
     public void send(Message message) {
         try {
             out.writeObject(message);
             out.flush();
         }catch (IOException e){
-            //TODO catch exception with logger
+            logger.severe(e.getMessage());
         }
     }
 
@@ -75,7 +76,7 @@ public class SocketClient extends Client{
             out.close();
             connection.close();
         }catch (IOException e){
-            //TODO logger
+            logger.severe(e.getMessage());
         }
     }
 }
