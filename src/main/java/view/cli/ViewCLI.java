@@ -7,11 +7,7 @@ import network.messages.*;
 import view.View;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ViewCLI extends View {
     private static PrintWriter out=new PrintWriter(System.out,true);
@@ -19,6 +15,11 @@ public class ViewCLI extends View {
     private int myPoint;
     private HashMap<String, CardWeapon[]> spawnSquareWeapon;
     private boolean finalTurn;
+    private boolean update=false;
+    private boolean grab=false;
+    private boolean move=false;
+    private boolean waitUpdate=false;
+    private boolean shot=false;
 
 
 
@@ -38,7 +39,6 @@ public class ViewCLI extends View {
             else if(i==2){
                 client= new RMIClient("localhost",10000,this);
                 corrected=true;
-
             }
             else{
                 out.println("it's not difficult, you can do it ");
@@ -58,8 +58,7 @@ public class ViewCLI extends View {
     }
 
     public static void main(String[] args) {
-        ViewCLI viewCLI=new ViewCLI();
-
+            new ViewCLI();
     }
 
     @Override
@@ -69,13 +68,6 @@ public class ViewCLI extends View {
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn=myTurn;
-        if(numberAction==3 && !finalTurn)
-            finalActions();
-        else if(finalTurn)
-            finalTurnAction();
-        else
-            startActions();
-
     }
 
 
@@ -93,7 +85,7 @@ public class ViewCLI extends View {
         int i=1;
 
         for(CardWeapon weapon :spawnSquareWeapon.get(myPositionID)){
-            out.println(1+ "="+weapon.getName() +"\t");
+            out.println(i+ "="+weapon.getName() +"\t");
             i++;
         }
         out.println("choose a number from 1 to "+ 3 +"");
@@ -148,7 +140,19 @@ public class ViewCLI extends View {
         while(!corrected) {
             i=in.nextInt();
             if(i>=1 && i<=squares.size()){
-                client.send(new MoveResponse(client.getToken(),squares.get(i-1)));
+                if(move && !grab){
+                    numberAction++;
+                    //move=false;
+                    client.send(new MoveResponse(client.getToken(),squares.get(i-1)));
+                }
+                else if(grab && (squares.get(i-1).equals("0,2")||squares.get(i-1).equals("1,0")||squares.get(i-1).equals("2,3"))) {
+                    client.send(new MoveResponse(client.getToken(),squares.get(i-1)));
+                }
+                else {
+                    numberAction++;
+                    client.send(new MoveResponse(client.getToken(),squares.get(i-1)));
+                }
+
                 corrected=true;
             }
             else{
@@ -156,14 +160,16 @@ public class ViewCLI extends View {
                 out.println("choose a number from 1 to "+ squares.size() +"" );
             }
         }
-        if(numberAction==3 && !finalTurn)
-            finalActions();
-        else if(finalTurn)
-            finalTurnAction();
-        else
-            startActions();
-
+        if(move){
+            if(numberAction>=3 && !finalTurn)
+                finalActions();
+            else if(finalTurn)
+                finalTurnAction();
+            else
+                startActions();
+        }
     }
+
 
     @Override
     public void showPossibleRooms(List<String> ids) {
@@ -188,6 +194,10 @@ public class ViewCLI extends View {
             }
     }
 
+    @Override
+    public void setNumberAction(int numberAction) {
+        this.numberAction=numberAction;
+    }
 
     @Override
     public void showPossibleSquares(List<String> targets) {
@@ -245,7 +255,7 @@ public class ViewCLI extends View {
 
     @Override
     public void payment(Payment message) {
-        out.println("you must pay: red="+message.getCost()[0]+"yellow="+message.getCost()[1]+"blue="+message.getCost()[2]);
+        out.println("you must pay: red= "+message.getCost()[0]+"  yellow= "+message.getCost()[1]+"  blue= "+message.getCost()[2]);
         out.println(" PRESS 1 if you want to pay the effect with powerUp, or another number if you wan't");
         ArrayList<Integer> powerUp= new ArrayList<>();
         boolean corrected=false;
@@ -253,24 +263,34 @@ public class ViewCLI extends View {
             int i=in.nextInt();
             if(i==1){
                 boolean esc=false;
-                for ( int count = 1; i <= powerUps.size(); count++)
-                    out.println(count + ":" +powerUps.get(count - 1)+ powerUps.get(count - 1).getColor() + "\t");
-                out.println("\n choose a number from 1 to" + powerUps.size() + "or 9 to esc(you can use more powerUp)\n");
+                int count=1;
+                for ( CardPowerUp card: powerUps){
+                    out.println(count + ":" +card.getName() +"  "+ card.getColor() + "\t");
+                    count++;
+                }
+                out.println("\n choose a number from 1 to" + count+ "or 9 to esc(you can use more powerUp)\n");
                 while(!esc) {
                     i=in.nextInt();
                     if(i>=1 && i<=powerUps.size()){
+                        out.println("you have choose a powerUp to pay");
                         powerUp.add(i-1);
+
                     }
                     else if(i==9){
                         esc=true;
                     }
                     else{
                         out.println("it's not difficult, you can do it ");
-                        out.println("\n choose a number from 1 to" + powerUps.size() + "or 9 to esc(you can use more powerUp)\n");
+                        out.println("\n choose a number from 1 to" + count + "or 9 to esc(you can use more powerUp)\n");
                     }
+                    if(!esc)
+                        System.out.println("choose another powerUp");
+
                 }
                 corrected=true;
             }
+            else if(i>1)
+                corrected=true;
             else{
                 out.println("it's not difficult, you can do it ");
                 out.println(" PRESS 1 if you want to pay the effect with powerUp, or another number if you wan't");
@@ -296,47 +316,49 @@ public class ViewCLI extends View {
                 }
             }
         }
-        else{
-            client.send(new PaymentResponse(client.getToken(),powerUp,false,message.getCost(),false));
-            if(numberAction==3 && !finalTurn)
-                finalActions();
-            else if(finalTurn)
-                finalTurnAction();
+        else {
+            numberAction++;
+            if(powerUp.isEmpty())
+                client.send(new PaymentResponse(client.getToken(), powerUp, false, message.getCost(), false));
             else
-                startActions();
+                client.send(new PaymentResponse(client.getToken(), powerUp, true, message.getCost(), false));
         }
 
     }
     private void paymentWithScope(Integer posPowerUp,ArrayList<Integer> paymentPowerUp,Integer[] cost){
-        int count=0;
+        int count=1;
         for ( CardPowerUp p:powerUps){
             if((powerUps.indexOf(p)!=posPowerUp && !paymentPowerUp.contains(powerUps.indexOf(p)))) {
-                count++;
-                out.print(count + ":" + powerUps.get(count - 1) + powerUps.get(count - 1).getColor() + "\t");
+                out.print(count + ":" + p.getName()+" " + p.getColor() + "\t");
             }
+            else
+                out.print(count + ": NOPOWERUP");
+            count++;
+
         }
-        if(count!=0) {
+        if(count!=1) {
             out.println(" choose a number from 1 to" + count);
             boolean corrected=false;
             while (!corrected) {
                 int powerUpScope = in.nextInt();
-                if (powerUpScope >= 1 && powerUpScope <= powerUps.size()) {
-                    if(paymentPowerUp.isEmpty())
-                        client.send(new PaymentResponse(client.getToken(), paymentPowerUp,false, cost, true,"",powerUpScope ));
-                    else
-                        client.send(new PaymentResponse(client.getToken(), paymentPowerUp,true, cost, true,"",powerUpScope ));
+                if (powerUpScope >= 1 && powerUpScope <= count) {
+                    if(paymentPowerUp.isEmpty()) {
+                        numberAction++;
+                        client.send(new PaymentResponse(client.getToken(), paymentPowerUp, false, cost, true, "", powerUpScope));
+
+                    }
+                    else {
+                        numberAction++;
+                        client.send(new PaymentResponse(client.getToken(), paymentPowerUp, true, cost, true, "", powerUpScope));
+
+                    }
                     corrected = true;
                 } else {
                     out.println("it's not difficult, you can do it ");
                     out.println(" choose a number from 1 to" + count);
                 }
             }
-            if(numberAction==3 && !finalTurn)
-                finalActions();
-            else if(finalTurn)
-                finalTurnAction();
-            else
-                startActions();
+
         }
         else
             paymentWithScope2(posPowerUp,paymentPowerUp,cost);
@@ -358,12 +380,6 @@ public class ViewCLI extends View {
                 out.println("You must pay scope with ammo, press r for red, y for yellow, b for blue");
             }
         }
-        if(numberAction==3 && !finalTurn)
-            finalActions();
-        else if(finalTurn)
-            finalTurnAction();
-        else
-            startActions();
     }
 
 
@@ -408,7 +424,7 @@ public class ViewCLI extends View {
 
     @Override
     public void showPowerUpChooseRespawn() {
-        out.println("choose the power up to discard to spawn in that color:");
+        out.println("\nchoose the power up to discard to spawn in that color:");
         int c=1;
         for(CardPowerUp p:powerUps){
             out.println(c +":"+p.getName()+", "+p.getColor()+ "\t");
@@ -419,6 +435,7 @@ public class ViewCLI extends View {
         while(!corrected) {
             int i=in.nextInt();
             if(i>=1 && i<=powerUps.size()){
+                waitUpdate=true;
                 client.send(new RespawnMessage(client.getToken(),i-1));
                 corrected=true;
             }
@@ -427,12 +444,21 @@ public class ViewCLI extends View {
                 out.println("choose a number from 1 to "+ powerUps.size() +"" );
             }
         }
-        startActions();
+
     }
 
     @Override
     public void showMessage(String message) {
-        out.println(message);
+        out.println("\n"+message);
+        if(message.equals("Action not done") && myPositionID!=null && !(grab && (myPositionID.equals("0,2")||myPositionID.equals("1,0")||myPositionID.equals("2,3")))){
+            if(numberAction>=3 && !finalTurn)
+                finalActions();
+            else if(finalTurn)
+                finalTurnAction();
+            else
+                startActions();
+
+        }
     }
 
 
@@ -518,8 +544,6 @@ public class ViewCLI extends View {
                 }
             }
         }
-        else
-            in.close();
     }
 
     @Override
@@ -534,43 +558,6 @@ public class ViewCLI extends View {
             out.println("The game is over.You didn't win!");
     }
 
-
-    @Override
-    public void setBlueAmmo(int blueAmmo) {
-        super.setBlueAmmo(blueAmmo);
-        out.print("\n You have ammo blue="+blueAmmo);
-    }
-
-    @Override
-    public void setRedAmmo(int redAmmo) {
-        super.setRedAmmo(redAmmo);
-        out.print("\n You have ammo red="+redAmmo);
-    }
-
-    @Override
-    public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
-        this.setPowerUps(powerUps);
-        out.print("\n You grab a new POWER UP="+powerUps.get(powerUps.size()-1));
-        out.print("\n Yours powerUp are: \t");
-        for(CardPowerUp powerUp:powerUps)
-            out.print(powerUp +"\n");
-    }
-
-    @Override
-    public void setWeapons(ArrayList<CardWeapon> weapons) {
-        this.setWeapons(weapons);
-        out.print("\n You grab a new POWER UP="+weapons.get(weapons.size()-1));
-        out.print("\n Yours weapons are: \t");
-        for(CardWeapon weapon :weapons)
-            out.print(weapon +"\n");
-    }
-
-    @Override
-    public void setYellowAmmo(int yellowAmmo) {
-        super.setYellowAmmo(yellowAmmo);
-        out.print("\n You have ammo yellow="+yellowAmmo);
-    }
-
     @Override
     public void startGame(String map) {
         out.println("The game started, GOOD LUCK!!");
@@ -579,7 +566,14 @@ public class ViewCLI extends View {
     @Override
     public void startTurn() {
         out.println("it's officially your turn ");
-        startActions();
+        myTurn=true;
+        numberAction=1;
+        if(myPositionID!=null){
+            if(finalTurn)
+                finalTurnAction();
+            else
+                startActions();
+        }
     }
 
     @Override
@@ -589,20 +583,27 @@ public class ViewCLI extends View {
 
     public void startActions(){
         if(myTurn){
-            out.println("Is the action number" +getNumberAction()+" you can choose:");
+            update=false;
+            grab=false;
+            move=false;
+            shot=false;
+            out.println("\nyou can choose:");
             out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass  type a number from 1 to 6 ");
             boolean corrected=false;
             while(!corrected){
                 int i=in.nextInt();
                 if(i==1){
+                    move=true;
                     client.send(new ReceiveTargetSquare(client.getToken(),"move"));
                     corrected=true;
                 }
                 else if(i==2){
+                    shot=true;
                     actionCLI.actionShot();
                     corrected=true;
                 }
                 else if(i==3){
+                    grab=true;
                     client.send(new ReceiveTargetSquare(client.getToken(),"grab"));
                     corrected=true;
                 }
@@ -628,7 +629,11 @@ public class ViewCLI extends View {
     }
     public void finalActions(){
         if (myTurn){
-            out.println("you have finished your turn you can recharge using some powerUp or pass");
+            update=false;
+            grab=false;
+            move=false;
+            shot=false;
+            out.println("\nyou have finished your turn you can recharge using some powerUp or pass");
             out.println("1:Use power up 2:Reload, 3:Pass  type a number from 1 to 3 ");
             boolean corrected=false;
             while(!corrected) {
@@ -650,18 +655,25 @@ public class ViewCLI extends View {
             }
         }
     }
+
     public void finalTurnAction(){
         if(myTurn){
-            out.println("Is the action number" +getNumberAction()+" you can choose:");
+            grab=false;
+            update=false;
+            move=false;
+            shot=false;
+            out.println("\nyou can choose: ");
             out.println("1:Move(don't press if you play after first player), 2:Shoot, 3:Grab, 4:Use power up  5:Pass  type a number from 1 to 5 ");
             boolean corrected=false;
             while(!corrected){
                 int i=in.nextInt();
                 if(i==1){
+                    move=true;
                     client.send(new ReceiveTargetSquare(client.getToken(),"move"));
                     corrected=true;
                 }
                 else if(i==2){
+                    shot=true;
                     out.println("you can reload this weapon for shot");
                     int posWeapon=actionCLI.actionReload();
                     if(posWeapon==0)
@@ -671,6 +683,7 @@ public class ViewCLI extends View {
                     corrected=true;
                 }
                 else if(i==3){
+                    grab=true;
                     client.send(new ReceiveTargetSquare(client.getToken(),"grab"));
                     corrected=true;
                 }
@@ -688,16 +701,12 @@ public class ViewCLI extends View {
                     out.println("it's not difficult, you can do it ");
                     out.println("1:Move(don't press if you play after first player), 2:Shoot, 3:Grab, 4:Use power up  5:Pass  type a number from 1 to 5 ");
                 }
+
             }
         }
+        update=false;
     }
 
-
-    @Override
-    public void setMyPositionID(String myPositionID) {
-        this.myPositionID=myPositionID;
-        out.println("your new Position is" +myPositionID);
-    }
 
     @Override
     public void updateEnemyPosition(Colors player, String position) {
@@ -707,11 +716,11 @@ public class ViewCLI extends View {
 
     @Override
     public void fillSquare(String squareID, CardAmmo ammo){
-        out.println(squareID+":"+ammo.getName()+"");
+        out.print(squareID+":"+ammo.getName()+"\t");
     }
     @Override
     public void fillSpawn(String squareID, int position, CardWeapon weapon){
-        out.println(squareID+":"+"position" +position+weapon.getName()+"\n" );
+        out.print(squareID+":"+"position " +position+ " "+weapon.getName()+"\t" );
         spawnSquareWeapon.get(squareID)[position] = weapon;
 
     }
@@ -724,4 +733,69 @@ public class ViewCLI extends View {
         myPoint+=points;
         out.println("you have gained  "+points+" points han you have "+myPoint+"points");
     }
+    @Override
+    public void setMyPositionID(String myPositionID) {
+        this.myPositionID=myPositionID;
+
+        out.println("your new Position is " +myPositionID);
+
+        if(!update){
+            update=true;
+            setWeapons(weapons);
+        }
+
+
+    }
+    @Override
+    public void setBlueAmmo(int blueAmmo) {
+        this.blueAmmo =blueAmmo;
+        out.print("\n You have ammo blue="+blueAmmo);
+        waitUpdate=false;
+        grab=false;
+        shot=false;
+    }
+
+    @Override
+    public void setRedAmmo(int redAmmo) {
+        this.redAmmo=redAmmo;
+        out.print("\n You have ammo red="+redAmmo);
+    }
+
+    @Override
+    public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
+        this.powerUps=powerUps;
+        out.print("\n Yours powerUp are: \t");
+        for(CardPowerUp powerUp:powerUps)
+            out.print(powerUp.getName()+"\t");
+    }
+
+    @Override
+    public void setWeapons(ArrayList<CardWeapon> weapons) {
+        if(!update){
+            update=true;
+            setMyPositionID(myPositionID);
+        }
+        this.weapons=weapons;
+        out.print("\n Yours weapons are: \t");
+        for(CardWeapon weapon :weapons)
+            out.print(weapon.getName() +"\n");
+
+        if(myPositionID!=null && !grab && !shot && !move &&!waitUpdate){
+            if(numberAction>=3 && !finalTurn)
+                finalActions();
+            else if(finalTurn)
+                finalTurnAction();
+            else
+                startActions();
+        }
+
+    }
+
+    @Override
+    public void setYellowAmmo(int yellowAmmo) {
+        this.yellowAmmo=yellowAmmo;
+        out.print("\n You have ammo yellow="+yellowAmmo);
+    }
+
+
 }
