@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -52,7 +53,7 @@ public class MainGuiView extends View {
         frame.setMinimumSize(new Dimension(panelWidth, INITIALWINDOWHEIGHT));
         mainPanel = new JPanel(new BorderLayout());
 
-        ImageIcon icon = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "homeAdrenaline.png");
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("GUI/homeAdrenaline.png"));
         imageLabel = new JLabel(icon);
 
         FlowLayout flowLayout = new FlowLayout();

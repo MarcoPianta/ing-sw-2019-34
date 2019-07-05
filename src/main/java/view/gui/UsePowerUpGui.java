@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +17,7 @@ public class UsePowerUpGui extends JFrame {
         this.setLayout(new FlowLayout());
         int i = 0;
         for (String s: powerUps){
-            JLabel label = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
+            JLabel label = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/powerups/" + s + ".png")));
             int index = i;
             label.addMouseListener(new MouseListener() {
                 int choose = index;
