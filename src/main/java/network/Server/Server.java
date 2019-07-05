@@ -85,7 +85,7 @@ public class Server {
                 lobbyHashMap.get(message.getToken()).receiveMessage(message);
             }
         }catch (Exception e){
-            logger.severe(e.getMessage());
+            e.printStackTrace();//TODO logger
         }
     }
 
