@@ -18,6 +18,7 @@ public class ViewCLI extends View {
     private static Scanner in=new Scanner(System.in);
     private int myPoint;
     private HashMap<String, CardWeapon[]> spawnSquareWeapon;
+    private boolean finalTurn;
 
 
 
@@ -49,6 +50,11 @@ public class ViewCLI extends View {
         spawnSquareWeapon.put("0,2",new CardWeapon[3]);
         spawnSquareWeapon.put("1,0",new CardWeapon[3]);
         spawnSquareWeapon.put("2,3",new CardWeapon[3]);
+        finalTurn=false;
+    }
+
+    public boolean isFinalTurn() {
+        return finalTurn;
     }
 
     public static void main(String[] args) {
@@ -62,6 +68,13 @@ public class ViewCLI extends View {
     }
 
     public void setMyTurn(boolean myTurn) {
+        this.myTurn=myTurn;
+        if(numberAction==3 && !finalTurn)
+            finalActions();
+        else if(finalTurn)
+            finalTurnAction();
+        else
+            startActions();
 
     }
 
@@ -69,7 +82,8 @@ public class ViewCLI extends View {
 
     @Override
     public void finalTurn() {
-
+        out.println("finally is the final turn");
+        finalTurn=true;
     }
 
 
@@ -142,6 +156,12 @@ public class ViewCLI extends View {
                 out.println("choose a number from 1 to "+ squares.size() +"" );
             }
         }
+        if(numberAction==3 && !finalTurn)
+            finalActions();
+        else if(finalTurn)
+            finalTurnAction();
+        else
+            startActions();
 
     }
 
@@ -200,7 +220,7 @@ public class ViewCLI extends View {
         for(Colors c:targets){
             out.println(c +"\t");
         }
-        out.println(" choose a number from 0 to "+ targets.size() +"or z to cancel ");
+        out.println(" choose a number from 0 to "+ targets.size());
         out.println("choose max"+i+"target and press 9 when terminate");
         int count=0;
         List<Colors> targetChoose=new ArrayList();
@@ -222,10 +242,130 @@ public class ViewCLI extends View {
         client.send(new ShootResponsep(client.getToken(),targetChoose));
     }
 
+
     @Override
     public void payment(Payment message) {
+        out.println("you must pay: red="+message.getCost()[0]+"yellow="+message.getCost()[1]+"blue="+message.getCost()[2]);
+        out.println(" PRESS 1 if you want to pay the effect with powerUp, or another number if you wan't");
+        ArrayList<Integer> powerUp= new ArrayList<>();
+        boolean corrected=false;
+        while(!corrected) {
+            int i=in.nextInt();
+            if(i==1){
+                boolean esc=false;
+                for ( int count = 1; i <= powerUps.size(); count++)
+                    out.println(count + ":" +powerUps.get(count - 1)+ powerUps.get(count - 1).getColor() + "\t");
+                out.println("\n choose a number from 1 to" + powerUps.size() + "or 9 to esc(you can use more powerUp)\n");
+                while(!esc) {
+                    i=in.nextInt();
+                    if(i>=1 && i<=powerUps.size()){
+                        powerUp.add(i-1);
+                    }
+                    else if(i==9){
+                        esc=true;
+                    }
+                    else{
+                        out.println("it's not difficult, you can do it ");
+                        out.println("\n choose a number from 1 to" + powerUps.size() + "or 9 to esc(you can use more powerUp)\n");
+                    }
+                }
+                corrected=true;
+            }
+            else{
+                out.println("it's not difficult, you can do it ");
+                out.println(" PRESS 1 if you want to pay the effect with powerUp, or another number if you wan't");
+            }
+        }
+        corrected=false;
+        if (message.getPowerUp()!=-1){
+            out.println(" PRESS 1 if you want to pay the scope with powerUp, 2 if you don't want\n");
+            while(!corrected) {
+                int i=in.nextInt();
+                if(i==1){
+                    paymentWithScope(message.getPowerUp(),powerUp,message.getCost());
+                    corrected=true;
+                }
+                else if(i==2){
+                    paymentWithScope2(message.getPowerUp(),powerUp,message.getCost());
+                    corrected=true;
+                }
+
+                else{
+                    out.println("it's not difficult, you can do it ");
+                    out.println(" PRESS 1 if you want to pay the scope with powerUp, 2 if you don't want\n");
+                }
+            }
+        }
+        else{
+            client.send(new PaymentResponse(client.getToken(),powerUp,false,message.getCost(),false));
+            if(numberAction==3 && !finalTurn)
+                finalActions();
+            else if(finalTurn)
+                finalTurnAction();
+            else
+                startActions();
+        }
 
     }
+    private void paymentWithScope(Integer posPowerUp,ArrayList<Integer> paymentPowerUp,Integer[] cost){
+        int count=0;
+        for ( CardPowerUp p:powerUps){
+            if((powerUps.indexOf(p)!=posPowerUp && !paymentPowerUp.contains(powerUps.indexOf(p)))) {
+                count++;
+                out.print(count + ":" + powerUps.get(count - 1) + powerUps.get(count - 1).getColor() + "\t");
+            }
+        }
+        if(count!=0) {
+            out.println(" choose a number from 1 to" + count);
+            boolean corrected=false;
+            while (!corrected) {
+                int powerUpScope = in.nextInt();
+                if (powerUpScope >= 1 && powerUpScope <= powerUps.size()) {
+                    if(paymentPowerUp.isEmpty())
+                        client.send(new PaymentResponse(client.getToken(), paymentPowerUp,false, cost, true,"",powerUpScope ));
+                    else
+                        client.send(new PaymentResponse(client.getToken(), paymentPowerUp,true, cost, true,"",powerUpScope ));
+                    corrected = true;
+                } else {
+                    out.println("it's not difficult, you can do it ");
+                    out.println(" choose a number from 1 to" + count);
+                }
+            }
+            if(numberAction==3 && !finalTurn)
+                finalActions();
+            else if(finalTurn)
+                finalTurnAction();
+            else
+                startActions();
+        }
+        else
+            paymentWithScope2(posPowerUp,paymentPowerUp,cost);
+
+    }
+    private void paymentWithScope2(Integer posPowerUp,ArrayList<Integer> paymentPowerUp,Integer[] cost){
+        out.println("You must pay scope with ammo, press r for red, y for yellow, b for blue");
+        boolean corrected=false;
+        while (!corrected) {
+            String ammo = in.next();
+            if (ammo.equals("r")||ammo.equals("y")||ammo.equals("b")) {
+                if(paymentPowerUp.isEmpty())
+                    client.send(new PaymentResponse(client.getToken(), paymentPowerUp,false, cost, true,ammo,-1));
+                else
+                    client.send(new PaymentResponse(client.getToken(), paymentPowerUp,true, cost, true,ammo,-1 ));
+                corrected = true;
+            } else {
+                out.println("it's not difficult, you can do it ");
+                out.println("You must pay scope with ammo, press r for red, y for yellow, b for blue");
+            }
+        }
+        if(numberAction==3 && !finalTurn)
+            finalActions();
+        else if(finalTurn)
+            finalTurnAction();
+        else
+            startActions();
+    }
+
 
     @Override
     public void showTargetMove(List<String> targets) {
@@ -448,63 +588,106 @@ public class ViewCLI extends View {
     }
 
     public void startActions(){
-        out.println("Is the action number" +getNumberAction()+" you can choose:");
-        out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass  type a number from 1 to 6 ");
-        boolean corrected=false;
-        while(!corrected){
-            int i=in.nextInt();
-            if(i==1){
-                client.send(new ReceiveTargetSquare(client.getToken(),"move"));
-                corrected=true;
+        if(myTurn){
+            out.println("Is the action number" +getNumberAction()+" you can choose:");
+            out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass  type a number from 1 to 6 ");
+            boolean corrected=false;
+            while(!corrected){
+                int i=in.nextInt();
+                if(i==1){
+                    client.send(new ReceiveTargetSquare(client.getToken(),"move"));
+                    corrected=true;
+                }
+                else if(i==2){
+                    actionCLI.actionShot();
+                    corrected=true;
+                }
+                else if(i==3){
+                    client.send(new ReceiveTargetSquare(client.getToken(),"grab"));
+                    corrected=true;
+                }
+                else if(i==4){
+                    actionCLI.actionPowerUp();
+                    corrected=true;
+                }
+                else if(i==5){
+                    actionCLI.actionReload();
+                    corrected=true;
+                }
+                else if(i==6){
+                    client.send(new Pass(client.getToken()));
+                    setMyTurn(false);
+                    corrected=true;
+                }
+                else{
+                    out.println("it's not difficult, you can do it ");
+                    out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass  type a number from 1 to 6 ");
+                }
             }
-            else if(i==2){
-                actionCLI.actionShot();
-                corrected=true;
-            }
-            else if(i==3){
-                client.send(new ReceiveTargetSquare(client.getToken(),"grab"));
-                corrected=true;
-            }
-            else if(i==4){
-                actionCLI.actionPowerUp();
-                corrected=true;
-            }
-            else if(i==5){
-                actionCLI.actionReload();
-                corrected=true;
-            }
-            else if(i==6){
-                client.send(new Pass(client.getToken()));
-                corrected=true;
-            }
-            else{
-                out.println("it's not difficult, you can do it ");
-                out.println("1:Move, 2:Shoot, 3:Grab, 4:Use power up 5:Reload and pass, 6:Pass  type a number from 1 to 6 ");
-            }
-
         }
     }
     public void finalActions(){
-        out.println("you have finished your turn you can recharge using some powerUp or pass");
-        out.println("1:Use power up 2:Reload, 3:Pass  type a number from 1 to 3 ");
-        boolean corrected=false;
-        while(!corrected){
-            int i=in.nextInt();
-            if(i==1){
-                actionCLI.actionPowerUp();
-                corrected=true;
+        if (myTurn){
+            out.println("you have finished your turn you can recharge using some powerUp or pass");
+            out.println("1:Use power up 2:Reload, 3:Pass  type a number from 1 to 3 ");
+            boolean corrected=false;
+            while(!corrected) {
+                int i = in.nextInt();
+                if (i == 1) {
+                    actionCLI.actionPowerUp();
+                    corrected = true;
+                } else if (i == 2) {
+                    actionCLI.actionReload();
+                    corrected = true;
+                } else if (i == 3) {
+                    client.send(new Pass(client.getToken()));
+                    setMyTurn(false);
+                    corrected = true;
+                } else {
+                    out.println("it's not difficult, you can do it ");
+                    out.println("1:Use power up 2:Reload, 3:Pass  type a number from 1 to 3 ");
+                }
             }
-            else if(i==2){
-                actionCLI.actionReload();
-                corrected=true;
-            }
-            else if(i==3){
-                client.send(new Pass(client.getToken()));
-                corrected=true;
-            }
-            else{
-                out.println("it's not difficult, you can do it ");
-                out.println("1:Use power up 2:Reload, 3:Pass  type a number from 1 to 3 ");
+        }
+    }
+    public void finalTurnAction(){
+        if(myTurn){
+            out.println("Is the action number" +getNumberAction()+" you can choose:");
+            out.println("1:Move(don't press if you play after first player), 2:Shoot, 3:Grab, 4:Use power up  5:Pass  type a number from 1 to 5 ");
+            boolean corrected=false;
+            while(!corrected){
+                int i=in.nextInt();
+                if(i==1){
+                    client.send(new ReceiveTargetSquare(client.getToken(),"move"));
+                    corrected=true;
+                }
+                else if(i==2){
+                    out.println("you can reload this weapon for shot");
+                    int posWeapon=actionCLI.actionReload();
+                    if(posWeapon==0)
+                        actionCLI.actionShot();
+                    else
+                        actionCLI.shotFinalTurn(posWeapon);
+                    corrected=true;
+                }
+                else if(i==3){
+                    client.send(new ReceiveTargetSquare(client.getToken(),"grab"));
+                    corrected=true;
+                }
+                else if(i==4){
+                    actionCLI.actionPowerUp();
+                    corrected=true;
+                }
+
+                else if(i==5){
+                    client.send(new Pass(client.getToken()));
+                    setMyTurn(false);
+                    corrected=true;
+                }
+                else{
+                    out.println("it's not difficult, you can do it ");
+                    out.println("1:Move(don't press if you play after first player), 2:Shoot, 3:Grab, 4:Use power up  5:Pass  type a number from 1 to 5 ");
+                }
             }
         }
     }

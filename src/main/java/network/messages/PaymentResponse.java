@@ -38,16 +38,6 @@ public class PaymentResponse extends Message{
         this.powerUpScoop=powerUpScoop;
         this.colorScoop=colorScoop;
     }
-    public  PaymentResponse(Integer token, List<Integer> powerUp, boolean usePowerUp, Integer[] cost, boolean scoop, Integer powerUpScoop){
-        actionType=ActionType.PAYMENTRESPONSE;
-        this.token=token;
-        this.powerUp=powerUp;
-        this.usePowerUp=usePowerUp;
-        this.cost=cost;
-        this.scoop=scoop;
-        this.powerUpScoop=powerUpScoop;
-        this.colorScoop=null;
-    }
 
     public Integer[] getCost() {
         return cost;
