@@ -31,7 +31,7 @@ public class ReloadTest {
         CardWeapon testWeapon = new CardWeapon(WeaponDictionary.CYBERBLADE.getAbbreviation());
         testPlayer.getPlayerBoard().getHandPlayer().addWeapon(testWeapon);
         testPlayer.getPlayerBoard().getHandPlayer().addAmmo(testWeapon.getRedCost(), testWeapon.getYellowCost(), testWeapon.getBlueCost());
-        Reload action = new Reload(testPlayer, testWeapon);
+        Reload action = new Reload(testPlayer, testWeapon, 1, 1, 1);
         assertTrue(action.isValid());
     }
 

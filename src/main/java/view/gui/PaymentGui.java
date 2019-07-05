@@ -85,40 +85,6 @@ public class PaymentGui extends JFrame {
             }
         }
 
-        c.gridx = 0;
-        c.gridy = 6;
-        JButton button = new JButton("Confirm");
-        button.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (payment.getPowerUp()==-1)
-                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, ""));
-                else
-                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, color[ammoChoose.getSelectedIndex()]));
-                dispose();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
         if (payment.getPowerUp() != -1){
             c.gridx = 0;
             c.gridy = 3;
@@ -173,6 +139,40 @@ public class PaymentGui extends JFrame {
             ammoChoose = new JComboBox<>(color);
             this.add(ammoChoose, c);
         }
+
+        c.gridx = 0;
+        c.gridy = 5;
+        JButton button = new JButton("Confirm");
+        button.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (payment.getPowerUp()==-1)
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, ""));
+                else
+                    mapGui.pay(createMessage(payment, powerup.isSelected(), payment.getPowerUp() != -1, color[ammoChoose.getSelectedIndex()]));
+                dispose();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         this.add(button, c);
 

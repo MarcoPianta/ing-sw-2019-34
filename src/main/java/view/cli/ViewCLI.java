@@ -390,7 +390,7 @@ public class ViewCLI extends View {
         }
     }
 
-    @Override
+
     public void updateEnemiesDamageBar(List<Colors> damageBar,List<Colors> marks, Colors player) {
         out.println(player+"was attacked and his damagedBar was changed:" );
         for(Colors color:damageBar)

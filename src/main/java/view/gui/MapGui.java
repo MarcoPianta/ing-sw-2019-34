@@ -51,6 +51,7 @@ public class MapGui extends JFrame{
     private BufferedImage currentMapImage;
     private BufferedImage currentPlayerBoardModified;
     private BufferedImage[] currentOtherPlayerBoards = new BufferedImage[4];
+    private BufferedImage[] currentOtherPlayerBoardsModified = new BufferedImage[4];
     private HashMap<Colors, Integer> enemies; //The string is the color name of the player
     private List<String> redCrosses;
     private String myPosition;
@@ -109,7 +110,10 @@ public class MapGui extends JFrame{
                 otherPlayerBoards[index] = new File("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "playerBoards" + File.separatorChar + Colors.values()[i].getAbbreviation() + ".png");
                 try {
                     currentOtherPlayerBoards[index] = ImageIO.read(otherPlayerBoards[index]);
-                } catch (IOException e){}
+                    currentOtherPlayerBoardsModified[index] = currentOtherPlayerBoards[index];
+                } catch (IOException e){
+                    //
+                }
                 players[index] = new JLabel(new ImageIcon(currentOtherPlayerBoards[index]));
                 players[index].setName(Colors.values()[i].getAbbreviation());
                 enemies.put(Colors.values()[i], index);
@@ -118,7 +122,9 @@ public class MapGui extends JFrame{
             }
         }
 
-        try {player = new JLabel(new ImageIcon(ImageIO.read(playerBoard)));} catch (IOException e){}
+        try {player = new JLabel(new ImageIcon(ImageIO.read(playerBoard)));} catch (IOException e){
+            //
+        }
 
         chatArea = new JPanel();
         chatArea.setLayout(new BoxLayout(chatArea, BoxLayout.PAGE_AXIS));
@@ -304,14 +310,14 @@ public class MapGui extends JFrame{
         int i = 0;
         currentPlayerBoardModified = cloneImage(currentPlayerBoard);
         for (Colors c: damageBar){
-            i = updatePlayerImage(i, c, currentPlayerBoard, damagePosition, currentPlayerBoardModified, 120 * currentPlayerBoardModified.getHeight() / 274);
+            i = updatePlayerImage(i, c, currentPlayerBoard, damagePosition, currentPlayerBoardModified, 120 * currentPlayerBoardModified.getHeight() / 274, player);
         }
     }
 
     /**
      * Method used to add components to player's image
      * */
-    private int updatePlayerImage(int i, Colors c, BufferedImage currentPlayerBoard, int[] damagePosition, BufferedImage currentPlayerBoardModified, int i2) {
+    private int updatePlayerImage(int i, Colors c, BufferedImage currentPlayerBoard, int[] damagePosition, BufferedImage currentPlayerBoardModified, int i2, JLabel player) {
         Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
 
         Graphics2D g = currentPlayerBoardModified.createGraphics();
@@ -331,7 +337,7 @@ public class MapGui extends JFrame{
     void addMarks(List<Colors> marks){
         int i = 0;
         for (Colors mark: marks) {
-            i = updatePlayerImage(i, mark, currentPlayerBoard , marksPosition, currentPlayerBoardModified, 1);
+            i = updatePlayerImage(i, mark, currentPlayerBoard , marksPosition, currentPlayerBoardModified, 1, player);
         }
         setMyPosition(myPosition);
     }
@@ -467,17 +473,27 @@ public class MapGui extends JFrame{
      * */
     void updateOthersBar(List<Colors> damageBar, Colors player){
         int i = 0;
-        for (Colors c: damageBar){
-            Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            Image damage = createColorMarker(c, currentOtherPlayerBoards[enemies.get(player)].getWidth(), currentOtherPlayerBoards[enemies.get(player)].getHeight());
-
-            g.drawImage(damage, damagePosition[i] * currentOtherPlayerBoards[enemies.get(player)].getWidth() / 1120, 120 * currentOtherPlayerBoards[enemies.get(player)].getHeight() / 274, null);
-            g.dispose();
-            i++;
+        if (!player.getAbbreviation().equals(myColor.getAbbreviation())) {
+            currentOtherPlayerBoardsModified[enemies.get(player)] = cloneImage(currentOtherPlayerBoards[enemies.get(player)]);
+            for (Colors c : damageBar) {
+                i = updatePlayerImage(i, c, currentOtherPlayerBoards[enemies.get(player)], damagePosition, currentOtherPlayerBoardsModified[enemies.get(player)], 120 * currentPlayerBoardModified.getHeight() / 274, players[enemies.get(player)]);
+            }
         }
-        Image markResized = currentOtherPlayerBoards[enemies.get(player)].getScaledInstance(players[enemies.get(player)].getWidth(), players[enemies.get(player)].getHeight(), Image.SCALE_DEFAULT);
-        players[enemies.get(player)].setIcon(new ImageIcon(markResized));
+    }
+
+    /**
+     * This method is used to update marks of the other players
+     * @param marks marks bar of the player
+     * @param player color of the player to update
+     * */
+    void updateOthersMarks(List<Colors> marks, Colors player){
+        int i = 0;
+        if (!player.getAbbreviation().equals(myColor.getAbbreviation())) {
+            for (Colors mark : marks) {
+                i = updatePlayerImage(i, mark, currentOtherPlayerBoards[enemies.get(player)], marksPosition, currentOtherPlayerBoardsModified[enemies.get(player)], 1, players[enemies.get(player)]);
+            }
+            updateEnemyPosition(player, othersPosition[enemies.get(player)]);
+        }
     }
 
     /**
@@ -540,7 +556,12 @@ public class MapGui extends JFrame{
             public void componentResized(ComponentEvent e) {
                 for (int i= 0; i < 4; i++) {
                     int a = i;
-                    new Thread(() -> resizeImage(players[a], new ImageIcon(currentOtherPlayerBoards[a]))).start();
+                    new Thread(() -> {
+                        if (currentOtherPlayerBoardsModified[a] != null)
+                            resizeImage(players[a], new ImageIcon(currentOtherPlayerBoardsModified[a]));
+                        else
+                            resizeImage(players[a], new ImageIcon(currentOtherPlayerBoards[a]));
+                    }).start();
                 }
             }
         });
@@ -779,7 +800,7 @@ public class MapGui extends JFrame{
     private void openWeaponDetail(int x, int y){
         for (String s: spawnSquareWeapon.keySet()){
             for (int a = 0; a < 3; a++){
-                if((!spawnSquareWeapon.get(s)[a].equals("")) && (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
+                if((!spawnSquareWeapon.get(s)[a].getName().equals("")) && (((x > ViewMap.getxWeapon(s, a) * map.getWidth()/2545) && (x < (ViewMap.getxWeapon(s, a)+ViewMap.getxWeaponIncrement(s))*map.getWidth()/2545))
                             && ((y > map.getHeight()*ViewMap.getyWeapon(s, a)/1928) && (y < (ViewMap.getyWeapon(s, a)+ViewMap.getyWeaponIncrement(s))*map.getHeight()/1928)))){
                     new WeaponDetailGui(spawnSquareWeapon.get(s)[a].getName(), s, a, false, this);
                 }
@@ -891,13 +912,13 @@ public class MapGui extends JFrame{
      * */
     void updateEnemyPosition(Colors player, String id){
         othersPosition[enemies.get(player)] = id;
-        Graphics2D g = currentOtherPlayerBoards[enemies.get(player)].createGraphics();
+        Graphics2D g = currentOtherPlayerBoardsModified[enemies.get(player)].createGraphics();
         Image number = new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "numbers" + File.separatorChar + (ViewMap.getSquareNumber(id)+1) + ".png").getImage();
 
-        g.drawImage(number, 1050 * currentOtherPlayerBoards[enemies.get(player)].getWidth() / 1120, 0, null);
+        g.drawImage(number, 1050 * currentOtherPlayerBoardsModified[enemies.get(player)].getWidth() / 1120, 0, null);
         g.dispose();
 
-        Image playerResized = currentOtherPlayerBoards[enemies.get(player)].getScaledInstance(players[enemies.get(player)].getWidth(), players[enemies.get(player)].getHeight(), Image.SCALE_DEFAULT);
+        Image playerResized = currentOtherPlayerBoardsModified[enemies.get(player)].getScaledInstance(players[enemies.get(player)].getWidth(), players[enemies.get(player)].getHeight(), Image.SCALE_DEFAULT);
         players[enemies.get(player)].setIcon(new ImageIcon(playerResized));
     }
 

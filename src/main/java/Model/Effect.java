@@ -124,6 +124,8 @@ public class Effect implements Serializable {
         private int maxRange;
         private boolean cardinal;
         private boolean sameSquare;
+        private boolean consecutive;
+
 
         public PreCondition(JsonObject jsonValues){
             vision = jsonValues.getBoolean("vision");
@@ -134,6 +136,8 @@ public class Effect implements Serializable {
             maxRange = jsonValues.getInt("maxRange");
             cardinal = jsonValues.getBoolean("cardinal");
             sameSquare = jsonValues.getBoolean("sameSquare");
+            consecutive = jsonValues.getBoolean("consecutive");
+
         }
 
         /**
@@ -148,6 +152,7 @@ public class Effect implements Serializable {
             this.maxRange = preCondition.getMaxRange();
             this.cardinal = preCondition.isCardinal();
             this.sameSquare = preCondition.isSameSquare();
+            this.consecutive = preCondition.isConsecutive();
         }
 
         public boolean isVision() {
@@ -179,5 +184,10 @@ public class Effect implements Serializable {
         }
 
         public boolean isSameSquare() { return sameSquare;}
+
+        public boolean isConsecutive(){
+            return consecutive;
+        }
+
     }
 }

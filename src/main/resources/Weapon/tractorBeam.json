@@ -46,7 +46,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": true,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }
@@ -87,7 +88,8 @@
           "maxRange": 1,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }

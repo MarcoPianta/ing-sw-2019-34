@@ -66,7 +66,7 @@ public class Shot extends Message {
         this.powerUp=-1;
         this.weapon=weapon;
     }
-    public Shot(Integer token, Room room, Integer posposEffect, int weapon){
+    public Shot(Integer token, Room room, Integer posEffect, int weapon){
         this.token = token;
         actionType=ActionType.SHOT;
         this.posEffect =posEffect;

@@ -199,10 +199,6 @@ public class GameLobby {
                     shootHistoryMessage = new ArrayList<>();
                     server.send(new UpdateClient(message.getToken(), "Action not valid"));
                 }
-            /*if(players.get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
-                historyMessage = new ArrayList<>(shootHistoryMessage);
-                shootHistoryMessage = new ArrayList<>();
-            }*/
             } else if (message.getActionType().equals(ActionType.SHOOTRESPONSER)) {
                 ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
                 ShootResponser shootResponser = (ShootResponser) message;
@@ -222,22 +218,14 @@ public class GameLobby {
                     shootHistoryMessage = new ArrayList<>();
                     server.send(new UpdateClient(message.getToken(), "Action not valid"));
                 }
-            /*if(players.get(currentPlayer).getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect())).getActionSequence().length() == shootHistoryMessage.size()){
-                historyMessage = new ArrayList<>(shootHistoryMessage);
-                shootHistoryMessage = new ArrayList<>();
-                server.send(new Payment(currentPlayer, effect.getBonusCost(), false)); //TODO gestire PowerUp
-            }*/
             } else if (message.getActionType().equals(ActionType.TARGETMOVERESPONSE)) {
                 ReceiveTargetSquare receiveTargetSquare = (ReceiveTargetSquare) historyMessage.get(0);
                 TargetMoveResponse targetMoveResponse = (TargetMoveResponse) message;
                 Shot lastShotMessage = (Shot) shootHistoryMessage.get(shootHistoryMessage.size() - 1);
                 gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), lastShotMessage.getTargets().get(0), gameHandler.getGame().getMap().getSquareFromId(targetMoveResponse.getTargetSquare())));
 
-                Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
                 if(!movedPlayer.containsKey(lastShotMessage.getTargets().get(0).getPlayerID()))
                     movedPlayer.put(lastShotMessage.getTargets().get(0).getPlayerID(), lastShotMessage.getTargets().get(0).getPosition());
-                //TODO possibile problema qui
-                //server.send(new UpdateClient(receiveTargetSquare.getToken(), new Move(lastShotMessage.getTargets().get(0), gameHandler.getGame().getMap().getSquareFromId(targetMoveResponse.getTargetSquare()), effect.getTargetMove()).reachableSquare()));
 
                 shootHistoryMessage.add(new MoveMessage(receiveTargetSquare.getToken(), lastShotMessage.getTargets().get(0), gameHandler.getGame().getMap().getSquareFromId(targetMoveResponse.getTargetSquare())));
                 shootActionSequences(receiveTargetSquare);

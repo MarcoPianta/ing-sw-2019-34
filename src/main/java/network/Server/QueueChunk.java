@@ -8,7 +8,6 @@ import java.util.*;
  * This class is used to create and handle a queue for client which request to enter in a new game.
  * Server will get from this class clients waiting in the queue to start a new game.
  * */
-//TODO check for disconnection
 public class QueueChunk {
     private HashMap<Integer, GameSettingsResponse> playersID; //Contains the players' token and the game settings he choose ordered3 by insertion
     private Server server;

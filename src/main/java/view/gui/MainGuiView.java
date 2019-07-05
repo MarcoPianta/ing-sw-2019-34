@@ -282,7 +282,6 @@ public class MainGuiView extends View {
         });
     }
 
-    //TODO probably the name will be modified
     public void showScoopRequest(){
         SwingUtilities.invokeLater(() -> {
             int value = JOptionPane.showConfirmDialog(mapGui, "Do you want to use scoop power up?");
@@ -293,7 +292,6 @@ public class MainGuiView extends View {
 
     @Override
     public void showGameSettingsRequest() {
-        //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setVisible(false);
         frame = new GameSettingsChoose(client);
     }
@@ -330,8 +328,9 @@ public class MainGuiView extends View {
     }
 
     @Override
-    public void updateEnemiesDamageBar(ArrayList<Colors> damageBar, Colors player) {
+    public void updateEnemiesDamageBar(List<Colors> damageBar, List<Colors> marks, Colors player) {
         mapGui.updateOthersBar(damageBar, player);
+        mapGui.updateOthersMarks(marks, player);
     }
 
     public void showPossibleRooms(List<String> targets){

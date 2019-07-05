@@ -50,7 +50,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }
@@ -90,7 +91,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }
@@ -130,7 +132,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }
@@ -170,7 +173,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }
@@ -212,7 +216,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }
@@ -254,7 +259,8 @@
           "maxRange": 0,
           "cardinal": false,
           "enemiesDifferentSquare": false,
-          "sameSquare": false
+          "sameSquare": false,
+          "consecutive": false
         }
       ]
     }

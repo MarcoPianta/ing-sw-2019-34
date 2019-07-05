@@ -66,6 +66,9 @@ public class Shoot implements Action, Serializable {
      * Control the pre-condition of case P
      * */
     private boolean isValidP(){
+        if(shootEffect.getPreCondition().isConsecutive()){
+            return isValidTHOR();
+        }
         List<Player> visibleTarget = targetablePlayer();
         ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
         for (Player target : targets) {
@@ -82,6 +85,22 @@ public class Shoot implements Action, Serializable {
             }
             System.out.println(cardinalControl(targetListSquare));
             return cardinalControl(targetListSquare);
+        }
+        return true;
+    }
+
+    private boolean isValidTHOR() {
+        targets = new ArrayList(shooterPlayer.getGameId().getPlayers());
+        targets.remove(shooterPlayer);
+        for(int i = 0; i < targets.size(); i++){
+            if(i == 0){
+                if(!targetablePlayer().contains(targets.get(i)))
+                    return false;
+            }
+            else{
+                if(!(new Shoot(shootEffect, targets.get(i-1), null, null, false).targetablePlayer()).contains(targets.get(i)))
+                    return false;
+            }
         }
         return true;
     }
@@ -292,6 +311,9 @@ public class Shoot implements Action, Serializable {
          * @return the list of Player that can be targeted by the actorPlayer
          */
     public List<Player> targetablePlayer(){
+        if(shootEffect.getPreCondition().isConsecutive()){
+            return shooterPlayer.getGameId().getPlayers();
+        }
         ArrayList<Player> reachablePlayer = new ArrayList<>(shooterPlayer.getGameId().getPlayers());
         reachablePlayer.remove(shooterPlayer);
 
@@ -329,7 +351,7 @@ public class Shoot implements Action, Serializable {
      * This method execute the Shoot Action only in 'p' case
      */
     private void execP(){
-        for (int i = 0; i < targets.size(); i++) {
+        for (int i = 0; i < targets.size() && i < shootEffect.getpDamage().size() ; i++) {
             injureTarget(targets.get(i), shootEffect.getpDamage().get(i));
             markTarget(targets.get(i), shootEffect.getpMark().get(i));
         }
