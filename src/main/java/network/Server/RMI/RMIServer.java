@@ -44,7 +44,7 @@ public class RMIServer {
     }
 
     private void init() throws RemoteException{
-        System.setProperty("java.rmi.server.hostname", "192.168.0.2");
+        System.setProperty("java.rmi.server.hostname", "192.168.0.5");
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));

@@ -46,7 +46,8 @@
           "cardinal": false,
           "enemiesDifferentSquare": true,
           "sameSquare": false,
-          "consecutive": false
+          "consecutive": false,
+          "tractor": false
         }
       ]
     }

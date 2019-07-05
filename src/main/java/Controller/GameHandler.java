@@ -232,11 +232,16 @@ public class GameHandler {
 
                 } else if (actionSequence.charAt(0) == 's') {
                     System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
-                    ArrayList<String> targetID = new ArrayList<>();
-                    for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
-                        targetID.add(target.getId());
+                    if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getName().equals(WeaponDictionary.VORTEXCANNON.getAbbreviation())){
+                        gameLobby.send(new UpdateClient(message.getToken(), new Shoot(effect, game.getCurrentPlayer(), null, null, false).reachableSquare()));
                     }
-                    gameLobby.send(new ShootRequests(message.getToken(), targetID));
+                    else{
+                        ArrayList<String> targetID = new ArrayList<>();
+                        for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableSquare()) {
+                            targetID.add(target.getId());
+                        }
+                        gameLobby.send(new ShootRequests(message.getToken(), targetID));
+                    }
 
                 } else if (actionSequence.charAt(0) == 'r') {
                     System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
@@ -245,7 +250,6 @@ public class GameHandler {
                         targetID.add(target.getId());
                     }
                     gameLobby.send(new ShootRequestr(message.getToken(), targetID));
-
                 }else if (actionSequence.charAt(0) == 'M') {
                     System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
                     gameLobby.send(new UpdateClient(message.getToken(), new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
