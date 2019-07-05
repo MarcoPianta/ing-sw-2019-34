@@ -66,6 +66,9 @@ public class Shoot implements Action, Serializable {
      * Control the pre-condition of case P
      * */
     private boolean isValidP(){
+        if(shootEffect.getPreCondition().isConsecutive()){
+            return isValidTHOR();
+        }
         List<Player> visibleTarget = targetablePlayer();
         ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
         for (Player target : targets) {
@@ -82,6 +85,20 @@ public class Shoot implements Action, Serializable {
             }
             System.out.println(cardinalControl(targetListSquare));
             return cardinalControl(targetListSquare);
+        }
+        return true;
+    }
+
+    private boolean isValidTHOR() {
+        for(int i = 0; i < targets.size(); i++){
+            if(i == 0){
+                if(!targetablePlayer().contains(targets.get(i)))
+                    return false;
+            }
+            else{
+                if(!(new Shoot(shootEffect, targets.get(i-1), null, null, false).targetablePlayer()).contains(targets.get(i)))
+                    return false;
+            }
         }
         return true;
     }
