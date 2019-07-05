@@ -10,7 +10,6 @@ public enum WeaponDictionary implements Serializable {
     ELECTROSCYTE("electroscyte"),
     FLAMETHROWER("flamethrower"),
     FURNACE("furnace"),
-    VORTEXCANNON("vortexCannon"),
     GRENADELAUNCHER("grenadeLauncher"),
     HEATSEEKER("heatseeker"),
     HELLION("hellion"),
@@ -26,7 +25,8 @@ public enum WeaponDictionary implements Serializable {
     THOR("thor"),
     TRACTORBEAM("tractorBeam"),
     WHISPER("whisper"),
-    ZX_2("ZX-2");
+    ZX_2("ZX-2"),
+    VORTEXCANNON("vortexCannon");
 
     private String abbreviation;
     private WeaponDictionary(String abbreviation) {

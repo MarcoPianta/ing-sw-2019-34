@@ -68,6 +68,7 @@ public class Server {
     }
 
     public void onReceive(Message message){
+        System.out.println("Ho RICEVUTO un messaggio di " + message.getActionType() + " da " + clients.get(message.getToken()));
         try {
             if(message.getActionType().getAbbreviation().equals(ActionType.GAMESETTINGSRESPONSE.getAbbreviation())) {
                 GameSettingsResponse m = (GameSettingsResponse) message;

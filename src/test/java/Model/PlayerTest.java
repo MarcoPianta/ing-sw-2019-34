@@ -96,6 +96,7 @@ public class PlayerTest {
 
         String file= PowerUpEnum.TARGETTINGSCOPE_R.getAbbreviation();
         CardPowerUp cardPowerUp=new CardPowerUp(file);
+        System.out.println(cardPowerUp.getWhen());
         game.getPlayers().get(0).getPlayerBoard().getHandPlayer().addPowerUp(cardPowerUp);
 
         assertFalse(game.getPlayers().get(0).isValidCost(cost,true));

@@ -222,11 +222,14 @@ public class Game implements Serializable {
      * this method increment the current player
      * */
     public void incrementCurrentPlayer(){
+        System.out.println("qui1 " + players);
         if(players.size()==(players.indexOf(currentPlayer)+1)) {
             currentPlayer = players.get(0);
+            System.out.println("qui2");
         }
         else {
             currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+            System.out.println("qui3");
         }
     }
 

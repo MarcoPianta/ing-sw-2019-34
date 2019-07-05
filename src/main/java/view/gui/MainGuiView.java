@@ -197,6 +197,7 @@ public class MainGuiView extends View {
     public void setPowerUps(ArrayList<CardPowerUp> powerUps) {
         ArrayList<String> powerUpsName = new ArrayList<>();
         for (CardPowerUp p: powerUps){
+            System.out.println("MainGui  " + p.getName());
             powerUpsName.add(p.getName());
         }
         mapGui.setPowerUps(powerUpsName);
@@ -239,11 +240,15 @@ public class MainGuiView extends View {
 
     @Override
     public void setMyTurn(boolean myTurn) {
+        System.out.println("Sto per settare bool");
         mapGui.myTurn(myTurn);
+        System.out.println("Ho settato bool");
         if (myTurn)
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mapGui, "It's your turn"));
         else {
+            System.out.println("Arriva finestra");
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mapGui, "Your turn is ended"));
+            System.out.println("Fatta finestra");
         }
     }
 
@@ -381,6 +386,7 @@ public class MainGuiView extends View {
                     UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             JFrame.setDefaultLookAndFeelDecorated(false);
+            System.out.println("Look and feel not found");
         }
         //Code to solve focus border bug of swing
         UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
