@@ -79,12 +79,20 @@ public abstract class View {
 
     }
 
+    public GameBoard getMap() {
+        return map;
+    }
+
     public ArrayList<CardWeapon> getWeapons() {
         return weapons;
     }
 
     public Client getClient() {
         return client;
+    }
+
+    public HashMap<Colors, Integer> getPlayers() {
+        return players;
     }
 
     public abstract void substituteWeaponRequest();
