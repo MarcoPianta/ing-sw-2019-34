@@ -2,6 +2,8 @@ package Controller;
 
 
 import Model.Player;
+import network.Server.GameLobby;
+import network.Server.Server;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -33,43 +35,8 @@ public class GameHandlerTest {
         gameHandler.getGame().getDeadRoute().addMurders(gameHandler.getGame().getPlayers().get(3),2);
         assertEquals(1,gameHandler.countPlayer(gameHandler.getGame().getPlayers().get(1)));
         assertEquals(2,gameHandler.countPlayer(gameHandler.getGame().getPlayers().get(0)));
-        // test verified with the returnParametr winnerlist
-        /*winners=gameHandler.winner();
-        assertEquals(gameHandler.getGame().getPlayers().get(0),winners.get(0));
-
-        assertEquals(1, winners.size());
-        assertEquals(gameHandler.getGame().getPlayers().get(0),winners.get(0));
-        gameHandler.getGame().getPlayers().get(3).getPlayerBoard().addPoints(2);
-
-        winners=gameHandler.winner();
-
-        assertEquals(2, winners.size());
-        assertEquals(gameHandler.getGame().getPlayers().get(0), winners.get(0));
-        assertEquals(gameHandler.getGame().getPlayers().get(3), winners.get(1));*/
     }
 
-    @Test
-    public void endGameTest() throws FileNotFoundException{
-        ArrayList<Integer> players=new ArrayList<>();
-        players.add(1233);
-        players.add(3525);
-        players.add(235555);
-
-        GameHandler gameHandler=new GameHandler(1,players,"map1",null);
-        gameHandler.getGame().getDeadRoute().setFinalTurn(true);
-        gameHandler.getTurnHandler().getEndTurnChecks().isFinalTurn(gameHandler.getGame());
-        gameHandler.getGame().getPlayers().get(2).getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(1),3);
-        gameHandler.getGame().getPlayers().get(2).getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(0),2);
-        gameHandler.getGame().getPlayers().get(1).getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(2),3);
-        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(1),3);
-        gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getHealthPlayer().addDamage(gameHandler.getGame().getPlayers().get(2),2);
-        gameHandler.getGame().getDeadRoute().addMurders(gameHandler.getGame().getPlayers().get(0),1);
-        gameHandler.endGame();
-
-        assertEquals(9,gameHandler.getGame().getPlayers().get(0).getPlayerBoard().getPoints());
-        assertEquals(4,gameHandler.getGame().getPlayers().get(1).getPlayerBoard().getPoints());
-        assertEquals(3,gameHandler.getGame().getPlayers().get(2).getPlayerBoard().getPoints());
-    }
 
 
 

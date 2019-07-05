@@ -33,10 +33,10 @@ public class Server {
      * It creates an ArrayList to contain the tokens generated for each client and an hash map used to distinguish RMI
      * and socket clients.
      */
-    public Server(){
+    public Server(String myip){
         playersQueue = new QueueChunk(this);
         socketServer = new SocketServer(this, 10000);
-        rmiServer = new RMIServer(this, 10001);
+        rmiServer = new RMIServer(this, 10001, myip);
         tokens = new ArrayList<>();
         clients = new HashMap<>();
         lobbyHashMap = new HashMap<>();
@@ -159,6 +159,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        new Server();
+        new Server(args[0]);
     }
 }

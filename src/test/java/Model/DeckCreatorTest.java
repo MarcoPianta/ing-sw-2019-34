@@ -20,7 +20,7 @@ public class DeckCreatorTest {
         deck = deckCreator.createDeck("WEAPON");
 
         assertTrue(deckCreator.createDeck("WEAPON").getCard(0) instanceof CardWeapon); //Check if card inserted in deck are of the correct type
-        assertEquals(21, deck.getSize()); //Weapon card deck should be of 21 card (Now is 4 because not all json file are fixed)
+        assertEquals(20, deck.getSize()); //Weapon card deck should be of 21 card (Now is 4 because not all json file are fixed)
         assertEquals(WeaponDictionary.CYBERBLADE.getAbbreviation(), deck.getCard(0).getName()); //Deck is created in alphabetical order so first card should be cyberblade
         //assertEquals(0, deck.getSize()); // After getting a card this should be removed from the deck
     }

@@ -20,6 +20,7 @@ public class RMIServer {
     private final int PORT;
     private Server server;
     private HashMap<Integer , RMIClientInterface> rmiHashMap;
+    private String myip;
     private static Logger logger = Logger.getLogger("rmiServer");
 
     /**
@@ -37,17 +38,18 @@ public class RMIServer {
      * @param server the main server
      * @param port the port on which the server will listen for new connection
      * */
-    public RMIServer(Server server, int port) {
+    public RMIServer(Server server, int port, String myip) {
         this.server = server;
         this.PORT = port;
         rmiHashMap = new HashMap<>();
+        this.myip = myip;
     }
 
     /**
      * This method execute the initialization of RMI server
      */
     private void init() throws RemoteException{
-        System.setProperty("java.rmi.server.hostname", "localhost");
+        System.setProperty("java.rmi.server.hostname", myip);
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));

@@ -321,7 +321,6 @@ public class MapGui extends JFrame{
         Image imageColor = createColorMarker(c, currentPlayerBoard.getWidth(), currentPlayerBoard.getHeight());
 
         Graphics2D g = currentPlayerBoardModified.createGraphics();
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         g.drawImage(imageColor, damagePosition[i] * currentPlayerBoardModified.getWidth() / 1120, i2, null);
         g.dispose();
         Image playerBoardResized = currentPlayerBoardModified.getScaledInstance(player.getWidth(), player.getHeight(), Image.SCALE_DEFAULT);
