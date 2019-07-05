@@ -25,7 +25,6 @@ public class PaymentController {
      * @return true if payment executed
      */
     public boolean payment(Integer[] cost, List<Integer> powerUps){
-        System.out.println("sono dentro pagamemnti powerUp");
         if(!isValidPayment(Arrays.copyOf(cost,3), powerUps))
             return false;
         boolean x;
@@ -38,17 +37,14 @@ public class PaymentController {
             x = false;
             if(c.getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0) {
                 cost[0]--;
-                System.out.println("sono dentro i rossi");
                 x = true;
             }
             else if(c.getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0) {
                 cost[1]--;
-                System.out.println("sono dentro pagamemnti i gialli");
                 x = true;
             }
             else if(c.getColor().getAbbreviation().equals(AmmoColors.BLUE.getAbbreviation()) && cost[2] > 0){
                 cost[2]--;
-                System.out.println("sono dentro pagamemnti blu");
                 x = true;
             }
             if(x)
@@ -75,14 +71,12 @@ public class PaymentController {
      */
     public boolean paymentPowerUp(int powerUp){
         boolean valueReturn;
-        System.out.println("thcthrrhtrjreferjy"+gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp));
         if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(powerUp)!= null){
             gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().removePowerUp(powerUp);
             valueReturn = true;
         }
         else
             valueReturn = false;
-        System.out.println("thcthrrhtrjreferjy"+valueReturn);
         return  valueReturn;
     }
 
@@ -114,9 +108,7 @@ public class PaymentController {
      * @return true if the payment is possible
      */
     private boolean isValidPayment(Integer[] cost, List<Integer> powerUps){
-        System.out.println(powerUps.size());
         for(Integer i:powerUps){
-            System.out.println(i);
             if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.RED.getAbbreviation()) && cost[0] > 0)
                 cost[0]--;
             else if(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getColor().getAbbreviation().equals(AmmoColors.YELLOW.getAbbreviation()) && cost[1] > 0)

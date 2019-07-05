@@ -47,7 +47,6 @@ public class TargetChooseGui extends JFrame {
                 Colors playerChoose = currentColor;
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println(playerChoose);
                     if (maxMove > 0) {
                         chosen.add(playerChoose);
                         maxMove--;

@@ -85,7 +85,6 @@ public class Hand implements Serializable {
      * */
     public void usePowerUp(CardPowerUp cardPowerUp,Player target,NormalSquare square,int pos){
         if(cardPowerUp.getDamage()==1){
-            System.out.println("fgjngnogwourtuortuoruw   uso scoop njrgoejgnoettnonte");
             target.getPlayerBoard().getHealthPlayer().addDamage(getPlayerBoard().getPlayer(),1);}
         else if(cardPowerUp.getMyMove()==-1){
             getPlayerBoard().getPlayer().newPosition(square);}
@@ -99,8 +98,6 @@ public class Hand implements Serializable {
      * This method remove a power up after use its
      * */
     public void removePowerUp(int position){
-        System.out.println(getPlayerPowerUps().size());
-        System.out.println(position);
         getPlayerPowerUps().remove(position);
     }
 

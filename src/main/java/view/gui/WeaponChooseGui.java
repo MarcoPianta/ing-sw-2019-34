@@ -125,7 +125,6 @@ public class WeaponChooseGui extends JFrame {
         choose.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Effetto stringaaaaa: " + weaponChoose);
                 if (!weaponChoose.equals("")) {
                     if (shot) {
                         if (!cardWeapon.get(Character.getNumericValue(weaponChoose.charAt(0))).getActionSequences().contains(Integer.parseInt(weaponChoose.substring(2)))) {

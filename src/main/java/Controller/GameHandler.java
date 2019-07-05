@@ -204,8 +204,6 @@ public class GameHandler {
             //verified if there is sight power up
             boolean isFind=false;
             for(int i=0;i< game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().size()&& !isFind ;i++){
-                System.out.println("trrreydrey hai power up??");
-                System.out.println(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen());
                 if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerPowerUps().get(i).getWhen().equals("get")
                         && game.getCurrentPlayer().isValidCost(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getActionSequences().indexOf(message.getPosEffect())).getBonusCost(),true)){
                     isFind=true;
@@ -224,7 +222,6 @@ public class GameHandler {
                 Effect effect = game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getEffects().get(getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getActionSequences().indexOf(message.getPosEffect()));
                 String actionSequence = effect.getActionSequence();
                 if (actionSequence.charAt(0) == 'p') {
-                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
 
                     ArrayList<Colors> targetToken = new ArrayList<>();
                     for (Player target: new Shoot(effect, game.getCurrentPlayer(), null).targetablePlayer()) {
@@ -233,7 +230,6 @@ public class GameHandler {
                     gameLobby.send(new ShootRequestp(message.getToken(), effect.getTargetNumber(), targetToken));
 
                 } else if (actionSequence.charAt(0) == 's') {
-                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
                     if(game.getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(message.getPosWeapon()).getName().equals(WeaponDictionary.VORTEXCANNON.getAbbreviation())){
                         gameLobby.send(new UpdateClient(message.getToken(), new Shoot(effect, game.getCurrentPlayer(), null, null, false).reachableSquare()));
                     }
@@ -246,14 +242,12 @@ public class GameHandler {
                     }
 
                 } else if (actionSequence.charAt(0) == 'r') {
-                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
                     ArrayList<String> targetID = new ArrayList<>();
                     for (NormalSquare target: new Shoot(effect, game.getCurrentPlayer(), null).reachableRoom()) {
                         targetID.add(target.getId());
                     }
                     gameLobby.send(new ShootRequestr(message.getToken(), targetID));
                 }else if (actionSequence.charAt(0) == 'M') {
-                    System.out.println("Nella receiveShoot ho un "+actionSequence.charAt(0));
                     gameLobby.send(new UpdateClient(message.getToken(), new Move(getGame().getCurrentPlayer(), null, effect.getMyMove()).reachableSquare()));
 
                 }
@@ -273,7 +267,6 @@ public class GameHandler {
      * @param   message  indicates only the token for updateClient
      */
     private void receiveGrab(ReceiveTargetSquare message){
-        System.out.println(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction());
         if(game.getCurrentPlayer().getPlayerBoard().getHealthPlayer().getAdrenalineAction()==0
                 &&!game.getDeadRoute().isFinalTurn())
             gameLobby.send(new UpdateClient(message.getToken(),new Move(getGame().getCurrentPlayer(),null,1).reachableSquare()));

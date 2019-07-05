@@ -31,7 +31,7 @@ public class DeckCreator implements Serializable {
      * */
     private Deck<CardWeapon> createWeaponDeck() {
         Deck<CardWeapon> deck = new Deck<>(false);
-        for (int i = 0; i < WeaponDictionary.values().length; i++){
+        for (int i = 0; i < 10 /*WeaponDictionary.values().length*/; i++){
             try {
                 deck.add(new CardWeapon(WeaponDictionary.values()[i].getAbbreviation()));
             }catch (FileNotFoundException e){

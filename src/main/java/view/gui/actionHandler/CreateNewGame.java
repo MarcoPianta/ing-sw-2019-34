@@ -20,6 +20,5 @@ public class CreateNewGame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Ciao");
     }
 }

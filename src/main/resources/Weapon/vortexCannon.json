@@ -39,7 +39,7 @@
       "targetMove": 0,
       "preCondition": [
         {
-          "vision": false,
+          "vision": true,
           "blind": false,
           "melee": false,
           "minRange": 0,
@@ -86,7 +86,7 @@
       "targetMove": 0,
       "preCondition": [
         {
-          "vision": false,
+          "vision": true,
           "blind": false,
           "melee": false,
           "minRange": 0,

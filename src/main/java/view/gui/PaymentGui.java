@@ -54,7 +54,6 @@ public class PaymentGui extends JFrame {
             c.gridy = 2;
             if (!(payment.getPowerUp() != -1 && s.equals(powerUps.get(payment.getPowerUp())))) {
                 JLabel labelPo = new JLabel(new ImageIcon("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png"));
-                System.out.println("." + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "GUI" + File.separatorChar + "powerups" + File.separatorChar + s + ".png");
                 int choose = i;
                 labelPo.addMouseListener(new MouseListener() {
                     @Override
