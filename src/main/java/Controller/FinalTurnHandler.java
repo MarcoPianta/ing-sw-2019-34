@@ -1,13 +1,13 @@
 package Controller;
 
-import Model.CardPowerUp;
 import Model.Move;
 import Model.Player;
 import Model.Reload;
 import network.messages.*;
 
-import java.util.ArrayList;
-
+/**
+ * This class is used to handle the final frenzy turn
+ */
 public class FinalTurnHandler extends TurnHandler {
     private Player firstFinalTurnPlayer;
     private GameHandler gameHandler;
@@ -16,6 +16,10 @@ public class FinalTurnHandler extends TurnHandler {
     private ActionValidController actionValidController;
     private PaymentController paymentController;
 
+    /**
+     * The constructor is called from a gamehandler and create the class used to check final frenzy rules
+     * @param gameHandler the gameHandler which creates the handler
+     */
     public FinalTurnHandler(GameHandler gameHandler) {
         super(gameHandler);
         this.gameHandler = gameHandler;
@@ -26,10 +30,18 @@ public class FinalTurnHandler extends TurnHandler {
         this.paymentController = gameHandler.getPaymentController();
     }
 
+    /**
+     * This method sets the first player of the final turn, the player is saved beacause when is his turn the game ends
+     * @param firstFinalTurnPlayer the player which is the first in the final turn
+     */
     public void setFirstFinalTurnPlayer(Player firstFinalTurnPlayer) {
         this.firstFinalTurnPlayer = firstFinalTurnPlayer;
     }
 
+
+    /**
+     * This method return true if the first player has yet played
+     */
     public boolean isAlreadyFirstPlayer() {
         return alreadyFirstPlayer;
     }
@@ -46,6 +58,11 @@ public class FinalTurnHandler extends TurnHandler {
         return endFinalTurnChecks;
     }
 
+    /**
+     * This method execute the appropriate action based on player's position in turn
+     * @param message a message that contains the action to be done
+     * @return true if the action is done
+     */
     public boolean actionFinalTurn(Message message){
         boolean valueReturn;
 
@@ -57,18 +74,15 @@ public class FinalTurnHandler extends TurnHandler {
         return  valueReturn;
     }
 
+    /**
+     * This method execute actions for the first player
+     */
     private boolean actionBeforeFirstPlayer(Message message){
         boolean valueReturn;
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(gameHandler.getGame().getCurrentPlayer(),newMessage.getNewSquare(), 4).execute();
-            if(valueReturn) {
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
-                gameHandler.getGameLobby().getClients()
-                        .parallelStream().
-                        filter(x -> (!x.equals(newMessage.getPlayerTarget().getPlayerID()))).
-                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
-            }
+            updateClients(valueReturn, newMessage, gameHandler);
 
         }
         else if(message.getActionType()==ActionType.SHOT){
@@ -80,6 +94,22 @@ public class FinalTurnHandler extends TurnHandler {
         return valueReturn;
     }
 
+    /**
+     * This method send updates to the clients
+     */
+    static void updateClients(boolean valueReturn, MoveMessage newMessage, GameHandler gameHandler) {
+        if(valueReturn) {
+            gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
+            gameHandler.getGameLobby().getClients()
+                    .parallelStream().
+                    filter(x -> (!x.equals(newMessage.getPlayerTarget().getPlayerID()))).
+                    forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
+        }
+    }
+
+    /**
+     * This method execute actions for players which are not the firsts
+     */
     private boolean actionAfterFirstPlayer(Message message){
         boolean valueReturn;
         if(message.getActionType()==ActionType.SHOT){
@@ -111,7 +141,9 @@ public class FinalTurnHandler extends TurnHandler {
 
     }
 
-
+    /**
+     * This method execute a check routine when turn is end
+     */
     public void endTurn(){
 
         endFinalTurnChecks.playerIsDead(gameHandler.getGame());
@@ -128,6 +160,9 @@ public class FinalTurnHandler extends TurnHandler {
 
     }
 
+    /**
+     * This nested class is used to execute final turns checks
+     */
     class EndFinalTurnChecks extends EndTurnChecks{
         public void isFirstPlayer(){
             if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer() )

@@ -43,8 +43,11 @@ public class RMIServer {
         rmiHashMap = new HashMap<>();
     }
 
+    /**
+     * This method execute the initialization of RMI server
+     */
     private void init() throws RemoteException{
-        System.setProperty("java.rmi.server.hostname", "192.168.0.5");
+        System.setProperty("java.rmi.server.hostname", "localhost");
         Registry registry = LocateRegistry.createRegistry(PORT);
         try {
             registry.rebind("Server", new RMIServerImplementation(server, this));
@@ -54,6 +57,9 @@ public class RMIServer {
         }
     }
 
+    /**
+     * This method is used to send messages to the client
+     */
     public void send(Message message) {
         try {
             try {

@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+/**
+ * This class is used to display a window for player's infos
+ */
 public class PlayerInformationGui extends JFrame {
 
     public PlayerInformationGui(List<CardWeapon> cards, int[] ammos, int points){

@@ -9,6 +9,9 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * This class is used to display a window for choose powerup to use
+ */
 public class UsePowerUpGui extends JFrame {
 
     public UsePowerUpGui(ArrayList<String> powerUps , MapGui mapGui, boolean tagBack, boolean scoop, Colors colors){

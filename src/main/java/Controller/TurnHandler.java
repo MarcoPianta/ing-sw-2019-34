@@ -104,13 +104,7 @@ public class TurnHandler {
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(newMessage.getPlayerTarget(),newMessage.getNewSquare(), 3).execute();
-            if(valueReturn) {
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
-                gameHandler.getGameLobby().getClients()
-                        .parallelStream().
-                        filter(x -> (!x.equals(newMessage.getPlayerTarget().getPlayerID()))).
-                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
-            }
+            FinalTurnHandler.updateClients(valueReturn, newMessage, gameHandler);
         }
         else if(message.getActionType()==ActionType.SHOT){
             System.out.println("in actionAdrenaline " + ((Shot)message).getPosEffect());
@@ -468,12 +462,10 @@ public class TurnHandler {
                 System.out.println("In final turn");
                 game.getDeadRoute().setFinalTurnPlayer();
                 for(Player p:game.getPlayers()) {
-                    if (p.getPlayerBoard().isFinalTurn()) {
-                        gameHandler.getGameLobby().send(new FinalTurnMessage(p.getPlayerID(), p.getPlayerID().equals(gameHandler.getGame().getFirstPlayer().getPlayerID())));
-                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), "Is final Turn, the rule of the action have changed"));
-                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHandPlayer().getAmmoRYB()[0], p.getPlayerBoard().getHandPlayer().getAmmoRYB()[1], p.getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(p.getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(p.getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
-                        gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHealthPlayer().getDamageBar(), p.getPlayerBoard().getHealthPlayer().getMark()));
-                    }
+                    gameHandler.getGameLobby().send(new FinalTurnMessage(p.getPlayerID(), p.getPlayerID().equals(gameHandler.getGame().getFirstPlayer().getPlayerID())));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), "Is final Turn, the rule of the action have changed"));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHandPlayer().getAmmoRYB()[0], p.getPlayerBoard().getHandPlayer().getAmmoRYB()[1], p.getPlayerBoard().getHandPlayer().getAmmoRYB()[2], new ArrayList<>(p.getPlayerBoard().getHandPlayer().getPlayerWeapons()), new ArrayList<>(p.getPlayerBoard().getHandPlayer().getPlayerPowerUps())));
+                    gameHandler.getGameLobby().send(new UpdateClient(p.getPlayerID(), p.getPlayerBoard().getHealthPlayer().getDamageBar(), p.getPlayerBoard().getHealthPlayer().getMark()));
                 }
                 getGameHandler().getFinalTurnHandler().setFirstFinalTurnPlayer(getGameHandler().getGame().getCurrentPlayer());
                 if(getGameHandler().getGame().getCurrentPlayer()==getGameHandler().getGame().getFirstPlayer())

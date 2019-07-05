@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to display a window for choose a weapon to use
+ */
 public class WeaponChooseGui extends JFrame {
     private ArrayList<JButton> weaponButtons;
     private int choose;
@@ -61,7 +64,7 @@ public class WeaponChooseGui extends JFrame {
                             }
                             choosed = true;
                             if (shot)
-                                JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0) + " effect: " + weaponChoose.charAt(weaponChoose.length()-1));
+                                JOptionPane.showMessageDialog(button, "You choose weapon effect " + weaponChoose.charAt(0) + " effect: " + weaponChoose.charAt(2));
                             else
                                 JOptionPane.showMessageDialog(button, "You choose weapon: " + weaponChoose.charAt(0));
                         } else {
@@ -73,7 +76,7 @@ public class WeaponChooseGui extends JFrame {
                                 weaponChoose = weaponChoose + createActionFromWeapon(choose, 3);
                             }
                             if (shot)
-                                JOptionPane.showMessageDialog(button, "You choose effect: " + weaponChoose.charAt(2));
+                                JOptionPane.showMessageDialog(button, "You choose effect: " + weaponChoose.charAt(weaponChoose.length()-1));
                         }
                     }
 

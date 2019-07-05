@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to display a window fto ask the player which weapon wants to discard
+ */
 public class SubstituteWeaponGui extends JFrame {
     int choose;
 

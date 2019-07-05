@@ -9,6 +9,9 @@ import javax.swing.event.InternalFrameEvent;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**
+ * This class is used to handle all messages sent from player which are playing in the same game
+ */
 public class GameLobby {
     private HashMap<Integer, Player> players;
     private HashMap<Colors, Integer> playersColor;
@@ -67,6 +70,9 @@ public class GameLobby {
         //new Thread(this::ping).start();
     }
 
+    /**
+     * This method send periodically a ping message to the clients
+     */
     private void ping(){
         try {
             Thread.sleep(30000);
@@ -89,6 +95,9 @@ public class GameLobby {
                 ,0 ,PINGTIME);
     }
 
+    /**
+     * This method remove players from gamelobby
+     */
     public void remove(int i){
         disconnected.add(i);
         System.out.println(i + "disconnesso");
@@ -98,6 +107,9 @@ public class GameLobby {
         pinged.remove(i);
     }
 
+    /**
+     * This method send messages to player to tell the turn has started or ended
+     */
     public void startTurn(Integer token){
         actionPerformed.replace(token, false);
         if (currentPlayer != null) {
@@ -113,6 +125,9 @@ public class GameLobby {
         }
     }
 
+    /**
+     * This method start timers for every player
+     */
     private void startTimer(){
         int player = currentPlayer;
         Timer timer = new Timer();
@@ -139,6 +154,9 @@ public class GameLobby {
         return players;
     }
 
+    /**
+     * This method handle all messages from client and do proper acrion
+     */
     public void receiveMessage(Message message){
         if (message.getActionType().getAbbreviation().equals(ActionType.PING.getAbbreviation())) {
             pinged.put(message.getToken(), true);
@@ -423,6 +441,9 @@ public class GameLobby {
         }
     }
 
+    /**
+     * This method sends update to the clients
+     */
     private void movesForShot(Message message, MoveResponse moveResponse) {
         gameHandler.receiveServerMessage(new MoveMessage(message.getToken(), gameHandler.getGame().getCurrentPlayer(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId())));
         gameHandler.getGameLobby().send(new UpdateClient(message.getToken(), moveResponse.getSquareId()));
@@ -432,6 +453,9 @@ public class GameLobby {
                 forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, players.get(message.getToken()).getColor(), gameHandler.getGame().getMap().getSquareFromId(moveResponse.getSquareId()))));
     }
 
+    /**
+     * This method is used to perform payment of an action
+     */
     public void paymentServer(PaymentResponse paymentResponse){
             boolean valueReturn;
             boolean scoopReturn;
@@ -595,14 +619,17 @@ public class GameLobby {
 
     }
 
+    /**
+     * This message is used to send scope power up request
+     */
     public void canUseScoop(Integer player){
         server.send(new CanUseScoop(player));
     }
 
-    public void canUseTagBack(Integer player,Colors playerShooter){
-        server.send(new CanUseTagBack(player,playerShooter));
-    }
-
+    /**
+     * This method is called when game end and send winner messages
+     * @param winner
+     */
     public void endGame(List<Integer> winner){
         for (Integer i: clients){
             if (!(winner.contains(i)))
@@ -612,6 +639,10 @@ public class GameLobby {
         }
     }
 
+    /**
+     * This method is used to execute shoot action
+     * @param receiveTargetSquare first message received durng an action
+     */
     public void shootActionSequences(ReceiveTargetSquare receiveTargetSquare){
         Effect effect = gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getEffects().get(gameHandler.getGame().getCurrentPlayer().getPlayerBoard().getHandPlayer().getPlayerWeapons().get(receiveTargetSquare.getPosWeapon()).getActionSequences().indexOf(receiveTargetSquare.getPosEffect()));
         String actionSequence = effect.getActionSequence();

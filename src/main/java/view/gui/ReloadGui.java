@@ -15,6 +15,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * This class is used to display a window for reload action
+ */
 public class ReloadGui extends JFrame {
     private int i = 0;
 

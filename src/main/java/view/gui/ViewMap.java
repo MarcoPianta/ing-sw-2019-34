@@ -3,6 +3,9 @@ package view.gui;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class contains x and y coordinates of some component of the gui
+ */
 public abstract class ViewMap {
     private static final String[] ids = {"0,0", "0,1", "0,2", "0,3", "1,0", "1,1", "1,2", "1,3", "2,0", "2,1", "2,2", "2,3"};
 

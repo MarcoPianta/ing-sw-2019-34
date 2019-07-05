@@ -7,6 +7,9 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * This class is used to display a window for spawn
+ */
 public class SpawnGui extends JFrame {
     private int position;
 

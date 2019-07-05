@@ -2,6 +2,9 @@ package network.messages;
 
 import java.io.Serializable;
 
+/**
+ * This class is an enumeration that contains names for all possible messages
+ */
 public enum ActionType implements Serializable {
 
     START("Start"),

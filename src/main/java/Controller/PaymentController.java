@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class checks if payments are executed correctly
+ */
 public class PaymentController {
     private GameHandler gameHandler;
 
@@ -15,6 +18,12 @@ public class PaymentController {
         this.gameHandler=gameHandler;
     }
 
+    /**
+     * This method is used to execute the payment of an action
+     * @param cost the cost of the action
+     * @param powerUps powerups used for pay if there are some
+     * @return true if payment executed
+     */
     public boolean payment(Integer[] cost, List<Integer> powerUps){
         System.out.println("sono dentro pagamemnti powerUp");
         if(!isValidPayment(Arrays.copyOf(cost,3), powerUps))
@@ -51,7 +60,7 @@ public class PaymentController {
     }
 
     /**
-     * this method serves to pay the effect o reload,
+     * this method serves to pay the effect or reload,
      * @param cost is the cost to pay
      */
     public boolean payment(Integer[] cost){
@@ -100,6 +109,10 @@ public class PaymentController {
         return valueReturn;
     }
 
+    /**
+     * This method checks if a payment is possible to be done
+     * @return true if the payment is possible
+     */
     private boolean isValidPayment(Integer[] cost, List<Integer> powerUps){
         System.out.println(powerUps.size());
         for(Integer i:powerUps){

@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is the main class, it display the first window and handle all method calls based on messages from the View
+ * abstract class
+ */
 public class MainGuiView extends View {
     private JFrame frame;
     private MapGui mapGui;

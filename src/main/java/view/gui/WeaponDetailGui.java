@@ -8,6 +8,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 
+/**
+ * This class is used to display weapon infos
+ */
 public class WeaponDetailGui extends JFrame {
     ImageIcon card;
 
