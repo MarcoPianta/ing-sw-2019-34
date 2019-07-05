@@ -13,6 +13,9 @@ import java.io.File;
 
 import static view.gui.MainGuiView.GOLDENRATIO;
 
+/**
+ * This class is used to display a window for game setting choose
+ */
 public class GameSettingsChoose extends JFrame{
     private Client client;
     private JPanel mainPanel;

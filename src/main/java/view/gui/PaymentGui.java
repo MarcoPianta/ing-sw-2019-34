@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is used to display a window for payment
+ */
 public class PaymentGui extends JFrame {
     ArrayList<Integer> selected = new ArrayList<>();
     private int scopeSelectedPayment = -1;

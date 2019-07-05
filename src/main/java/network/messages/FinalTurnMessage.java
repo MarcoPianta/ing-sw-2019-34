@@ -1,5 +1,8 @@
 package network.messages;
 
+/**
+ * This message tell the client final frenzy has started
+ */
 public class FinalTurnMessage extends Message {
     boolean firstPlayer;
 

@@ -10,6 +10,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * This class is the main class which check if rules are respected during the game
+ */
 public class GameHandler {
     private Game game;
     private FinalTurnHandler finalTurnHandler;
@@ -20,20 +23,11 @@ public class GameHandler {
     private GameLobby gameLobby;
     private boolean actionAdrenalineDone;
 
-    public void setActionAdrenalineDone(boolean actionAdrenalineDone) {
-        this.actionAdrenalineDone = actionAdrenalineDone;
-    }
-
-    public boolean isActionAdrenalineDone() {
-        return actionAdrenalineDone;
-    }
-
     /**
      * The constructor of gameHandler
      * @param n the numbers of skulls
      * @param players the list of tokens' player
      * @param file  the map's file
-     * @throws FileNotFoundException
      */
     public GameHandler(int n, List<Integer> players, String file, GameLobby gameLobby) throws FileNotFoundException {
         this.game = new Game(n,file);
@@ -52,16 +46,24 @@ public class GameHandler {
         this.gameLobby=gameLobby;
     }
 
+    /**
+     * This method set a boolean to tell if the action adrenaline as yet been done
+     * @param actionAdrenalineDone
+     */
+    public void setActionAdrenalineDone(boolean actionAdrenalineDone) {
+        this.actionAdrenalineDone = actionAdrenalineDone;
+    }
+
+    public boolean isActionAdrenalineDone() {
+        return actionAdrenalineDone;
+    }
+
     public PaymentController getPaymentController() {
         return paymentController;
     }
 
     public GameLobby getGameLobby() {
         return gameLobby;
-    }
-
-    public void setPlayerValid (Player playerValid) {
-        this.playerValid = playerValid;
     }
 
     public Player getPlayerValid() {

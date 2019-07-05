@@ -1,5 +1,8 @@
 package network.messages;
 
+/**
+ * This message is the response for the using of the scope power up
+ */
 public class CanUseScoopResponse extends Message {
     private boolean use;
     private int position;

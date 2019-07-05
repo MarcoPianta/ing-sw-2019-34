@@ -104,13 +104,7 @@ public class TurnHandler {
         if(message.getActionType()==ActionType.MOVE){
             MoveMessage newMessage=(MoveMessage)message;
             valueReturn= new Move(newMessage.getPlayerTarget(),newMessage.getNewSquare(), 3).execute();
-            if(valueReturn) {
-                gameHandler.getGameLobby().send(new UpdateClient(newMessage.getPlayerTarget().getPlayerID(), newMessage.getPlayerTarget().getPosition()));
-                gameHandler.getGameLobby().getClients()
-                        .parallelStream().
-                        filter(x -> (!x.equals(newMessage.getPlayerTarget().getPlayerID()))).
-                        forEach(x -> gameHandler.getGameLobby().send(new UpdateClient(x, newMessage.getPlayerTarget().getColor(), newMessage.getPlayerTarget().getPosition())));
-            }
+            FinalTurnHandler.updateClients(valueReturn, newMessage, gameHandler);
         }
         else if(message.getActionType()==ActionType.SHOT){
             System.out.println("in actionAdrenaline " + ((Shot)message).getPosEffect());

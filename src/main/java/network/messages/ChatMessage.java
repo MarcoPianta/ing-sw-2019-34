@@ -1,6 +1,9 @@
 
 package network.messages;
 
+/**
+ * This message is used to send chat messages
+ */
 public class ChatMessage extends Message{
     private String message;
 

@@ -12,6 +12,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to display a window for choose a target to shot
+ */
 public class TargetChooseGui extends JFrame {
     private int maxMove;
     private ArrayList<Colors> chosen;

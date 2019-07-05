@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to display a window for choose a weapon to use
+ */
 public class WeaponChooseGui extends JFrame {
     private ArrayList<JButton> weaponButtons;
     private int choose;
