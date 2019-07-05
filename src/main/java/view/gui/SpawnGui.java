@@ -19,11 +19,13 @@ public class SpawnGui extends JFrame {
         position = 0;
         for (String s: powerUps){
             JLabel label = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("GUI/powerups/" + s + ".png")));
+
             label.addMouseListener(new MouseListener() {
                 int pos = position;
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     mapGui.sendSpawnMessage(pos);
+                    System.out.println(pos);
                     dispose();
                 }
 

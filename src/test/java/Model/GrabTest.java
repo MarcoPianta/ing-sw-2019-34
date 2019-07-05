@@ -66,7 +66,11 @@ public class GrabTest {
         //Test grab NotOnlyAmmo
         CardNotOnlyAmmo testNotOnlyAmmo = new CardNotOnlyAmmo (AmmoEnum.AMMO11.getAbbreviation()); // (P, Yellow, Red)
         action = new Grab(testPlayer, testNotOnlyAmmo);
+        System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " +testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
+        System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps());
         assertTrue(action.execute());
+        System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0] + " " + testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1] + " " +testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);
+        System.out.println(testPlayer.getPlayerBoard().getHandPlayer().getPlayerPowerUps());
         assertEquals(1 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[0]);
         assertEquals(1 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[1]);
         assertEquals(0 ,testPlayer.getPlayerBoard().getHandPlayer().getAmmoRYB()[2]);

@@ -85,8 +85,14 @@ public final class GameBoard implements Serializable {
     }
 
     private void setSides(NormalSquare square, ArrayList<String> currentReference){
+//        System.out.println("current ref " + currentReference);
+//        System.out.println("Adding " + square.getId());
         square.setN(rooms.get(Character.getNumericValue(currentReference.get(0).charAt(0))).getNormalSquares().get(Character.getNumericValue(currentReference.get(0).charAt(2))));
         square.setE(rooms.get(Character.getNumericValue(currentReference.get(1).charAt(0))).getNormalSquares().get(Character.getNumericValue(currentReference.get(1).charAt(2))));
+//        System.out.println(rooms.size());
+//        System.out.println(rooms.get(Character.getNumericValue(currentReference.get(2).charAt(0))).getNormalSquares());
+//        System.out.println(Character.getNumericValue(currentReference.get(2).charAt(2)));
+//        System.out.println(rooms.get(Character.getNumericValue(currentReference.get(2).charAt(0))).getNormalSquares().get(Character.getNumericValue(currentReference.get(2).charAt(2))));
         square.setS(rooms.get(Character.getNumericValue(currentReference.get(2).charAt(0))).getNormalSquares().get(Character.getNumericValue(currentReference.get(2).charAt(2))));
         square.setW(rooms.get(Character.getNumericValue(currentReference.get(3).charAt(0))).getNormalSquares().get(Character.getNumericValue(currentReference.get(3).charAt(2))));
 

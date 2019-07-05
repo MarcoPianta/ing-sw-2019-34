@@ -73,6 +73,7 @@ public class Shoot implements Action, Serializable {
         ArrayList<NormalSquare> targetListSquare = new ArrayList<>();
         for (Player target : targets) {
             if(!conditionControll(target, visibleTarget, targetListSquare)){
+                System.out.println("falso1");
                 return false;
             }
         }
@@ -82,6 +83,7 @@ public class Shoot implements Action, Serializable {
             for (Player target : targets) {
                 targetListSquare.add(target.getPosition());
             }
+            System.out.println(cardinalControl(targetListSquare));
             return cardinalControl(targetListSquare);
         }
         return true;
@@ -181,19 +183,23 @@ public class Shoot implements Action, Serializable {
      * */
     private boolean conditionControll(Player target, List<Player> visibleTarget, ArrayList<NormalSquare> targetListSquare){
         if (shootEffect.getPreCondition().isMelee() && shooterPlayer.getPosition() != target.getPosition()){
+            System.out.println("1");
             return false;
         }
         if (shootEffect.getPreCondition().isBlind() && visibleTarget.contains(target)){
+            System.out.println("2");
 
             return false;
         }
 
         if (!shootEffect.getPreCondition().isBlind() && !(visibleTarget.contains(target))){
+            System.out.println("3");
 
             return false;
         }
         if (shootEffect.getPreCondition().isEnemiesDifferentSquare()){
             if (targetListSquare.contains(target.getPosition())){
+                System.out.println("4");
 
                 return false;
             }

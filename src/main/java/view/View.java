@@ -38,8 +38,7 @@ public abstract class View {
     protected List<Colors> marks;
     protected ArrayList<CardPowerUp> powerUps;
     /**
-     * The powerUps owned from the player
-     */
+     * The powerUps owned from the player*/
     protected GameBoard map;
     protected int maxReward;
     /**
